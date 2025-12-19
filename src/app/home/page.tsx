@@ -11,6 +11,8 @@ import bulb from "../../../public/img/bulb.png";
 import dashimg from "../../../public/img/dash-img.png";
 import facebook from "../../../public/img/facebook.png";
 import flower from "../../../public/img/flower.png";
+import background from "../../../public/img/img/logo.jpg";
+import logo from "../../../public/img/img/logo.png";
 import lineleft from "../../../public/img/line-left.png";
 import lineright from "../../../public/img/line-right.png";
 import link from "../../../public/img/link1.png";
@@ -55,27 +57,42 @@ export default function HomePage() {
     },
   ];
   return (
-    <div>
-      <section className=" bg-myGreen">
-        <div className=" flex justify-between items-center w-[80%] mx-auto h-[8vh] text-white">
+    <div className="bg-gray-100">
+      {/* CONTACT SECTION */}
+      <section className="bg-white">
+        <div className=" flex justify-between items-center w-[80%] mx-auto h-[8vh] text-gray-700">
           <p>info@foovante-global.com | +(233) 504-609989</p>
           {/* <div>
             <input type="text" placeholder="Search crevy" />
           </div> */}
-          <div className="flex items-center bg-gray-50/30 border border-white rounded-full px-4 py-2 shadow-sm w-[250px]">
+        </div>
+      </section>
+
+      {/* LOGO SECTION */}
+      <section className=" bg-myGreen relative pb-[4%] pt-[1%]">
+        <div className=" flex justify-between items-center w-[80%] mx-auto h-[16vh] text-white">
+          <div className="w-[200px]">
+            <Image
+              src={logo}
+              alt="this is the logo"
+              className="w-full text-white"
+            />
+          </div>
+
+          <div className="flex items-center bg-gray-50/10 border border-white rounded-full px-4 py-2 shadow-sm w-[250px]">
             <input
               type="text"
-              placeholder="Search crevy"
-              className="flex-grow outline-none bg-transparent text-gray-700 placeholder-gray-500"
+              placeholder="Search Telemedics"
+              className="grow outline-none bg-transparent text-gray-700 placeholder-white"
             />
             <svg
               aria-label="Search icon"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
+              strokeWidth={2}
               stroke="currentColor"
-              className="w-5 h-5 text-white bg-myDarkGreen p-1 rounded-full"
+              className="w-6 h-6 text-white bg-orange-400 p-1 rounded-full"
             >
               <title id="searchIconTitle">Search icon</title>
               <path
@@ -87,201 +104,57 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section className=" bg-white">
-        <div className=" flex justify-between items-center w-[80%] mx-auto h-[12vh] text-white">
-          <p className=" text-myGreen text-5xl">Crevy</p>
-          <nav>
-            <ul className=" flex justify-between items-center gap-[30px]">
-              <li className=" text-black hover:text-myGreen  cursor-pointer">
-                Home
-              </li>
-              <li className=" text-black hover:text-myGreen  cursor-pointer">
-                Features
-              </li>
-              <li className=" text-black hover:text-myGreen  cursor-pointer">
-                How it Works
-              </li>
-              <li className=" text-white hover:text-white ml-[40px] px-[40px] py-[10px] bg-myGreen rounded-full  cursor-pointer  hover:bg-myDarkGreen duration-200">
-                Get Started
-              </li>
-            </ul>
-          </nav>
-        </div>
+
+      {/* NAVIGATION SECTION */}
+      <section className="h-[10vh] w-[80%] translate-x-[15%] absolute bg-white rounded-lg translate-y-[-50%] z-30">
+        <nav className=" h-[10vh] w-[50%] mx-auto flex justify-center items-center">
+          <ul className="w-[50%] flex justify-between items-center uppercase text-xl">
+            <li className=" text-gray-600 hover:text-myGreen  cursor-pointer">
+              Home
+            </li>
+            <li className=" text-gray-600 hover:text-myGreen  cursor-pointer">
+              Crevy
+            </li>
+            <li className=" text-gray-600 hover:text-myGreen  cursor-pointer">
+              Support
+            </li>
+          </ul>
+        </nav>
       </section>
-      <header className=" bg-[url('/img/moon.webp')] h-[80vh] bg-no-repeat bg-cover bg-center text-white">
-        <div className=" w-[60%] pt-[6%] pl-[8%]">
-          <h2 className=" text-lg font-semibold pb-[20px]">
-            GROW. TRADE. LIVE
-          </h2>
-          <h1 className=" text-5xl font-bold tracking-wider pb-[20px]">
-            Turn Your Climate Impact Into Carbon Credits
+
+      {/* HEADER SECTION */}
+      <header className=" bg-[url('/img/img/background.jpg')] h-[95vh] pt-[2%] bg-no-repeat bg-cover bg-center text-white bg-black/40 bg-blend-multiply">
+        <div className=" w-[60%] pt-[8%] pl-[8%]">
+          <h1 className=" text-6xl font-semibold tracking-wide pb-[40px]">
+            <span className="text-6xl font-bold ">Carbon </span>
+            Credit <br /> Generation Platform
           </h1>
-          <p className=" text-left w-[70%]">
-            Crevy helps African climate projects calculate carbon savings, get
-            internationally certified, and earn revenue through verified carbon
-            credits. From clean cookstoves to reforestation - we make carbon
-            certification simple
+          <p className=" text-left w-[70%] text-2xl">
+            Use our interactive calculator to learn <br /> your carbon credits
+            potential and <br /> actions to take to tokenize it.
           </p>
-          <div className="flex gap-[5%] w-[70%] pt-[40px]">
+          <div className="flex gap-[5%] w-[70%] pt-[50px]">
             <button
               type="button"
-              className=" text-white hover:text-white   px-[40px] py-[10px] bg-myGreen rounded-full cursor-pointer hover:bg-myDarkGreen duration-200"
+              className=" text-white hover:text-white font-semibold uppercase px-[60px] py-[10px] bg-myGreen rounded-full cursor-pointer hover:bg-myDarkGreen duration-200"
             >
-              Start your project
+              Sign up
             </button>
             <button
               type="button"
-              className=" text-white hover:text-white  px-[40px] py-[10px] bg-transparent border-2 border-white rounded-full cursor-pointer  hover:bg-myDarkGreen duration-200"
+              className=" text-myGreen font-semibold hover:text-white uppercase px-[60px] py-[10px] bg-white border-2 border-white rounded-full cursor-pointer hover:bg-myDarkGreen duration-200"
             >
-              Watch demo &rarr;
+              Login
             </button>
           </div>
         </div>
       </header>
-      <section className=" bg-gray-100">
-        <div className="w-[85%] mx-auto">
-          <div className="pb-[8%]">
-            <h1 className=" text-4xl font-semibold text-gray-800 pt-[12%] pb-[0px] flex items-center">
-              The Problem Today
-              <div className=" bg-myGreen h-[3px] w-[20%] ml-5"></div>
-            </h1>
-            <p className=" text-gray-700">
-              A broken connection between those creating climate impact — and
-              those willing to pay for it.
-            </p>
-          </div>
-          <div className="flex gap-6">
-            <div className=" flex gap-0">
-              <div className="flex-[30%]">
-                <Image src={man} alt="a man holding a card" />
-              </div>
-              <div className="flex-[70%]">
-                <h1 className=" font-medium text-xl">Project owners</h1>
-                <p>
-                  You’ve poured your soul into the soil. You’ve planted,
-                  protected, and restored what others overlooked. But the next
-                  step, getting support for your impact, still feels out of
-                  reach.
-                </p>
-              </div>
-            </div>
-            <div className=" flex gap-0">
-              <div className="flex-[20%]">
-                <Image src={man} alt="a man holding a card" />
-              </div>
-              <div className="flex-[60%]">
-                <h1 className=" font-medium text-xl">Project owners</h1>
-                <p>
-                  You want to be part of the solution. To give back to the
-                  planet in ways that matter. But finding real, grounded climate
-                  action? It’s tough. Scattered. Full of big claims, but little
-                  proof.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className=" flex justify-center items-center pt-[10px]">
-            <Image
-              className=" translate-x-[-150%] translate-y-[40%]"
-              src={lineleft}
-              alt="this is a link symbol"
-            />
-            <Image src={link} alt="this is a link symbol" />
-            <Image
-              className=" translate-x-[150%] translate-y-[40%]"
-              src={lineright}
-              alt="this is a link symbol"
-            />
-          </div>
-          <div className="pb-[10%]">
-            <h1 className=" text-4xl text-gray-800 pb-[0px] text-center">
-              Two sides, One missing link!
-            </h1>
-            <p className="text-gray-700 text-center">
-              That’s where <span className=" text-myGreen">Crevy </span>
-              comes in.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div className="flex gap-5 w-[85%] mx-auto pt-[8%]">
-          <div className="flex-1">
-            <h1 className="text-4xl text-gray-800">
-              The Solution, <span className="text-myGreen">Crevy</span>
-            </h1>
-            <p className="text-gray-700 pt-3">
-              Everything you need to finish your climate project — all in one
-              platform.
-            </p>
-            <div className="pt-9 translate-x-[-9%]">
-              <Image
-                className="w-[100%]"
-                src={mac}
-                alt="this is a mac symbol"
-              />
-            </div>
-          </div>
-          <div className="flex-1">
-            {/* Tab Headers */}
-            <div className="flex justify-around  bg-gray-100 rounded-full">
-              {tabs.map((tab) => (
-                <button
-                  type="button"
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`py-3 px-9 text-sm font-semibold border-b-2 transition duration-200 ${
-                    activeTab === tab.id
-                      ? "border-myGreen text-white bg-myGreen rounded-full"
-                      : "border-transparent text-gray-700 hover:text-myGreen"
-                  }`}
-                >
-                  {tab.title}
-                </button>
-              ))}
-            </div>
 
-            {/* Tab Content */}
-            {/* <div className="p-6 text-gray-700 text-xl">
-              {tabs.map((tab) =>
-                activeTab === tab.id ? (
-                  <div key={tab.id}>
-                    <p>{tab.content}</p>
-                  </div>
-                ) : null
-              )}
-            </div> */}
-            <div className="p-6 text-gray-700 text-xl">
-              {tabs.map((tab) =>
-                activeTab === tab.id ? (
-                  <div key={tab.id}>
-                    {tab.content.map((para) => (
-                      <p key={para} className="mt-[6%]">
-                        {para}
-                      </p>
-                    ))}
-                  </div>
-                ) : null,
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-      <section>
+      {/* CATEGORY SECTION */}
+      <section className=" translate-y-[-10%] z-50">
         <div className="w-[90%] mx-auto">
-          <div className="pb-[4%] ">
-            <h1 className=" text-4xl font-semibold text-gray-800 pt-[12%] flex justify-center items-center">
-              <div className=" bg-myGreen h-[3px] w-[10%] mr-5"></div>
-              How Crevy Works
-              <div className=" bg-myGreen h-[3px] w-[10%] ml-5"></div>
-            </h1>
-            <p className=" text-gray-700 text-center pt-3">
-              Let’s tell you how the solution works!
-            </p>
-          </div>
-
           <div className="flex gap-4">
-            <div className="group hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
+            <div className="flex-1 group bg-white hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
               <div>
                 <Image
                   src={flower}
@@ -300,7 +173,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="group hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
+            <div className=" flex-1 group bg-white hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
               <div>
                 <Image
                   src={bulb}
@@ -319,7 +192,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="group hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
+            <div className="flex-1 group bg-white hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
               <div>
                 <Image
                   src={rotate}
@@ -338,7 +211,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="group hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
+            <div className=" flex-1 group bg-white hover:bg-myGreen p-6 text-gray-600 shadow-2xl duration-300 rounded-lg">
               <div>
                 <Image
                   src={book}
@@ -356,203 +229,14 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <div className="my-[6%] flex justify-center items-center">
-            <button
-              type="button"
-              className=" text-white hover:text-white  px-[40px] py-[10px] bg-myGreen rounded-full cursor-pointer hover:bg-myDarkGreen duration-200 "
-            >
-              Start your project
-            </button>
-          </div>
         </div>
       </section>
-      <section className=" bg-gray-100">
-        <div className=" w-[80%] mx-auto pb-[7%]">
-          <div className="pb-[4%] ">
-            <h1 className=" text-4xl font-semibold text-gray-800 pt-[12%] flex justify-center items-center">
-              <div className=" bg-myGreen h-[3px] w-[10%] mr-5"></div>
-              Who is Crevy for?
-              <div className=" bg-myGreen h-[3px] w-[10%] ml-5"></div>
-            </h1>
-            <p className=" text-gray-700 text-center pt-3">
-              Let’s tell you how the solution works!
-            </p>
-          </div>
-
-          <div className="flex justify-between">
-            <Image
-              className=" translate-x-[80%] translate-y-[30%]"
-              src={arrowup}
-              alt="arrow facing up"
-            />
-            <Image
-              className=" translate-x-[-80%] translate-y-[30%]"
-              src={arrowup}
-              alt="arrow facing up"
-            />
-          </div>
-          <div className="flex justify-center gap-7">
-            <div className=" p-6 shadow-2xl hover:border-b-6 hover:border-b-myGreen duration-200 flex-[1] bg-white">
-              <div className="flex justify-center items-center">
-                <Image src={bike} alt="this is a flower" />
-              </div>
-              <h3 className=" font-semibold pt-[20px] text-center">
-                Farmers & Cooperatives
-              </h3>
-              <p className=" text-gray-600 text-center">
-                Land restoration, agroforestry, sustainable agriculture — all
-                counted.
-              </p>
-              <div className="my-[6%] flex justify-center items-center">
-                <button
-                  type="button"
-                  className=" text-myGreen hover:text-white  px-[40px] py-[8px] bg-transparent border-2 border-myGreen rounded-lg cursor-pointer  hover:bg-myGreen duration-200"
-                >
-                  Learn more
-                </button>
-              </div>
-            </div>
-
-            <div className=" p-6 shadow-2xl hover:border-b-6 hover:border-b-myGreen duration-200 flex-[1] bg-white">
-              <div className="flex justify-center items-center">
-                <Image src={people} alt="this is a flower" />
-              </div>
-              <h3 className=" font-semibold pt-[20px] text-center">
-                Community Projects
-              </h3>
-              <p className=" text-gray-600 text-center">
-                Clean cooking, waste management, reforestation groups.
-              </p>
-              <div className="my-[6%] flex justify-center items-center">
-                <button
-                  type="button"
-                  className=" text-myGreen hover:text-white  px-[40px] py-[8px] bg-transparent border-2 border-myGreen rounded-lg cursor-pointer  hover:bg-myGreen duration-200"
-                >
-                  Learn more
-                </button>
-              </div>
-            </div>
-
-            <div className=" p-6 shadow-2xl hover:border-b-6 hover:border-b-myGreen duration-200 flex-[1] bg-white">
-              <div className="flex justify-center items-center">
-                <Image src={stack} alt="this is a flower" />
-              </div>
-              <h3 className=" font-semibold pt-[20px] text-center">
-                Green Startups
-              </h3>
-              <p className=" text-gray-600 text-center">
-                Solar, biochar, composting, and more.
-              </p>
-              <div className="my-[6%] flex justify-center items-center">
-                <button
-                  type="button"
-                  className=" text-myGreen hover:text-white  px-[40px] py-[8px] bg-transparent border-2 border-myGreen rounded-lg cursor-pointer  hover:bg-myGreen duration-200"
-                >
-                  Learn more
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div className="pb-[4%]">
-          <div className="pb-[4%] ">
-            <h1 className=" text-4xl font-semibold text-gray-800 pt-[12%] flex justify-center items-center">
-              <div className=" bg-myGreen h-[3px] w-[10%] mr-5"></div>A peek on
-              what to expect
-              <div className=" bg-myGreen h-[3px] w-[10%] ml-5"></div>
-            </h1>
-            <p className=" text-xl text-gray-700 text-center pt-3">
-              Everything you need to transform your climate project into
-              verified carbon credits
-            </p>
-          </div>
-          <div className="flex gap-8 w-[90%] mx-auto">
-            <div className="flex-[1]">
-              <p className=" text-gray-700 pt-3">
-                Tempus nunc risus a urna commodo in suspendisse cursus etiam.
-                Tellus non quisque semper tellus. Feugiat nam nibh nibh quis
-                scelerisque sapien. Ipsum odio porttitor ac cras mi est. Non
-                amet at nibh erat nunc id sed. Tortor penatibus urna id feugiat
-                varius nisi id aliquet morbi. Cras commodo morbi aliquet lacinia
-                nisl amet imperdiet natoque nunc.
-              </p>
-              <div className="pt-[30px]">
-                <Image src={dashimg} alt="" />
-              </div>
-            </div>
-            <div className="flex-[1]">
-              <div className="group hover:border-r-8 hover:border-r-myGreen hover:shadow-2xl py-5 px-5 hover:rounded-b-lg flex gap-4 duration-200 mb-2">
-                <div className="bg-gray-300 group-hover:bg-myGreen h-fit p-2 rounded-lg duration-200">
-                  <Image src={upload} alt="upload icon" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold">Carbon Calculator</h1>
-                  <p className="text-gray-600 group-hover:text-gray-800 transition duration-200">
-                    Advanced tools to accurately measure and quantify your
-                    project's carbon impact
-                  </p>
-                </div>
-              </div>
-
-              <div className="group hover:border-r-8 hover:border-r-myGreen hover:shadow-2xl py-5 px-5 hover:rounded-b-lg flex gap-4 duration-200 mb-2">
-                <div className="bg-gray-300 group-hover:bg-myGreen h-fit p-2 rounded-lg duration-200">
-                  <Image src={verify} alt="upload icon" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold">Progress Tracker</h1>
-                  <p className="text-gray-600 group-hover:text-gray-800 pr-2 transition duration-200">
-                    Real-time monitoring of your certification journey and
-                    carbon credit generation
-                  </p>
-                </div>
-              </div>
-
-              <div className="group hover:border-r-8 hover:border-r-myGreen hover:shadow-2xl py-5 px-5 hover:rounded-b-lg flex gap-4 duration-200 mb-2">
-                <div className="bg-gray-300 group-hover:bg-myGreen h-fit p-2 rounded-lg duration-200">
-                  <Image src={windowimg} alt="upload icon" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold">Certification Guide</h1>
-                  <p className="text-gray-600 group-hover:text-gray-800 transition duration-200">
-                    Step-by-step guidance through Verra, Gold Standard, and
-                    other certification processes
-                  </p>
-                </div>
-              </div>
-
-              <div className="group hover:border-r-8 hover:border-r-myGreen hover:shadow-2xl py-5 px-5 hover:rounded-b-lg flex gap-4 duration-200 mb-2">
-                <div className="bg-gray-300 group-hover:bg-myGreen h-fit p-2 rounded-lg duration-200">
-                  <Image src={user} alt="upload icon" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold">Market Connect</h1>
-                  <p className="text-gray-600 group-hover:text-gray-800 transition duration-200">
-                    Direct connection to verified carbon credit buyers and
-                    marketplace opportunities
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="button"
-                  className=" text-white hover:text-white  px-[40px] py-[10px] ml-4 mt-4 bg-myGreen rounded-lg cursor-pointer hover:bg-myDarkGreen duration-200"
-                >
-                  Get Started
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className=" bg-gray-100 pt-[8%] pb-[10%]">
+      <section className=" bg-gray-100 pt-[12%] pb-[10%] mt-[-40px]">
         <div className="w-[80%] mx-auto bg-white rounded-br-[100px] rounded-tl-[100px] ">
           <div className="w-[90%] mx-auto flex">
             <div className="pt-[7%] flex-[1]">
               <div className=" bg-myGreen h-[5px] w-[20%] mr-5"></div>
-              <p className="pt-5 text-2xl">
+              <p className="pt-5 text-4xl">
                 Use our interactive calculator to learn your carbon credit
                 potential and actions to take to tokenize it.
               </p>
