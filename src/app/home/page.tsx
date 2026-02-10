@@ -3,35 +3,20 @@
 import Image from "next/image";
 // import "./App.css";
 import { useState } from "react";
-import arrowup from "../../../public/img/arrow-up.png";
 import bigimg from "../../../public/img/big-img.png";
-import bike from "../../../public/img/bike.png";
 import book from "../../../public/img/book.png";
 import bulb from "../../../public/img/bulb.png";
-import dashimg from "../../../public/img/dash-img.png";
 import facebook from "../../../public/img/facebook.png";
 import flower from "../../../public/img/flower.png";
-import background from "../../../public/img/img/logo.jpg";
 import logo from "../../../public/img/img/logo.png";
-import lineleft from "../../../public/img/line-left.png";
-import lineright from "../../../public/img/line-right.png";
-import link from "../../../public/img/link1.png";
 import linkedin from "../../../public/img/linkedin.png";
-import mac from "../../../public/img/mac.png";
-import man from "../../../public/img/man1.png";
-import people from "../../../public/img/people.png";
 import rotate from "../../../public/img/rotate.png";
-import stack from "../../../public/img/stack.png";
 import twitter from "../../../public/img/twitter.png";
-import upload from "../../../public/img/upload.png";
-import user from "../../../public/img/user.png";
-import verify from "../../../public/img/verify.png";
-import windowimg from "../../../public/img/window.png";
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState("tab1");
+  const [_activeTab, _setActiveTab] = useState("tab1");
 
-  const tabs = [
+  const _tabs = [
     {
       id: "tab1",
       title: "What is Crevy?",

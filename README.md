@@ -1,121 +1,179 @@
-# crevy-frontend
-The official Crevy platform for Foovante-Global
+# Crevy Dashboard
 
-## Requirements
-The package manager used during project creation is [pnpm](https://pnpm.io/) version [v10.13.1](https://pnpm.io/installation).
+A modern carbon credit management dashboard built with Next.js, TypeScript, and shadcn/ui.
 
-The following minimum requirements are needed to successfully run the project:
-- [Node.JS v18.*](https://nodejs.org/en/download)
-- [PNPM v10.3.1+](https://pnpm.io/)
+## ✨ Features Implemented
 
-## Installtion
-- Clone the repository
-- Install dependencies:
+### 1. **Professional Sidebar** (`src/components/AppSidebar.tsx`)
+- Emerald gradient background matching the reference design
+- Organized navigation with sections:
+  - **Top Items**: Get Started, Compliance, Dashboard
+  - **Carbon Center**: Carbon Credit Calculator, Project Profile, Carbon Credits, Track Verification
+  - **Account Pages**: User Profile, Notifications (with badge), Support
+- Collapsible sidebar with icon-only mode
+- Active state highlighting with white background
+- User profile footer with "Welcome back 👋" message
+
+### 2. **Dashboard Header** (`src/components/DashboardHeader.tsx`)
+- Welcome message with user name
+- Subtitle explaining the platform
+- Right-side action icons:
+  - Notifications (with red dot indicator)
+  - Settings
+  - User avatar
+- Navigation tabs:
+  - Home
+  - Submit project
+  - Marketplace
+  - Verification
+  - Contact us
+- Active tab indication with emerald underline
+
+### 3. **Main Dashboard Page** (`src/app/(dashboard)/dashboard/page.tsx`)
+- **Hero Section**:
+  - "Ready to make an impact?" call-to-action
+  - "Welcome to crevy" card with gradient background
+- **Quick Actions** grid with 3 cards:
+  - Start a new project (blue theme)
+  - View Carbon Calculator (emerald theme)
+  - Track My Verification (amber theme)
+- **Project Overview** stats with 4 cards:
+  - Active Projects (3)
+  - Carbon Credits Earned (1,245)
+  - CO₂ Savings (892 tons)
+  - Verification Progress (67%)
+- **Recent Activity** feed with 3 recent items
+
+### 4. **Improved Layout** (`src/components/DashboardLayout.tsx`)
+- Clean background with proper spacing
+- Responsive design for mobile and desktop
+- Professional footer with copyright
+- Max-width container for better readability
+
+### 5. **Type-Safe Architecture**
+- Created `src/types/sidebar.types.ts` for sidebar configuration
+- Exported types from `src/types.d.ts`
+- Proper TypeScript interfaces throughout
+
+### 6. **Navigation Routes**
+Created placeholder pages for all navigation items:
+- `/get-started`
+- `/carbon-calculator`
+- `/submit-project`
+- And more...
+
+## 🎨 Design System
+
+- **Primary Color**: Emerald/Green (`#2CC295`)
+- **Accent Colors**: Blue, Amber for different sections
+- **Typography**: Clean, professional font stack
+- **Spacing**: Consistent padding and margins
+- **Shadows**: Subtle shadows for depth
+
+## 🚀 Running the Project
+
 ```bash
-pnpm install
-```
-- Set up lefthook:
-```bash
-npx lefthook install
-```
-- Start development server:
-```bash
-pnpm run dev
-```
-- Visit http://localhost:3000/ in your browser to view the running application.
+# Install dependencies
+npm install
 
-## Tools & Technologies
-### Stack for development
-- [Next.JS v16.0.10](https://nextjs.org/)
-- [TailwindCSS v4.1](https://tailwindcss.com/)
-- [shadcn](https://ui.shadcn.com/)
+# Run development server
+npm run dev
 
-### Tooling
-- [Next](https://nextjs.org/)
-- [BiomeJS](https://biomejs.dev/) is used for code formatting and linting
-- [LeftHook](https://lefthook.dev/) is used to manage pre-commit hooks ensuring all staged files are formatted properly before commited. Committing code changes will reveal the following (supposing a single file is staged for changes and it contains some formatting issues):
-```ts
-// Problem 1: Use of single quotes instead of double quotes
-// Problem 2: No semicolon
-import React from 'react'
+# Build for production
+npm run build
 ```
 
-```bash
-git add .
-git commit -m "import React"
+## 📁 Project Structure
+
 ```
-Will produce:
-```bash
-🥊 lefthook v2.0.4  hook: pre-commit │
-╰──────────────────────────────────────╯
-┃  check ❯ 
-
-Checked 1 file in 12ms. Fixed 1 file.
-
-                                      
-  ────────────────────────────────────
-summary: (done in 1.98 seconds)       
-✔️ check (1.97 seconds)
+src/
+├── app/
+│   └── (dashboard)/
+│       ├── dashboard/          # Main dashboard
+│       ├── get-started/        # Onboarding page
+│       ├── carbon-calculator/  # Calculator tool
+│       ├── submit-project/     # Project submission
+│       └── ...                 # Other routes
+├── components/
+│   ├── AppSidebar.tsx         # Main sidebar component
+│   ├── DashboardHeader.tsx    # Header with tabs
+│   ├── DashboardLayout.tsx    # Main layout wrapper
+│   ├── NavUser.tsx            # User profile dropdown
+│   └── ui/                    # shadcn components
+├── constants/
+│   └── sidebar-items.ts       # Sidebar configuration
+├── types/
+│   ├── sidebar.types.ts       # Sidebar type definitions
+│   └── index.ts               # Type exports
+└── lib/
+    └── utils.ts               # Utility functions
 ```
-**Note**: If the above information is not shown when you commit changes, kindly run the command below to set up `lefthook`:
-```bash
-npx lefthook install
-```
-___
-**Note: If your development environment is WSL running in Windows (via VS Code), I strongly advice you commit changes using the VS Code integrated terminal due to `UNC` path issues with Windows and WSL. This will break the effect of the pre-commit hook.**
-```bash
-# The following error is produced when you commit using the VS Code Source Control panel
 
-│ 🥊 lefthook v2.0.11  hook: pre-commit │
-╰───────────────────────────────────────╯
-┃  check ❯ 
+## 🎯 Key Components
 
-bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-'\\wsl.localhost\Ubuntu-24.04\home\martyofmca\work\foovante-global\crevy-frontend'
-CMD.EXE was started with the above path as the current directory.
-UNC paths are not supported.  Defaulting to Windows directory.
-C:\Windows\src\app\page.tsx internalError/io  INTERNAL  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### AppSidebar
+- Collapsible sidebar with icon mode
+- Section-based navigation
+- Active route highlighting
+- User profile footer
 
-  × The system cannot find the path specified. (os error 3)
-  
-  ! This diagnostic was derived from an internal Biome error. Potential bug, please reChecked 0 files in 14ms. No fixes applied.port it if nec
-essary.
-  
+### DashboardHeader
+- User welcome message
+- Action buttons (notifications, settings)
+- Navigation tabs
+- Responsive design
 
+### Dashboard Page
+- Statistics cards
+- Quick action buttons
+- Recent activity feed
+- Clean, modern UI
 
-                                      
-  ────────────────────────────────────
-summary: (done in 2.86 seconds)       
-✔️ check (2.86 seconds)
-```
-___
+## 📝 Next Steps
 
-## Important Project Rules
-- When importing in a module, kindly use the path aliases defined in the `tsconfig.json` like so:
-```ts
-import Logout from "../../../../component/ui/Logout"; ❌
-import Logout from "@component/ui/Logout"; ✅
-```
-- You are free to define as many path aliases you need to make the codebase readable.
-- Avoid undescriptive packed strings. Use structured data instead
-```ts
-// Avoid this ❌
-const someUserDetails = "firstName=Jake&lastName=Savage&avatar=https://linktoavatar.com&role=admin";
-// This is fine ✅
-const user = {
-  firstName: "Jake",
-  lastName: "Savage",
-  avatar: "https://linktoavatar.com",
-  role: "admin"
+1. **Icons**: Download actual icons from Figma and place in `/public/icons/`
+2. **Authentication**: Integrate real auth (currently using mock user)
+3. **API Integration**: Connect to backend services
+4. **Forms**: Build project submission forms
+5. **Charts**: Add data visualization for statistics
+6. **Responsiveness**: Test and refine mobile experience
+
+## 🔧 Customization
+
+### Updating Sidebar Items
+Edit `src/constants/sidebar-items.ts`:
+
+```typescript
+export const SIDEBAR_CONFIG: SidebarConfig = {
+  topItems: [
+    // Add/remove top-level items
+  ],
+  sections: [
+    // Add/remove sections
+  ],
 };
-// This is also fine ✅
-const firstName = "Jake";
-const lastName = "Savage";
-const avatar: "https://linktoavatar.com";
-const role = "admin";
 ```
 
-## Help
-Kindly refer to the [Engineering Guide](./ENGINEERING_GUIDE.md) on the best practices to follow for this project.
+### Changing Colors
+Update `src/app/globals.css`:
 
-Thank you and have a great time solving problems!
+```css
+@theme {
+  --color-myGreen: #2cc295;
+  --color-myDarkGreen: #178a74;
+  --color-myBlue: #131927;
+}
+```
+
+## 📚 Technologies Used
+
+- **Next.js 16** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS 4** - Styling
+- **shadcn/ui** - Component library
+- **Lucide React** - Icons
+- **Sonner** - Toast notifications
+
+---
+
+Built with ❤️ for Crevy - Making carbon credit management simple and effective.
