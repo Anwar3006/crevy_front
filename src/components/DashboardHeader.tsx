@@ -13,6 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+
 import { cn } from "@/lib/utils";
 import type { TBetterAuthUser } from "@/types";
 import { Separator } from "./ui/separator";

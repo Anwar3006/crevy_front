@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 // import ProjectOverviewStep from "./steps/ProjectOverviewStep";
 // import SidebarProgress from "./SidebarProgress";
@@ -13,6 +14,7 @@ import {
   createProjectInputSchema,
   type TCreateProject,
 } from "@/constants/new-project";
+import { ProjectService } from "@/lib/services/project-service";
 import ProjectDetailsStep from "./_components/ProjectDetailsStep";
 import ProjectOverviewStep from "./_components/ProjectOverviewStep";
 // Internal Components (To be created)
@@ -24,8 +26,7 @@ const STEPS = ["Project Type", "Overview", "Details", "Review & Submit"];
 
 const NewProject = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [_isSubmitting, setIsSubmitting] = useState(false);
-  const [_submitSuccess, setSubmitSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const methods = useForm<TCreateProject>({
@@ -59,20 +60,20 @@ const NewProject = () => {
     try {
       console.log("Final Project Data:", data);
       // TODO: Replace with actual API call
-      // await createProject(data);
+      await ProjectService.createProject(data);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      setSubmitSuccess(true);
-
       // Redirect to dashboard after success
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
+      // setTimeout(() => {
+      //   router.push("/dashboard");
+      // }, 2000);
+
+      toast.success("Project submitted successfully.");
     } catch (error) {
       console.error("Error submitting project:", error);
-      alert("Failed to submit project. Please try again.");
+      toast.error("Failed to submit project. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -131,6 +132,7 @@ const NewProject = () => {
               {currentStep === 3 && (
                 <ReviewStep
                   onPrev={prevStep}
+                  isSubmitting={isSubmitting}
                   onSubmit={() => methods.handleSubmit(onSubmit)()}
                 />
               )}

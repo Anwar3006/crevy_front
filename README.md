@@ -177,3 +177,28 @@ Update `src/app/globals.css`:
 ---
 
 Built with ❤️ for Crevy - Making carbon credit management simple and effective.
+
+
+this is the data we are passing from the frontend, is it enough to be correctly populated in the database? Will it be enough to calculate the carbon captured?
+{
+    "name": "Project MT",
+    "projectType": "regenerative_agriculture",
+    "location": "Kumasi, Ghana",
+    "gpsCoordinates": "34.0522, -118.2437",
+    "startDate": "2026-02-20T00:00:00.000Z",
+    "durationMonths": 40,
+    "totalAreaHectares": 400,
+    "baselineLandUse": "Current land use about something something",
+    "baselineEmissionsYearly": 30,
+    "soilType": "Clay",
+    "initialSoilCarbonContent": 20,
+    "cropLivestockTypes": "Cattle, Maize",
+    "usesSyntheticFertilizers": false,
+    "usesSyntheticPesticides": false,
+    "organicAmendments": "Compost, Manure",
+    "supportsBiodiversityConservation": true,
+    "supportsWaterManagement": true,
+    "description": "Project Description is about something something",
+    "implementationPlan": "Implementation Plan about something something",
+    "expectedOutcomes": "Expected Outcomes about something something"
+}

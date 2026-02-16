@@ -37,7 +37,7 @@ export const PROJECT_TYPES = [
       "Rebuild ecosystems and sequester carbon by planting native forest species.",
   },
   {
-    id: "blue-carbon",
+    id: "blue_carbon",
     title: "Blue Carbon",
     icon: "/icons/blue-carbon.png",
     description:

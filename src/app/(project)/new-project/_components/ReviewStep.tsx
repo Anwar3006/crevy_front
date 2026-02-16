@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import type { TCreateProject } from "@/constants/new-project";
@@ -10,15 +10,18 @@ import { PROJECT_TYPES } from "@/constants/new-project";
 type ReviewStepProps = {
   onPrev: () => void;
   onSubmit: () => void;
+  isSubmitting: boolean;
 };
 
-const ReviewStep = ({ onPrev, onSubmit }: ReviewStepProps) => {
+const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
   const { getValues } = useFormContext<TCreateProject>();
   const formData = getValues();
 
   const projectType = PROJECT_TYPES.find(
     (type) => type.id === formData.projectType,
   );
+
+  console.log("isSubmitting: ", isSubmitting);
 
   const InfoRow = ({
     label,
@@ -207,9 +210,14 @@ const ReviewStep = ({ onPrev, onSubmit }: ReviewStepProps) => {
         <Button
           type="submit"
           onClick={onSubmit}
+          disabled={isSubmitting}
           className="bg-[#2ebc8d] hover:bg-[#27a37b] px-8 py-3 md:px-12 md:py-4 xl:py-6 text-sm md:text-base xl:text-lg rounded-xl font-bold transition-all order-1 sm:order-2"
         >
-          Submit Project
+          {isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            "Submit Project"
+          )}
         </Button>
       </div>
     </div>
