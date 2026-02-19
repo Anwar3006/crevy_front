@@ -2,7 +2,7 @@ import type { TCreateProject } from "@/constants/new-project";
 import { axiosClient } from "../axiosClient";
 
 export const ProjectService = {
-  createProject: async (data: TCreateProject) => {
+  createProject: async (data: any) => {
     try {
       console.log("Project Data: ", data);
       const response = await axiosClient.post("/projects", data);
@@ -49,6 +49,18 @@ export const ProjectService = {
       return response.data;
     } catch (error) {
       console.error("Error deleting project: ", error);
+      throw error;
+    }
+  },
+
+  getMarketplaceProjects: async (params?: any) => {
+    try {
+      const response = await axiosClient.get("/projects/marketplace", {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error getting marketplace projects: ", error);
       throw error;
     }
   },

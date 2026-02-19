@@ -10,6 +10,9 @@ const RegisterPage = () => {
             <div className="p-2 text-primary-foreground flex size-full items-center justify-center">
               <Image
                 src="/icons/Crevy.png"
+                width={100}
+                height={20}
+                priority
                 alt="Logo"
                 className="w-32 rounded-md "
               />
@@ -28,6 +31,9 @@ const RegisterPage = () => {
       <div className="bg-[#2CC295] relative hidden lg:block h-full">
         <Image
           src="/assets/images/all-img/AuthImage.png"
+          width={100}
+          height={20}
+          priority
           alt="placeholder"
           className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
         />

@@ -104,7 +104,37 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
             label="Total Area"
             value={`${formData.totalAreaHectares} hectares`}
           />
+          <InfoRow label="Current Status" value={formData.currentStatus} />
         </dl>
+      </div>
+
+      {/* Supporting Documents Section */}
+      <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-900">
+          Supporting Documents ({formData.documents?.length || 0})
+        </h3>
+        {formData.documents && formData.documents.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {formData.documents.map((file) => (
+              <div
+                key={file.name}
+                className="flex items-center gap-3 p-3 border border-slate-100 rounded-lg bg-slate-50/50"
+              >
+                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                <span className="text-xs font-medium text-slate-700 truncate">
+                  {file.name}
+                </span>
+                <span className="text-[10px] text-slate-400 ml-auto whitespace-nowrap">
+                  {file.size}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-slate-400 italic">
+            No documents uploaded.
+          </p>
+        )}
       </div>
 
       {/* Project Details Section */}
@@ -145,14 +175,6 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
           )}
 
           <InfoRow label="Baseline Land Use" value={formData.baselineLandUse} />
-          <InfoRow
-            label="Baseline Emissions (Yearly)"
-            value={
-              formData.baselineEmissionsYearly
-                ? `${formData.baselineEmissionsYearly} tonnes CO2e/year`
-                : undefined
-            }
-          />
           <InfoRow label="Soil Type" value={formData.soilType} />
           <InfoRow
             label="Initial Soil Carbon Content"
@@ -161,6 +183,10 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
                 ? `${formData.initialSoilCarbonContent}%`
                 : undefined
             }
+          />
+          <InfoRow
+            label="Regenerative Practices"
+            value={formData.regenerativePractices?.join(", ")}
           />
           <InfoRow
             label="Crop/Livestock Types"
@@ -188,8 +214,8 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
             value={formData.usesSyntheticPesticides}
           />
           <InfoRow
-            label="Supports Biodiversity Conservation"
-            value={formData.supportsBiodiversityConservation}
+            label="Supports Biodiversity"
+            value={formData.supportsBiodiversity}
           />
           <InfoRow
             label="Supports Water Management"

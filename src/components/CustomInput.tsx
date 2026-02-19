@@ -49,7 +49,7 @@ const CustomInput = <T extends FieldValues>({
             {...field}
             disabled={disabled}
             className={className}
-            readOnly={readOnly}
+            readOnly={false}
           />
         );
       case "textarea":
@@ -59,7 +59,7 @@ const CustomInput = <T extends FieldValues>({
             {...field}
             disabled={disabled}
             className={cn("overflow-y-scroll h-42", className)}
-            readOnly={readOnly}
+            readOnly={false}
           />
         );
 

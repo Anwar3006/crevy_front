@@ -12,6 +12,9 @@ const LoginPage = () => {
                 src="/icons/Crevy.png"
                 alt="Logo"
                 className="w-32 rounded-md "
+                width={100}
+                height={20}
+                priority
               />
             </div>
           </a>
@@ -28,6 +31,9 @@ const LoginPage = () => {
       <div className="bg-[#2CC295] relative hidden lg:block h-full">
         <Image
           src="/assets/images/all-img/AuthImage.png"
+          width={100}
+          height={20}
+          priority
           alt="placeholder"
           className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
         />

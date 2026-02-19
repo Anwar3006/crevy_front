@@ -7,26 +7,31 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-// import ProjectOverviewStep from "./steps/ProjectOverviewStep";
-// import SidebarProgress from "./SidebarProgress";
 import {
   createProjectDefaultValues,
   createProjectInputSchema,
   type TCreateProject,
 } from "@/constants/new-project";
 import { ProjectService } from "@/lib/services/project-service";
-import ProjectDetailsStep from "./_components/ProjectDetailsStep";
+import CommunityStep from "./_components/CommunityStep";
+import LandUseStep from "./_components/LandUseStep";
+import ProcessingStep from "./_components/ProcessingStep";
 import ProjectOverviewStep from "./_components/ProjectOverviewStep";
-// Internal Components (To be created)
 import ProjectTypeStep from "./_components/ProjectTypeStep";
 import ReviewStep from "./_components/ReviewStep";
 import SidebarProgress from "./_components/SidebarProgress";
+import SoilBiomassStep from "./_components/SoilBiomassStep";
+import SubmissionResult from "./_components/SubmissionResult";
+import SupportingDocumentsStep from "./_components/SupportingDocumentsStep";
 
-const STEPS = ["Project Type", "Overview", "Details", "Review & Submit"];
+const STEPS = ["Project Type", "Questionnaire", "Documents", "Review & Submit"];
 
 const NewProject = () => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0); // 0: Project Type, 1: Questionnaire, 2: Documents, 3: Review
+  const [questionnaireSubStep, setQuestionnaireSubStep] = useState(0); // 0: Overview, 1: Land Use, 2: Soil, 3: Community
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+  const [submissionData, setSubmissionData] = useState<any>(null);
   const router = useRouter();
 
   const methods = useForm<TCreateProject>({
@@ -36,51 +41,106 @@ const NewProject = () => {
   });
 
   const nextStep = async () => {
-    const stepFields: Record<number, (keyof TCreateProject)[]> = {
-      0: ["projectType"],
-      1: [
-        "name",
-        "startDate",
-        "location",
-        "durationMonths",
-        "gpsCoordinates",
-        "totalAreaHectares",
+    const questionnaireFields: Record<number, (keyof TCreateProject)[]> = {
+      0: ["name", "startDate", "location", "durationMonths", "currentStatus"],
+      1: ["totalAreaHectares", "baselineLandUse", "regenerativePractices"],
+      2: [
+        "soilType",
+        "initialSoilCarbonContent",
+        "expectedBiomassIncrease",
+        "cropLivestockTypes",
+        "usesSyntheticFertilizers",
+        "usesSyntheticPesticides",
+        "organicAmendments",
       ],
-      2: ["description", "implementationPlan", "expectedOutcomes"],
+      3: [
+        "socialEconomicBenefits",
+        "supportsBiodiversity",
+        "supportsWaterManagement",
+        "planToExpandPractices",
+        "description",
+      ],
     };
 
-    const isValid = await methods.trigger(stepFields[currentStep] as any);
-    if (isValid) setCurrentStep((prev) => prev + 1);
+    if (currentStep === 0) {
+      const isValid = await methods.trigger(["projectType"]);
+      if (isValid) setCurrentStep(1);
+    } else if (currentStep === 1) {
+      const isValid = await methods.trigger(
+        questionnaireFields[questionnaireSubStep] as any,
+      );
+      if (isValid) {
+        if (questionnaireSubStep < 3) {
+          setQuestionnaireSubStep((prev) => prev + 1);
+        } else {
+          setCurrentStep(2);
+        }
+      }
+    } else if (currentStep === 2) {
+      setCurrentStep(3);
+    }
   };
 
-  const prevStep = () => setCurrentStep((prev) => prev - 1);
+  const prevStep = () => {
+    if (currentStep === 1) {
+      if (questionnaireSubStep > 0) {
+        setQuestionnaireSubStep((prev) => prev - 1);
+      } else {
+        setCurrentStep(0);
+      }
+    } else if (currentStep > 1) {
+      setCurrentStep((prev) => prev - 1);
+      if (currentStep === 2) setQuestionnaireSubStep(3);
+    }
+  };
 
   const onSubmit = async (data: TCreateProject) => {
     setIsSubmitting(true);
     try {
       console.log("Final Project Data:", data);
-      // TODO: Replace with actual API call
-      await ProjectService.createProject(data);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Transform data for API
+      const apiData = {
+        ...data,
+        usesSyntheticFertilizers: data.usesSyntheticFertilizers === "yes",
+        usesSyntheticPesticides: data.usesSyntheticPesticides === "yes",
+        supportsBiodiversityConservation: data.supportsBiodiversity === "yes",
+        supportsWaterManagement: data.supportsWaterManagement === "yes",
+        regenerativePractices: data.regenerativePractices.join(","),
+        durationMonths: Number(data.durationMonths),
+        region: data.region,
+        sdgs: data.sdgs.join(","),
+      };
 
-      // Redirect to dashboard after success
-      // setTimeout(() => {
-      //   router.push("/dashboard");
-      // }, 2000);
+      const response = await ProjectService.createProject(apiData);
+      setSubmissionData(response);
 
+      // Simulate processing time
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      setShowResult(true);
       toast.success("Project submitted successfully.");
     } catch (error) {
       console.error("Error submitting project:", error);
       toast.error("Failed to submit project. Please try again.");
-    } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (showResult) {
+    return (
+      <div className="min-h-screen bg-slate-50 p-8">
+        <div className="max-w-6xl mx-auto">
+          <SubmissionResult data={submissionData} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 p-8">
+      {isSubmitting && <ProcessingStep />}
+
       {/* Header */}
       <div className="mb-8 max-w-6xl mx-auto">
         <Button
@@ -123,12 +183,24 @@ const NewProject = () => {
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
               {currentStep === 0 && <ProjectTypeStep onNext={nextStep} />}
-              {currentStep === 1 && (
+
+              {currentStep === 1 && questionnaireSubStep === 0 && (
                 <ProjectOverviewStep onNext={nextStep} onPrev={prevStep} />
               )}
-              {currentStep === 2 && (
-                <ProjectDetailsStep onNext={nextStep} onPrev={prevStep} />
+              {currentStep === 1 && questionnaireSubStep === 1 && (
+                <LandUseStep onNext={nextStep} onPrev={prevStep} />
               )}
+              {currentStep === 1 && questionnaireSubStep === 2 && (
+                <SoilBiomassStep onNext={nextStep} onPrev={prevStep} />
+              )}
+              {currentStep === 1 && questionnaireSubStep === 3 && (
+                <CommunityStep onNext={nextStep} onPrev={prevStep} />
+              )}
+
+              {currentStep === 2 && (
+                <SupportingDocumentsStep onNext={nextStep} onPrev={prevStep} />
+              )}
+
               {currentStep === 3 && (
                 <ReviewStep
                   onPrev={prevStep}
