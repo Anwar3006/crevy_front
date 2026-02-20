@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { TCreateProject } from "@/constants/new-project";
+import { SDGSelection } from "./SDGSelection";
 
 type CommunityStepProps = {
   onNext: () => void;
@@ -159,6 +160,8 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
             </div>
           </RadioGroup>
         </div>
+
+        <SDGSelection />
 
         <CustomInput
           control={control}

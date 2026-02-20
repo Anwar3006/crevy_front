@@ -36,7 +36,7 @@ export default function MarketplacePage() {
       filters.status === "All Status"
         ? undefined
         : filters.status.toLowerCase().replace(" ", "-"),
-    search: filters.search,
+    search: filters.search.trim() !== "" ? filters.search.trim() : undefined,
     sdgs: filters.sdgs.length > 0 ? filters.sdgs.join(",") : undefined,
   });
 

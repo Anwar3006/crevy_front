@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
 export function ProjectCard({ project }: { project: any }) {
@@ -153,12 +154,12 @@ export function ProjectCard({ project }: { project: any }) {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="w-full mt-5 py-3 bg-primary text-white rounded-xl font-medium text-sm hover:bg-primary/90 transition-colors"
+        <Link
+          href={`/marketplace/${project.id}`}
+          className="block w-full text-center mt-5 py-3 bg-emerald-500 text-white rounded-xl font-medium text-sm hover:bg-emerald-600 transition-colors"
         >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );

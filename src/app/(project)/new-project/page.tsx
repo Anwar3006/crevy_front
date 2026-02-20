@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -33,6 +34,7 @@ const NewProject = () => {
   const [showResult, setShowResult] = useState(false);
   const [submissionData, setSubmissionData] = useState<any>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const methods = useForm<TCreateProject>({
     resolver: zodResolver(createProjectInputSchema) as any,
@@ -64,7 +66,17 @@ const NewProject = () => {
 
     if (currentStep === 0) {
       const isValid = await methods.trigger(["projectType"]);
-      if (isValid) setCurrentStep(1);
+      if (isValid) {
+        // Prefetch regenerative practices as soon as user clicks next
+        queryClient.prefetchQuery({
+          queryKey: ["regenerative-practices"],
+          queryFn: async () => {
+            const response = await ProjectService.getRegenerativePractices();
+            return response.data;
+          },
+        });
+        setCurrentStep(1);
+      }
     } else if (currentStep === 1) {
       const isValid = await methods.trigger(
         questionnaireFields[questionnaireSubStep] as any,
@@ -109,33 +121,29 @@ const NewProject = () => {
         regenerativePractices: data.regenerativePractices.join(","),
         durationMonths: Number(data.durationMonths),
         region: data.region,
-        sdgs: data.sdgs.join(","),
+        sdgs: data.sdgs,
       };
 
       const response = await ProjectService.createProject(apiData);
-      setSubmissionData(response);
+      setSubmissionData(response.data);
 
       // Simulate processing time
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      setShowResult(true);
       toast.success("Project submitted successfully.");
+
+      // Navigate to the marketplace details page
+      if (response.data?.id) {
+        router.push(`/marketplace/${response.data.id}`);
+      } else {
+        router.push("/marketplace");
+      }
     } catch (error) {
       console.error("Error submitting project:", error);
       toast.error("Failed to submit project. Please try again.");
       setIsSubmitting(false);
     }
   };
-
-  if (showResult) {
-    return (
-      <div className="min-h-screen bg-slate-50 p-8">
-        <div className="max-w-6xl mx-auto">
-          <SubmissionResult data={submissionData} />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-slate-50 p-8">

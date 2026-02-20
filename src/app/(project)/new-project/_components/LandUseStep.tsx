@@ -7,25 +7,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import type { TCreateProject } from "@/constants/new-project";
+import { useRegenerativePractices } from "@/hooks/use-regenerative-practices";
 
 type LandUseStepProps = {
   onNext: () => void;
   onPrev: () => void;
 };
 
-const PRACTICE_OPTIONS = [
-  { id: "cover_cropping", label: "Cover cropping" },
-  { id: "agroforestry", label: "Agroforestry" },
-  { id: "no_low_tillage", label: "No/low tillage" },
-  { id: "managed_grazing", label: "Managed grazing" },
-  { id: "compost_application", label: "Compost application" },
-  { id: "biochar_use", label: "Biochar use" },
-  { id: "crop_rotation", label: "Crop rotation" },
-  { id: "others", label: "Others (specify)" },
-];
-
 const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
   const { control, watch, setValue } = useFormContext<TCreateProject>();
+  const { data: practices, isLoading } = useRegenerativePractices();
 
   const selectedPractices = watch("regenerativePractices") || [];
   const projectType = watch("projectType") || "Regenerative Agriculture";
@@ -91,29 +82,40 @@ const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
             </span>
           </Label>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {PRACTICE_OPTIONS.map((option) => (
-              <div
-                key={option.id}
-                className="flex items-center space-x-3 p-3 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors"
-              >
-                <Checkbox
-                  id={option.id}
-                  checked={selectedPractices.includes(option.id)}
-                  onCheckedChange={(checked) =>
-                    togglePractice(option.id, !!checked)
-                  }
-                  className="w-5 h-5 border-slate-200 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2, 4].map((i) => (
+                <div
+                  key={i}
+                  className="h-12 bg-slate-50 animate-pulse rounded-lg"
                 />
-                <Label
-                  htmlFor={option.id}
-                  className="text-slate-600 font-medium cursor-pointer flex-1"
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {practices?.map((option: any) => (
+                <div
+                  key={option.id}
+                  className="flex items-center space-x-3 p-3 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors"
                 >
-                  {option.label}
-                </Label>
-              </div>
-            ))}
-          </div>
+                  <Checkbox
+                    id={option.id}
+                    checked={selectedPractices.includes(option.id)}
+                    onCheckedChange={(checked) =>
+                      togglePractice(option.id, !!checked)
+                    }
+                    className="w-5 h-5 border-slate-200 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                  />
+                  <Label
+                    htmlFor={option.id}
+                    className="text-slate-600 font-medium cursor-pointer flex-1"
+                  >
+                    {option.name}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {selectedPractices.includes("others") && (

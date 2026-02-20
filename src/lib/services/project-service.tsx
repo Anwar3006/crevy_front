@@ -64,4 +64,16 @@ export const ProjectService = {
       throw error;
     }
   },
+
+  getRegenerativePractices: async () => {
+    try {
+      const response = await axiosClient.get(
+        "/projects/regenerative-practices",
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error getting regenerative practices: ", error);
+      throw error;
+    }
+  },
 };

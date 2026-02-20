@@ -73,11 +73,11 @@ const SupportingDocumentsStep = ({
         Upload relevant documents to support your project submission
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <button
+          type="button" // Critical to prevent form submission
           onClick={() => fileInputRef.current?.click()}
-          type="button"
-          className="border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors"
+          className="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
           <input
             type="file"
@@ -89,11 +89,15 @@ const SupportingDocumentsStep = ({
           <div className="bg-[#2ebc8d] p-3 rounded-lg mb-4">
             <UploadCloud className="h-6 w-6 text-white" />
           </div>
-          <p className="text-slate-400 text-sm font-medium mb-1">
+          <p className="text-slate-700 font-bold mb-1 text-center">
+            Project Documents
+          </p>
+          <p className="text-slate-400 text-sm font-medium mb-1 text-center">
             Drag your file(s) to start uploading
           </p>
           <p className="text-slate-300 text-xs mb-4">OR</p>
           <Button
+            type="button"
             variant="outline"
             className="border-emerald-500 text-emerald-500 hover:bg-emerald-50 font-bold px-8"
           >
@@ -101,22 +105,29 @@ const SupportingDocumentsStep = ({
           </Button>
         </button>
 
-        <div className="space-y-4">
-          <h3 className="font-bold text-slate-700 text-sm">
-            Recommended Documents:
-          </h3>
-          <ul className="space-y-2">
-            {RECOMMENDED_DOCS.map((doc) => (
-              <li
-                key={doc}
-                className="flex items-start gap-2 text-slate-500 text-xs font-medium"
-              >
-                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                <span>{doc}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <button
+          type="button" // Critical to prevent form submission
+          onClick={() => fileInputRef.current?.click()}
+          className="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          <div className="bg-[#2ebc8d] p-3 rounded-lg mb-4">
+            <UploadCloud className="h-6 w-6 text-white" />
+          </div>
+          <p className="text-slate-700 font-bold mb-1 text-center">
+            Facility Image
+          </p>
+          <p className="text-slate-400 text-sm font-medium mb-1 text-center">
+            Drag your image to start uploading
+          </p>
+          <p className="text-slate-300 text-xs mb-4">OR</p>
+          <Button
+            type="button"
+            variant="outline"
+            className="border-emerald-500 text-emerald-500 hover:bg-emerald-50 font-bold px-8"
+          >
+            Browse images
+          </Button>
+        </button>
       </div>
 
       {documents.length > 0 && (

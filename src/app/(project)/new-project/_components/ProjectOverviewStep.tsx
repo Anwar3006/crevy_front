@@ -6,6 +6,7 @@ import CustomDatePicker from "@/components/CustomDatePicker";
 import CustomInput from "@/components/CustomInput";
 import CustomSelect from "@/components/CustomSelect";
 import { Button } from "@/components/ui/button";
+import { CountryDropdown } from "@/components/ui/country-dropdown";
 import { Progress } from "@/components/ui/progress";
 import type { TCreateProject } from "@/constants/new-project";
 
@@ -67,6 +68,14 @@ const ProjectOverviewStep = ({ onNext, onPrev }: ProjectOverviewStepProps) => {
           placeholder="Project Wave"
         />
 
+        <CountryDropdown
+          control={control}
+          name="location"
+          label="Project Location*"
+          placeholder="Select country"
+          defaultValue="GHA"
+        />
+
         <CustomInput
           control={control}
           name="gpsCoordinates"
@@ -82,20 +91,20 @@ const ProjectOverviewStep = ({ onNext, onPrev }: ProjectOverviewStepProps) => {
           enableFutureDates={true}
         />
 
-        <CustomSelect
+        {/* <CustomSelect
           control={control}
           name="location"
           label="Project Location*"
           placeholder="Select region/country"
           options={LOCATION_OPTIONS}
-        />
+        /> */}
 
-        <CustomSelect
+        <CustomInput
           control={control}
           name="durationMonths"
-          label="Project Duration*"
+          label="Project Duration(in Months)*"
           placeholder="Select duration"
-          options={DURATION_OPTIONS}
+          type="number"
         />
 
         <CustomInput

@@ -5,7 +5,8 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import type { TCreateProject } from "@/constants/new-project";
-import { PROJECT_TYPES } from "@/constants/new-project";
+import { PROJECT_TYPES, SDGS } from "@/constants/new-project";
+import { useRegenerativePractices } from "@/hooks/use-regenerative-practices";
 
 type ReviewStepProps = {
   onPrev: () => void;
@@ -16,10 +17,25 @@ type ReviewStepProps = {
 const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
   const { getValues } = useFormContext<TCreateProject>();
   const formData = getValues();
+  const { data: practices } = useRegenerativePractices();
 
   const projectType = PROJECT_TYPES.find(
     (type) => type.id === formData.projectType,
   );
+
+  const practiceNames = formData.regenerativePractices
+    ?.map((id) => {
+      const practice = practices?.find((p: any) => p.id === id);
+      return practice ? practice.name : id;
+    })
+    .join(", ");
+
+  const sdgNames = formData.sdgs
+    ?.map((id) => {
+      const sdg = SDGS.find((s) => s.id === id);
+      return sdg ? sdg.title : id;
+    })
+    .join(", ");
 
   console.log("isSubmitting: ", isSubmitting);
 
@@ -184,10 +200,7 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
                 : undefined
             }
           />
-          <InfoRow
-            label="Regenerative Practices"
-            value={formData.regenerativePractices?.join(", ")}
-          />
+          <InfoRow label="Regenerative Practices" value={practiceNames} />
           <InfoRow
             label="Crop/Livestock Types"
             value={formData.cropLivestockTypes}
@@ -221,6 +234,7 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
             label="Supports Water Management"
             value={formData.supportsWaterManagement}
           />
+          <InfoRow label="SDGs" value={sdgNames} />
         </dl>
       </div>
 

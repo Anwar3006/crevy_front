@@ -129,10 +129,46 @@ export const createProjectInputSchema = z.object({
   documents: z.array(z.any()).optional().default([]),
 });
 
+export const SDGS = [
+  { id: "1", title: "No Poverty", color: "bg-[#E5243B]" },
+  { id: "2", title: "Zero Hunger", color: "bg-[#DDA63A]" },
+  { id: "3", title: "Good Health and Well-being", color: "bg-[#4C9F38]" },
+  { id: "4", title: "Quality Education", color: "bg-[#C5192D]" },
+  { id: "5", title: "Gender Equality", color: "bg-[#FF3A21]" },
+  { id: "6", title: "Clean Water and Sanitation", color: "bg-[#26BDE2]" },
+  { id: "7", title: "Affordable and Clean Energy", color: "bg-[#FCC30B]" },
+  { id: "8", title: "Decent Work and Economic Growth", color: "bg-[#A21942]" },
+  {
+    id: "9",
+    title: "Industry, Innovation and Infrastructure",
+    color: "bg-[#FD6925]",
+  },
+  { id: "10", title: "Reduced Inequality", color: "bg-[#DD1367]" },
+  {
+    id: "11",
+    title: "Sustainable Cities and Communities",
+    color: "bg-[#FD9D24]",
+  },
+  {
+    id: "12",
+    title: "Responsible Consumption and Production",
+    color: "bg-[#BF8B2E]",
+  },
+  { id: "13", title: "Climate Action", color: "bg-[#3F7E44]" },
+  { id: "14", title: "Life Below Water", color: "bg-[#0A97D9]" },
+  { id: "15", title: "Life on Land", color: "bg-[#56C02B]" },
+  {
+    id: "16",
+    title: "Peace, Justice and Strong Institutions",
+    color: "bg-[#00689D]",
+  },
+  { id: "17", title: "Partnerships for the Goals", color: "bg-[#19486A]" },
+];
+
 export const createProjectDefaultValues: Partial<TCreateProject> = {
   name: "",
   projectType: "" as (typeof projectTypeEnum)[0],
-  location: "",
+  location: "GHA",
   gpsCoordinates: "",
   startDate: new Date(),
   durationMonths: 1,
