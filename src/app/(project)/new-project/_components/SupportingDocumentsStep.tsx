@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, FileText, Trash2, UploadCloud } from "lucide-react";
+import { FileText, Trash2, UploadCloud } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { useFormContext } from "react-hook-form";
@@ -13,13 +13,13 @@ type SupportingDocumentsStepProps = {
   onPrev: () => void;
 };
 
-const RECOMMENDED_DOCS = [
-  "Project design document",
-  "Environmental impact assessment",
-  "Site photographs",
-  "Technical specifications",
-  "Community consent forms",
-];
+// const RECOMMENDED_DOCS = [
+//   "Project design document",
+//   "Environmental impact assessment",
+//   "Site photographs",
+//   "Technical specifications",
+//   "Community consent forms",
+// ];
 
 const SupportingDocumentsStep = ({
   onNext,
@@ -75,9 +75,9 @@ const SupportingDocumentsStep = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <button
-          type="button" // Critical to prevent form submission
+          type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 text-left gap-4"
         >
           <input
             type="file"
@@ -106,9 +106,9 @@ const SupportingDocumentsStep = ({
         </button>
 
         <button
-          type="button" // Critical to prevent form submission
+          type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full border-2 border-dashed border-emerald-200 rounded-2xl p-12 flex flex-col items-center justify-center bg-emerald-50/20 cursor-pointer hover:bg-emerald-50/40 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 text-left gap-4"
         >
           <div className="bg-[#2ebc8d] p-3 rounded-lg mb-4">
             <UploadCloud className="h-6 w-6 text-white" />
@@ -136,9 +136,9 @@ const SupportingDocumentsStep = ({
             Uploaded Files ({documents.length})
           </h3>
           <div className="space-y-3">
-            {documents.map((file: any, index: number) => (
+            {documents.map((file: Record<string, unknown>, index: number) => (
               <div
-                key={file}
+                key={`${file.name}-${index}`}
                 className="flex items-center gap-4 p-4 border border-slate-100 rounded-xl bg-white group"
               >
                 <div className="bg-amber-100 p-2 rounded-lg">

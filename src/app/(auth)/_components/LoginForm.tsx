@@ -48,6 +48,8 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
 
       toast.success("Log in successful!");
 
+      localStorage.setItem("authUser", JSON.stringify(authResult?.data));
+
       // Step 3: Redirect to dashboard
       router.push("/dashboard");
     } catch (error: unknown) {

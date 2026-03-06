@@ -1,19 +1,12 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type React from "react";
 import { DashboardLayoutClient } from "@/components/DashboardLayout";
-import { authClient } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth-server";
 import type { TBetterAuthUser } from "@/types";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
-  // 1. Pass headers to BetterAuth so it can read the cookies
-  const { data: session } = await authClient.getSession({
-    fetchOptions: {
-      headers: await headers(),
-    },
-  });
+  const session = await getServerSession();
 
-  // 2. Gatekeeping: Server-side redirect is instant
   if (!session) {
     redirect("/login");
   }
