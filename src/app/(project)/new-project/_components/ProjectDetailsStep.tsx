@@ -18,7 +18,7 @@ const ProjectDetailsStep = ({ onNext, onPrev }: ProjectDetailsStepProps) => {
   const usesSyntheticFertilizers = watch("usesSyntheticFertilizers");
   const usesSyntheticPesticides = watch("usesSyntheticPesticides");
   const supportsBiodiversityConservation = watch(
-    "supportsBiodiversityConservation",
+    "supportsBiodiversityConservation" as any,
   );
   const supportsWaterManagement = watch("supportsWaterManagement");
 
