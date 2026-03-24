@@ -45,17 +45,6 @@ export const PROJECT_TYPES = [
   },
 ];
 
-// export const projectTypeEnum = [
-//   "reforestation",
-//   "agroforestry",
-//   "soil_carbon",
-//   "wetland_restoration",
-//   "mangrove_restoration",
-//   "grassland_management",
-//   "biochar",
-//   "other"
-// ] as const;
-
 export const projectTypeEnum = PROJECT_TYPES.map((type) => type.id) as [
   string,
   ...string[],
@@ -73,14 +62,12 @@ export const createProjectInputSchema = z.object({
 
   location: z.string().min(2, "Location is required"),
 
-  // Coordinates usually come as "lat, lng" - NOW OPTIONAL
   gpsCoordinates: z
     .string()
     .regex(/^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/, "Invalid GPS format (lat, lng)")
     .optional()
     .or(z.literal("")),
 
-  // Use coerce to handle both string inputs from forms and Date objects
   startDate: z.coerce.date({
     error: () => ({ message: "Please enter a valid start date" }),
   }),
@@ -92,6 +79,7 @@ export const createProjectInputSchema = z.object({
   baselineLandUse: z
     .string()
     .min(5, "Baseline land use description is required"),
+  baselineEmissionsYearly: z.string().optional().or(z.literal("")),
   regenerativePractices: z
     .array(z.string())
     .min(1, "Select at least one practice"),
@@ -109,14 +97,14 @@ export const createProjectInputSchema = z.object({
 
   // Productivity & Inputs
   cropLivestockTypes: z.string().optional().or(z.literal("")),
-  usesSyntheticFertilizers: z.string().default("no"), // Using string for radio/select
-  usesSyntheticPesticides: z.string().default("no"),
+  usesSyntheticFertilizers: z.boolean().default(false),
+  usesSyntheticPesticides: z.boolean().default(false),
   organicAmendments: z.string().optional().or(z.literal("")),
 
   // Community & Co-benefits
   socialEconomicBenefits: z.string().optional().or(z.literal("")),
-  supportsBiodiversity: z.string().default("no"),
-  supportsWaterManagement: z.string().default("no"),
+  supportsBiodiversityConservation: z.boolean().default(false),
+  supportsWaterManagement: z.boolean().default(false),
   planToExpandPractices: z.string().default("no"),
 
   description: z.string().min(20, "Please provide a detailed description"),
@@ -180,12 +168,12 @@ export const createProjectDefaultValues: Partial<TCreateProject> = {
   initialSoilCarbonContent: 0,
   expectedBiomassIncrease: "",
   cropLivestockTypes: "",
-  usesSyntheticFertilizers: "no",
-  usesSyntheticPesticides: "no",
+  usesSyntheticFertilizers: false,
+  usesSyntheticPesticides: false,
   organicAmendments: "",
   socialEconomicBenefits: "",
-  supportsBiodiversity: "no",
-  supportsWaterManagement: "no",
+  supportsBiodiversityConservation: false,
+  supportsWaterManagement: false,
   planToExpandPractices: "no",
   description: "",
   implementationPlan: "",
@@ -194,6 +182,7 @@ export const createProjectDefaultValues: Partial<TCreateProject> = {
   region: "Africa",
   sdgs: [],
   documents: [],
+  baselineEmissionsYearly: "",
 };
 
 // Infer TypeScript type from create schema

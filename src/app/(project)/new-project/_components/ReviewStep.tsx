@@ -227,8 +227,8 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
             value={formData.usesSyntheticPesticides}
           />
           <InfoRow
-            label="Supports Biodiversity"
-            value={formData.supportsBiodiversity}
+            label="Supports Biodiversity Conservation"
+            value={formData.supportsBiodiversityConservation}
           />
           <InfoRow
             label="Supports Water Management"

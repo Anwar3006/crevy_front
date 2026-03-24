@@ -1,5 +1,5 @@
 // lib/utils/carbon-math.ts
-export const calculateProjectMetrics = (project: Record<string, unknown>) => {
+export const calculateProjectMetrics = (project: Record<string, any>) => {
   const estimatedImpact = Number(project.estimatedTotalTco2e || 0);
   const totalHectares = Number(project.totalAreaHectares || 0);
 

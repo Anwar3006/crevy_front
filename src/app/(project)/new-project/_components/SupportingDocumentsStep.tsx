@@ -144,16 +144,16 @@ const SupportingDocumentsStep = ({
                 <div className="bg-amber-100 p-2 rounded-lg">
                   <FileText className="h-5 w-5 text-amber-600" />
                   <span className="block text-[8px] font-black text-amber-600 text-center uppercase -mt-1">
-                    {file.type}
+                    {file.type as string}
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-slate-700 truncate">
-                    {file.name}
+                    {file.name as string}
                   </p>
                   <p className="text-xs text-slate-400 font-medium tracking-tight">
                     {" "}
-                    {file.size}
+                    {file.size as string}
                   </p>
                 </div>
                 <button

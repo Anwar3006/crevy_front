@@ -71,10 +71,12 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
             management?
           </Label>
           <RadioGroup
-            defaultValue={watch("supportsBiodiversity")}
+            // Convert boolean to string for the RadioGroup UI
+            value={watch("supportsBiodiversityConservation") ? "yes" : "no"}
             onValueChange={(val: string) => {
-              setValue("supportsBiodiversity", val);
-              setValue("supportsWaterManagement", val);
+              const boolVal = val === "yes";
+              setValue("supportsBiodiversityConservation", boolVal);
+              setValue("supportsWaterManagement", boolVal);
             }}
             className="flex gap-8"
           >

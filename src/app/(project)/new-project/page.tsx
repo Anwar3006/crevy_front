@@ -57,7 +57,7 @@ const NewProject = () => {
       ],
       3: [
         "socialEconomicBenefits",
-        "supportsBiodiversity",
+        "supportsBiodiversityConservation",
         "supportsWaterManagement",
         "planToExpandPractices",
         "description",
@@ -114,10 +114,10 @@ const NewProject = () => {
       // Transform data for API
       const apiData = {
         ...data,
-        usesSyntheticFertilizers: data.usesSyntheticFertilizers === "yes",
-        usesSyntheticPesticides: data.usesSyntheticPesticides === "yes",
-        supportsBiodiversityConservation: data.supportsBiodiversity === "yes",
-        supportsWaterManagement: data.supportsWaterManagement === "yes",
+        usesSyntheticFertilizers: data.usesSyntheticFertilizers,
+        usesSyntheticPesticides: data.usesSyntheticPesticides,
+        supportsBiodiversityConservation: data.supportsBiodiversityConservation,
+        supportsWaterManagement: data.supportsWaterManagement,
         regenerativePractices: data.regenerativePractices.join(","),
         durationMonths: Number(data.durationMonths),
         region: data.region,

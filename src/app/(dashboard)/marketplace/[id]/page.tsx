@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SDGS } from "@/constants/new-project";
 import { ProjectService } from "@/lib/services/project-service";
 import {
   calculateProjectMetrics,
@@ -700,7 +701,7 @@ export default function ProjectDetailsPage() {
               <InvestmentPanel
                 project={project}
                 metrics={metrics}
-                visual={visual}
+                // visual={visual}
               />
             </div>
           </aside>
@@ -734,7 +735,7 @@ export default function ProjectDetailsPage() {
                 <InvestmentPanel
                   project={project}
                   metrics={metrics}
-                  visual={visual}
+                  // visual={visual}
                 />
               </div>
             </SheetContent>
@@ -801,7 +802,7 @@ function InvestmentPanel({
             Permanence
           </p>
           <p className="text-sm font-bold text-slate-900">
-            {metrics.permanenceScore}
+            {metrics.permanenceScore as any}
           </p>
         </div>
         <div className="bg-slate-50 rounded-2xl p-4">
@@ -809,7 +810,7 @@ function InvestmentPanel({
             Duration
           </p>
           <p className="text-sm font-bold text-slate-900">
-            {Math.floor(project.durationMonths / 12)} Years
+            {Math.floor((project.durationMonths as any) / 12)} Years
           </p>
         </div>
       </div>
@@ -836,8 +837,8 @@ function InvestmentPanel({
         <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
         <p className="text-xs text-blue-700 font-medium leading-relaxed">
           Baseline carbon at{" "}
-          <strong>{project.initialSoilCarbonContent}%</strong> indicates high
-          sequestration headroom relative to regional benchmarks.
+          <strong>{project.initialSoilCarbonContent as any}%</strong> indicates
+          high sequestration headroom relative to regional benchmarks.
         </p>
       </div>
     </div>

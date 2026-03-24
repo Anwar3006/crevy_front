@@ -82,10 +82,11 @@ const SoilBiomassStep = ({ onNext, onPrev }: SoilBiomassStepProps) => {
                 Use of synthetic fertilizers or pesticides
               </Label>
               <RadioGroup
-                defaultValue={watch("usesSyntheticFertilizers")}
+                defaultValue={watch("usesSyntheticFertilizers") ? "yes" : "no"}
                 onValueChange={(val: string) => {
-                  setValue("usesSyntheticFertilizers", val);
-                  setValue("usesSyntheticPesticides", val);
+                  const boolVal = val === "yes";
+                  setValue("usesSyntheticFertilizers", boolVal);
+                  setValue("usesSyntheticPesticides", boolVal);
                 }}
                 className="flex gap-8"
               >

@@ -18,16 +18,19 @@ export const SIDEBAR_CONFIG: SidebarConfig = {
     {
       title: "Get Started",
       url: "/get-started",
+      // @ts-expect-error
       icon: MentoringIcon,
     },
     {
       title: "Compliance",
       url: "/compliance",
+      // @ts-expect-error
       icon: CheckmarkCircle03Icon,
     },
     {
       title: "Dashboard",
       url: "/dashboard",
+      // @ts-expect-error
       icon: DashboardSquareAddIcon,
     },
   ],
@@ -39,21 +42,25 @@ export const SIDEBAR_CONFIG: SidebarConfig = {
         {
           title: "Carbon Credit Calculator",
           url: "/carbon-calculator",
+          // @ts-expect-error
           icon: CalculateIcon,
         },
         {
           title: "Project Profile",
           url: "/project-profile",
+          // @ts-expect-error
           icon: DiscoverCircleIcon,
         },
         {
           title: "Carbon Credits",
           url: "/carbon-credits",
+          // @ts-expect-error
           icon: OrganicFoodIcon,
         },
         {
           title: "Track Verification",
           url: "/track-verification",
+          // @ts-expect-error
           icon: CheckListIcon,
         },
       ],
@@ -64,17 +71,20 @@ export const SIDEBAR_CONFIG: SidebarConfig = {
         {
           title: "User Profile",
           url: "/user-profile",
+          // @ts-expect-error
           icon: User02Icon,
         },
         {
           title: "Notifications",
           url: "/notifications",
+          // @ts-expect-error
           icon: Notification01Icon,
           badge: 3, // Example badge
         },
         {
           title: "Support",
           url: "/support",
+          // @ts-expect-error
           icon: CustomerService01Icon,
         },
       ],

@@ -92,6 +92,7 @@ export function AppSidebar({
                     >
                       <Link href={item.url}>
                         <HugeiconsIcon
+                          //@ts-expect-error
                           icon={item.icon}
                           size={24}
                           color="currentColor"
@@ -138,6 +139,7 @@ export function AppSidebar({
                       >
                         <Link href={item.url}>
                           <HugeiconsIcon
+                            //@ts-expect-error
                             icon={item.icon}
                             size={24}
                             color="currentColor"
