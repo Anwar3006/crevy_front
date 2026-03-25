@@ -32,32 +32,27 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (data: TSignInInput) => {
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      // Step 1: Create auth user with Better Auth
-      const authResult = await authClient.signIn.email({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (authResult.error) {
-        form.setError("root", { message: authResult.error.message });
-        return;
-      }
-
-      toast.success("Log in successful!");
-
-      localStorage.setItem("authUser", JSON.stringify(authResult?.data));
-
-      // Step 3: Redirect to dashboard
-      router.push("/dashboard");
-    } catch (error: unknown) {
-      console.error("Error logging in user: ", error);
-      toast.error(`Login failed! : ${(error as Error).message}`);
-    } finally {
-      setLoading(false);
-    }
+    await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Log in successful!");
+          // We call refresh to clear the Next.js cache and ensure Middleware sees the cookie
+          router.push("/dashboard");
+          router.refresh();
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message || "Login failed!");
+          form.setError("root", { message: ctx.error.message });
+        },
+        onResponse: () => {
+          setLoading(false);
+        },
+      },
+    });
   };
 
   return (
