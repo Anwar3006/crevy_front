@@ -40,9 +40,20 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
       fetchOptions: {
         onSuccess: () => {
           toast.success("Log in successful!");
-          // We call refresh to clear the Next.js cache and ensure Middleware sees the cookie
-          router.push("/dashboard");
+
+          // ─── IMPORTANT ─────────────────────────────────────────────────
+          // router.refresh() MUST come before router.push().
+          //
+          // refresh() tells Next.js to invalidate its server-component cache
+          // so that when DashboardLayout renders it calls getServerSession
+          // fresh — not a stale cached version that still has no session.
+          //
+          // If push() fires first, the dashboard layout runs immediately
+          // against the un-refreshed cache, finds no session, and redirects
+          // back to /login before refresh() even has a chance to run.
+          // ────────────────────────────────────────────────────────────────
           router.refresh();
+          router.push("/dashboard");
         },
         onError: (ctx) => {
           toast.error(ctx.error.message || "Login failed!");
@@ -64,7 +75,6 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
       >
         <FieldGroup>
           <div className="flex flex-col items-center gap-1 text-center">
-            {/* Title */}
             <h1 className="text-2xl font-bold">Login</h1>
 
             <p className="text-muted-foreground text-sm text-balance">
@@ -80,7 +90,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
             placeholder="rebecca@gmail.com"
             control={form.control}
             description="Use the email address you used to sign up"
-            disabled={false} //disable input, we will pull the email from the queryParams of the link sent to their email
+            disabled={false}
             readOnly={false}
           />
 
