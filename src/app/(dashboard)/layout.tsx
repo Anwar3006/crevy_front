@@ -7,9 +7,10 @@ import type { TBetterAuthUser } from "@/types";
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession();
 
-  // if (!session) {
-  //   redirect("/login");
-  // }
+  if (!session) {
+    console.log("No session found");
+    redirect("/login");
+  }
 
   return (
     <DashboardLayoutClient user={session.user as TBetterAuthUser}>
