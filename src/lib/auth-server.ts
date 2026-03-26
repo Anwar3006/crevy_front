@@ -2,7 +2,8 @@ import { headers } from "next/headers";
 
 export const getServerSession = async () => {
   // We point to our OWN server's rewrite path, not the Render URL
-  const proxyUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/proxy-auth/get-session`;
+  // Better Auth's own session endpoint is /api/auth/get-session
+  const proxyUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/get-session`;
 
   const headersList = await headers();
   const cookie = headersList.get("cookie") ?? "";
@@ -18,6 +19,7 @@ export const getServerSession = async () => {
     if (!response.ok) return null;
 
     const data = await response.json();
+    // Better Auth returns session/user object
     return data?.session ? data : null;
   } catch (err) {
     console.error("[getServerSession] Proxy fetch failed:", err);
