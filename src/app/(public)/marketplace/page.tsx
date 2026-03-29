@@ -7,6 +7,8 @@ import {
   RotateCcw,
   Search,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,6 +21,7 @@ import { ProjectCard } from "./_components/ProjectCard";
 // ... (SDGS constant remains the same)
 
 export default function MarketplacePage() {
+  const router = useRouter();
   const [filters, setFilters] = useState({
     region: "All Regions",
     projectType: "All Types",
@@ -54,15 +57,17 @@ export default function MarketplacePage() {
       {/* Header Banner (Optimized for mobile) */}
       <div className="bg-[#2ebc8d]/5 py-8 md:py-12 px-6 border-b border-[#2ebc8d]/10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 text-[#2ebc8d] font-semibold text-sm mb-4 cursor-pointer hover:opacity-80 transition-opacity">
+          <Link
+            href="/dashboard"
+            className="group flex items-center gap-2 text-[#2ebc8d] font-semibold text-sm mb-4 hover:opacity-80 transition-opacity"
+          >
             <svg
-              className="w-4 h-4"
+              className="w-4 h-4 transition-transform group-hover:-translate-x-1"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
-              <title>Back arrow</title>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -71,7 +76,7 @@ export default function MarketplacePage() {
               />
             </svg>
             <span>Back to Dashboard</span>
-          </div>
+          </Link>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
             Carbon Credit Marketplace
           </h1>

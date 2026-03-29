@@ -68,6 +68,14 @@ export const userRegistrationSchema = z
       }),
     }),
     baseUserRegistrationSchema.extend({
+      userType: z.literal("Admin"),
+      admin: z
+        .object({
+          assignedBusinessId: z.string().optional(),
+        })
+        .optional(),
+    }),
+    baseUserRegistrationSchema.extend({
       userType: z.literal("ProjectOwner"),
       projectOwner: z
         .object({

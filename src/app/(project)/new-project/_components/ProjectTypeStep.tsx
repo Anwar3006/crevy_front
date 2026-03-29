@@ -6,7 +6,13 @@ import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { PROJECT_TYPES } from "@/constants/new-project";
 
-const ProjectTypeStep = ({ onNext }: { onNext: () => void }) => {
+const ProjectTypeStep = ({
+  onNext,
+  onPrev,
+}: {
+  onNext: () => void;
+  onPrev: () => void;
+}) => {
   const { setValue, watch } = useFormContext();
   const selected = watch("projectType");
   const customProjectName = watch("customProjectName");
@@ -100,7 +106,8 @@ const ProjectTypeStep = ({ onNext }: { onNext: () => void }) => {
       <div className="mt-8 md:mt-12 flex flex-col sm:flex-row justify-end gap-3 md:gap-4">
         <Button
           variant="ghost"
-          disabled
+          onClick={onPrev}
+          type="button"
           className="px-6 md:px-8 py-3 md:py-4 text-slate-400 font-bold text-sm md:text-base order-2 sm:order-1"
         >
           Previous

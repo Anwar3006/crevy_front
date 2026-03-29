@@ -1,60 +1,123 @@
-import { Calculator, FileUp, ShieldCheck } from "lucide-react";
+import {
+  BarChart3,
+  Calculator,
+  ClipboardCheck,
+  FileUp,
+  MapPin,
+  ShieldCheck,
+  ShoppingBag,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
+import type { UserType } from "@/constants/sidebar-items";
 
-const QuickActions = () => {
+interface QuickActionsProps {
+  userType: UserType;
+}
+
+const QuickActions = ({ userType }: QuickActionsProps) => {
+  const getActions = () => {
+    switch (userType) {
+      case "Company":
+        return [
+          {
+            title: "Join Marketplace",
+            description: "Discover and invest in sustainable projects",
+            icon: <ShoppingBag className="h-6 w-6 stroke-white" />,
+            color: "bg-blue-500",
+            href: "/marketplace",
+          },
+          {
+            title: "Impact Analytics",
+            description: "View detailed environmental impact reports",
+            icon: <BarChart3 className="h-6 w-6 stroke-white" />,
+            color: "bg-emerald-500",
+            href: "/analytics",
+          },
+          {
+            title: "Request Compliance",
+            description: "Submit carbon credit certificates for audit",
+            icon: <ShieldCheck className="h-6 w-6 stroke-white" />,
+            color: "bg-amber-500",
+            href: "/compliance",
+          },
+        ];
+      case "Admin":
+        return [
+          {
+            title: "Assigned Businesses",
+            description: "View businesses under your management",
+            icon: <Users className="h-6 w-6 stroke-white" />,
+            color: "bg-indigo-500",
+            href: "/assigned-businesses",
+          },
+          {
+            title: "Log Site Visit",
+            description: "Submit geolocated evidence on-site",
+            icon: <MapPin className="h-6 w-6 stroke-white" />,
+            color: "bg-emerald-500",
+            href: "/site-visits",
+          },
+          {
+            title: "Verification Queue",
+            description: "Process submitted project documents",
+            icon: <ClipboardCheck className="h-6 w-6 stroke-white" />,
+            color: "bg-rose-500",
+            href: "/track-verification",
+          },
+        ];
+      default:
+        return [
+          {
+            title: "Start a new project",
+            description: "Submit your green project for estimation",
+            icon: <FileUp className="h-6 w-6 stroke-white" />,
+            color: "bg-blue-500",
+            href: "/new-project",
+          },
+          {
+            title: "Carbon Calculator",
+            description: "Estimate potential CO₂ savings",
+            icon: <Calculator className="h-6 w-6 stroke-white" />,
+            color: "bg-emerald-500",
+            href: "/carbon-calculator",
+          },
+          {
+            title: "Track Verification",
+            description: "Monitor certification progress",
+            icon: <ShieldCheck className="h-6 w-6 stroke-white" />,
+            color: "bg-amber-500",
+            href: "/track-verification",
+          },
+        ];
+    }
+  };
+
+  const actions = getActions();
+
   return (
     <div className="mx-auto max-w-5xl">
       <h3 className="mb-4 text-lg font-semibold text-gray-900">
         Quick Actions
       </h3>
       <div className="grid gap-4 md:grid-cols-3">
-        {/* Start a new project */}
-        <Link
-          href="/new-project"
-          className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
-        >
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#3B82F6] transition-colors group-hover:bg-[#3B82F6]">
-            <FileUp className="h-6 w-6 stroke-white" />
-          </div>
-          <h4 className="mb-2 font-semibold text-gray-900">
-            Start a new project
-          </h4>
-          <p className="text-sm text-gray-600">
-            Submit your green project for carbon credit estimation
-          </p>
-        </Link>
-
-        {/* View Carbon Calculator */}
-        <Link
-          href="/carbon-calculator"
-          className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
-        >
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#2CC295] transition-colors group-hover:bg-[#2CC295]">
-            <Calculator className="h-6 w-6 stroke-white" />
-          </div>
-          <h4 className="mb-2 font-semibold text-gray-900">
-            View Carbon Calculator
-          </h4>
-          <p className="text-sm text-gray-600">
-            Estimate potential CO₂ savings for your project
-          </p>
-        </Link>
-
-        {/* Track My Verification */}
-        <Link
-          href="/track-verification"
-          className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
-        >
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[#E39F40] transition-colors group-hover:bg-[#E39F40]">
-            <ShieldCheck className="h-6 w-6 stroke-white" />
-          </div>
-          <h4 className="mb-2 font-semibold text-gray-900">
-            Track My Verification
-          </h4>
-          <p className="text-sm text-gray-600">
-            Monitor your project certification progress
-          </p>
-        </Link>
+        {actions.map((action) => (
+          <Link
+            key={action.href}
+            href={action.href}
+            className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
+          >
+            <div
+              className={`mb-4 flex h-12 w-12 items-center justify-center rounded-lg ${action.color} transition-transform group-hover:scale-110`}
+            >
+              {action.icon}
+            </div>
+            <h4 className="mb-2 font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">
+              {action.title}
+            </h4>
+            <p className="text-sm text-gray-600">{action.description}</p>
+          </Link>
+        ))}
       </div>
     </div>
   );

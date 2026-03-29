@@ -3,4 +3,5 @@ export type TBetterAuthUser = {
   name: string;
   email: string;
   avatar?: string;
+  userType: string;
 };

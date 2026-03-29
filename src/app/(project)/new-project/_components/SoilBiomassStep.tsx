@@ -133,8 +133,16 @@ const SoilBiomassStep = ({ onNext, onPrev }: SoilBiomassStepProps) => {
       <div className="mt-12 flex gap-4">
         <Button
           type="button"
+          variant="outline"
+          onClick={onPrev}
+          className="px-6 md:px-8 py-3 md:py-4 text-emerald-500 border-emerald-500 font-bold text-sm md:text-base"
+        >
+          Previous
+        </Button>
+        <Button
+          type="button"
           onClick={onNext}
-          className="w-full bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all"
+          className="flex-1 bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all"
         >
           Next
         </Button>

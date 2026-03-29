@@ -22,7 +22,6 @@ import ProjectTypeStep from "./_components/ProjectTypeStep";
 import ReviewStep from "./_components/ReviewStep";
 import SidebarProgress from "./_components/SidebarProgress";
 import SoilBiomassStep from "./_components/SoilBiomassStep";
-import SubmissionResult from "./_components/SubmissionResult";
 import SupportingDocumentsStep from "./_components/SupportingDocumentsStep";
 
 const STEPS = ["Project Type", "Questionnaire", "Documents", "Review & Submit"];
@@ -31,8 +30,8 @@ const NewProject = () => {
   const [currentStep, setCurrentStep] = useState(0); // 0: Project Type, 1: Questionnaire, 2: Documents, 3: Review
   const [questionnaireSubStep, setQuestionnaireSubStep] = useState(0); // 0: Overview, 1: Land Use, 2: Soil, 3: Community
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const [submissionData, setSubmissionData] = useState<any>(null);
+  const [_showResult, _setShowResult] = useState(false);
+  const [_submissionData, setSubmissionData] = useState<any>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -190,7 +189,12 @@ const NewProject = () => {
         <div className="bg-white rounded-3xl p-6 xl:p-12 shadow-sm border border-slate-100">
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)}>
-              {currentStep === 0 && <ProjectTypeStep onNext={nextStep} />}
+              {currentStep === 0 && (
+                <ProjectTypeStep
+                  onNext={nextStep}
+                  onPrev={() => router.push("/dashboard")}
+                />
+              )}
 
               {currentStep === 1 && questionnaireSubStep === 0 && (
                 <ProjectOverviewStep onNext={nextStep} onPrev={prevStep} />

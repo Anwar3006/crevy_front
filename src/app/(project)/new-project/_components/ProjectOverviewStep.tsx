@@ -4,7 +4,6 @@ import { Info } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import CustomDatePicker from "@/components/CustomDatePicker";
 import CustomInput from "@/components/CustomInput";
-import CustomSelect from "@/components/CustomSelect";
 import { Button } from "@/components/ui/button";
 import { CountryDropdown } from "@/components/ui/country-dropdown";
 import { Progress } from "@/components/ui/progress";
@@ -15,7 +14,7 @@ type ProjectOverviewStepProps = {
   onPrev: () => void;
 };
 
-const LOCATION_OPTIONS = [
+const _LOCATION_OPTIONS = [
   { value: "ghana", label: "Ghana" },
   { value: "nigeria", label: "Nigeria" },
   { value: "kenya", label: "Kenya" },
@@ -24,7 +23,7 @@ const LOCATION_OPTIONS = [
   { value: "other", label: "Other" },
 ];
 
-const DURATION_OPTIONS = [
+const _DURATION_OPTIONS = [
   { value: "6", label: "6 months" },
   { value: "12", label: "12 months" },
   { value: "24", label: "24 months" },
@@ -129,11 +128,19 @@ const ProjectOverviewStep = ({ onNext, onPrev }: ProjectOverviewStepProps) => {
         </div>
       </div>
 
-      <div className="mt-12">
+      <div className="mt-12 flex gap-4">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={onPrev}
+          className="px-6 md:px-8 py-3 md:py-4 text-slate-400 font-bold text-sm md:text-base"
+        >
+          Previous
+        </Button>
         <Button
           type="button"
           onClick={onNext}
-          className="w-full bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all"
+          className="flex-1 bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all"
         >
           Next
         </Button>

@@ -5,7 +5,7 @@ import { countries } from "country-data-list";
 // assets
 import { CheckIcon, ChevronDown, Globe } from "lucide-react";
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import { CircleFlag } from "react-circle-flags";
 import { type Control, Controller } from "react-hook-form";
 // shadcn

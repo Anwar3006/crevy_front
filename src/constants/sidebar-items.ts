@@ -1,93 +1,182 @@
 import {
   CalculateIcon,
+  Calendar03Icon,
   CheckListIcon,
   CheckmarkCircle03Icon,
   CustomerService01Icon,
   DashboardSquareAddIcon,
   DiscoverCircleIcon,
-  MentoringIcon,
   Notification01Icon,
   OrganicFoodIcon,
+  PropertyAddIcon,
   User02Icon,
+  UserGroupIcon,
+  ViewIcon,
 } from "@hugeicons/core-free-icons";
-import type { SidebarConfig } from "@/types/sidebar.types";
+import type { SidebarConfig, SidebarItem } from "@/types/sidebar.types";
 
-export const SIDEBAR_CONFIG: SidebarConfig = {
-  // Top-level items (Get Started, Compliance, Dashboard)
-  topItems: [
+export type UserType = "Company" | "ProjectOwner" | "Admin";
+
+export const getSidebarConfig = (userType: UserType): SidebarConfig => {
+  const commonAccountItems: SidebarItem[] = [
     {
-      title: "Get Started",
-      url: "/get-started",
+      title: "User Profile",
+      url: "/profile",
       // @ts-expect-error
-      icon: MentoringIcon,
+      icon: User02Icon,
     },
     {
-      title: "Compliance",
-      url: "/compliance",
+      title: "Notifications",
+      url: "/notifications",
       // @ts-expect-error
-      icon: CheckmarkCircle03Icon,
+      icon: Notification01Icon,
+      badge: 3,
     },
     {
-      title: "Dashboard",
-      url: "/dashboard",
+      title: "Support",
+      url: "/support",
       // @ts-expect-error
-      icon: DashboardSquareAddIcon,
+      icon: CustomerService01Icon,
     },
-  ],
-  // Grouped sections
-  sections: [
-    {
-      title: "CARBON CENTER",
-      items: [
+  ];
+
+  const configs: Record<UserType, SidebarConfig> = {
+    Company: {
+      topItems: [
         {
-          title: "Carbon Credit Calculator",
-          url: "/carbon-calculator",
+          title: "Dashboard",
+          url: "/dashboard",
           // @ts-expect-error
-          icon: CalculateIcon,
+          icon: DashboardSquareAddIcon,
         },
         {
-          title: "Project Profile",
-          url: "/project-profile",
+          title: "Marketplace",
+          url: "/marketplace",
           // @ts-expect-error
           icon: DiscoverCircleIcon,
         },
         {
-          title: "Carbon Credits",
-          url: "/carbon-credits",
+          title: "Compliance",
+          url: "/compliance",
           // @ts-expect-error
-          icon: OrganicFoodIcon,
+          icon: CheckmarkCircle03Icon,
+        },
+      ],
+      sections: [
+        {
+          title: "INVESTMENTS",
+          items: [
+            {
+              title: "My Carbon Credits",
+              url: "/carbon-credits",
+              // @ts-expect-error
+              icon: OrganicFoodIcon,
+            },
+            {
+              title: "Impact Analytics",
+              url: "/analytics",
+              // @ts-expect-error
+              icon: CalculateIcon,
+            },
+          ],
         },
         {
-          title: "Track Verification",
-          url: "/track-verification",
-          // @ts-expect-error
-          icon: CheckListIcon,
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
         },
       ],
     },
-    {
-      title: "ACCOUNT PAGES",
-      items: [
+    ProjectOwner: {
+      topItems: [
         {
-          title: "User Profile",
-          url: "/user-profile",
+          title: "Dashboard",
+          url: "/dashboard",
           // @ts-expect-error
-          icon: User02Icon,
+          icon: DashboardSquareAddIcon,
         },
         {
-          title: "Notifications",
-          url: "/notifications",
+          title: "Register Project",
+          url: "/new-project",
           // @ts-expect-error
-          icon: Notification01Icon,
-          badge: 3, // Example badge
+          icon: PropertyAddIcon,
         },
         {
-          title: "Support",
-          url: "/support",
+          title: "Compliance",
+          url: "/compliance",
           // @ts-expect-error
-          icon: CustomerService01Icon,
+          icon: CheckmarkCircle03Icon,
+        },
+      ],
+      sections: [
+        {
+          title: "MY PROJECTS",
+          items: [
+            {
+              title: "Project Profiles",
+              url: "/project-profile",
+              // @ts-expect-error
+              icon: ViewIcon,
+            },
+            {
+              title: "Track Verification",
+              url: "/track-verification",
+              // @ts-expect-error
+              icon: CheckListIcon,
+            },
+          ],
+        },
+        {
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
         },
       ],
     },
-  ],
+    Admin: {
+      topItems: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+          // @ts-expect-error
+          icon: DashboardSquareAddIcon,
+        },
+        {
+          title: "Compliance",
+          url: "/compliance",
+          // @ts-expect-error
+          icon: CheckmarkCircle03Icon,
+        },
+      ],
+      sections: [
+        {
+          title: "MANAGEMENT",
+          items: [
+            {
+              title: "Assigned Businesses",
+              url: "/assigned-businesses",
+              // @ts-expect-error
+              icon: UserGroupIcon,
+            },
+            {
+              title: "Site Visits",
+              url: "/site-visits",
+              // @ts-expect-error
+              icon: Calendar03Icon,
+            },
+            {
+              title: "Data Collection",
+              url: "/data-collection",
+              // @ts-expect-error
+              icon: CalculateIcon,
+            },
+          ],
+        },
+        {
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
+        },
+      ],
+    },
+  };
+
+  return configs[userType] || configs.ProjectOwner;
 };

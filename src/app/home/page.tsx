@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 // import "./App.css";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import bigimg from "../../../public/img/big-img.png";
 import book from "../../../public/img/book.png";
@@ -14,6 +16,7 @@ import rotate from "../../../public/img/rotate.png";
 import twitter from "../../../public/img/twitter.png";
 
 export default function HomePage() {
+  const router = useRouter();
   const [_activeTab, _setActiveTab] = useState("tab1");
 
   const _tabs = [
@@ -100,8 +103,10 @@ export default function HomePage() {
             <li className=" text-gray-600 hover:text-myGreen  cursor-pointer">
               Crevy
             </li>
-            <li className=" text-gray-600 hover:text-myGreen  cursor-pointer">
-              Support
+            <li className="text-gray-600 hover:text-myGreen cursor-pointer">
+              <Link href="/support" className="outline-none">
+                Support
+              </Link>
             </li>
           </ul>
         </nav>
@@ -120,12 +125,14 @@ export default function HomePage() {
           </p>
           <div className="flex gap-[5%] w-[70%] pt-[50px]">
             <button
+              onClick={() => router.push("/register")}
               type="button"
               className=" text-white hover:text-white font-semibold uppercase px-[60px] py-[10px] bg-myGreen rounded-full cursor-pointer hover:bg-myDarkGreen duration-200"
             >
               Sign up
             </button>
             <button
+              onClick={() => router.push("/login")}
               type="button"
               className=" text-myGreen font-semibold hover:text-white uppercase px-[60px] py-[10px] bg-white border-2 border-white rounded-full cursor-pointer hover:bg-myDarkGreen duration-200"
             >
@@ -252,6 +259,7 @@ export default function HomePage() {
           </p>
           <div className="pt-[6%] flex justify-center gap-[6%]">
             <button
+              onClick={() => router.push("/new-project")}
               type="button"
               className=" text-myGreen hover:text-white  px-[40px] py-[10px] bg-white border-2 border-myGreen rounded-full cursor-pointer  hover:bg-myGreen duration-200"
             >
@@ -259,6 +267,7 @@ export default function HomePage() {
             </button>
 
             <button
+              onClick={() => router.push("/support")}
               type="button"
               className=" text-white hover:bg-white  px-[40px] py-[10px] bg-transparent border-2 border-white rounded-full cursor-pointer  hover:text-myGreen duration-200"
             >

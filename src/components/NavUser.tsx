@@ -109,7 +109,7 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push("/user-profile")}>
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
                 <BadgeCheck className="h-4 w-4" />
                 My Profile
               </DropdownMenuItem>

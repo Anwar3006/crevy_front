@@ -20,7 +20,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { SIDEBAR_CONFIG } from "@/constants/sidebar-items";
+import { getSidebarConfig, type UserType } from "@/constants/sidebar-items";
 import type { TBetterAuthUser } from "@/types";
 import { NavUser } from "./NavUser";
 import { Separator } from "./ui/separator";
@@ -36,6 +36,9 @@ export function AppSidebar({
 
   // The specific brand green from the image
   const brandGreen = "bg-[#2ebc8d]";
+
+  // Get role-based sidebar config
+  const sidebarConfig = getSidebarConfig(user.userType as UserType);
 
   return (
     <Sidebar
@@ -75,7 +78,7 @@ export function AppSidebar({
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {SIDEBAR_CONFIG.topItems.map((item) => {
+              {sidebarConfig.topItems.map((item) => {
                 const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -113,7 +116,7 @@ export function AppSidebar({
         </SidebarGroup>
 
         {/* Grouped sections */}
-        {SIDEBAR_CONFIG.sections.map((section, sectionIndex) => (
+        {sidebarConfig.sections.map((section, sectionIndex) => (
           <SidebarGroup key={section.title || sectionIndex} className="mt-4">
             {section.title && (
               <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white/70 mb-2 group-data-[collapsible=icon]:hidden">
