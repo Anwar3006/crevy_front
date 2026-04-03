@@ -41,12 +41,12 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-}
 
-@theme {
+  /* Custom Crevy Tokens */
   --color-myGreen: #2cc295;
   --color-myDarkGreen: #178a74;
   --color-myBlue: #131927;
+  --font-syne: var(--font-syne);
 }
 
 :root {
