@@ -5,8 +5,6 @@ import {
   motion,
   useInView,
   useReducedMotion,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import {
   Activity,
@@ -15,9 +13,7 @@ import {
   Calculator,
   CheckCircle2,
   ChevronDown,
-  Facebook,
   Flame,
-  Linkedin,
   MapPin,
   Menu,
   Quote,
@@ -28,7 +24,6 @@ import {
   Star,
   Sun,
   Trees,
-  Twitter,
   Users,
   Waves,
   X,
