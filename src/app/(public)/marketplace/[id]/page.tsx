@@ -1,9 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowLeft,
-  BadgeCheck,
+  ArrowUpRight,
+  Award,
   BarChart3,
   CheckCircle2,
   ChevronRight,
@@ -25,78 +27,90 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
-
-import { Badge } from "@/components/ui/badge";
+import { memo, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SDGS } from "@/constants/new-project";
 import { ProjectService } from "@/lib/services/project-service";
+import { cn } from "@/lib/utils";
 import {
   calculateProjectMetrics,
   parsePostgresArray,
 } from "@/lib/utils/carbon-math";
 
-// ─── Project type visual config ─────────────────────────────────────────────
+// ─── Visual Config ────────────────────────────────────────────────────────────
+
 const PROJECT_VISUAL: Record<
   string,
   {
     icon: string;
-    gradientFrom: string;
-    gradientTo: string;
+    gradFrom: string;
+    gradTo: string;
     accent: string;
     lightBg: string;
+    heroImage: string;
   }
 > = {
   regenerative_agriculture: {
     icon: "/icons/3d-leaf.png",
-    gradientFrom: "#052e16",
-    gradientTo: "#166534",
+    gradFrom: "#052e16",
+    gradTo: "#166534",
     accent: "#16a34a",
     lightBg: "#f0fdf4",
+    heroImage:
+      "https://images.pexels.com/photos/2132250/pexels-photo-2132250.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   waste_management: {
     icon: "/icons/3d-waste.png",
-    gradientFrom: "#0f172a",
-    gradientTo: "#334155",
+    gradFrom: "#0f172a",
+    gradTo: "#334155",
     accent: "#64748b",
     lightBg: "#f8fafc",
+    heroImage:
+      "https://images.pexels.com/photos/802221/pexels-photo-802221.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   renewable_energy: {
     icon: "/icons/3d-renewable.png",
-    gradientFrom: "#451a03",
-    gradientTo: "#92400e",
+    gradFrom: "#451a03",
+    gradTo: "#92400e",
     accent: "#d97706",
     lightBg: "#fffbeb",
+    heroImage:
+      "https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   biochar: {
     icon: "/icons/biochar.png",
-    gradientFrom: "#1c1917",
-    gradientTo: "#44403c",
+    gradFrom: "#1c1917",
+    gradTo: "#44403c",
     accent: "#78716c",
     lightBg: "#fafaf9",
+    heroImage:
+      "https://images.pexels.com/photos/259280/pexels-photo-259280.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   reforestation: {
     icon: "/icons/reforestation.png",
-    gradientFrom: "#052e16",
-    gradientTo: "#065f46",
+    gradFrom: "#052e16",
+    gradTo: "#065f46",
     accent: "#059669",
     lightBg: "#ecfdf5",
+    heroImage:
+      "https://images.pexels.com/photos/440731/pexels-photo-440731.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
   blue_carbon: {
     icon: "/icons/blue-carbon.png",
-    gradientFrom: "#0c1a4e",
-    gradientTo: "#1e40af",
+    gradFrom: "#0c1a4e",
+    gradTo: "#1e40af",
     accent: "#3b82f6",
     lightBg: "#eff6ff",
+    heroImage:
+      "https://images.pexels.com/photos/1680140/pexels-photo-1680140.jpeg?auto=compress&cs=tinysrgb&w=1600",
   },
 };
 
 const DEFAULT_VISUAL = PROJECT_VISUAL.regenerative_agriculture;
 
-// SDG hex colors (extracted from SDGS constant)
 const SDG_HEX: Record<string, string> = {
   "1": "#E5243B",
   "2": "#DDA63A",
@@ -119,6 +133,8 @@ const SDG_HEX: Record<string, string> = {
 
 type Tab = "overview" | "technical" | "sustainability";
 
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default function ProjectDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -134,172 +150,171 @@ export default function ProjectDetailsPage() {
     enabled: !!id,
   });
 
-  if (isLoading) return <ProjectLoadingSkeleton />;
-  if (!project) return <ProjectNotFoundState />;
+  const visual = useMemo(
+    () =>
+      project
+        ? (PROJECT_VISUAL[project.projectType] ?? DEFAULT_VISUAL)
+        : DEFAULT_VISUAL,
+    [project],
+  );
 
-  const metrics = calculateProjectMetrics(project);
-  const sdgs = parsePostgresArray(project.sdgs);
-  const visual = PROJECT_VISUAL[project.projectType] || DEFAULT_VISUAL;
-  const projectTypeLabel = project.projectType.replace(/_/g, " ");
-  const projectYears = Math.floor(project.durationMonths / 12);
+  const metrics = useMemo(
+    () => (project ? calculateProjectMetrics(project) : null),
+    [project],
+  );
+
+  const sdgs = useMemo(
+    () => (project ? parsePostgresArray(project.sdgs) : []),
+    [project],
+  );
+
+  const projectYears = useMemo(
+    () => (project ? Math.floor(project.durationMonths / 12) : 0),
+    [project],
+  );
+
+  if (isLoading) return <ProjectLoadingSkeleton />;
+  if (!project || !metrics) return <ProjectNotFoundState />;
+
+  const typeLabel = project.projectType.replace(/_/g, " ");
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans selection:bg-emerald-100 selection:text-emerald-900">
-      {/* ─── Hero ─────────────────────────────────────────────────────────── */}
-      <div
-        className="relative overflow-hidden"
-        style={{
-          background: `linear-gradient(135deg, ${visual.gradientFrom} 0%, ${visual.gradientTo} 100%)`,
-        }}
-      >
-        {/* Atmospheric texture overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.05)_0%,transparent_60%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(0,0,0,0.2)_0%,transparent_70%)] pointer-events-none" />
+    <div className="min-h-screen bg-[#F4F7F4] selection:bg-emerald-100 selection:text-emerald-900">
+      {/* ── Full-bleed Hero ────────────────────────────────────────────────── */}
+      <section className="relative h-[88vh] min-h-[560px] max-h-[780px] overflow-hidden">
+        {/* Hero photo */}
+        <Image
+          src={project.imageUrl || visual.heroImage}
+          alt={project.name}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover scale-105"
+        />
 
-        {/* Nav bar inside hero */}
-        <nav className="relative z-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        {/* Layered gradient overlays for editorial depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            background: `linear-gradient(135deg, ${visual.gradFrom}CC 0%, transparent 60%)`,
+          }}
+        />
+
+        {/* Nav bar */}
+        <nav className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto w-full">
           <button
             type="button"
             onClick={() => router.back()}
-            className="group flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            className="group flex items-center gap-2.5 text-white/60 hover:text-white transition-colors"
+            aria-label="Back to marketplace"
           >
-            <div className="p-1.5 rounded-full group-hover:bg-white/10 transition-colors">
+            <div className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center group-hover:bg-white/20 transition-colors">
               <ArrowLeft className="w-4 h-4" />
             </div>
-            <span className="text-sm font-medium hidden sm:block">
+            <span className="text-sm font-semibold hidden md:block">
               Marketplace
             </span>
           </button>
 
           <div className="flex items-center gap-3">
-            <Badge className="hidden sm:flex bg-white/10 text-white border-white/20 hover:bg-white/20 rounded-full px-3 py-1 font-semibold text-xs capitalize">
-              {project.status}
-            </Badge>
-            {/* Desktop invest button */}
+            {/* Status badge */}
+            <span className="hidden sm:flex items-center gap-1.5 bg-white/10 backdrop-blur-md border border-white/15 text-white/80 text-xs font-bold tracking-wider uppercase px-3 py-1.5 rounded-full">
+              <span
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  project.status === "approved" || project.status === "verified"
+                    ? "bg-emerald-400"
+                    : "bg-amber-400 animate-pulse",
+                )}
+              />
+              {project.status === "approved" ? "Verified" : project.status}
+            </span>
+            {/* Desktop CTA */}
             <Button
-              className="hidden md:flex bg-white text-slate-900 hover:bg-white/90 rounded-xl px-5 h-9 font-bold text-sm transition-all active:scale-95"
-              style={{ color: visual.gradientTo }}
+              className="hidden md:flex h-9 px-5 rounded-xl font-bold text-sm text-white border-none shadow-lg"
+              style={{ backgroundColor: visual.accent }}
             >
-              Participate in Round
+              Invest Now
             </Button>
           </div>
         </nav>
 
-        {/* Hero body */}
-        <div className="relative z-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:pt-12 sm:pb-20">
-          <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-16">
-            {/* Left: identity */}
-            <div className="flex-1 space-y-5">
-              <div className="flex flex-wrap items-center gap-2">
-                {visual.icon && (
-                  <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden">
-                    <Image
-                      src={visual.icon}
-                      alt={projectTypeLabel}
-                      width={28}
-                      height={28}
-                      className="object-contain"
-                    />
-                  </div>
-                )}
-                <Badge className="bg-white/15 text-white border-none hover:bg-white/20 rounded-lg px-3 py-1 text-xs font-bold capitalize">
-                  {projectTypeLabel}
-                </Badge>
-                <div className="flex items-center gap-1.5 text-white/60 text-sm font-medium">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>
-                    {project.region}, {project.location}
-                  </span>
+        {/* Hero content — bottom left */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 max-w-7xl mx-auto px-6 pb-10 md:pb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="max-w-3xl"
+          >
+            {/* Type + location row */}
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              {visual.icon && (
+                <div className="w-9 h-9 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center overflow-hidden shrink-0">
+                  <Image
+                    src={visual.icon}
+                    alt={typeLabel}
+                    width={26}
+                    height={26}
+                    className="object-contain"
+                  />
                 </div>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.08]">
-                {project.name}
-              </h1>
-
-              <p className="text-white/65 text-sm xl:text-base leading-relaxed max-w-2xl font-medium">
-                {project.description}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4 pt-1">
-                <div className="flex items-center gap-1.5 text-white/50 text-sm">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>
-                    {projectYears} year{projectYears !== 1 ? "s" : ""} duration
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 text-white/50 text-sm">
-                  <BadgeCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-300 font-semibold">
-                    Verified Stage 1
-                  </span>
-                </div>
+              )}
+              <span
+                className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider text-white border border-white/20"
+                style={{ backgroundColor: `${visual.accent}40` }}
+              >
+                {typeLabel}
+              </span>
+              <div className="flex items-center gap-1.5 text-white/50 text-sm font-medium">
+                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                {project.region}, {project.location}
               </div>
             </div>
 
-            {/* Right: hero stat chips (desktop only) */}
-            <div className="hidden lg:flex flex-col gap-3 shrink-0">
-              <HeroStat
+            {/* Title */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05] mb-4">
+              {project.name}
+            </h1>
+
+            <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl mb-6">
+              {project.description}
+            </p>
+
+            {/* Inline key metrics */}
+            <div className="flex flex-wrap gap-3">
+              <HeroPill
+                icon={<TrendingUp className="w-3.5 h-3.5" />}
                 label="Carbon Potential"
                 value={`${Number(project.estimatedTotalTco2e).toLocaleString()} tCO₂e`}
+                accent={visual.accent}
               />
-              <HeroStat
-                label="Annual Yield"
-                value={`${metrics.estimatedYield} tCO₂e/yr`}
-              />
-              <HeroStat
-                label="Area Managed"
+              <HeroPill
+                icon={<Leaf className="w-3.5 h-3.5" />}
+                label="Area"
                 value={`${Number(project.totalAreaHectares).toLocaleString()} Ha`}
+                accent={visual.accent}
+              />
+              <HeroPill
+                icon={<Clock className="w-3.5 h-3.5" />}
+                label="Duration"
+                value={`${projectYears} Years`}
+                accent={visual.accent}
               />
             </div>
-          </div>
+          </motion.div>
         </div>
+      </section>
 
-        {/* Bottom wave divider */}
-        <div className="absolute bottom-0 left-0 right-0 h-8 overflow-hidden">
-          <svg
-            viewBox="0 0 1440 32"
-            preserveAspectRatio="none"
-            className="w-full h-full"
-            aria-hidden="true"
-          >
-            <title>Wave divider</title>
-            <path
-              d="M0,32 C360,0 1080,0 1440,32 L1440,32 L0,32 Z"
-              fill="#f8fafc"
-            />
-          </svg>
-        </div>
-      </div>
-
-      {/* ─── Mobile quick stats (below hero on small screens) ─────────────── */}
-      <div className="lg:hidden max-w-7xl mx-auto px-4 sm:px-6 -mt-2 mb-2">
-        <div className="grid grid-cols-3 gap-2 py-4">
-          <MobileStatChip
-            label="Potential"
-            value={`${(Number(project.estimatedTotalTco2e) / 1000).toFixed(1)}k`}
-            unit="tCO₂e"
-          />
-          <MobileStatChip
-            label="Yield/yr"
-            value={metrics.estimatedYield.split(",")[0]}
-            unit="tCO₂e"
-          />
-          <MobileStatChip
-            label="Area"
-            value={Number(project.totalAreaHectares).toLocaleString()}
-            unit="Ha"
-          />
-        </div>
-      </div>
-
-      {/* ─── Main content ────────────────────────────────────────────────── */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-28 lg:pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 lg:gap-12">
-          {/* ── Left: tabbed narrative content ── */}
-          <section className="space-y-0">
+      {/* ── Body ───────────────────────────────────────────────────────────── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-28 lg:pb-16 -mt-4 relative z-10">
+        {/* Magazine-style two-column layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-8 lg:gap-10">
+          {/* ── Left: Content ── */}
+          <section className="space-y-6">
             {/* Tab nav */}
-            <div className="flex gap-1 p-1 bg-white rounded-2xl border border-slate-100 shadow-sm mb-8">
+            <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-white shadow-sm p-1 flex gap-1">
               {(
                 [
                   {
@@ -309,7 +324,7 @@ export default function ProjectDetailsPage() {
                   },
                   {
                     key: "technical" as Tab,
-                    label: "Technical",
+                    label: "Technical Data",
                     icon: <FlaskConical className="w-4 h-4" />,
                   },
                   {
@@ -323,407 +338,472 @@ export default function ProjectDetailsPage() {
                   type="button"
                   key={key}
                   onClick={() => setActiveTab(key)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 sm:px-4 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                  className={cn(
+                    "flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-sm font-bold transition-all",
                     activeTab === key
-                      ? "bg-slate-900 text-white shadow-md"
-                      : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
-                  }`}
+                      ? "bg-[#131927] text-white shadow-md"
+                      : "text-gray-500 hover:text-[#131927] hover:bg-gray-50",
+                  )}
                 >
                   <span
                     className={
-                      activeTab === key ? "text-white" : "text-slate-400"
+                      activeTab === key ? "text-white" : "text-gray-400"
                     }
                   >
                     {icon}
                   </span>
                   <span className="hidden sm:inline">{label}</span>
-                  <span className="sm:hidden text-xs">
-                    {label.split(" ")[0]}
-                  </span>
+                  <span className="sm:hidden">{label.split(" ")[0]}</span>
                 </button>
               ))}
             </div>
 
-            {/* Tab: Overview */}
-            {activeTab === "overview" && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                {/* Impact metric cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <MetricCard
-                    label="Carbon Potential"
-                    value={Number(project.estimatedTotalTco2e).toLocaleString()}
-                    unit="tCO₂e"
-                    subtext={`${metrics.treesEquivalent.toLocaleString()} trees equivalent`}
-                    icon={<Leaf className="w-5 h-5" />}
-                    accentColor={visual.accent}
-                    lightBg={visual.lightBg}
-                  />
-                  <MetricCard
-                    label="Annual Yield"
-                    value={metrics.estimatedYield}
-                    unit="tCO₂e/yr"
-                    subtext={`Over ${projectYears} year project`}
-                    icon={<TrendingUp className="w-5 h-5" />}
-                    accentColor="#3b82f6"
-                    lightBg="#eff6ff"
-                  />
-                  <MetricCard
-                    label="Area Managed"
-                    value={Number(project.totalAreaHectares).toLocaleString()}
-                    unit="Ha"
-                    subtext={`${metrics.tco2ePerHectare} tCO₂e per hectare`}
-                    icon={<Layers className="w-5 h-5" />}
-                    accentColor="#f59e0b"
-                    lightBg="#fffbeb"
-                  />
-                </div>
-
-                {/* Project timeline */}
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                  <div className="px-6 pt-6 pb-2 flex justify-between items-center">
-                    <h3 className="text-base font-bold text-slate-900">
-                      Project Phases
-                    </h3>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                      ID: {project.id?.split("-")[0] || "—"}
-                    </span>
+            {/* ── Tab: Overview ── */}
+            <AnimatePresence mode="wait">
+              {activeTab === "overview" && (
+                <motion.div
+                  key="overview"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  {/* Impact cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <MagazineMetricCard
+                      label="Carbon Potential"
+                      value={Number(
+                        project.estimatedTotalTco2e,
+                      ).toLocaleString()}
+                      unit="tCO₂e"
+                      sub={`≈ ${metrics.treesEquivalent.toLocaleString()} trees`}
+                      icon={<Leaf className="w-5 h-5" />}
+                      accent={visual.accent}
+                      bg={visual.lightBg}
+                    />
+                    <MagazineMetricCard
+                      label="Annual Yield"
+                      value={metrics.estimatedYield}
+                      unit="tCO₂e/yr"
+                      sub={`${projectYears}-year project`}
+                      icon={<TrendingUp className="w-5 h-5" />}
+                      accent="#3b82f6"
+                      bg="#eff6ff"
+                    />
+                    <MagazineMetricCard
+                      label="Area Managed"
+                      value={Number(project.totalAreaHectares).toLocaleString()}
+                      unit="Ha"
+                      sub={`${metrics.tco2ePerHectare} tCO₂e/Ha`}
+                      icon={<Layers className="w-5 h-5" />}
+                      accent="#f59e0b"
+                      bg="#fffbeb"
+                    />
                   </div>
-                  <div className="px-6 pb-6 mt-4 space-y-3">
-                    {[
-                      {
-                        phase: "Baseline Assessment",
-                        status: "done",
-                        label: "Complete",
-                      },
-                      {
-                        phase: "Methodology Verification",
-                        status: "done",
-                        label: "Stage 1 Verified",
-                      },
-                      {
-                        phase: "Issuance Round 1",
-                        status: "active",
-                        label: "In Progress — 75%",
-                      },
-                      {
-                        phase: "Annual Monitoring",
-                        status: "upcoming",
-                        label: "Scheduled",
-                      },
-                      {
-                        phase: "Full Certification",
-                        status: "upcoming",
-                        label: `Est. Year ${projectYears}`,
-                      },
-                    ].map(({ phase, status, label }) => (
-                      <div key={phase} className="flex items-center gap-4">
-                        <div
-                          className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center ${
-                            status === "done"
-                              ? "bg-emerald-100"
-                              : status === "active"
-                                ? "bg-blue-100"
-                                : "bg-slate-100"
-                          }`}
-                        >
-                          {status === "done" ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                          ) : status === "active" ? (
-                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                          ) : (
-                            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                          )}
-                        </div>
-                        <div className="flex-1 flex items-center justify-between min-w-0">
-                          <span
-                            className={`text-sm font-semibold truncate ${
-                              status === "done"
-                                ? "text-slate-700"
-                                : status === "active"
-                                  ? "text-blue-700"
-                                  : "text-slate-400"
-                            }`}
-                          >
-                            {phase}
-                          </span>
-                          <span
-                            className={`text-xs font-bold ml-4 shrink-0 ${
-                              status === "done"
-                                ? "text-emerald-600"
-                                : status === "active"
-                                  ? "text-blue-600"
-                                  : "text-slate-400"
-                            }`}
-                          >
-                            {label}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-                {/* Applied practices */}
-                {project.projectPractices?.length > 0 && (
-                  <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 space-y-4">
-                    <h3 className="text-base font-bold text-slate-900">
-                      Applied Practices
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {project.projectPractices.map(
-                        (p: Record<string, any>) => (
+                  {/* Project phases — magazine timeline */}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="px-6 pt-6 pb-3 border-b border-gray-50">
+                      <h2 className="font-extrabold text-[#131927] text-lg">
+                        Project Phases
+                      </h2>
+                      <p className="text-gray-400 text-sm mt-0.5">
+                        Verification & issuance milestones
+                      </p>
+                    </div>
+                    <div className="p-6 space-y-3">
+                      {[
+                        {
+                          phase: "Baseline Assessment",
+                          status: "done",
+                          label: "Completed",
+                        },
+                        {
+                          phase: "Methodology Verification",
+                          status: "done",
+                          label: "Stage 1 Verified",
+                        },
+                        {
+                          phase: "Issuance Round 1",
+                          status: "active",
+                          label: "In Progress — 75%",
+                        },
+                        {
+                          phase: "Annual Monitoring",
+                          status: "upcoming",
+                          label: "Scheduled",
+                        },
+                        {
+                          phase: "Full Certification",
+                          status: "upcoming",
+                          label: `Est. Year ${projectYears}`,
+                        },
+                      ].map(({ phase, status, label }) => (
+                        <div key={phase} className="flex items-center gap-4">
                           <div
-                            key={`${p.intensity}-${p.impactFactorAtSigning}`}
-                            className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2"
+                            className={cn(
+                              "w-9 h-9 rounded-full shrink-0 flex items-center justify-center border-2",
+                              status === "done"
+                                ? "bg-emerald-50 border-emerald-200"
+                                : status === "active"
+                                  ? "bg-blue-50 border-blue-200"
+                                  : "bg-gray-50 border-gray-200",
+                            )}
                           >
-                            <Sprout className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                            <span className="text-sm font-semibold text-slate-700">
-                              {p.intensity}
+                            {status === "done" ? (
+                              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                            ) : status === "active" ? (
+                              <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+                            ) : (
+                              <div className="w-2.5 h-2.5 rounded-full bg-gray-300" />
+                            )}
+                          </div>
+                          <div className="flex-1 flex items-center justify-between min-w-0">
+                            <span
+                              className={cn(
+                                "text-sm font-bold truncate",
+                                status === "done"
+                                  ? "text-gray-700"
+                                  : status === "active"
+                                    ? "text-blue-700"
+                                    : "text-gray-400",
+                              )}
+                            >
+                              {phase}
                             </span>
-                            <span className="text-xs text-slate-400 font-bold">
-                              {p.impactFactorAtSigning}× factor
+                            <span
+                              className={cn(
+                                "text-xs font-extrabold ml-4 shrink-0",
+                                status === "done"
+                                  ? "text-emerald-600"
+                                  : status === "active"
+                                    ? "text-blue-600"
+                                    : "text-gray-400",
+                              )}
+                            >
+                              {label}
                             </span>
                           </div>
-                        ),
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Tab: Technical */}
-            {activeTab === "technical" && (
-              <div className="space-y-6 animate-in fade-in duration-300">
-                {/* Technical attributes grid */}
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-8">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-1">
-                      Soil & Land Profile
-                    </h3>
-                    <p className="text-sm text-slate-500">
-                      Baseline conditions and measurement parameters
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                    <TechnicalDetail
-                      icon={<FlaskConical className="w-4 h-4" />}
-                      label="Soil Type"
-                      value={project.soilType}
-                    />
-                    <TechnicalDetail
-                      icon={<BarChart3 className="w-4 h-4" />}
-                      label="Initial Carbon"
-                      value={
-                        project.initialSoilCarbonContent
-                          ? `${project.initialSoilCarbonContent}%`
-                          : null
-                      }
-                    />
-                    <TechnicalDetail
-                      icon={<Layers className="w-4 h-4" />}
-                      label="Baseline Land Use"
-                      value={project.baselineLandUse}
-                    />
-                    <TechnicalDetail
-                      icon={<Shield className="w-4 h-4" />}
-                      label="Permanence"
-                      value={metrics.permanenceScore}
-                    />
-                  </div>
-
-                  {/* Carbon headroom insight */}
-                  <div className="bg-blue-50 rounded-2xl border border-blue-100 p-5 flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-0.5">
-                      <Info className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-bold text-blue-900">
-                        Sequestration Headroom
-                      </p>
-                      <p className="text-sm text-blue-700 leading-relaxed">
-                        Baseline soil carbon at{" "}
-                        <strong>{project.initialSoilCarbonContent}%</strong>{" "}
-                        signals significant potential for accumulation. Projects
-                        below 3% typically yield 2–4× the carbon uplift of
-                        higher-baseline sites.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Co-benefit flags */}
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8">
-                  <h3 className="text-lg font-bold text-slate-900 mb-6">
-                    Environmental Co-Benefits
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {[
-                      {
-                        icon: <Droplets className="w-4 h-4" />,
-                        label: "Water Management",
-                        active: project.supportsWaterManagement === "yes",
-                        desc: "Improved watershed & infiltration",
-                      },
-                      {
-                        icon: <TreePine className="w-4 h-4" />,
-                        label: "Biodiversity",
-                        active: project.supportsBiodiversity === "yes",
-                        desc: "Native habitat enhancement",
-                      },
-                      {
-                        icon: <Waves className="w-4 h-4" />,
-                        label: "Practice Expansion",
-                        active: project.planToExpandPractices === "yes",
-                        desc: "Planned scale-up program",
-                      },
-                      {
-                        icon: <Scale className="w-4 h-4" />,
-                        label: "Social & Economic",
-                        active: !!project.socialEconomicBenefits,
-                        desc:
-                          project.socialEconomicBenefits ||
-                          "Community development",
-                      },
-                    ].map(({ icon, label, active, desc }) => (
-                      <div
-                        key={label}
-                        className={`flex items-start gap-3 p-4 rounded-2xl border ${active ? "bg-emerald-50 border-emerald-100" : "bg-slate-50 border-slate-100"}`}
-                      >
-                        <div
-                          className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${active ? "bg-emerald-100 text-emerald-600" : "bg-slate-200 text-slate-400"}`}
-                        >
-                          {icon}
                         </div>
-                        <div>
-                          <p
-                            className={`text-sm font-bold ${active ? "text-emerald-900" : "text-slate-400"}`}
-                          >
-                            {label}
-                          </p>
-                          <p
-                            className={`text-xs mt-0.5 leading-snug ${active ? "text-emerald-700" : "text-slate-400"}`}
-                          >
-                            {desc}
-                          </p>
-                        </div>
-                        {active && (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 ml-auto mt-0.5" />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Applied practices */}
+                  {project.projectPractices?.length > 0 && (
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                      <h2 className="font-extrabold text-[#131927] text-lg mb-4">
+                        Applied Practices
+                      </h2>
+                      <div className="flex flex-wrap gap-2">
+                        {project.projectPractices.map(
+                          (p: Record<string, any>) => (
+                            <div
+                              key={`${p.intensity}-${p.impactFactorAtSigning}`}
+                              className="inline-flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-2"
+                              style={{ backgroundColor: visual.lightBg }}
+                            >
+                              <Sprout
+                                className="w-3.5 h-3.5 shrink-0"
+                                style={{ color: visual.accent }}
+                              />
+                              <span className="text-sm font-bold text-gray-700">
+                                {p.intensity}
+                              </span>
+                              <span className="text-xs text-gray-400 font-bold">
+                                {p.impactFactorAtSigning}× factor
+                              </span>
+                            </div>
+                          ),
                         )}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Tab: Sustainability / SDGs */}
-            {activeTab === "sustainability" && (
-              <div className="space-y-6 animate-in fade-in duration-300">
-                <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-bold text-slate-900 mb-1">
-                      UN Sustainable Development Goals
-                    </h3>
-                    <p className="text-sm text-slate-500">
-                      This project directly advances {sdgs.length} of the 17
-                      global goals.
-                    </p>
-                  </div>
-
-                  {sdgs.length === 0 ? (
-                    <p className="text-slate-400 text-sm">
-                      No SDGs mapped yet.
-                    </p>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {sdgs.map((sdgId: string) => {
-                        const goal = SDGS.find((g) => g.id === sdgId);
-                        const hex = SDG_HEX[sdgId] || "#94a3b8";
-                        if (!goal) return null;
-                        return (
-                          <div
-                            key={sdgId}
-                            className="flex items-center gap-3 p-3 rounded-2xl border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all bg-white"
-                          >
-                            <div
-                              className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0 shadow-sm"
-                              style={{ backgroundColor: hex }}
-                            >
-                              {sdgId}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">
-                                SDG {sdgId}
-                              </p>
-                              <p className="text-sm font-bold text-slate-800 leading-snug">
-                                {goal.title}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
                     </div>
                   )}
-                </div>
+                </motion.div>
+              )}
 
-                {/* Expected outcomes */}
-                {project.expectedOutcomes && (
-                  <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-3">
-                    <h3 className="text-lg font-bold text-slate-900">
-                      Expected Outcomes
-                    </h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      {project.expectedOutcomes}
+              {/* ── Tab: Technical ── */}
+              {activeTab === "technical" && (
+                <motion.div
+                  key="technical"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                    <h2 className="font-extrabold text-[#131927] text-xl mb-1">
+                      Soil & Land Profile
+                    </h2>
+                    <p className="text-gray-400 text-sm mb-8">
+                      Baseline conditions and measurement parameters
                     </p>
-                  </div>
-                )}
 
-                {/* Implementation plan */}
-                {project.implementationPlan && (
-                  <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 space-y-3">
-                    <h3 className="text-lg font-bold text-slate-900">
-                      Implementation Plan
-                    </h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      {project.implementationPlan}
-                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
+                      {[
+                        {
+                          icon: <FlaskConical className="w-4 h-4" />,
+                          label: "Soil Type",
+                          value: project.soilType,
+                        },
+                        {
+                          icon: <BarChart3 className="w-4 h-4" />,
+                          label: "Initial Carbon",
+                          value: project.initialSoilCarbonContent
+                            ? `${project.initialSoilCarbonContent}%`
+                            : null,
+                        },
+                        {
+                          icon: <Layers className="w-4 h-4" />,
+                          label: "Baseline Land Use",
+                          value: project.baselineLandUse,
+                        },
+                        {
+                          icon: <Shield className="w-4 h-4" />,
+                          label: "Permanence",
+                          value: metrics.permanenceScore,
+                        },
+                      ].map(({ icon, label, value }) => (
+                        <div key={label} className="space-y-1.5">
+                          <div className="flex items-center gap-1.5 text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                            {icon} {label}
+                          </div>
+                          <p className="text-[#131927] font-extrabold text-sm">
+                            {value || "—"}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Insight box */}
+                    <div className="bg-blue-50 rounded-2xl border border-blue-100 p-5 flex gap-4">
+                      <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                        <Info className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-extrabold text-blue-900 mb-1">
+                          Sequestration Headroom
+                        </p>
+                        <p className="text-sm text-blue-700 leading-relaxed">
+                          Baseline soil carbon at{" "}
+                          <strong>{project.initialSoilCarbonContent}%</strong>{" "}
+                          signals significant potential. Sites below 3%
+                          typically yield 2–4× the carbon uplift.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-            )}
+
+                  {/* Co-benefits */}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                    <h2 className="font-extrabold text-[#131927] text-xl mb-6">
+                      Environmental Co-Benefits
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {[
+                        {
+                          icon: <Droplets className="w-4 h-4" />,
+                          label: "Water Management",
+                          active: project.supportsWaterManagement === "yes",
+                          desc: "Improved watershed & infiltration",
+                        },
+                        {
+                          icon: <TreePine className="w-4 h-4" />,
+                          label: "Biodiversity",
+                          active: project.supportsBiodiversity === "yes",
+                          desc: "Native habitat enhancement",
+                        },
+                        {
+                          icon: <Waves className="w-4 h-4" />,
+                          label: "Practice Expansion",
+                          active: project.planToExpandPractices === "yes",
+                          desc: "Planned scale-up program",
+                        },
+                        {
+                          icon: <Scale className="w-4 h-4" />,
+                          label: "Social & Economic",
+                          active: !!project.socialEconomicBenefits,
+                          desc:
+                            project.socialEconomicBenefits ||
+                            "Community development",
+                        },
+                      ].map(({ icon, label, active, desc }) => (
+                        <div
+                          key={label}
+                          className={cn(
+                            "flex items-start gap-3 p-4 rounded-2xl border",
+                            active
+                              ? "bg-emerald-50 border-emerald-100"
+                              : "bg-gray-50 border-gray-100",
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
+                              active
+                                ? "bg-emerald-100 text-emerald-600"
+                                : "bg-gray-200 text-gray-400",
+                            )}
+                          >
+                            {icon}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p
+                              className={cn(
+                                "text-sm font-extrabold",
+                                active ? "text-emerald-900" : "text-gray-400",
+                              )}
+                            >
+                              {label}
+                            </p>
+                            <p
+                              className={cn(
+                                "text-xs mt-0.5 leading-snug",
+                                active ? "text-emerald-700" : "text-gray-400",
+                              )}
+                            >
+                              {desc}
+                            </p>
+                          </div>
+                          {active && (
+                            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* ── Tab: Sustainability ── */}
+              {activeTab === "sustainability" && (
+                <motion.div
+                  key="sustainability"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                    <div className="flex items-start justify-between mb-6">
+                      <div>
+                        <h2 className="font-extrabold text-[#131927] text-xl mb-1">
+                          UN SDGs Aligned
+                        </h2>
+                        <p className="text-gray-400 text-sm">
+                          This project advances{" "}
+                          <strong className="text-[#131927]">
+                            {sdgs.length}
+                          </strong>{" "}
+                          of the 17 global goals.
+                        </p>
+                      </div>
+                      <div className="bg-[#131927] text-white rounded-2xl px-4 py-2 text-center shrink-0">
+                        <p className="text-2xl font-black leading-none">
+                          {sdgs.length}
+                        </p>
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-white/50 mt-0.5">
+                          SDGs
+                        </p>
+                      </div>
+                    </div>
+
+                    {sdgs.length === 0 ? (
+                      <p className="text-gray-400 text-sm">
+                        No SDGs mapped yet.
+                      </p>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {sdgs.map((sdgId: string) => {
+                          const goal = SDGS.find((g) => g.id === sdgId);
+                          const hex = SDG_HEX[sdgId] || "#94a3b8";
+                          if (!goal) return null;
+                          return (
+                            <div
+                              key={sdgId}
+                              className="flex items-center gap-3 p-3.5 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all bg-white group"
+                            >
+                              <div
+                                className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0 shadow-sm"
+                                style={{ backgroundColor: hex }}
+                              >
+                                {sdgId}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
+                                  SDG {sdgId}
+                                </p>
+                                <p className="text-sm font-extrabold text-[#131927] leading-snug">
+                                  {goal.title}
+                                </p>
+                              </div>
+                              <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 ml-auto shrink-0 transition-colors" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {project.expectedOutcomes && (
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                      <h2 className="font-extrabold text-[#131927] text-xl mb-3">
+                        Expected Outcomes
+                      </h2>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {project.expectedOutcomes}
+                      </p>
+                    </div>
+                  )}
+
+                  {project.implementationPlan && (
+                    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                      <h2 className="font-extrabold text-[#131927] text-xl mb-3">
+                        Implementation Plan
+                      </h2>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {project.implementationPlan}
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </section>
 
-          {/* ── Right: Investment terminal (desktop sticky) ── */}
+          {/* ── Right: Investment Terminal ── */}
           <aside className="hidden lg:block">
             <div className="sticky top-6">
-              <InvestmentPanel
+              <InvestmentTerminal
                 project={project}
                 metrics={metrics}
-                // visual={visual}
+                visual={visual}
+                projectYears={projectYears}
               />
             </div>
           </aside>
         </div>
       </main>
 
-      {/* ─── Mobile: sticky bottom investment bar ────────────────────────── */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 px-4 py-3 shadow-[0_-8px_32px_rgba(0,0,0,0.08)]">
+      {/* ── Mobile sticky investment bar ─────────────────────────────────── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 shadow-[0_-8px_32px_rgba(0,0,0,0.1)]">
         <div className="flex items-center gap-3 max-w-lg mx-auto">
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
-              Acquisition Floor
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              Floor Price
             </p>
-            <p className="text-xl font-black text-slate-900 mt-0.5">
+            <p className="text-xl font-black text-[#131927]">
               $45.00{" "}
-              <span className="text-sm font-bold text-slate-400">/ tonne</span>
+              <span className="text-sm font-bold text-gray-400">/ tCO₂e</span>
             </p>
           </div>
           <Sheet open={investSheetOpen} onOpenChange={setInvestSheetOpen}>
             <SheetTrigger asChild>
               <Button
-                className="rounded-xl px-6 h-12 font-bold text-sm text-white transition-all active:scale-95"
+                className="rounded-xl px-6 h-12 font-bold text-sm text-white border-none"
                 style={{ backgroundColor: visual.accent }}
               >
                 Invest Now
@@ -732,10 +812,11 @@ export default function ProjectDetailsPage() {
             </SheetTrigger>
             <SheetContent side="bottom" className="rounded-t-3xl px-4 pb-8">
               <div className="pt-6">
-                <InvestmentPanel
+                <InvestmentTerminal
                   project={project}
                   metrics={metrics}
-                  // visual={visual}
+                  visual={visual}
+                  projectYears={projectYears}
                 />
               </div>
             </SheetContent>
@@ -746,223 +827,221 @@ export default function ProjectDetailsPage() {
   );
 }
 
-// ─── Investment Panel ────────────────────────────────────────────────────────
-function InvestmentPanel({
+// ─── Investment Terminal ──────────────────────────────────────────────────────
+
+const InvestmentTerminal = memo(function InvestmentTerminal({
   project,
   metrics,
+  visual,
+  projectYears,
 }: {
-  project: Record<string, unknown>;
-  metrics: Record<string, unknown>;
+  project: Record<string, any>;
+  metrics: Record<string, any>;
+  visual: (typeof PROJECT_VISUAL)[string];
+  projectYears: number;
 }) {
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 shadow-[0_16px_48px_-12px_rgba(0,0,0,0.1)] p-6 space-y-6">
-      {/* Price */}
-      <div>
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
-          Acquisition Floor
-        </p>
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-black text-slate-900">$45.00</span>
-          <span className="text-base font-bold text-slate-400">/ tonne</span>
-        </div>
-      </div>
+    <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] overflow-hidden">
+      {/* Top accent */}
+      <div className="h-1 w-full" style={{ backgroundColor: visual.accent }} />
 
-      {/* Issuance progress */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
-          <div>
-            <span className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-0.5">
-              Issuance Progress
+      <div className="p-6 space-y-6">
+        {/* Price block */}
+        <div>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">
+            Acquisition Floor
+          </p>
+          <div className="flex items-baseline gap-2">
+            <span className="text-5xl font-black text-[#131927] tracking-tight">
+              $45
             </span>
-            <span className="text-sm font-black text-emerald-600">
-              Verified Stage 1
+            <span className="text-lg font-bold text-gray-400">/ tCO₂e</span>
+          </div>
+          <div
+            className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold px-2.5 py-1 rounded-full"
+            style={{
+              backgroundColor: `${visual.accent}15`,
+              color: visual.accent,
+            }}
+          >
+            <TrendingUp className="w-3 h-3" />
+            +12% vs. global avg.
+          </div>
+        </div>
+
+        {/* Issuance progress */}
+        <div className="space-y-2.5">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-extrabold text-gray-500 uppercase tracking-widest">
+              Round 1 Issuance
+            </span>
+            <span
+              className="text-xs font-black"
+              style={{ color: visual.accent }}
+            >
+              75%
             </span>
           </div>
-          <div className="text-right">
-            <span className="text-xs text-slate-400 font-bold">75%</span>
+          <Progress
+            value={75}
+            className="h-2.5 bg-gray-100"
+            indicatorClassName="rounded-full"
+            style={{ "--progress-indicator-color": visual.accent } as any}
+          />
+          <div className="flex justify-between text-xs text-gray-400 font-semibold">
+            <span>0 tCO₂e</span>
+            <span>
+              {Number(project.estimatedTotalTco2e).toLocaleString()} tCO₂e
+            </span>
           </div>
         </div>
-        <Progress
-          value={75}
-          className="h-2.5 bg-slate-100"
-          indicatorClassName="bg-emerald-500 rounded-full"
-        />
-        <div className="flex justify-between text-xs text-slate-400 font-semibold">
-          <span>0 tCO₂e</span>
-          <span>
-            {Number(project.estimatedTotalTco2e).toLocaleString()} tCO₂e
-          </span>
-        </div>
-      </div>
 
-      {/* Key investment stats */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-slate-50 rounded-2xl p-4">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-            Permanence
-          </p>
-          <p className="text-sm font-bold text-slate-900">
-            {metrics.permanenceScore as any}
+        {/* Key metrics grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: "Permanence", value: metrics.permanenceScore },
+            { label: "Duration", value: `${projectYears} Years` },
+            { label: "Annual Yield", value: `${metrics.estimatedYield} tCO₂e` },
+            { label: "Verified", value: "Stage 1" },
+          ].map(({ label, value }) => (
+            <div key={label} className="bg-gray-50 rounded-2xl p-4">
+              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                {label}
+              </p>
+              <p className="text-sm font-extrabold text-[#131927]">{value}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Certifications */}
+        <div className="flex flex-wrap gap-2">
+          {["VCS Eligible", "Gold Standard", "ISO 14064"].map((cert) => (
+            <span
+              key={cert}
+              className="inline-flex items-center gap-1.5 text-[10px] font-black px-2.5 py-1.5 bg-gray-50 border border-gray-200 text-gray-600 rounded-full"
+            >
+              <Award className="w-2.5 h-2.5 text-[#2CC295]" />
+              {cert}
+            </span>
+          ))}
+        </div>
+
+        {/* CTAs */}
+        <div className="space-y-2.5">
+          <Button
+            className="w-full h-14 rounded-2xl font-extrabold text-base text-white border-none shadow-lg hover:opacity-90 active:scale-[0.98] transition-all"
+            style={{
+              backgroundColor: visual.accent,
+              boxShadow: `0 8px 24px ${visual.accent}40`,
+            }}
+          >
+            Commit Capital
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full h-12 rounded-2xl border-gray-200 text-gray-600 font-bold hover:bg-gray-50 gap-2"
+          >
+            <Shield className="w-4 h-4 text-[#2CC295]" />
+            View Verification Chain
+          </Button>
+        </div>
+
+        {/* Insight note */}
+        <div className="flex gap-3 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+          <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+          <p className="text-xs text-blue-700 leading-relaxed">
+            Soil carbon at <strong>{project.initialSoilCarbonContent}%</strong>{" "}
+            indicates high sequestration headroom vs. regional benchmarks.
           </p>
         </div>
-        <div className="bg-slate-50 rounded-2xl p-4">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-            Duration
-          </p>
-          <p className="text-sm font-bold text-slate-900">
-            {Math.floor((project.durationMonths as any) / 12)} Years
-          </p>
-        </div>
-      </div>
-
-      {/* CTAs */}
-      <div className="space-y-3">
-        <Button
-          className="w-full h-14 rounded-2xl font-bold text-base text-white transition-all hover:opacity-90 active:scale-95 shadow-lg"
-          style={{ backgroundColor: "#0f172a" }}
-        >
-          Commit Capital
-        </Button>
-        <Button
-          variant="outline"
-          className="w-full h-12 rounded-2xl border-slate-200 text-slate-600 font-bold hover:bg-slate-50 gap-2.5"
-        >
-          <Shield className="w-4 h-4 text-emerald-500" />
-          View Verification Chain
-        </Button>
-      </div>
-
-      {/* Info note */}
-      <div className="flex items-start gap-3 p-4 bg-blue-50/70 rounded-2xl border border-blue-100">
-        <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-        <p className="text-xs text-blue-700 font-medium leading-relaxed">
-          Baseline carbon at{" "}
-          <strong>{project.initialSoilCarbonContent as any}%</strong> indicates
-          high sequestration headroom relative to regional benchmarks.
-        </p>
       </div>
     </div>
   );
-}
+});
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+// ─── Small helpers ────────────────────────────────────────────────────────────
 
-function HeroStat({ label, value }: { label: string; value: string }) {
+function HeroPill({
+  icon,
+  label,
+  value,
+  accent,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  accent: string;
+}) {
   return (
-    <div className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-2xl px-4 py-3 backdrop-blur-sm min-w-[200px]">
-      <div className="w-1.5 h-8 rounded-full bg-white/40" />
+    <div className="flex items-center gap-2.5 bg-black/30 backdrop-blur-md border border-white/15 rounded-full px-4 py-2">
+      <span style={{ color: accent }}>{icon}</span>
       <div>
-        <p className="text-[10px] font-black text-white/50 uppercase tracking-widest leading-none">
+        <p className="text-[9px] font-black text-white/40 uppercase tracking-widest leading-none">
           {label}
         </p>
-        <p className="text-base font-black text-white mt-0.5">{value}</p>
+        <p className="text-sm font-extrabold text-white leading-tight">
+          {value}
+        </p>
       </div>
     </div>
   );
 }
 
-function MobileStatChip({
+const MagazineMetricCard = memo(function MagazineMetricCard({
   label,
   value,
   unit,
-}: {
-  label: string;
-  value: string | number;
-  unit: string;
-}) {
-  return (
-    <div className="bg-white rounded-2xl border border-slate-100 p-3 text-center shadow-sm">
-      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
-        {label}
-      </p>
-      <p className="text-lg font-black text-slate-900">{value}</p>
-      <p className="text-[9px] font-bold text-slate-400 uppercase mt-0.5">
-        {unit}
-      </p>
-    </div>
-  );
-}
-
-function MetricCard({
-  label,
-  value,
-  unit,
-  subtext,
+  sub,
   icon,
-  accentColor,
-  lightBg,
+  accent,
+  bg,
 }: {
   label: string;
   value: string | number;
   unit: string;
-  subtext: string;
+  sub: string;
   icon: React.ReactNode;
-  accentColor: string;
-  lightBg: string;
+  accent: string;
+  bg: string;
 }) {
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-4 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
       <div
-        className="w-10 h-10 rounded-2xl flex items-center justify-center"
-        style={{ backgroundColor: lightBg, color: accentColor }}
+        className="w-10 h-10 rounded-2xl flex items-center justify-center mb-4"
+        style={{ backgroundColor: bg, color: accent }}
       >
         {icon}
       </div>
-      <div>
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-          {label}
-        </p>
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-2xl font-black text-slate-900 tracking-tight">
-            {value}
-          </span>
-          <span className="text-xs font-bold text-slate-400 uppercase">
-            {unit}
-          </span>
-        </div>
-        <p className="text-xs text-slate-500 font-medium mt-1">{subtext}</p>
+      <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5">
+        {label}
+      </p>
+      <div className="flex items-baseline gap-1.5 mb-1">
+        <span className="text-2xl font-black text-[#131927] tracking-tight">
+          {value}
+        </span>
+        <span className="text-xs font-bold text-gray-400 uppercase">
+          {unit}
+        </span>
       </div>
+      <p className="text-xs text-gray-400 font-medium">{sub}</p>
     </div>
   );
-}
+});
 
-function TechnicalDetail({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string | null;
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center gap-1.5 text-slate-400">
-        {icon}
-        <p className="text-[10px] font-black uppercase tracking-widest">
-          {label}
-        </p>
-      </div>
-      <p className="text-slate-900 font-bold text-sm">{value || "—"}</p>
-    </div>
-  );
-}
-
-// ─── Skeleton & Error States ─────────────────────────────────────────────────
+// ─── Skeletons & Error ────────────────────────────────────────────────────────
 
 function ProjectLoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="h-64 bg-slate-200 animate-pulse" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
-        <div className="grid grid-cols-3 gap-4">
-          <Skeleton className="h-28 rounded-3xl" />
-          <Skeleton className="h-28 rounded-3xl" />
-          <Skeleton className="h-28 rounded-3xl" />
-        </div>
+    <div className="min-h-screen bg-[#F4F7F4]">
+      <div className="h-[88vh] bg-gray-200 animate-pulse" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-6">
         <Skeleton className="h-12 rounded-2xl" />
-        <Skeleton className="h-64 rounded-3xl" />
-        <Skeleton className="h-80 rounded-3xl" />
+        <div className="grid grid-cols-3 gap-4">
+          <Skeleton className="h-32 rounded-2xl" />
+          <Skeleton className="h-32 rounded-2xl" />
+          <Skeleton className="h-32 rounded-2xl" />
+        </div>
+        <Skeleton className="h-64 rounded-2xl" />
       </div>
     </div>
   );
@@ -971,19 +1050,19 @@ function ProjectLoadingSkeleton() {
 function ProjectNotFoundState() {
   const router = useRouter();
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
-      <div className="w-20 h-20 bg-white border border-slate-100 rounded-full flex items-center justify-center mb-6 shadow-sm">
-        <Wind className="w-9 h-9 text-slate-300" />
+    <div className="min-h-screen bg-[#F4F7F4] flex flex-col items-center justify-center p-6 text-center">
+      <div className="w-20 h-20 bg-white border border-gray-100 rounded-full flex items-center justify-center mb-6 shadow-sm">
+        <Wind className="w-9 h-9 text-gray-300" />
       </div>
-      <h1 className="text-2xl font-black text-slate-900 mb-2">
+      <h1 className="text-2xl font-black text-[#131927] mb-2">
         Project Not Found
       </h1>
-      <p className="text-slate-500 mb-8 max-w-xs text-sm leading-relaxed">
+      <p className="text-gray-500 mb-8 max-w-xs text-sm leading-relaxed">
         This project may have been archived or the link is no longer valid.
       </p>
       <Button
         onClick={() => router.back()}
-        className="rounded-2xl px-8 h-12 bg-slate-900 text-white font-bold hover:bg-black"
+        className="rounded-2xl px-8 h-12 bg-[#131927] text-white font-bold hover:bg-black"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Marketplace
