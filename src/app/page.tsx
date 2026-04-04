@@ -34,6 +34,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaFacebook, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+import { PublicFooter } from "@/components/public/public-footer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -61,7 +62,7 @@ export default function LandingPage() {
         <TestimonialsSection shouldReduceMotion={shouldReduceMotion} />
         <FinalCTASection shouldReduceMotion={shouldReduceMotion} />
       </main>
-      <Footer />
+      <PublicFooter />
     </div>
   );
 }
@@ -1140,6 +1141,36 @@ function FinalCTASection({
   );
 }
 
+const FOOTER_LINKS = {
+  platform: [
+    { title: "Marketplace", href: "/marketplace" },
+    { title: "Carbon Calculator", href: "/carbon-calculator" },
+    { title: "How It Works", href: "/#how-it-works" },
+    { title: "Register a Project", href: "/new-project" },
+    { title: "Login", href: "/login" },
+  ],
+  company: [
+    { title: "About Us", href: "/#about" },
+    { title: "Support", href: "/support" },
+    { title: "Terms & Conditions", href: "/terms" },
+    { title: "Privacy Policy", href: "/privacy" },
+  ],
+  socials: [
+    { icon: FaXTwitter, href: "https://twitter.com/crevy", label: "Twitter" },
+    {
+      icon: FaLinkedin,
+      href: "https://linkedin.com/company/crevy",
+      label: "LinkedIn",
+    },
+    { icon: FaFacebook, href: "https://facebook.com/crevy", label: "Facebook" },
+  ],
+  contact: [
+    { icon: MapPin, text: "Accra, Greater Accra, Ghana" },
+    { icon: Zap, text: "+(233) 504-609989" },
+    { icon: CheckCircle2, text: "info@foovante-global.com" },
+  ],
+};
+
 function Footer() {
   return (
     <footer className="bg-myBlue pt-24 pb-12 border-t border-white/5">
@@ -1174,24 +1205,17 @@ function Footer() {
               Empowering local communities through sustainable impact.
             </p>
             <div className="flex space-x-4">
-              <a
-                href="https://twitter.com/crevy"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-myGreen hover:text-white transition-all"
-              >
-                <FaXTwitter size={18} />
-              </a>
-              <a
-                href="https://linkedin.com/company/crevy"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-myGreen hover:text-white transition-all"
-              >
-                <FaLinkedin size={18} />
-              </a>
-              <a
-                href="https://facebook.com/crevy"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-myGreen hover:text-white transition-all"
-              >
-                <FaFacebook size={18} />
-              </a>
+              {FOOTER_LINKS.socials.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-myGreen hover:text-white transition-all"
+                >
+                  <social.icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -1201,19 +1225,13 @@ function Footer() {
               Platform
             </h4>
             <ul className="space-y-4">
-              {[
-                "Marketplace",
-                "Carbon Calculator",
-                "How It Works",
-                "Register a Project",
-                "Login",
-              ].map((item) => (
-                <li key={item}>
+              {FOOTER_LINKS.platform.map((link) => (
+                <li key={link.title}>
                   <Link
-                    href="#"
+                    href={link.href}
                     className="text-white/60 hover:text-myGreen transition-colors text-sm font-medium"
                   >
-                    {item}
+                    {link.title}
                   </Link>
                 </li>
               ))}
@@ -1226,18 +1244,13 @@ function Footer() {
               Company
             </h4>
             <ul className="space-y-4">
-              {[
-                "About Us",
-                "Support",
-                "Terms & Conditions",
-                "Privacy Policy",
-              ].map((item) => (
-                <li key={item}>
+              {FOOTER_LINKS.company.map((link) => (
+                <li key={link.title}>
                   <Link
-                    href="#"
+                    href={link.href}
                     className="text-white/60 hover:text-myGreen transition-colors text-sm font-medium"
                   >
-                    {item}
+                    {link.title}
                   </Link>
                 </li>
               ))}
@@ -1250,25 +1263,15 @@ function Footer() {
               Contact
             </h4>
             <ul className="space-y-6">
-              <li className="flex items-start">
-                <MapPin size={18} className="text-myGreen mr-4 mt-1 shrink-0" />
-                <span className="text-white/60 text-sm">
-                  Accra, Greater Accra, Ghana
-                </span>
-              </li>
-              <li className="flex items-center">
-                <Zap size={18} className="text-myGreen mr-4 shrink-0" />
-                <span className="text-white/60 text-sm">+(233) 504-609989</span>
-              </li>
-              <li className="flex items-center">
-                <CheckCircle2
-                  size={18}
-                  className="text-myGreen mr-4 shrink-0"
-                />
-                <span className="text-white/60 text-sm">
-                  info@foovante-global.com
-                </span>
-              </li>
+              {FOOTER_LINKS.contact.map((item, idx) => (
+                <li key={idx} className="flex items-start">
+                  <item.icon
+                    size={18}
+                    className="text-myGreen mr-4 mt-1 shrink-0"
+                  />
+                  <span className="text-white/60 text-sm">{item.text}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -1281,13 +1284,13 @@ function Footer() {
           </p>
           <div className="flex space-x-6">
             <Link
-              href="#"
+              href="/terms"
               className="text-white/40 hover:text-white transition-colors text-xs"
             >
               Terms of Service
             </Link>
             <Link
-              href="#"
+              href="/privacy"
               className="text-white/40 hover:text-white transition-colors text-xs"
             >
               Privacy Policy
