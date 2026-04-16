@@ -10,9 +10,9 @@ const STATS = [
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="h-screen w-full flex overflow-hidden">
       {/* ── Left: Form Panel ───────────────────────────────────────────────── */}
-      <div className="relative flex flex-col w-full lg:w-[46%] xl:w-[42%] bg-white px-8 md:px-14 py-10 overflow-y-auto">
+      <div className="relative flex flex-col w-full lg:w-[46%] xl:w-[42%] bg-white px-8 md:px-14 py-10 h-full overflow-y-auto">
         {/* Top nav */}
         <div className="flex items-center justify-between mb-12 shrink-0">
           <Link href="/" className="flex items-center gap-2.5">

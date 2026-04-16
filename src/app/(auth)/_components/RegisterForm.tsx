@@ -226,6 +226,21 @@ const RegisterForm = ({
             </div>
           )}
 
+          {selectedUserType === "Admin" && (
+            <div className="flex flex-col gap-5 border-l-4 border-emerald-500 pl-4 py-2 bg-slate-50 rounded-r-lg">
+              <h3 className="text-sm font-semibold text-emerald-700">
+                Administrative Information
+              </h3>
+              <CustomInput
+                type="text"
+                name="admin.assignedBusinessId"
+                label="Assigned Business ID (Optional)"
+                placeholder="BUS-12345"
+                control={form.control}
+              />
+            </div>
+          )}
+
           {/* Password & Confirm Password */}
           <div className="grid grid-cols-2 gap-5">
             <CustomInput

@@ -27,9 +27,9 @@ const FEATURES = [
 
 const RegisterPage = () => {
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="h-screen w-full flex overflow-hidden">
       {/* ── Left: Immersive Image Panel ────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[48%] xl:w-[44%] relative overflow-hidden order-first">
+      <div className="hidden lg:flex lg:w-[48%] xl:w-[44%] relative overflow-hidden order-first h-full">
         {/* Full-bleed background image — aerial solar + green field */}
         <Image
           src="https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg"
@@ -103,7 +103,7 @@ const RegisterPage = () => {
       </div>
 
       {/* ── Right: Form Panel ──────────────────────────────────────────────── */}
-      <div className="relative flex flex-col w-full lg:w-[52%] xl:w-[56%] bg-white px-8 md:px-14 py-10 overflow-y-auto">
+      <div className="relative flex flex-col w-full lg:w-[52%] xl:w-[56%] bg-white px-8 md:px-14 py-10 h-full overflow-y-auto">
         {/* Mobile logo */}
         <div className="flex items-center justify-between mb-10 shrink-0 lg:justify-end">
           <Link href="/" className="lg:hidden">

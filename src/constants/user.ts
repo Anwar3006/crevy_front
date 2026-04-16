@@ -7,6 +7,10 @@ export const USERTYPE_OPTIONS = [
     label: "Company",
     value: "Company",
   },
+  {
+    label: "Admin",
+    value: "Admin",
+  },
 ];
 export const USER_TYPES = USERTYPE_OPTIONS.map((option) => option.value);
 

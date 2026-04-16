@@ -140,6 +140,12 @@ export const getSidebarConfig = (userType: UserType): SidebarConfig => {
           icon: DashboardSquareAddIcon,
         },
         {
+          title: "User Management",
+          url: "/assigned-businesses",
+          // @ts-expect-error
+          icon: UserGroupIcon,
+        },
+        {
           title: "Compliance",
           url: "/compliance",
           // @ts-expect-error
@@ -148,25 +154,25 @@ export const getSidebarConfig = (userType: UserType): SidebarConfig => {
       ],
       sections: [
         {
-          title: "MANAGEMENT",
+          title: "OVERSIGHT",
           items: [
             {
-              title: "Assigned Businesses",
-              url: "/assigned-businesses",
+              title: "Project Vetting",
+              url: "/track-verification",
               // @ts-expect-error
-              icon: UserGroupIcon,
+              icon: CheckListIcon,
+            },
+            {
+              title: "Transaction Log",
+              url: "/data-collection",
+              // @ts-expect-error
+              icon: CalculateIcon,
             },
             {
               title: "Site Visits",
               url: "/site-visits",
               // @ts-expect-error
               icon: Calendar03Icon,
-            },
-            {
-              title: "Data Collection",
-              url: "/data-collection",
-              // @ts-expect-error
-              icon: CalculateIcon,
             },
           ],
         },
