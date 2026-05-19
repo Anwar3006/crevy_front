@@ -90,7 +90,7 @@ const RegisterForm = ({
           type="email"
           label="Email Address"
           placeholder="rebecca@example.com"
-          description="This will be your login email."
+          description="Optional. You can also log in with your phone number."
         />
 
         {/* Phone */}

@@ -43,10 +43,11 @@ export const GroupedBarChart = ({
   const chartW = W - PAD.left - PAD.right;
   const chartH = H - PAD.top - PAD.bottom;
 
-  const maxVal = Math.max(...data.flatMap((d) => [d.a, d.b])) * 1.15;
+  const rawMax = Math.max(...data.flatMap((d) => [d.a, d.b]));
+  const maxVal = rawMax > 0 ? rawMax * 1.15 : 100;
 
-  const groupW = chartW / data.length;
-  const barW = (groupW - 8) / 2;
+  const groupW = data.length > 0 ? chartW / data.length : chartW;
+  const barW = Math.max((groupW - 8) / 2, 0);
 
   const yScale = (v: number) => PAD.top + chartH - (v / maxVal) * chartH;
   const barH = (v: number) => (v / maxVal) * chartH;

@@ -26,7 +26,15 @@ export const userRegistrationSchema = z
       .max(50, "Last name must not exceed 50 characters")
       .trim(),
 
-    email: z.string().email("Invalid email address").toLowerCase().trim(),
+    email: z
+      .string()
+      .toLowerCase()
+      .trim()
+      .refine((val) => val === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+        message: "Invalid email format",
+      })
+      .optional()
+      .or(z.literal("")),
 
     password: z
       .string()
@@ -50,12 +58,16 @@ export const userRegistrationSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
+  })
+  .refine((data) => (data.email && data.email !== "") || (data.contactNumber && data.contactNumber !== ""), {
+    message: "Either email or contact number is required",
+    path: ["email"],
   });
 
 export type TUserRegistrationInput = z.infer<typeof userRegistrationSchema>;
 
 export const signInSchema = z.object({
-  identifier: z.string().min(1, "Email is required").trim(),
+  identifier: z.string().min(1, "Email or phone is required").trim(),
   password: z.string().min(1, "Password is required"),
 });
 
