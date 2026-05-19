@@ -113,4 +113,9 @@ export const ProjectService = {
     );
     return response.data;
   },
+
+  simulateMrv: async (projectId: string) => {
+    const response = await axiosClient.post(`/mrv/simulate/${projectId}`);
+    return response.data;
+  },
 };

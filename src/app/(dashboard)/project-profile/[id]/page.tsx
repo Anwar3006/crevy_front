@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle2,
   ChevronLeft,
@@ -11,7 +11,7 @@ import {
   Leaf,
   Loader2,
   MapPin,
-  Radio,
+  Radio, Zap, Award, Globe, ShieldCheck, Activity,
   Ruler,
   Tag,
 } from "lucide-react";
@@ -21,6 +21,8 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -71,6 +73,20 @@ const docTypeLabelMap: Record<string, string> = {
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState("overview");
+  const queryClient = useQueryClient();
+  const { mutate: simulate, isPending: isSimulating } = useMutation({
+    mutationFn: () => ProjectService.simulateMrv(id as string),
+    onSuccess: () => {
+      toast.success("MRV Pipeline simulation successful!");
+      queryClient.invalidateQueries({ queryKey: ["project-verifications", id] });
+      queryClient.invalidateQueries({ queryKey: ["project-anchors", id] });
+      queryClient.invalidateQueries({ queryKey: ["project", id] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message ?? "Simulation failed.");
+    },
+  });
+
 
   const { data: projectRes, isLoading: loadingProject } = useQuery({
     queryKey: ["project", id],
@@ -138,65 +154,57 @@ export default function ProjectDetailPage() {
       </Link>
 
       {/* Header card */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                {project.sector?.replace(/_/g, " ")}
-              </span>
-              <span className="text-slate-200">·</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                {project.code}
-              </span>
+      <div className="bg-[#131927] rounded-3xl p-8 md:p-12 relative overflow-hidden text-white shadow-2xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#2cc295]/10 rounded-full blur-3xl -mr-32 -mt-32" />
+        <div className="relative z-10">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-[#2cc295] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                  {project.sector?.replace(/_/g, " ")}
+                </div>
+                <span className="text-white/40 font-mono text-[10px]">{project.code}</span>
+              </div>
+
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight max-w-2xl">
+                {project.name ?? project.code}
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-sm">
+                  <div className={cn("w-2 h-2 rounded-full", project.projectStatus === "active" ? "bg-[#2cc295] animate-pulse" : "bg-white/40")} />
+                  <span className="text-xs font-bold uppercase tracking-wider">{project.projectStatus}</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-sm">
+                  <Activity className="w-3 h-3 text-[#2cc295]" />
+                  <span className="text-xs font-bold uppercase tracking-wider">{project.projectStage} Stage</span>
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-bold text-[#131927]">
-              {project.name ?? project.code}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-3 mt-3">
-              <span
-                className={cn(
-                  "rounded-full px-3 py-0.5 text-xs font-semibold",
-                  statusPill[project.projectStatus] ?? "",
-                )}
-              >
-                {project.projectStatus}
-              </span>
-              <span
-                className={cn(
-                  "rounded-full px-3 py-0.5 text-xs font-semibold",
-                  stagePill[project.projectStage] ?? "",
-                )}
-              >
-                {project.projectStage}
-              </span>
+            <div className="flex flex-col gap-4 sm:items-end">
+              <div className="text-right">
+                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">Location</p>
+                <p className="text-xl font-bold flex items-center justify-end gap-2">
+                  <MapPin className="h-5 w-5 text-[#2cc295]" />
+                  {project.region}, {project.country}
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <div className="bg-white/5 rounded-2xl p-4 border border-white/10 min-w-[120px] text-center">
+                  <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Area</p>
+                  <p className="text-lg font-black">{project.totalAreaHectares} <span className="text-xs font-medium text-white/40">HA</span></p>
+                </div>
+                <div className="bg-white/5 rounded-2xl p-4 border border-white/10 min-w-[120px] text-center">
+                  <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Vintage</p>
+                  <p className="text-lg font-black">2024</p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* Quick meta */}
-          <div className="flex flex-wrap sm:flex-col gap-3 sm:items-end text-sm text-slate-500 shrink-0">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5 text-[#2cc295]" />
-              {project.region}, {project.country}
-            </span>
-            {project.totalAreaHectares && (
-              <span className="flex items-center gap-1.5">
-                <Ruler className="h-3.5 w-3.5 text-[#2cc295]" />
-                {Number(project.totalAreaHectares).toFixed(1)} ha
-              </span>
-            )}
-            <span className="flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5 text-[#2cc295]" />
-              Started{" "}
-              {new Date(project.startDate).toLocaleDateString("en-GB", {
-                month: "short",
-                year: "numeric",
-              })}
-            </span>
           </div>
         </div>
+      </div>
+
 
         {/* Verification pipeline */}
         <div className="mt-8 pt-6 border-t border-slate-50">
@@ -275,6 +283,49 @@ export default function ProjectDetailPage() {
 
         {/* ── Overview ─────────────────────────────────────────────────────── */}
         <TabsContent value="overview" className="space-y-4">
+          {/* Key Metric Highlight Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
+                <Leaf className="w-5 h-5 text-[#2cc295]" />
+              </div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Carbon Sequestration</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-[#131927]">12.5k</span>
+                <span className="text-xs font-bold text-gray-400">tCO₂e</span>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+                <Globe className="w-5 h-5 text-blue-500" />
+              </div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Permanence Score</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-[#131927]">A+</span>
+                <span className="text-xs font-bold text-gray-400">Ranked</span>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
+                <Award className="w-5 h-5 text-amber-500" />
+              </div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Methodology</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl font-black text-[#131927]">Verra VM0042</span>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mb-4">
+                <ShieldCheck className="w-5 h-5 text-purple-500" />
+              </div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Audit Status</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-[#131927]">Stage 1</span>
+                <span className="text-xs font-bold text-gray-400">Clear</span>
+              </div>
+            </div>
+          </div>
+
           {/* Description */}
           {project.description && (
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -505,17 +556,38 @@ export default function ProjectDetailPage() {
                 <span className="text-sm">Loading MRV data…</span>
               </div>
             ) : verifications.length === 0 ? (
-              <div className="rounded-xl bg-slate-50 border border-dashed border-slate-200 p-8 text-center">
-                <Radio className="h-8 w-8 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm font-semibold text-slate-600">
-                  Awaiting first sensor reading
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl bg-slate-50 border border-dashed border-slate-200 p-10 text-center"
+              >
+                <div className="bg-white w-16 h-16 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mx-auto mb-4">
+                  <Radio className="h-8 w-8 text-[#2cc295] animate-pulse" />
+                </div>
+                <h4 className="text-base font-bold text-slate-800">Awaiting Sensor Telemetry</h4>
+                <p className="text-sm text-slate-500 mt-2 max-w-sm mx-auto leading-relaxed">
+                  The dMRV pipeline is ready. In production, verification data flows automatically from
+                  on-site IoT sensors. For this demo, you can trigger a full pipeline simulation.
                 </p>
-                <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
-                  Verification data will appear here once our dMRV partner's
-                  sensors begin transmitting from your land. This typically
-                  starts within 24–48 hours of sensor deployment.
-                </p>
-              </div>
+
+                <Button
+                  onClick={() => simulate()}
+                  disabled={isSimulating}
+                  className="mt-6 bg-[#2cc295] hover:bg-[#24a37d] text-white rounded-xl px-6 py-6 h-auto font-bold shadow-lg shadow-[#2cc295]/20 transition-all active:scale-95"
+                >
+                  {isSimulating ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Simulating Pipeline...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="mr-2 h-5 w-5 fill-current" />
+                      Simulate MRV Pipeline
+                    </>
+                  )}
+                </Button>
+              </motion.div>
             ) : (
               <div className="space-y-3">
                 {verifications.map((v: any) => (

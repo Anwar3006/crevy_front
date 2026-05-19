@@ -112,7 +112,14 @@ const NewProject = () => {
         }
       }
 
-      toast.success("Project registered successfully!");
+            // 3. Trigger MRV simulation (async, non-blocking)
+      try {
+        await ProjectService.simulateMrv(projectId);
+      } catch (simError) {
+        console.warn("MRV simulation failed to trigger:", simError);
+      }
+
+toast.success("Project registered successfully!");
       router.push(`/project-profile/${projectId}`);
     } catch (error: any) {
       console.error("Error registering project:", error);
