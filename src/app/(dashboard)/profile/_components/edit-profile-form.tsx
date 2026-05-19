@@ -80,12 +80,12 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
         countryOfOperation: values.countryOfOperation,
       };
 
-      if (user.userType === "Company") {
+      if (user.role === "financial_admin") {
         updateData.company = {
           legalBusinessName: values.legalBusinessName,
           businessAddress: values.businessAddress,
         };
-      } else if (user.userType === "ProjectOwner") {
+      } else if (user.role === "project_owner") {
         updateData.projectOwner = {
           projectCategory: values.projectCategory,
           projectStartDate: values.projectStartDate,
@@ -177,7 +177,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             </div>
           </div>
 
-          {user.userType === "Company" && (
+          {user.role === "financial_admin" && (
             <div className="space-y-6 pt-6 border-t">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
                 Company Data
@@ -201,7 +201,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             </div>
           )}
 
-          {user.userType === "ProjectOwner" && (
+          {user.role === "project_owner" && (
             <div className="space-y-6 pt-6 border-t">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
                 Project Owner Data

@@ -1,74 +1,155 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
-  AlertTriangle,
   ArrowRight,
+  CheckCircle2,
   Clock,
+  MapPin,
   Rocket,
+  ShieldCheck,
   Sparkles,
   Target,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { UserType } from "@/constants/sidebar-items";
+import { authClient } from "@/lib/auth";
+import { ProjectService } from "@/lib/services/project-service";
+import type { TRole } from "@/types/user.types";
 
 interface HeroSectionProps {
-  userType: UserType;
+  role: TRole;
   userName: string;
 }
 
-const configs = {
-  ProjectOwner: {
-    title: "Build your carbon legacy",
-    description:
-      "Register projects, track sequestration, and earn verified carbon credits with full transparency.",
-    cta: { label: "Register New Project", url: "/new-project", icon: Rocket },
-    badge: {
-      text: "3 Active Projects",
-      color: "bg-[#2cc295]/10 text-[#178a74]",
-    },
-    nextSteps: [
-      { icon: Clock, text: "Verification audit scheduled in 3 days" },
-      { icon: AlertTriangle, text: "2 documents pending upload" },
-    ],
-    gradFrom: "#2cc295",
-    gradTo: "#178a74",
-  },
-  Company: {
-    title: "Maximize your ESG impact",
-    description:
-      "Invest in verified green projects, track your offset portfolio, and generate compliance-ready reports.",
-    cta: { label: "Explore Marketplace", url: "/marketplace", icon: Sparkles },
-    badge: { text: "12 Active Investments", color: "bg-blue-50 text-blue-700" },
-    nextSteps: [
-      { icon: Clock, text: "ESG report due in 14 days" },
-      { icon: AlertTriangle, text: "3 portfolio projects need renewal" },
-    ],
-    gradFrom: "#131927",
-    gradTo: "#1e2d42",
-  },
-  Admin: {
-    title: "Streamline site verification",
-    description:
-      "Manage assigned businesses, schedule field visits, and process the verification queue efficiently.",
-    cta: {
-      label: "View Assignments",
-      url: "/assigned-businesses",
-      icon: Target,
-    },
-    badge: { text: "5 Pending Approvals", color: "bg-amber-50 text-amber-700" },
-    nextSteps: [
-      { icon: Clock, text: "Site visit at Green Valley Farm — Tomorrow 9 AM" },
-      { icon: AlertTriangle, text: "14 pending verification documents" },
-    ],
-    gradFrom: "#178a74",
-    gradTo: "#131927",
-  },
-};
-
-const HeroSection = ({ userType, userName }: HeroSectionProps) => {
+const HeroSection = ({ role, userName }: HeroSectionProps) => {
   const router = useRouter();
-  const c = configs[userType];
+  const { data: session } = authClient.useSession();
+  const userId = (session?.user as any)?.id;
+
+  const { data: projectsRes } = useQuery({
+    queryKey: ["hero-projects", userId],
+    queryFn: () => ProjectService.getProjects({ createdBy: userId, limit: 50 }),
+    enabled: !!userId && role === "project_owner",
+    staleTime: 60_000,
+  });
+
+  const projects: any[] = projectsRes?.data ?? [];
+  const activeCount = projects.filter(
+    (p) => p.projectStatus === "active",
+  ).length;
+  const pendingVerif = projects.filter(
+    (p) => p.projectStage === "verification",
+  ).length;
+
+  // ── Config per role ───────────────────────────────────────────────────────
+  const configs: Record<TRole, any> = {
+    project_owner: {
+      title: "Build your carbon legacy",
+      desc: "Register projects, track sequestration, and earn verified carbon credits with full transparency.",
+      cta: { label: "Register New Project", url: "/new-project", icon: Rocket },
+      badge: {
+        text:
+          projects.length === 0
+            ? "Get Started"
+            : `${projects.length} Project${projects.length !== 1 ? "s" : ""}`,
+        color: "bg-[#2cc295]/10 text-[#178a74]",
+      },
+      nextSteps: [
+        projects.length === 0
+          ? {
+              icon: Rocket,
+              text: "Register your first project to get started →",
+            }
+          : {
+              icon: CheckCircle2,
+              text: `${activeCount} project${activeCount !== 1 ? "s" : ""} active on the platform`,
+            },
+        pendingVerif > 0
+          ? {
+              icon: Clock,
+              text: `${pendingVerif} project${pendingVerif !== 1 ? "s" : ""} under MRV verification`,
+            }
+          : {
+              icon: Clock,
+              text: "Upload required documents to move to active status",
+            },
+      ],
+      gradFrom: "#2cc295",
+      gradTo: "#178a74",
+    },
+    financial_admin: {
+      title: "Maximize your ESG impact",
+      desc: "Invest in verified green projects, track your offset portfolio, and generate compliance-ready reports.",
+      cta: {
+        label: "Explore Marketplace",
+        url: "/marketplace",
+        icon: Sparkles,
+      },
+      badge: { text: "Carbon Marketplace", color: "bg-blue-50 text-blue-700" },
+      nextSteps: [
+        { icon: Clock, text: "Browse verified green projects by sector" },
+        {
+          icon: CheckCircle2,
+          text: "Generate ESG compliance reports from your portfolio",
+        },
+      ],
+      gradFrom: "#131927",
+      gradTo: "#1e2d42",
+    },
+    super_admin: {
+      title: "Platform Oversight",
+      desc: "Manage platform health, approve users, and oversee the project verification lifecycle.",
+      cta: {
+        label: "View User Management",
+        url: "/assigned-businesses",
+        icon: Target,
+      },
+      badge: { text: "Super Admin", color: "bg-purple-50 text-purple-700" },
+      nextSteps: [
+        { icon: Clock, text: "Review pending verification queue" },
+        { icon: CheckCircle2, text: "Monitor platform transaction logs" },
+      ],
+      gradFrom: "#178a74",
+      gradTo: "#131927",
+    },
+    mrv_admin: {
+      title: "MRV Verification Engine",
+      desc: "Verify project data, monitor satellite imagery, and issue carbon credits with precision.",
+      cta: {
+        label: "Verification Queue",
+        url: "/track-verification",
+        icon: ShieldCheck,
+      },
+      badge: { text: "MRV Admin", color: "bg-amber-50 text-amber-700" },
+      nextSteps: [
+        { icon: Clock, text: "Audit pending project telemetry" },
+        {
+          icon: CheckCircle2,
+          text: "Issue credits for verified sequestrations",
+        },
+      ],
+      gradFrom: "#178a74",
+      gradTo: "#131927",
+    },
+    project_manager: {
+      title: "Regional Project Management",
+      desc: "Oversee project owners, schedule field visits, and ensure regional compliance.",
+      cta: { label: "Field Assignments", url: "/site-visits", icon: MapPin },
+      badge: {
+        text: "Project Manager",
+        color: "bg-emerald-50 text-emerald-700",
+      },
+      nextSteps: [
+        { icon: Clock, text: "Schedule upcoming site visits" },
+        { icon: CheckCircle2, text: "Review field agent reports" },
+      ],
+      gradFrom: "#178a74",
+      gradTo: "#131927",
+    },
+  };
+
+  const c = configs[role] || configs.project_owner;
   const Cta = c.cta.icon;
 
   return (
@@ -79,7 +160,7 @@ const HeroSection = ({ userType, userName }: HeroSectionProps) => {
       className="mx-auto max-w-5xl"
     >
       <div className="grid gap-4 md:grid-cols-5">
-        {/* Left: Main CTA panel */}
+        {/* Left: main CTA card */}
         <div className="md:col-span-3 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <span
             className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${c.badge.color} mb-4`}
@@ -93,7 +174,7 @@ const HeroSection = ({ userType, userName }: HeroSectionProps) => {
             {c.title}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-gray-500 max-w-sm">
-            {c.description}
+            {c.desc}
           </p>
           <button
             type="button"
@@ -109,14 +190,13 @@ const HeroSection = ({ userType, userName }: HeroSectionProps) => {
           </button>
         </div>
 
-        {/* Right: Welcome + Next Steps */}
+        {/* Right: welcome + next steps */}
         <div
           className="md:col-span-2 relative overflow-hidden rounded-2xl p-6 text-white shadow-lg"
           style={{
             background: `linear-gradient(145deg, ${c.gradFrom}, ${c.gradTo})`,
           }}
         >
-          {/* BG decoration */}
           <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-white/8 blur-2xl" />
           <div className="pointer-events-none absolute -bottom-10 -left-6 h-32 w-32 rounded-full bg-white/6 blur-2xl" />
 
@@ -135,7 +215,7 @@ const HeroSection = ({ userType, userName }: HeroSectionProps) => {
               <p className="text-xs font-semibold uppercase tracking-widest text-white/60">
                 Next Steps
               </p>
-              {c.nextSteps.map((step, i) => {
+              {c.nextSteps.map((step: any, i: number) => {
                 const Icon = step.icon;
                 return (
                   <motion.div

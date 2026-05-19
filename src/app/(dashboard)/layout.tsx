@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type React from "react";
 import { DashboardLayoutClient } from "@/components/DashboardLayout";
@@ -11,8 +12,33 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/login");
   }
 
+  const user = session.user as TBetterAuthUser;
+
+  // Fetch role if missing (v2 rbac)
+  if (!user.role) {
+    try {
+      const headersList = await headers();
+      const cookie = headersList.get("cookie") ?? "";
+
+      const roleResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v2/rbac/me/role`,
+        {
+          headers: { cookie },
+          cache: "no-store",
+        },
+      );
+
+      if (roleResponse.ok) {
+        const roleData = await roleResponse.json();
+        user.role = roleData.data.role;
+      }
+    } catch (err) {
+      console.error("[DashboardLayout] Failed to fetch user role:", err);
+    }
+  }
+
   return (
-    <DashboardLayoutClient user={session.user as TBetterAuthUser}>
+    <DashboardLayoutClient user={user}>
       <div className="flex-1">{children}</div>
     </DashboardLayoutClient>
   );

@@ -1,9 +1,8 @@
+// src/lib/axiosClient.tsx
 import axios from "axios";
 
 export const axiosClient = axios.create({
-  // Use the frontend's OWN domain so the proxy handles the request
-  // and browser sends the frontend-scoped cookies automatically.
-  baseURL: "/api/v1",
+  baseURL: "/api/v2",
   headers: {
     "Content-Type": "application/json",
   },

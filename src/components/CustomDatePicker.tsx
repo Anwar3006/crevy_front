@@ -17,7 +17,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 type CustomDatePickerProps<T extends FieldValues> = {
-  control: Control<T>;
+  control: any;
   name: FieldPath<T>;
   label?: string;
   placeholder?: string;

@@ -9,16 +9,16 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import type { UserType } from "@/constants/sidebar-items";
+import type { TRole } from "@/types/user.types";
 
 interface QuickActionsProps {
-  userType: UserType;
+  role: TRole;
 }
 
-const QuickActions = ({ userType }: QuickActionsProps) => {
+const QuickActions = ({ role }: QuickActionsProps) => {
   const getActions = () => {
-    switch (userType) {
-      case "Company":
+    switch (role) {
+      case "financial_admin":
         return [
           {
             title: "Join Marketplace",
@@ -42,11 +42,13 @@ const QuickActions = ({ userType }: QuickActionsProps) => {
             href: "/compliance",
           },
         ];
-      case "Admin":
+      case "super_admin":
+      case "mrv_admin":
+      case "project_manager":
         return [
           {
-            title: "Assigned Businesses",
-            description: "View businesses under your management",
+            title: "User Management",
+            description: "Manage platform users and businesses",
             icon: <Users className="h-6 w-6 stroke-white" />,
             color: "bg-indigo-500",
             href: "/assigned-businesses",
@@ -66,6 +68,7 @@ const QuickActions = ({ userType }: QuickActionsProps) => {
             href: "/track-verification",
           },
         ];
+      case "project_owner":
       default:
         return [
           {

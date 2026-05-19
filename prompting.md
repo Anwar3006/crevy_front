@@ -83,3 +83,14 @@ Create a dashboard that serves three distinct user roles: **Carbon Project Owner
 
 ## 🚀 Execution Goal
 Deliver a fully functional, highly interactive dashboard where a user can log in and immediately understand their climate impact or operational responsibilities through beautiful data visualization.
+
+
+
+
+
+
+
+
+### To Fix:
+frontend: /Users/anwarsadat/Desktop/WORK/crevy-frontend, remove the userType from the registration form, users should not be able to register and select their role, the only    
+way to register is through an invitation and the Role and description should be displayed and immutable, so throughout the codebsae replace the userType with the role

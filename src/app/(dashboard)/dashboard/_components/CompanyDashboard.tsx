@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { BarChart2, FileBarChart, Globe, Leaf, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import type { TRole } from "@/types/user.types";
 import { AreaChart } from "./AreaChart";
 import HeroSection from "./HeroSection";
 import { DonutChart } from "./PieChart";
@@ -124,10 +125,16 @@ function EsgScore({ score }: { score: number }) {
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
-export default function CompanyDashboard({ userName }: { userName: string }) {
+export default function CompanyDashboard({
+  userName,
+  role,
+}: {
+  userName: string;
+  role: TRole;
+}) {
   return (
     <div className="space-y-8">
-      <HeroSection userType="Company" userName={userName} />
+      <HeroSection role={role} userName={userName} />
 
       {/* KPIs */}
       <section className="mx-auto max-w-5xl">

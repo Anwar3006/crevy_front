@@ -1,121 +1,137 @@
+// src/constants/new-project.ts
 import { z } from "zod";
+
+// ─── Taxonomy ──────────────────────────────────────────────────────────────────
 
 export const PROJECT_TYPES = [
   {
     id: "regenerative_agriculture",
+    sector: "green_economy",
     title: "Regenerative Agriculture",
+    pilotEnabled: true,
     icon: "/icons/3d-leaf.png",
     description:
-      "Restore soil health and capture carbon through sustainable farming practices.",
-  },
-  {
-    id: "waste_management",
-    title: "Waste Management",
-    icon: "/icons/3d-waste.png",
-    description:
-      "Reduce landfill reliance by converting organic or plastic waste into resources.",
+      "Restore soil health and sequester carbon through sustainable farming.",
   },
   {
     id: "renewable_energy",
+    sector: "green_economy",
     title: "Renewable Energy",
+    pilotEnabled: true,
     icon: "/icons/3d-renewable.png",
     description:
-      "Generate clean power using solar, wind, or hydro-electric infrastructure.",
+      "Generate clean power using solar, wind, or hydro infrastructure.",
   },
   {
-    id: "biochar",
-    title: "Biochar",
-    icon: "/icons/biochar.png",
-    description:
-      "Create stable carbon sinks by converting biomass into charcoal-like soil enhancers.",
+    id: "waste_management",
+    sector: "brown_economy",
+    title: "Waste Management",
+    pilotEnabled: false,
+    icon: "/icons/3d-waste.png",
+    description: "Reduce landfill reliance and capture methane emissions.",
   },
   {
-    id: "reforestation",
-    title: "Reforestation",
-    icon: "/icons/reforestation.png",
-    description:
-      "Rebuild ecosystems and sequester carbon by planting native forest species.",
+    id: "water_projects",
+    sector: "blue_economy",
+    title: "Water Projects",
+    pilotEnabled: false,
+    icon: "/icons/blue-carbon.png",
+    description: "Clean water infrastructure and wetland restoration.",
   },
   {
     id: "blue_carbon",
+    sector: "blue_economy",
     title: "Blue Carbon",
+    pilotEnabled: false,
     icon: "/icons/blue-carbon.png",
-    description:
-      "Protect coastal ecosystems like mangroves and seagrasses to store carbon.",
+    description: "Mangrove and coastal ecosystem protection.",
   },
-];
+] as const;
 
-export const projectTypeEnum = PROJECT_TYPES.map((type) => type.id) as [
-  string,
-  ...string[],
-];
+// ─── Practice tags by project type ────────────────────────────────────────────
 
-export const createProjectInputSchema = z.object({
-  name: z
-    .string()
-    .min(3, "Project name must be at least 3 characters")
-    .max(100),
+export const PRACTICES_BY_TYPE: Record<string, string[]> = {
+  regenerative_agriculture: [
+    "Agroforestry",
+    "Cover Cropping",
+    "Rotational Grazing",
+    "Composting / Organic Amendments",
+    "No-Till / Minimum Tillage",
+    "Intercropping",
+    "Silvopasture",
+    "Riparian Buffers",
+  ],
+  renewable_energy: [
+    "Solar PV",
+    "Wind Energy",
+    "Small-Scale Hydro",
+    "Biogas / Biomass",
+    "Off-Grid Electrification",
+    "Clean Cooking Fuel",
+  ],
+};
 
-  projectType: z.enum(projectTypeEnum, {
-    error: () => ({ message: "Please select a valid project category" }),
-  }),
+// ─── Document slots ────────────────────────────────────────────────────────────
 
-  location: z.string().min(2, "Location is required"),
+export const DOCUMENT_TYPES = [
+  {
+    id: "land_ownership",
+    label: "Land Ownership Proof",
+    description:
+      "Title deed, land certificate, lease agreement, or a signed letter from the chief confirming your land rights.",
+    required: true,
+    hasTemplate: false,
+    accept: ".pdf,.jpg,.jpeg,.png",
+    multiple: false,
+  },
+  {
+    id: "community_consent",
+    label: "Community / Landowner Consent Form",
+    description:
+      "Signed consent to participate in the Crevy dMRV monitoring programme and allow sensor deployment on your land.",
+    required: true,
+    hasTemplate: true,
+    templateUrl: "/templates/consent-form.pdf",
+    accept: ".pdf",
+    multiple: false,
+  },
+  {
+    id: "site_access_authorization",
+    label: "Site Access Authorization",
+    description:
+      "Written permission for our technical team to access your land to install monitoring sensors.",
+    required: true,
+    hasTemplate: true,
+    templateUrl: "/templates/site-access-form.pdf",
+    accept: ".pdf",
+    multiple: false,
+  },
+  {
+    id: "national_id",
+    label: "National ID / Business Registration",
+    description:
+      "Your national ID card, passport, or business registration certificate.",
+    required: true,
+    hasTemplate: false,
+    accept: ".pdf,.jpg,.jpeg,.png",
+    multiple: false,
+  },
+  {
+    id: "site_photos",
+    label: "Site Photographs",
+    description:
+      "Recent photos of your land (up to 5 images). Helps buyers understand your project.",
+    required: false,
+    hasTemplate: false,
+    accept: ".jpg,.jpeg,.png",
+    multiple: true,
+    maxFiles: 5,
+  },
+] as const;
 
-  gpsCoordinates: z
-    .string()
-    .regex(/^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/, "Invalid GPS format (lat, lng)")
-    .optional()
-    .or(z.literal("")),
+export type DocumentTypeId = (typeof DOCUMENT_TYPES)[number]["id"];
 
-  startDate: z.coerce.date({
-    error: () => ({ message: "Please enter a valid start date" }),
-  }),
-
-  durationMonths: z.coerce.number().int().positive().min(1),
-  totalAreaHectares: z.coerce.number().positive("Total area is required"),
-
-  // Land Use & Practices
-  baselineLandUse: z
-    .string()
-    .min(5, "Baseline land use description is required"),
-  baselineEmissionsYearly: z.string().optional().or(z.literal("")),
-  regenerativePractices: z
-    .array(z.string())
-    .min(1, "Select at least one practice"),
-  otherPractice: z.string().optional().or(z.literal("")),
-
-  // Soil & Biomass
-  soilType: z.string().optional().or(z.literal("")),
-  initialSoilCarbonContent: z.coerce
-    .number()
-    .min(0)
-    .max(100)
-    .optional()
-    .or(z.literal(0)),
-  expectedBiomassIncrease: z.string().optional().or(z.literal("")),
-
-  // Productivity & Inputs
-  cropLivestockTypes: z.string().optional().or(z.literal("")),
-  usesSyntheticFertilizers: z.boolean().default(false),
-  usesSyntheticPesticides: z.boolean().default(false),
-  organicAmendments: z.string().optional().or(z.literal("")),
-
-  // Community & Co-benefits
-  socialEconomicBenefits: z.string().optional().or(z.literal("")),
-  supportsBiodiversityConservation: z.boolean().default(false),
-  supportsWaterManagement: z.boolean().default(false),
-  planToExpandPractices: z.string().default("no"),
-
-  description: z.string().min(20, "Please provide a detailed description"),
-  implementationPlan: z.string().optional().or(z.literal("")),
-  expectedOutcomes: z.string().optional().or(z.literal("")),
-
-  currentStatus: z.string().optional().or(z.literal("")),
-  region: z.string().default("Africa"),
-  sdgs: z.array(z.string()).optional().default([]),
-  documents: z.array(z.any()).optional().default([]),
-});
+// ─── SDGs ──────────────────────────────────────────────────────────────────────
 
 export const SDGS = [
   { id: "1", title: "No Poverty", color: "bg-[#E5243B]" },
@@ -153,37 +169,66 @@ export const SDGS = [
   { id: "17", title: "Partnerships for the Goals", color: "bg-[#19486A]" },
 ];
 
-export const createProjectDefaultValues: Partial<TCreateProject> = {
+// ─── Zod schema ───────────────────────────────────────────────────────────────
+// NOTE: country uses ISO alpha-3 (3-char) codes because that is what the
+// CountryDropdown component stores (e.g. "GHA" for Ghana).
+// The project service maps this value straight to the backend which now
+// accepts min(2).max(3).
+
+export const createProjectInputSchema = z.object({
+  // Step 1 — Project Profile
+  projectType: z.string().min(1, "Select a project type"),
+  sector: z.string().min(1, "Sector is required"),
+  name: z.string().min(1, "Project name is required").max(255),
+  country: z.string().min(2, "Select a country").max(3),
+  region: z.string().min(1, "Region / area is required"),
+  gpsCoordinates: z
+    .string()
+    .regex(
+      /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/,
+      "Format: lat, lng — e.g. 6.5244, -1.3792",
+    )
+    .optional()
+    .or(z.literal("")),
+  startDate: z.coerce.date({
+    error: () => ({ message: "Enter a valid start date" }),
+  }),
+  endDate: z.coerce.date().optional(),
+  totalAreaHectares: z.coerce
+    .number()
+    .positive("Land area must be greater than 0"),
+  currency: z.object({
+    code: z.string().min(3, "Select a currency").max(3),
+    name: z.string().min(1, "Select a currency"),
+  }),
+
+  // Step 2 — Practices & Context
+  projectTags: z.array(z.string()).default([]),
+  description: z
+    .string()
+    .min(20, "Please describe your project (at least 20 characters)")
+    .max(1000),
+  sdgs: z.array(z.string()).default([]),
+
+  // Step 3 — Documents (tracked client-side, uploaded separately)
+  documents: z.record(z.string(), z.any().nullable()).default({}),
+});
+
+export type TCreateProject = z.infer<typeof createProjectInputSchema>;
+
+export const createProjectDefaultValues: TCreateProject = {
+  projectType: "",
+  sector: "green_economy",
   name: "",
-  projectType: "" as (typeof projectTypeEnum)[0],
-  location: "GHA",
+  country: "GHA", // alpha3 for Ghana — matches CountryDropdown default
+  region: "",
   gpsCoordinates: "",
   startDate: new Date(),
-  durationMonths: 1,
+  endDate: undefined,
   totalAreaHectares: 0,
-  baselineLandUse: "",
-  regenerativePractices: [],
-  otherPractice: "",
-  soilType: "",
-  initialSoilCarbonContent: 0,
-  expectedBiomassIncrease: "",
-  cropLivestockTypes: "",
-  usesSyntheticFertilizers: false,
-  usesSyntheticPesticides: false,
-  organicAmendments: "",
-  socialEconomicBenefits: "",
-  supportsBiodiversityConservation: false,
-  supportsWaterManagement: false,
-  planToExpandPractices: "no",
+  currency: { code: "", name: "" },
+  projectTags: [],
   description: "",
-  implementationPlan: "",
-  expectedOutcomes: "",
-  currentStatus: "",
-  region: "Africa",
   sdgs: [],
-  documents: [],
-  baselineEmissionsYearly: "",
+  documents: {},
 };
-
-// Infer TypeScript type from create schema
-export type TCreateProject = z.infer<typeof createProjectInputSchema>;

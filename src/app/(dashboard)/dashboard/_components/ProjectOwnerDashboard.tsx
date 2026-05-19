@@ -1,112 +1,152 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Banknote, Leaf, Plus, ScanSearch, TreePine } from "lucide-react";
+import {
+  Banknote,
+  Leaf,
+  Loader2,
+  Plus,
+  ScanSearch,
+  TreePine,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth";
+import { ProjectService } from "@/lib/services/project-service";
+import type { TRole } from "@/types/user.types";
 import { AreaChart } from "./AreaChart";
 import { GroupedBarChart } from "./BarChart";
 import HeroSection from "./HeroSection";
 import { StatCard } from "./StatCard";
 
-// ─── Mock data ────────────────────────────────────────────────────────────────
+// ─── Status badge helper ──────────────────────────────────────────────────────
+
+const statusStyle: Record<string, string> = {
+  draft: "bg-gray-100 text-gray-500",
+  active: "bg-[#2cc295]/10 text-[#178a74]",
+  suspended: "bg-red-50 text-red-600",
+  closed: "bg-slate-100 text-slate-500",
+};
+
+const stageStyle: Record<string, string> = {
+  registration: "bg-amber-50 text-amber-700",
+  active: "bg-blue-50 text-blue-700",
+  verification: "bg-purple-50 text-purple-700",
+  completed: "bg-[#2cc295]/10 text-[#178a74]",
+};
+
+const stagePct: Record<string, number> = {
+  registration: 20,
+  active: 55,
+  verification: 80,
+  completed: 100,
+};
+
+// ─── Chart mock data (stays mock for pilot — connected when MRV data flows) ──
+
 const revenueData = [
-  { label: "Jan", value: 1800 },
-  { label: "Feb", value: 2400 },
-  { label: "Mar", value: 2100 },
-  { label: "Apr", value: 3200 },
-  { label: "May", value: 2900 },
-  { label: "Jun", value: 4100 },
-  { label: "Jul", value: 3800 },
-  { label: "Aug", value: 5200 },
-  { label: "Sep", value: 4700 },
-  { label: "Oct", value: 6100 },
-  { label: "Nov", value: 5800 },
-  { label: "Dec", value: 7400 },
+  { label: "Jan", value: 0 },
+  { label: "Feb", value: 0 },
+  { label: "Mar", value: 0 },
+  { label: "Apr", value: 0 },
+  { label: "May", value: 0 },
+  { label: "Jun", value: 0 },
+  { label: "Jul", value: 0 },
+  { label: "Aug", value: 0 },
+  { label: "Sep", value: 0 },
+  { label: "Oct", value: 0 },
+  { label: "Nov", value: 0 },
+  { label: "Dec", value: 0 },
 ];
 
 const seqData = [
-  { label: "Q1", a: 420, b: 390 },
-  { label: "Q2", a: 610, b: 580 },
-  { label: "Q3", a: 540, b: 500 },
-  { label: "Q4", a: 780, b: 720 },
+  { label: "Q1", a: 0, b: 0 },
+  { label: "Q2", a: 0, b: 0 },
+  { label: "Q3", a: 0, b: 0 },
+  { label: "Q4", a: 0, b: 0 },
 ];
-
-const projects = [
-  {
-    name: "Volta Basin Reforestation",
-    type: "Reforestation",
-    status: "Verified",
-    credits: 1240,
-    pct: 92,
-  },
-  {
-    name: "Brong-Ahafo Agroforestry",
-    type: "Regen-Ag",
-    status: "In Review",
-    credits: 680,
-    pct: 61,
-  },
-  {
-    name: "Coastal Mangrove Restore",
-    type: "Blue Carbon",
-    status: "Pending",
-    credits: 0,
-    pct: 18,
-  },
-];
-
-const statusStyle: Record<string, string> = {
-  Verified: "bg-[#2cc295]/10 text-[#178a74]",
-  "In Review": "bg-amber-50 text-amber-700",
-  Pending: "bg-gray-100 text-gray-500",
-};
 
 // ─── Component ────────────────────────────────────────────────────────────────
+
 export default function ProjectOwnerDashboard({
   userName,
+  role,
 }: {
   userName: string;
+  role: TRole;
 }) {
+  const { data: session } = authClient.useSession();
+  const userId = (session?.user as any)?.id;
+  const router = useRouter();
+
+  // Fetch real projects for this user
+  const { data: projectsRes, isLoading: loadingProjects } = useQuery({
+    queryKey: ["my-projects", userId],
+    queryFn: () => ProjectService.getProjects({ createdBy: userId, limit: 10 }),
+    enabled: !!userId,
+  });
+
+  const projects: any[] = projectsRes?.data ?? [];
+
+  const activeProjects = projects.filter(
+    (p) => p.projectStatus === "active",
+  ).length;
+  const draftProjects = projects.filter(
+    (p) => p.projectStatus === "draft",
+  ).length;
+
   return (
     <div className="space-y-8">
-      <HeroSection userType="ProjectOwner" userName={userName} />
+      <HeroSection role={role} userName={userName} />
 
       {/* KPI Stats */}
       <section className="mx-auto max-w-5xl">
         <SectionLabel label="Key Metrics" delay={0.05} />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
-            label="Credits Issued"
-            value="1,920"
-            sub="tCO₂e verified"
+            label="My Projects"
+            value={loadingProjects ? "—" : String(projects.length)}
+            sub={`${activeProjects} active · ${draftProjects} draft`}
             icon={<Leaf />}
-            trend={{ value: "14%", up: true }}
             accent="green"
             delay={0.1}
           />
           <StatCard
-            label="Total Revenue"
-            value="$38,400"
-            sub="from credit sales"
+            label="Verified Credits"
+            value="—"
+            sub="Awaiting first MRV cycle"
             icon={<Banknote />}
-            trend={{ value: "22%", up: true }}
             accent="green"
             delay={0.15}
           />
           <StatCard
-            label="Active Land Area"
-            value="847 ha"
-            sub="across 3 projects"
+            label="Total Land Area"
+            value={
+              loadingProjects
+                ? "—"
+                : projects.length
+                  ? `${projects.reduce((a: number, p: any) => a + Number(p.totalAreaHectares ?? 0), 0).toFixed(1)} ha`
+                  : "0 ha"
+            }
+            sub={`across ${projects.length} project${projects.length !== 1 ? "s" : ""}`}
             icon={<TreePine />}
             accent="blue"
             delay={0.2}
           />
           <StatCard
             label="Pending Verifications"
-            value="2"
-            sub="audits scheduled"
+            value={
+              loadingProjects
+                ? "—"
+                : String(
+                    projects.filter(
+                      (p: any) => p.projectStage === "verification",
+                    ).length,
+                  )
+            }
+            sub="awaiting MRV review"
             icon={<ScanSearch />}
-            trend={{ value: "1 overdue", up: false }}
             accent="amber"
             delay={0.25}
           />
@@ -120,7 +160,7 @@ export default function ProjectOwnerDashboard({
           <AreaChart
             data={revenueData}
             title="Revenue Growth"
-            subtitle="Monthly income from credit sales (USD)"
+            subtitle="Will populate after first credit sale"
             color="#2cc295"
             unit="$"
             delay={0.35}
@@ -128,7 +168,7 @@ export default function ProjectOwnerDashboard({
           <GroupedBarChart
             data={seqData}
             title="Sequestration Efficiency"
-            subtitle="Actual vs. Estimated tCO₂e removed"
+            subtitle="Will populate after first MRV verification"
             labelA="Actual"
             labelB="Estimated"
             colorA="#2cc295"
@@ -164,69 +204,131 @@ export default function ProjectOwnerDashboard({
           transition={{ delay: 0.5 }}
           className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
         >
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-50 bg-gray-50/60">
-                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                  Project
-                </th>
-                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                  Type
-                </th>
-                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                  Status
-                </th>
-                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                  Credits
-                </th>
-                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                  Verification
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.map((p, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors"
-                >
-                  <td className="px-5 py-4">
-                    <span className="font-medium text-[#131927]">{p.name}</span>
-                  </td>
-                  <td className="px-5 py-4 text-gray-500 text-xs">{p.type}</td>
-                  <td className="px-5 py-4">
-                    <span
-                      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyle[p.status]}`}
-                    >
-                      {p.status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 font-semibold text-[#131927]">
-                    {p.credits > 0 ? p.credits.toLocaleString() : "—"}
-                  </td>
-                  <td className="px-5 py-4 w-40">
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 rounded-full bg-gray-100">
-                        <div
-                          className="h-1.5 rounded-full bg-[#2cc295] transition-all"
-                          style={{ width: `${p.pct}%` }}
-                        />
-                      </div>
-                      <span className="text-xs text-gray-400 w-8 text-right">
-                        {p.pct}%
-                      </span>
-                    </div>
-                  </td>
+          {loadingProjects ? (
+            <div className="flex items-center justify-center gap-3 py-16 text-slate-400">
+              <Loader2 className="h-5 w-5 animate-spin" />
+              <span className="text-sm">Loading your projects…</span>
+            </div>
+          ) : projects.length === 0 ? (
+            /* ── Empty state ── */
+            <div className="flex flex-col items-center justify-center gap-4 py-16 text-center px-6">
+              <div className="h-16 w-16 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                <Leaf className="h-8 w-8 text-[#2cc295]" />
+              </div>
+              <div>
+                <p className="font-semibold text-slate-800 text-base">
+                  No projects yet
+                </p>
+                <p className="text-slate-400 text-sm mt-1">
+                  Register your first green project to get started on the Crevy
+                  marketplace.
+                </p>
+              </div>
+              <Link
+                href="/new-project"
+                className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[#2cc295] px-6 py-3 text-sm font-bold text-white hover:bg-[#178a74] transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                Register Your First Project
+              </Link>
+            </div>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-50 bg-gray-50/60">
+                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Project
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Type
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Status
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Stage
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Progress
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {projects.map((p: any) => (
+                  <tr
+                    key={p.id}
+                    className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors cursor-pointer"
+                    onClick={() => router.push(`/project-profile/${p.id}`)}
+                  >
+                    <td className="px-5 py-4">
+                      <span className="font-medium text-[#131927]">
+                        {p.name ?? p.code}
+                      </span>
+                      <span className="block text-xs text-slate-400 mt-0.5">
+                        {p.region}, {p.country}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4 text-gray-500 text-xs">
+                      {(p.projectType as string)
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyle[p.projectStatus] ?? ""}`}
+                      >
+                        {p.projectStatus}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${stageStyle[p.projectStage] ?? ""}`}
+                      >
+                        {p.projectStage}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4 w-40">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-1.5 rounded-full bg-gray-100">
+                          <div
+                            className="h-1.5 rounded-full bg-[#2cc295] transition-all"
+                            style={{
+                              width: `${stagePct[p.projectStage] ?? 0}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="text-xs text-gray-400 w-8 text-right">
+                          {stagePct[p.projectStage] ?? 0}%
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </motion.div>
+
+        {projects.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="mt-3 text-center"
+          >
+            <Link
+              href="/project-profile"
+              className="text-xs font-semibold text-[#2cc295] hover:text-[#178a74] transition-colors"
+            >
+              View all projects →
+            </Link>
+          </motion.div>
+        )}
       </section>
 
       {/* Recent Activity */}
       <section className="mx-auto max-w-5xl pb-4">
-        <SectionLabel label="Recent Activity" delay={0.55} />
+        <SectionLabel label="Recent Activity" delay={0.65} />
         <RecentActivity />
       </section>
     </div>
@@ -257,89 +359,27 @@ export function SectionLabel({
   );
 }
 
-const activityItems: Record<
-  "ProjectOwner" | "Company" | "Admin",
-  { icon: string; title: string; sub: string; color: string }[]
-> = {
-  ProjectOwner: [
-    {
-      icon: "✅",
-      title: "Volta Basin verification approved",
-      sub: "2 hours ago",
-      color: "bg-[#2cc295]/10",
-    },
-    {
-      icon: "📄",
-      title: "Q3 sequestration report uploaded",
-      sub: "1 day ago",
-      color: "bg-amber-50",
-    },
-    {
-      icon: "🌱",
-      title: "Coastal Mangrove project registered",
-      sub: "3 days ago",
-      color: "bg-blue-50",
-    },
-  ],
-  Company: [
-    {
-      icon: "💰",
-      title: "Purchased 400 tCO₂e from Green Valley",
-      sub: "1 hour ago",
-      color: "bg-[#2cc295]/10",
-    },
-    {
-      icon: "📊",
-      title: "ESG report generated — Q3 2024",
-      sub: "2 days ago",
-      color: "bg-blue-50",
-    },
-    {
-      icon: "🤝",
-      title: "New project investment: Blue Carbon GH",
-      sub: "5 days ago",
-      color: "bg-amber-50",
-    },
-  ],
-  Admin: [
-    {
-      icon: "🔍",
-      title: "Site visit completed — Brong Farm",
-      sub: "30 min ago",
-      color: "bg-[#2cc295]/10",
-    },
-    {
-      icon: "⏳",
-      title: "Verification pending: 3 new submissions",
-      sub: "4 hours ago",
-      color: "bg-amber-50",
-    },
-    {
-      icon: "✅",
-      title: "User approved: Mensah Farms Ltd.",
-      sub: "Yesterday",
-      color: "bg-blue-50",
-    },
-  ],
-};
+const activityItems = [
+  {
+    icon: "🌱",
+    title: "Account created — welcome to Crevy!",
+    sub: "Get started by registering your first project.",
+    color: "bg-emerald-50",
+  },
+];
 
-export function RecentActivity({
-  role = "ProjectOwner",
-}: {
-  role?: "ProjectOwner" | "Company" | "Admin";
-} = {}) {
-  const items = activityItems[role];
+export function RecentActivity() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6 }}
+      transition={{ delay: 0.7 }}
       className="space-y-2.5"
     >
-      {items.map((item, i) => (
+      {activityItems.map((item, i) => (
         <div
           key={i}
-          className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-4 py-3.5 shadow-sm hover:border-gray-200 transition-colors"
+          className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-4 py-3.5 shadow-sm"
         >
           <div className="flex items-center gap-3">
             <div
@@ -352,12 +392,6 @@ export function RecentActivity({
               <p className="text-xs text-gray-400">{item.sub}</p>
             </div>
           </div>
-          <button
-            type="button"
-            className="text-xs font-semibold text-[#2cc295] hover:text-[#178a74] transition-colors"
-          >
-            View →
-          </button>
         </div>
       ))}
     </motion.div>

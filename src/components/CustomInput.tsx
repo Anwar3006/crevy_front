@@ -12,7 +12,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
 type CustomInputProps<T extends FieldValues> = {
-  control: Control<T>;
+  control: any;
   name: FieldPath<T>;
   type: "text" | "email" | "password" | "number" | "textarea" | "select";
   label?: string;

@@ -20,7 +20,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getSidebarConfig, type UserType } from "@/constants/sidebar-items";
+import { getSidebarConfig } from "@/constants/sidebar-items";
 import type { TBetterAuthUser } from "@/types";
 import { NavUser } from "./NavUser";
 import { Separator } from "./ui/separator";
@@ -34,19 +34,11 @@ export function AppSidebar({
   const pathname = usePathname();
   const { setOpenMobile, isMobile } = useSidebar();
 
-  // The specific brand green from the image
-  const brandGreen = "bg-[#2ebc8d]";
-
-  // Get role-based sidebar config
-  const sidebarConfig = getSidebarConfig(user.userType as UserType);
+  // Use role name directly from the user object
+  const sidebarConfig = getSidebarConfig(user.role || "project_owner");
 
   return (
-    <Sidebar
-      {...props}
-      className={`border-r-0 ${brandGreen}`}
-      collapsible="icon"
-    >
-      {/* Header with Logo */}
+    <Sidebar {...props} className="border-r-0 bg-[#2ebc8d]" collapsible="icon">
       <SidebarHeader className="pt-8 pb-4">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
@@ -95,14 +87,13 @@ export function AppSidebar({
                     >
                       <Link href={item.url}>
                         <HugeiconsIcon
-                          //@ts-expect-error
+                          // @ts-expect-error — HugeIcons type mismatch with React component props
                           icon={item.icon}
                           size={24}
                           color="currentColor"
                           strokeWidth={1.5}
                           className="shrink-0"
                         />
-
                         <span className="text-sm group-data-[collapsible=icon]:hidden">
                           {item.title}
                         </span>
@@ -142,7 +133,7 @@ export function AppSidebar({
                       >
                         <Link href={item.url}>
                           <HugeiconsIcon
-                            //@ts-expect-error
+                            // @ts-expect-error
                             icon={item.icon}
                             size={24}
                             color="currentColor"
@@ -168,7 +159,6 @@ export function AppSidebar({
         ))}
       </SidebarContent>
 
-      {/* Footer Profile Section */}
       <SidebarFooter className="mt-auto p-4">
         <div className="rounded-xl bg-white/10 p-1 backdrop-blur-sm">
           <NavUser user={user} />

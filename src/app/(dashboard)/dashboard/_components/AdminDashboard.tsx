@@ -11,11 +11,14 @@ import {
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import type { TRole } from "@/types/user.types";
 import { GroupedBarChart } from "./BarChart";
 import HeroSection from "./HeroSection";
 import { MultiLineChart } from "./LineChart";
+import OnboardingFlow from "./OnboardingFlow";
 import { RecentActivity, SectionLabel } from "./ProjectOwnerDashboard";
 import { StatCard } from "./StatCard";
+import SystemHealth from "./SystemHealth";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 const userGrowthData = [
@@ -75,19 +78,19 @@ const pendingUsers = [
   {
     name: "Abena Twumasi",
     org: "EcoGhana Ltd.",
-    type: "Company",
+    type: "financial_admin",
     since: "Today",
   },
   {
     name: "Kwame Boateng",
     org: "Solo Farmer",
-    type: "ProjectOwner",
+    type: "project_owner",
     since: "Yesterday",
   },
   {
     name: "Dr. Yaa Mensah",
     org: "Climate Africa",
-    type: "Admin",
+    type: "super_admin",
     since: "2 days ago",
   },
 ];
@@ -98,10 +101,12 @@ const priorityStyle: Record<string, string> = {
   Low: "bg-gray-100 text-gray-500",
 };
 
-const userTypeStyle: Record<string, string> = {
-  Company: "bg-blue-50 text-blue-600",
-  ProjectOwner: "bg-[#2cc295]/10 text-[#178a74]",
-  Admin: "bg-purple-50 text-purple-600",
+const roleStyle: Record<string, string> = {
+  financial_admin: "bg-blue-50 text-blue-600",
+  project_owner: "bg-[#2cc295]/10 text-[#178a74]",
+  super_admin: "bg-purple-50 text-purple-600",
+  mrv_admin: "bg-amber-50 text-amber-600",
+  project_manager: "bg-emerald-50 text-emerald-600",
 };
 
 // ─── Approve / Reject modal ───────────────────────────────────────────────────
@@ -190,7 +195,70 @@ function AlertStrip() {
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export default function AdminDashboard({ userName }: { userName: string }) {
+const adminActivityItems = [
+  {
+    icon: "🛡️",
+    title: "New Super Admin assigned",
+    sub: "Dr. Yaa Mensah was granted elevated privileges.",
+    color: "bg-purple-50",
+  },
+  {
+    icon: "✅",
+    title: "Project Verified: Northern Savanna",
+    sub: "Technical review completed by MRV Admin.",
+    color: "bg-emerald-50",
+  },
+  {
+    icon: "⚠️",
+    title: "Unusual login detected",
+    sub: "IP mismatch for user Abena Twumasi.",
+    color: "bg-amber-50",
+  },
+  {
+    icon: "📄",
+    title: "New registration: Green Volta Co.",
+    sub: "Pending KYC and document verification.",
+    color: "bg-blue-50",
+  },
+];
+
+export function AdminRecentActivity() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.7 }}
+      className="space-y-2.5"
+    >
+      {adminActivityItems.map((item, i) => (
+        <div
+          key={i}
+          className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-4 py-3.5 shadow-sm"
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className={`flex h-9 w-9 items-center justify-center rounded-xl text-base ${item.color}`}
+            >
+              {item.icon}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-[#131927]">{item.title}</p>
+              <p className="text-xs text-gray-400">{item.sub}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+export default function AdminDashboard({
+  userName,
+  role,
+}: {
+  userName: string;
+  role: TRole;
+}) {
   const [projectModal, setProjectModal] = useState<{ name: string } | null>(
     null,
   );
@@ -198,7 +266,7 @@ export default function AdminDashboard({ userName }: { userName: string }) {
 
   return (
     <div className="space-y-8">
-      <HeroSection userType="Admin" userName={userName} />
+      <HeroSection role={role} userName={userName} />
 
       {/* Alert strip */}
       <div className="mx-auto max-w-5xl">
@@ -248,30 +316,40 @@ export default function AdminDashboard({ userName }: { userName: string }) {
         </div>
       </section>
 
-      {/* Charts */}
+      {/* Charts + Onboarding */}
       <section className="mx-auto max-w-5xl">
-        <SectionLabel label="Platform Analytics" delay={0.3} />
-        <div className="grid gap-4 md:grid-cols-2">
-          <MultiLineChart
-            data={userGrowthData}
-            title="User Growth"
-            subtitle="Monthly onboarding: Project Owners vs. Companies"
-            labelA="Project Owners"
-            labelB="Companies"
-            colorA="#2cc295"
-            colorB="#131927"
-            delay={0.35}
-          />
-          <GroupedBarChart
-            data={liquidityData}
-            title="Platform Liquidity"
-            subtitle="Credits listed vs. Credits purchased (tCO₂e)"
-            labelA="Listed"
-            labelB="Purchased"
-            colorA="#2cc295"
-            colorB="#131927"
-            delay={0.4}
-          />
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-4">
+            <SectionLabel label="Platform Analytics" delay={0.3} />
+            <div className="grid gap-4 md:grid-cols-2">
+              <MultiLineChart
+                data={userGrowthData}
+                title="User Growth"
+                subtitle="Monthly onboarding"
+                labelA="Owners"
+                labelB="Companies"
+                colorA="#2cc295"
+                colorB="#131927"
+                delay={0.35}
+              />
+              <GroupedBarChart
+                data={liquidityData}
+                title="Liquidity"
+                subtitle="Credits (tCO₂e)"
+                labelA="Listed"
+                labelB="Purchased"
+                colorA="#2cc295"
+                colorB="#131927"
+                delay={0.4}
+              />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <SectionLabel label="Lifecycle Watch" delay={0.3} />
+            <OnboardingFlow />
+            <SectionLabel label="Operations" delay={0.35} />
+            <SystemHealth />
+          </div>
         </div>
       </section>
 
@@ -389,9 +467,11 @@ export default function AdminDashboard({ userName }: { userName: string }) {
                   <td className="px-5 py-4 text-xs text-gray-500">{u.org}</td>
                   <td className="px-5 py-4">
                     <span
-                      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${userTypeStyle[u.type]}`}
+                      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${roleStyle[u.type]}`}
                     >
-                      {u.type}
+                      {u.type
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (l) => l.toUpperCase())}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-xs text-gray-400">{u.since}</td>
@@ -422,7 +502,7 @@ export default function AdminDashboard({ userName }: { userName: string }) {
       {/* Recent Activity */}
       <section className="mx-auto max-w-5xl pb-4">
         <SectionLabel label="Recent Activity" delay={0.65} />
-        <RecentActivity />
+        <AdminRecentActivity />
       </section>
 
       {/* Modals */}

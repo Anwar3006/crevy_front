@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
 import type * as zod from "zod";
 import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
@@ -16,15 +16,17 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { signInSchema, type TSignInInput } from "@/types/user.types";
 
 const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
+  const [loginType, setLoginType] = useState<"email" | "phone">("email");
   const form = useForm<zod.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
+      identifier: "",
       password: "",
     },
   });
@@ -34,24 +36,22 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
   const handleSubmit = async (data: TSignInInput) => {
     setLoading(true);
 
-    await authClient.signIn.email({
-      email: data.email,
-      password: data.password,
+    const signInMethod =
+      loginType === "email"
+        ? authClient.signIn.email
+        : authClient.signIn.username;
+
+    // For phone login, we treat the phone number as the username in BetterAuth
+    const signInData =
+      loginType === "email"
+        ? { email: data.identifier, password: data.password }
+        : { username: data.identifier, password: data.password };
+
+    await signInMethod({
+      ...signInData,
       fetchOptions: {
         onSuccess: () => {
           toast.success("Log in successful!");
-
-          // ─── IMPORTANT ─────────────────────────────────────────────────
-          // router.refresh() MUST come before router.push().
-          //
-          // refresh() tells Next.js to invalidate its server-component cache
-          // so that when DashboardLayout renders it calls getServerSession
-          // fresh — not a stale cached version that still has no session.
-          //
-          // If push() fires first, the dashboard layout runs immediately
-          // against the un-refreshed cache, finds no session, and redirects
-          // back to /login before refresh() even has a chance to run.
-          // ────────────────────────────────────────────────────────────────
           router.refresh();
           router.push("/dashboard");
         },
@@ -63,69 +63,98 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
           setLoading(false);
         },
       },
-    });
+    } as any);
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className={cn("flex flex-col gap-6", className)}
-        {...props}
+    <div className={cn("flex flex-col gap-6", className)}>
+      <Tabs
+        defaultValue="email"
+        onValueChange={(v) => setLoginType(v as "email" | "phone")}
+        className="w-full"
       >
-        <FieldGroup>
-          <div className="flex flex-col items-center gap-1 text-center">
-            <h1 className="text-2xl font-bold">Login</h1>
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="email" className="flex items-center gap-2">
+            <Mail className="w-4 h-4" />
+            Email
+          </TabsTrigger>
+          <TabsTrigger value="phone" className="flex items-center gap-2">
+            <Phone className="w-4 h-4" />
+            Phone
+          </TabsTrigger>
+        </TabsList>
 
-            <p className="text-muted-foreground text-sm text-balance">
-              Fill in the form below to log in to your account
-            </p>
-          </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col gap-4"
+            {...props}
+          >
+            <FieldGroup>
+              <div className="flex flex-col items-center gap-1 text-center mb-2">
+                <h1 className="text-xl font-bold tracking-tight">Login</h1>
+                <p className="text-muted-foreground text-xs text-balance">
+                  {loginType === "email"
+                    ? "Enter your email address to access your account"
+                    : "Enter your registered contact number to access your account"}
+                </p>
+              </div>
 
-          {/* Email */}
-          <CustomInput
-            type="email"
-            name="email"
-            label="Email Address"
-            placeholder="rebecca@gmail.com"
-            control={form.control}
-            description="Use the email address you used to sign up"
-            disabled={false}
-            readOnly={false}
-          />
+              <CustomInput
+                type={loginType === "email" ? "email" : "text"}
+                name="identifier"
+                label={loginType === "email" ? "Email Address" : "Phone Number"}
+                placeholder={
+                  loginType === "email" ? "rebecca@gmail.com" : "+233..."
+                }
+                control={form.control}
+                description={
+                  loginType === "email"
+                    ? "Use the email address you used to sign up"
+                    : "Use your registered phone number"
+                }
+                disabled={loading}
+              />
 
-          {/* Password */}
-          <CustomInput
-            type="password"
-            name="password"
-            label="Password"
-            placeholder="***********"
-            control={form.control}
-            disabled={false}
-            readOnly={false}
-          />
+              <CustomInput
+                type="password"
+                name="password"
+                label="Password"
+                placeholder="***********"
+                control={form.control}
+                disabled={loading}
+              />
 
-          <Field>
-            <Button
-              type="submit"
-              className="py-5 bg-[#2CC295]"
-              disabled={loading}
-            >
-              {loading ? "Logging in..." : "Login to Account"}
-            </Button>
-          </Field>
-          <FieldSeparator>Or continue with</FieldSeparator>
-          <Field>
-            <FieldDescription className="px-6 text-center">
-              Don&apos;t have an account?{" "}
-              <a href="/register" className="text-emerald-600">
-                Sign Up
-              </a>
-            </FieldDescription>
-          </Field>
-        </FieldGroup>
-      </form>
-    </Form>
+              <Field>
+                <Button
+                  type="submit"
+                  className="py-5 bg-[#2CC295] w-full text-white font-bold hover:bg-[#25a37d] transition-colors shadow-lg shadow-[#2CC295]/20"
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Login to Account"}
+                </Button>
+              </Field>
+
+              <FieldSeparator className="text-xs text-gray-400">
+                Or continue with
+              </FieldSeparator>
+
+              <Field>
+                <FieldDescription className="text-center text-xs">
+                  Don&apos;t have an account?{" "}
+                  <a
+                    href="/register"
+                    className="text-[#2CC295] font-semibold hover:underline"
+                  >
+                    Sign Up
+                  </a>
+                </FieldDescription>
+              </Field>
+            </FieldGroup>
+          </form>
+        </Form>
+      </Tabs>
+    </div>
   );
 };
 

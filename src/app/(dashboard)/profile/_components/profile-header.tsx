@@ -40,12 +40,14 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
                   variant="secondary"
                   className="bg-white/20 hover:bg-white/30 text-white border-none"
                 >
-                  {user.userType === "Company" ? (
+                  {user.role === "financial_admin" ? (
                     <Building2 className="w-3 h-3 mr-1" />
                   ) : (
                     <UserIcon className="w-3 h-3 mr-1" />
                   )}
-                  {user.userType}
+                  {user.role
+                    ?.replace(/_/g, " ")
+                    .replace(/\b\w/g, (l: any) => l.toUpperCase()) || "User"}
                 </Badge>
               </div>
               <p className="text-emerald-50 font-medium flex items-center justify-center md:justify-start gap-2">
@@ -69,18 +71,19 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
               )}
             </div>
 
-            {user.userType === "Company" && user.company?.legalBusinessName && (
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-sm font-semibold text-emerald-50 uppercase tracking-wider">
-                  Legal Entity
-                </p>
-                <p className="text-white font-medium">
-                  {user.company.legalBusinessName}
-                </p>
-              </div>
-            )}
+            {user.role === "financial_admin" &&
+              user.company?.legalBusinessName && (
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <p className="text-sm font-semibold text-emerald-50 uppercase tracking-wider">
+                    Legal Entity
+                  </p>
+                  <p className="text-white font-medium">
+                    {user.company.legalBusinessName}
+                  </p>
+                </div>
+              )}
 
-            {user.userType === "ProjectOwner" &&
+            {user.role === "project_owner" &&
               user.projectOwner?.projectCategory && (
                 <div className="mt-4 pt-4 border-t border-white/10">
                   <p className="text-sm font-semibold text-emerald-50 uppercase tracking-wider">

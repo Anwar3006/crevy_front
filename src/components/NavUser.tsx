@@ -20,33 +20,35 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { authClient } from "@/lib/auth";
 import type { TBetterAuthUser } from "@/types";
+
+const getInitials = (name?: string) => {
+  if (!name) return "U";
+  const parts = name.trim().split(" ");
+  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  return name.substring(0, 2).toUpperCase();
+};
 
 export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  // better-auth returns `image` on the session user object.
+  // TBetterAuthUser exposes both `image` and `avatar` for compat.
+  const avatarUrl = user?.image ?? user?.avatar;
+
   const handleLogOut = async () => {
     try {
       setLoading(true);
-      // await authClient.signOut();
+      await authClient.signOut();
       router.push("/login");
     } catch (error) {
-      toast.error(`Log out failed! : ${(error as Error).message}`);
+      toast.error(`Log out failed: ${(error as Error).message}`);
     } finally {
       setLoading(false);
     }
-  };
-
-  // Get initials for avatar
-  const getInitials = (name?: string) => {
-    if (!name) return "U";
-    const names = name.split(" ");
-    if (names.length >= 2) {
-      return `${names[0][0]}${names[1][0]}`.toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
   };
 
   return (
@@ -59,14 +61,14 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
               className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 data-[state=open]:bg-white/20 group-data-[collapsible=icon]:!p-2"
             >
               {loading ? (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="animate-spin" />
+                <div className="flex items-center justify-center w-full">
+                  <Loader2 className="h-4 w-4 animate-spin" />
                 </div>
               ) : (
                 <>
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user?.avatar} alt={user?.name} />
-                    <AvatarFallback className="rounded-lg bg-emerald-600 text-white font-semibold">
+                    <AvatarImage src={avatarUrl} alt={user?.name} />
+                    <AvatarFallback className="rounded-lg bg-emerald-600 text-white font-semibold text-xs">
                       {getInitials(user?.name)}
                     </AvatarFallback>
                   </Avatar>
@@ -83,6 +85,7 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
               )}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
@@ -92,8 +95,8 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
-                  <AvatarFallback className="rounded-lg bg-emerald-100 text-emerald-700 font-semibold">
+                  <AvatarImage src={avatarUrl} alt={user?.name} />
+                  <AvatarFallback className="rounded-lg bg-emerald-100 text-emerald-700 font-semibold text-xs">
                     {getInitials(user?.name)}
                   </AvatarFallback>
                 </Avatar>
@@ -102,24 +105,28 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
                     {user?.name || "User"}
                   </span>
                   <span className="truncate text-xs text-muted-foreground">
-                    {user?.email || "user@example.com"}
+                    {user?.email || ""}
                   </span>
                 </div>
               </div>
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <BadgeCheck className="h-4 w-4" />
+                <BadgeCheck className="h-4 w-4 mr-2" />
                 My Profile
               </DropdownMenuItem>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem onClick={handleLogOut} disabled={loading}>
               {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
               ) : (
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-4 w-4 mr-2" />
               )}
               Log out
             </DropdownMenuItem>

@@ -1,39 +1,45 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { AssignmentCheckModal } from "@/components/AssignmentCheckModal";
 import { Button } from "@/components/ui/button";
 import {
   createProjectDefaultValues,
   createProjectInputSchema,
   type TCreateProject,
 } from "@/constants/new-project";
+import { authClient } from "@/lib/auth";
 import { ProjectService } from "@/lib/services/project-service";
-import CommunityStep from "./_components/CommunityStep";
-import LandUseStep from "./_components/LandUseStep";
+import type { TRole } from "@/types/user.types";
 import ProcessingStep from "./_components/ProcessingStep";
-import ProjectOverviewStep from "./_components/ProjectOverviewStep";
-import ProjectTypeStep from "./_components/ProjectTypeStep";
-import ReviewStep from "./_components/ReviewStep";
 import SidebarProgress from "./_components/SidebarProgress";
-import SoilBiomassStep from "./_components/SoilBiomassStep";
-import SupportingDocumentsStep from "./_components/SupportingDocumentsStep";
+import Step1_ProjectProfile from "./_components/Step1_ProjectProfile";
+import Step2_PracticesContext from "./_components/Step2_PracticesContext";
+import Step3_Documents from "./_components/Step3_Documents";
 
-const STEPS = ["Project Type", "Questionnaire", "Documents", "Review & Submit"];
+const STEPS = ["Project Profile", "Practices & Context", "Documents"];
 
 const NewProject = () => {
-  const [currentStep, setCurrentStep] = useState(0); // 0: Project Type, 1: Questionnaire, 2: Documents, 3: Review
-  const [questionnaireSubStep, setQuestionnaireSubStep] = useState(0); // 0: Overview, 1: Land Use, 2: Soil, 3: Community
+  const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [_showResult, _setShowResult] = useState(false);
-  const [_submissionData, setSubmissionData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const router = useRouter();
-  const queryClient = useQueryClient();
+
+  const { data: session, isPending } = authClient.useSession();
+  const role = (session?.user as any)?.role as TRole;
+
+  console.log("Role: ", session?.user);
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/login");
+    }
+  }, [session, isPending, router]);
 
   const methods = useForm<TCreateProject>({
     resolver: zodResolver(createProjectInputSchema) as any,
@@ -41,112 +47,92 @@ const NewProject = () => {
     mode: "onTouched",
   });
 
-  const nextStep = async () => {
-    const questionnaireFields: Record<number, (keyof TCreateProject)[]> = {
-      0: ["name", "startDate", "location", "durationMonths", "currentStatus"],
-      1: ["totalAreaHectares", "baselineLandUse", "regenerativePractices"],
-      2: [
-        "soilType",
-        "initialSoilCarbonContent",
-        "expectedBiomassIncrease",
-        "cropLivestockTypes",
-        "usesSyntheticFertilizers",
-        "usesSyntheticPesticides",
-        "organicAmendments",
-      ],
-      3: [
-        "socialEconomicBenefits",
-        "supportsBiodiversityConservation",
-        "supportsWaterManagement",
-        "planToExpandPractices",
-        "description",
-      ],
-    };
+  const nextStep = () =>
+    setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
+  const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
-    if (currentStep === 0) {
-      const isValid = await methods.trigger(["projectType"]);
-      if (isValid) {
-        // Prefetch regenerative practices as soon as user clicks next
-        queryClient.prefetchQuery({
-          queryKey: ["regenerative-practices"],
-          queryFn: async () => {
-            const response = await ProjectService.getRegenerativePractices();
-            return response.data;
-          },
-        });
-        setCurrentStep(1);
-      }
-    } else if (currentStep === 1) {
-      const isValid = await methods.trigger(
-        questionnaireFields[questionnaireSubStep] as any,
-      );
-      if (isValid) {
-        if (questionnaireSubStep < 3) {
-          setQuestionnaireSubStep((prev) => prev + 1);
-        } else {
-          setCurrentStep(2);
-        }
-      }
-    } else if (currentStep === 2) {
-      setCurrentStep(3);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep === 1) {
-      if (questionnaireSubStep > 0) {
-        setQuestionnaireSubStep((prev) => prev - 1);
-      } else {
-        setCurrentStep(0);
-      }
-    } else if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
-      if (currentStep === 2) setQuestionnaireSubStep(3);
-    }
-  };
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+          <p className="text-slate-500 text-sm font-medium">
+            Loading session...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const onSubmit = async (data: TCreateProject) => {
     setIsSubmitting(true);
     try {
-      console.log("Final Project Data:", data);
+      // 1. Create the project record
+      const projectRes = await ProjectService.createProject(data);
+      const projectId: string = projectRes?.data?.id;
 
-      // Transform data for API
-      const apiData = {
-        ...data,
-        usesSyntheticFertilizers: data.usesSyntheticFertilizers,
-        usesSyntheticPesticides: data.usesSyntheticPesticides,
-        supportsBiodiversityConservation: data.supportsBiodiversityConservation,
-        supportsWaterManagement: data.supportsWaterManagement,
-        regenerativePractices: data.regenerativePractices.join(","),
-        durationMonths: Number(data.durationMonths),
-        region: data.region,
-        sdgs: data.sdgs,
-      };
+      if (!projectId) throw new Error("Project creation did not return an ID");
 
-      const response = await ProjectService.createProject(apiData);
-      setSubmissionData(response.data);
+      // 2. Upload each document that the user selected
+      //    Each document is uploaded individually with its type.
+      //    We fire all uploads concurrently but don't block on failures —
+      //    documents can be re-uploaded from the project profile page.
+      const documentEntries = Object.entries(data.documents ?? {}).filter(
+        ([, file]) => file != null,
+      );
 
-      // Simulate processing time
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      if (documentEntries.length > 0) {
+        const uploadResults = await Promise.allSettled(
+          documentEntries.flatMap(([documentType, fileOrFiles]) => {
+            const files = Array.isArray(fileOrFiles)
+              ? fileOrFiles
+              : [fileOrFiles as File];
+            return files.map((file: File) =>
+              ProjectService.uploadDocument(projectId, {
+                documentType,
+                fileName: file.name,
+                // For pilot: use a placeholder URL until storage (Supabase/S3) is wired.
+                // The metadata record is still created so the checklist can display it.
+                fileUrl: `/pending/${file.name}`,
+                fileSize: file.size,
+                mimeType: file.type,
+              }),
+            );
+          }),
+        );
 
-      toast.success("Project submitted successfully.");
-
-      // Navigate to the marketplace details page
-      if (response.data?.id) {
-        router.push(`/marketplace/${response.data.id}`);
-      } else {
-        router.push("/marketplace");
+        const failed = uploadResults.filter((r) => r.status === "rejected");
+        if (failed.length > 0) {
+          console.warn(
+            `${failed.length} document(s) failed to upload — they can be retried.`,
+          );
+          toast.warning(
+            `Project created but ${failed.length} document upload(s) failed. You can retry from your project page.`,
+          );
+        }
       }
-    } catch (error) {
-      console.error("Error submitting project:", error);
-      toast.error("Failed to submit project. Please try again.");
+
+      toast.success("Project registered successfully!");
+      router.push(`/project-profile/${projectId}`);
+    } catch (error: any) {
+      console.error("Error registering project:", error);
+      toast.error(
+        error?.response?.data?.message ??
+          "Failed to register project. Please try again.",
+      );
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       {isSubmitting && <ProcessingStep />}
+
+      <AssignmentCheckModal
+        isOpen={isModalOpen}
+        role={role}
+        onProceed={() => setIsModalOpen(false)}
+      />
 
       {/* Header */}
       <div className="mb-8 max-w-6xl mx-auto">
@@ -157,64 +143,50 @@ const NewProject = () => {
         >
           <ChevronLeft className="mr-2 h-4 w-4" /> Back to Dashboard
         </Button>
-        <h1 className="text-4xl font-bold text-slate-900">
-          Submit New Project
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+          Register New Project
         </h1>
-        <p className="text-slate-500 mt-2">
-          Complete the guided flow to submit your green project.
+        <p className="text-slate-500 mt-2 text-sm">
+          Complete the 3-step form to register your green project on Crevy.
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[300px_1fr] gap-4 xl:gap-8">
-        {/* Progress Sidebar */}
-        <div className="bg-white rounded-2xl p-4 xl:p-8 shadow-sm h-fit block lg:sticky top-10">
-          <h3 className="font-bold text-lg mb-6">Progress</h3>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[280px_1fr] gap-4 xl:gap-8">
+        {/* Progress sidebar */}
+        <div className="bg-white rounded-2xl p-5 xl:p-8 shadow-sm h-fit lg:sticky top-10">
+          <h3 className="font-bold text-base mb-6">Your Progress</h3>
           <SidebarProgress currentStep={currentStep} steps={STEPS} />
 
-          <div className="mt-12 bg-emerald-50 p-6 rounded-xl border border-emerald-100">
+          <div className="mt-10 bg-emerald-50 p-5 rounded-xl border border-emerald-100">
             <p className="text-emerald-700 font-semibold text-sm">Need Help?</p>
             <p className="text-xs text-slate-500 mt-1">
-              Contact our support team for guidance.
+              Our team is happy to help you through registration.
             </p>
             <Button
               variant="link"
               className="text-emerald-600 p-0 h-auto text-xs mt-2"
+              onClick={() => router.push("/support")}
             >
-              Get Support →
+              Contact Support →
             </Button>
           </div>
         </div>
 
-        {/* Form Content */}
+        {/* Form content */}
         <div className="bg-white rounded-3xl p-6 xl:p-12 shadow-sm border border-slate-100">
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
               {currentStep === 0 && (
-                <ProjectTypeStep
+                <Step1_ProjectProfile
                   onNext={nextStep}
                   onPrev={() => router.push("/dashboard")}
                 />
               )}
-
-              {currentStep === 1 && questionnaireSubStep === 0 && (
-                <ProjectOverviewStep onNext={nextStep} onPrev={prevStep} />
+              {currentStep === 1 && (
+                <Step2_PracticesContext onNext={nextStep} onPrev={prevStep} />
               )}
-              {currentStep === 1 && questionnaireSubStep === 1 && (
-                <LandUseStep onNext={nextStep} onPrev={prevStep} />
-              )}
-              {currentStep === 1 && questionnaireSubStep === 2 && (
-                <SoilBiomassStep onNext={nextStep} onPrev={prevStep} />
-              )}
-              {currentStep === 1 && questionnaireSubStep === 3 && (
-                <CommunityStep onNext={nextStep} onPrev={prevStep} />
-              )}
-
               {currentStep === 2 && (
-                <SupportingDocumentsStep onNext={nextStep} onPrev={prevStep} />
-              )}
-
-              {currentStep === 3 && (
-                <ReviewStep
+                <Step3_Documents
                   onPrev={prevStep}
                   isSubmitting={isSubmitting}
                   onSubmit={() => methods.handleSubmit(onSubmit)()}
