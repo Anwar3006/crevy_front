@@ -15,6 +15,7 @@ import {
 } from "@/constants/new-project";
 import { authClient } from "@/lib/auth";
 import { ProjectService } from "@/lib/services/project-service";
+import { StorageService } from "@/lib/services/storage-service";
 import type { TRole } from "@/types/user.types";
 import ProcessingStep from "./_components/ProcessingStep";
 import SidebarProgress from "./_components/SidebarProgress";
@@ -82,22 +83,27 @@ const NewProject = () => {
       );
 
       if (documentEntries.length > 0) {
+        const projectCode = projectRes?.data?.code || projectId;
         const uploadResults = await Promise.allSettled(
           documentEntries.flatMap(([documentType, fileOrFiles]) => {
             const files = Array.isArray(fileOrFiles)
               ? fileOrFiles
               : [fileOrFiles as File];
-            return files.map((file: File) =>
-              ProjectService.uploadDocument(projectId, {
+            return files.map(async (file: File) => {
+              // 1. Upload to Object Store
+              const storagePath = `project_doc/${projectCode}/`;
+              const objectKey = await StorageService.uploadFile(file, storagePath);
+              const fullUrl = StorageService.resolveUrl(objectKey) as string;
+
+              // 2. Register metadata on backend
+              return ProjectService.uploadDocument(projectId, {
                 documentType,
                 fileName: file.name,
-                // For pilot: use a placeholder URL until storage (Supabase/S3) is wired.
-                // The metadata record is still created so the checklist can display it.
-                fileUrl: `/pending/${file.name}`,
+                fileUrl: fullUrl,
                 fileSize: file.size,
                 mimeType: file.type,
-              }),
-            );
+              });
+            });
           }),
         );
 

@@ -61,8 +61,8 @@ export const ProjectService = {
    * The file is first uploaded to Supabase/S3 by the caller to obtain a URL,
    * then this method stores the metadata on Crevy's backend.
    *
-   * For now (pilot): pass fileUrl as a stub ("/pending") if storage is not yet
-   * wired up — the metadata record is still useful for the document checklist.
+   * Storage is now wired via StorageService — pass the resolved public URL.
+   *
    */
   uploadDocument: async (
     projectId: string,
