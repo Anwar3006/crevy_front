@@ -33,10 +33,12 @@ export const AreaChart = ({
   const chartW = W - PAD.left - PAD.right;
   const chartH = H - PAD.top - PAD.bottom;
 
-  const maxVal = Math.max(...data.map((d) => d.value)) * 1.1;
+  const rawMax = Math.max(...data.map((d) => d.value));
+  const maxVal = rawMax > 0 ? rawMax * 1.1 : 100;
   const minVal = 0;
 
-  const xScale = (i: number) => PAD.left + (i / (data.length - 1)) * chartW;
+  const xScale = (i: number) =>
+    PAD.left + (data.length > 1 ? (i / (data.length - 1)) * chartW : 0);
   const yScale = (v: number) =>
     PAD.top + chartH - ((v - minVal) / (maxVal - minVal)) * chartH;
 
@@ -147,9 +149,9 @@ export const AreaChart = ({
         {points.map((p, i) => (
           <g key={i}>
             <rect
-              x={p.x - chartW / data.length / 2}
+              x={data.length > 0 ? p.x - chartW / data.length / 2 : p.x}
               y={PAD.top}
-              width={chartW / data.length}
+              width={data.length > 0 ? chartW / data.length : 0}
               height={chartH}
               fill="transparent"
               // Add these to satisfy a11y

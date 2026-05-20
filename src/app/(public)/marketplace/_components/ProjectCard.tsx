@@ -157,150 +157,142 @@ export const ProjectCard = memo(function ProjectCard({
       className="block group outline-none focus-visible:ring-2 focus-visible:ring-[#2CC295] rounded-3xl"
     >
       <motion.article
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-[#2CC295]/8 hover:border-[#2CC295]/20 transition-all duration-300 cursor-pointer"
+        whileHover={{ y: -6, shadow: "0 20px 40px -15px rgba(0,0,0,0.1)" }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="relative bg-white rounded-3xl overflow-hidden border border-gray-100/80 shadow-sm hover:border-[#2CC295]/30 transition-all duration-300"
       >
         {/* ── Image block ──────────────────────────────────────────────── */}
-        <div className="relative h-52 overflow-hidden">
+        <div className="relative h-60 overflow-hidden">
           <Image
             src={imageUrl}
             alt={project.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-1000 group-hover:scale-110"
           />
 
-          {/* Gradient overlay — reveals stats on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-300" />
+          {/* Premium Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#131927] via-[#131927]/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
           {/* Top badges row */}
-          <div className="absolute top-3.5 left-3.5 right-3.5 flex items-start justify-between">
+          <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
             {/* Type pill */}
             <span
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md border border-white/20"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.1em] backdrop-blur-md border border-white/10"
               style={{
-                backgroundColor: `${typeConfig.color}33`,
+                backgroundColor: "rgba(255,255,255,0.1)",
                 color: "white",
               }}
             >
-              <Leaf className="w-2.5 h-2.5" />
+              <Leaf className="w-3 h-3 text-[#2CC295]" />
               {typeConfig.label}
             </span>
 
             {/* Status badge */}
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border backdrop-blur-md ${statusConfig.bg} ${statusConfig.text}`}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.1em] border backdrop-blur-md shadow-sm ${statusConfig.bg} ${statusConfig.text}`}
             >
               <span
-                className={`w-1.5 h-1.5 rounded-full ${statusConfig.dot}`}
+                className={`w-1.5 h-1.5 rounded-full ${statusConfig.dot} shadow-[0_0_8px_rgba(255,255,255,0.5)]`}
               />
               {statusConfig.label}
             </span>
           </div>
 
           {/* Bottom overlay — project name + location */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-            <h3 className="font-extrabold text-white text-lg leading-tight line-clamp-2 mb-1">
+          <div className="absolute bottom-0 left-0 right-0 p-5">
+            <motion.h3
+              className="font-extrabold text-white text-xl leading-tight line-clamp-2 mb-2 group-hover:text-[#2CC295] transition-colors"
+              style={{ fontFamily: "var(--font-syne)" }}
+            >
               {project.name}
-            </h3>
-            <div className="flex items-center gap-1.5 text-white/60 text-xs font-semibold">
-              <MapPin className="w-3 h-3 shrink-0" />
-              <span className="truncate">
+            </motion.h3>
+            <div className="flex items-center gap-1.5 text-white/70 text-xs font-bold">
+              <MapPin className="w-3.5 h-3.5 text-[#2CC295]" />
+              <span className="truncate uppercase tracking-wider">
                 {project.region || project.location || "Africa"}
               </span>
-            </div>
-          </div>
-
-          {/* Arrow icon — visible on hover */}
-          <div className="absolute top-3.5 right-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 translate-y-1 group-hover:translate-y-0">
-            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
-              <ArrowUpRight className="w-4 h-4 text-[#131927]" />
             </div>
           </div>
         </div>
 
         {/* ── Body ─────────────────────────────────────────────────────── */}
-        <div className="p-5">
+        <div className="p-6">
           {/* Description */}
-          <p className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-4 min-h-[2.5rem]">
+          <p className="text-gray-400 text-xs leading-relaxed line-clamp-2 mb-5 min-h-[2.5rem] font-medium">
             {project.description ||
-              "Transforming landscapes through science-backed, community-driven carbon sequestration."}
+              "High-integrity carbon sequestration through verified nature-based solutions and community empowerment."}
           </p>
 
           {/* Three key stats */}
-          <div className="grid grid-cols-3 gap-2 mb-4">
+          <div className="grid grid-cols-3 gap-3 mb-6">
             <StatChip
-              label="tCO₂e"
+              label="Removal"
               value={co2Formatted}
-              icon={<TrendingUp className="w-3 h-3" />}
-              color={typeConfig.color}
-              bg={typeConfig.accent}
-              textColor={typeConfig.lightText}
+              icon={<TrendingUp className="w-3.5 h-3.5" />}
+              color="#2CC295"
+              bg="#2CC29508"
+              textColor="#178a74"
             />
             <StatChip
               label="Hectares"
               value={areaFormatted}
-              icon={<Leaf className="w-3 h-3" />}
+              icon={<Ruler className="w-3.5 h-3.5" />}
               color="#131927"
-              bg="#f1f5f9"
+              bg="#f8fafc"
               textColor="#334155"
             />
             <StatChip
-              label="Duration"
-              value={`${durationYears}yr`}
-              icon={<Clock className="w-3 h-3" />}
+              label="Vintage"
+              value="2024"
+              icon={<Clock className="w-3.5 h-3.5" />}
               color="#131927"
-              bg="#f1f5f9"
+              bg="#f8fafc"
               textColor="#334155"
             />
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-gray-100 mb-4" />
-
           {/* Price + CTA row */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-2 border-t border-gray-50">
             <div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
-                Price / Tonne
+              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                Fixed Price
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-black text-[#131927] leading-none">
+                <span
+                  className="text-2xl font-black text-[#131927] leading-none"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
                   $52
                 </span>
-                <span className="text-xs font-bold text-gray-400">tCO₂e</span>
+                <span className="text-[10px] font-bold text-gray-400">
+                  / tCO₂e
+                </span>
               </div>
             </div>
 
             <div
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wide text-white transition-all duration-200 group-hover:shadow-lg group-hover:scale-[1.03]"
+              className="flex items-center gap-2.5 px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.1em] text-white transition-all duration-500 group-hover:gap-3"
               style={{
-                backgroundColor: typeConfig.color,
-                boxShadow: `0 4px 14px ${typeConfig.color}30`,
+                backgroundColor: "#131927",
+                boxShadow: "0 10px 20px -5px rgba(19,25,39,0.2)",
               }}
             >
               {project.status === "approved" ||
               project.status === "verified" ? (
                 <>
-                  <BadgeCheck className="w-3.5 h-3.5" />
+                  <BadgeCheck className="w-4 h-4 text-[#2CC295]" />
                   Invest Now
                 </>
               ) : (
                 <>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                  View Details
+                  View Project
+                  <ArrowUpRight className="w-4 h-4 text-[#2CC295] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </>
               )}
             </div>
           </div>
         </div>
-
-        {/* ── Bottom accent line ────────────────────────────────────────── */}
-        <div
-          className="h-0.5 w-0 group-hover:w-full transition-all duration-500 ease-out"
-          style={{ backgroundColor: typeConfig.color }}
-        />
       </motion.article>
     </Link>
   );

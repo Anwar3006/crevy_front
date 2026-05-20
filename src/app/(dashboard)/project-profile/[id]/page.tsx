@@ -1,34 +1,40 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 import {
+  Activity,
+  Award,
   CheckCircle2,
   ChevronLeft,
   Clock,
   ExternalLink,
   FileText,
+  Globe,
   Layers,
   Leaf,
   Loader2,
   MapPin,
-  Radio, Zap, Award, Globe, ShieldCheck, Activity,
+  Radio,
   Ruler,
+  ShieldCheck,
   Tag,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "sonner";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const statusPill: Record<string, string> = {
   draft: "bg-gray-100 text-gray-500",
-  active: "bg-[#2cc295]/10 text-[#178a74]",
+  active: "bg-myGreen/10 text-myDarkGreen",
   suspended: "bg-red-50 text-red-600",
   closed: "bg-slate-100 text-slate-500",
 };
@@ -37,7 +43,7 @@ const stagePill: Record<string, string> = {
   registration: "bg-amber-50 text-amber-700",
   active: "bg-blue-50 text-blue-700",
   verification: "bg-purple-50 text-purple-700",
-  completed: "bg-[#2cc295]/10 text-[#178a74]",
+  completed: "bg-myGreen/10 text-myDarkGreen",
 };
 
 const pipelineSteps = [
@@ -55,7 +61,7 @@ const stageIndex: Record<string, number> = {
 };
 
 const verificationStatusColor: Record<string, string> = {
-  success: "bg-[#2cc295]/10 text-[#178a74]",
+  success: "bg-myGreen/10 text-myDarkGreen",
   flagged: "bg-amber-50 text-amber-700",
   failed: "bg-red-50 text-red-600",
 };
@@ -78,7 +84,9 @@ export default function ProjectDetailPage() {
     mutationFn: () => ProjectService.simulateMrv(id as string),
     onSuccess: () => {
       toast.success("MRV Pipeline simulation successful!");
-      queryClient.invalidateQueries({ queryKey: ["project-verifications", id] });
+      queryClient.invalidateQueries({
+        queryKey: ["project-verifications", id],
+      });
       queryClient.invalidateQueries({ queryKey: ["project-anchors", id] });
       queryClient.invalidateQueries({ queryKey: ["project", id] });
     },
@@ -86,7 +94,6 @@ export default function ProjectDetailPage() {
       toast.error(error?.response?.data?.message ?? "Simulation failed.");
     },
   });
-
 
   const { data: projectRes, isLoading: loadingProject } = useQuery({
     queryKey: ["project", id],
@@ -132,7 +139,7 @@ export default function ProjectDetailPage() {
         <p className="text-lg font-semibold">Project not found.</p>
         <Link
           href="/project-profile"
-          className="text-sm text-[#2cc295] mt-2 block hover:underline"
+          className="text-sm text-myGreen mt-2 block hover:underline"
         >
           ← Back to Projects
         </Link>
@@ -147,118 +154,165 @@ export default function ProjectDetailPage() {
       {/* Breadcrumb */}
       <Link
         href="/project-profile"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-[#2cc295] transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-myGreen transition-colors"
       >
         <ChevronLeft className="h-4 w-4" />
         All Projects
       </Link>
 
       {/* Header card */}
-      <div className="bg-[#131927] rounded-3xl p-8 md:p-12 relative overflow-hidden text-white shadow-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#2cc295]/10 rounded-full blur-3xl -mr-32 -mt-32" />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-[#131927] rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden text-white shadow-[0_30px_60px_-15px_rgba(19,25,39,0.3)]"
+      >
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#2CC295]/10 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#2CC295]/5 rounded-full blur-[100px] -ml-48 -mb-48 pointer-events-none" />
+
         <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-[#2cc295] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-12">
+            <div className="space-y-6 flex-1">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="bg-[#2CC295]/20 border border-[#2CC295]/30 text-[#2CC295] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-md">
                   {project.sector?.replace(/_/g, " ")}
                 </div>
-                <span className="text-white/40 font-mono text-[10px]">{project.code}</span>
+                <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#2CC295] shadow-[0_0_8px_#2CC295]" />
+                  <span className="text-white/60 font-mono text-[10px] tracking-widest">
+                    {project.code}
+                  </span>
+                </div>
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight max-w-2xl">
+              <h1
+                className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1]"
+                style={{ fontFamily: "var(--font-syne)" }}
+              >
                 {project.name ?? project.code}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-sm">
-                  <div className={cn("w-2 h-2 rounded-full", project.projectStatus === "active" ? "bg-[#2cc295] animate-pulse" : "bg-white/40")} />
-                  <span className="text-xs font-bold uppercase tracking-wider">{project.projectStatus}</span>
+              <div className="flex flex-wrap items-center gap-6 pt-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                    <Activity className="w-5 h-5 text-[#2CC295]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+                      Platform Status
+                    </p>
+                    <p className="text-sm font-bold uppercase tracking-wider text-[#2CC295]">
+                      {project.projectStatus}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-2xl backdrop-blur-sm">
-                  <Activity className="w-3 h-3 text-[#2cc295]" />
-                  <span className="text-xs font-bold uppercase tracking-wider">{project.projectStage} Stage</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                    <ShieldCheck className="w-5 h-5 text-[#2CC295]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+                      Verification Stage
+                    </p>
+                    <p className="text-sm font-bold uppercase tracking-wider">
+                      {project.projectStage}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 sm:items-end">
-              <div className="text-right">
-                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">Location</p>
-                <p className="text-xl font-bold flex items-center justify-end gap-2">
-                  <MapPin className="h-5 w-5 text-[#2cc295]" />
-                  {project.region}, {project.country}
+            <div className="flex flex-col gap-8 lg:items-end">
+              <div className="lg:text-right">
+                <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-2 flex items-center lg:justify-end gap-2">
+                  <MapPin className="w-3 h-3" />
+                  Primary Location
+                </p>
+                <p
+                  className="text-3xl font-extrabold tracking-tight"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  {project.region}
+                  <span className="text-[#2CC295]/50 mx-2">/</span>
+                  {project.country}
                 </p>
               </div>
-              <div className="flex gap-4">
-                <div className="bg-white/5 rounded-2xl p-4 border border-white/10 min-w-[120px] text-center">
-                  <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Area</p>
-                  <p className="text-lg font-black">{project.totalAreaHectares} <span className="text-xs font-medium text-white/40">HA</span></p>
+
+              <div className="grid grid-cols-2 gap-4 w-full sm:w-auto">
+                <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 min-w-[140px] backdrop-blur-sm group hover:bg-white/10 transition-colors">
+                  <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">
+                    Impact Area
+                  </p>
+                  <p className="text-2xl font-black">
+                    {project.totalAreaHectares}{" "}
+                    <span className="text-xs font-medium text-white/30">
+                      HA
+                    </span>
+                  </p>
                 </div>
-                <div className="bg-white/5 rounded-2xl p-4 border border-white/10 min-w-[120px] text-center">
-                  <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Vintage</p>
-                  <p className="text-lg font-black">2024</p>
+                <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 min-w-[140px] backdrop-blur-sm group hover:bg-white/10 transition-colors">
+                  <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">
+                    Issue Vintage
+                  </p>
+                  <p className="text-2xl font-black">2024</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
+      {/* Verification pipeline */}
+      <div className="mt-8 pt-6 border-t border-slate-50">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-5">
+          Verification Pipeline
+        </p>
+        <div className="relative flex items-start">
+          {/* connector line */}
+          <div className="absolute left-4 top-4 h-0.5 w-[calc(100%-2rem)] bg-slate-100" />
 
-        {/* Verification pipeline */}
-        <div className="mt-8 pt-6 border-t border-slate-50">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-5">
-            Verification Pipeline
-          </p>
-          <div className="relative flex items-start">
-            {/* connector line */}
-            <div className="absolute left-4 top-4 h-0.5 w-[calc(100%-2rem)] bg-slate-100" />
+          {pipelineSteps.map((step, idx) => {
+            const done = idx < currentStageIdx;
+            const current = idx === currentStageIdx;
 
-            {pipelineSteps.map((step, idx) => {
-              const done = idx < currentStageIdx;
-              const current = idx === currentStageIdx;
-
-              return (
+            return (
+              <div
+                key={step.key}
+                className="relative z-10 flex-1 flex flex-col items-center text-center gap-2 px-1"
+              >
                 <div
-                  key={step.key}
-                  className="relative z-10 flex-1 flex flex-col items-center text-center gap-2 px-1"
+                  className={cn(
+                    "h-8 w-8 rounded-full flex items-center justify-center border-2 text-xs font-bold transition-all",
+                    done
+                      ? "border-myGreen bg-myGreen text-white"
+                      : current
+                        ? "border-myGreen bg-emerald-50 text-myGreen"
+                        : "border-slate-200 bg-white text-slate-400",
+                  )}
                 >
-                  <div
-                    className={cn(
-                      "h-8 w-8 rounded-full flex items-center justify-center border-2 text-xs font-bold transition-all",
-                      done
-                        ? "border-[#2cc295] bg-[#2cc295] text-white"
-                        : current
-                          ? "border-[#2cc295] bg-emerald-50 text-[#2cc295]"
-                          : "border-slate-200 bg-white text-slate-400",
-                    )}
-                  >
-                    {done ? <CheckCircle2 className="h-4 w-4" /> : idx + 1}
-                  </div>
-                  <span
-                    className={cn(
-                      "text-[10px] font-bold uppercase tracking-wide",
-                      current
-                        ? "text-[#2cc295]"
-                        : done
-                          ? "text-slate-600"
-                          : "text-slate-300",
-                    )}
-                  >
-                    {step.label}
-                  </span>
-                  <span className="hidden sm:block text-[9px] text-slate-400 leading-tight">
-                    {step.desc}
-                  </span>
+                  {done ? <CheckCircle2 className="h-4 w-4" /> : idx + 1}
                 </div>
-              );
-            })}
-          </div>
+                <span
+                  className={cn(
+                    "text-[10px] font-bold uppercase tracking-wide",
+                    current
+                      ? "text-myGreen"
+                      : done
+                        ? "text-slate-600"
+                        : "text-slate-300",
+                  )}
+                >
+                  {step.label}
+                </span>
+                <span className="hidden sm:block text-[9px] text-slate-400 leading-tight">
+                  {step.desc}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Tabs */}
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -273,7 +327,7 @@ export default function ProjectDetailPage() {
             <TabsTrigger
               key={value}
               value={value}
-              className="rounded-xl px-4 py-2 text-sm font-medium data-[state=active]:bg-[#2cc295] data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
+              className="rounded-xl px-4 py-2 text-sm font-medium data-[state=active]:bg-myGreen data-[state=active]:text-white data-[state=active]:shadow-sm transition-all"
             >
               <Icon className="h-3.5 w-3.5 mr-1.5" />
               {label}
@@ -282,46 +336,99 @@ export default function ProjectDetailPage() {
         </TabsList>
 
         {/* ── Overview ─────────────────────────────────────────────────────── */}
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview" className="space-y-6 pt-2">
           {/* Key Metric Highlight Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
-                <Leaf className="w-5 h-5 text-[#2cc295]" />
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 hover:shadow-xl hover:shadow-emerald-500/5 transition-all group">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Leaf className="w-6 h-6 text-myGreen" />
               </div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Carbon Sequestration</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-black text-[#131927]">12.5k</span>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">
+                Sequestration
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-3xl font-black text-[#131927]"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  12.5k
+                </span>
                 <span className="text-xs font-bold text-gray-400">tCO₂e</span>
               </div>
-            </div>
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
-                <Globe className="w-5 h-5 text-blue-500" />
-              </div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Permanence Score</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-black text-[#131927]">A+</span>
-                <span className="text-xs font-bold text-gray-400">Ranked</span>
+              <div className="mt-4 pt-4 border-t border-gray-50">
+                <p className="text-[10px] font-bold text-[#178a74]">
+                  +2.4% vs baseline
+                </p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
-                <Award className="w-5 h-5 text-amber-500" />
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 hover:shadow-xl hover:shadow-blue-500/5 transition-all group">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Globe className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Methodology</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-black text-[#131927]">Verra VM0042</span>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">
+                Permanence
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-3xl font-black text-[#131927]"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  A+
+                </span>
+                <span className="text-xs font-bold text-gray-400">Rating</span>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-50">
+                <p className="text-[10px] font-bold text-blue-600">
+                  High Integrity
+                </p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mb-4">
-                <ShieldCheck className="w-5 h-5 text-purple-500" />
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 hover:shadow-xl hover:shadow-amber-500/5 transition-all group">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Award className="w-6 h-6 text-amber-500" />
               </div>
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Audit Status</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl font-black text-[#131927]">Stage 1</span>
-                <span className="text-xs font-bold text-gray-400">Clear</span>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">
+                Protocol
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-xl font-black text-[#131927]"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  VM0042
+                </span>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-50">
+                <p className="text-[10px] font-bold text-amber-600">
+                  Verra Standard
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 hover:shadow-xl hover:shadow-purple-500/5 transition-all group">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-6 h-6 text-purple-500" />
+              </div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2">
+                Audit Phase
+              </p>
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="text-3xl font-black text-[#131927]"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  P2
+                </span>
+                <span className="text-xs font-bold text-gray-400">
+                  Verified
+                </span>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-50">
+                <p className="text-[10px] font-bold text-purple-600">
+                  On-Chain Anchor
+                </p>
               </div>
             </div>
           </div>
@@ -343,7 +450,7 @@ export default function ProjectDetailPage() {
             {/* Practices */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                <Tag className="h-4 w-4 text-[#2cc295]" />
+                <Tag className="h-4 w-4 text-myGreen" />
                 Practices Applied
               </h3>
               {project.projectTags?.length > 0 ? (
@@ -351,7 +458,7 @@ export default function ProjectDetailPage() {
                   {project.projectTags.map((tag: string) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-emerald-50 border border-emerald-100 text-[#178a74] text-xs font-semibold px-3 py-1"
+                      className="rounded-full bg-emerald-50 border border-emerald-100 text-myDarkGreen text-xs font-semibold px-3 py-1"
                     >
                       {tag}
                     </span>
@@ -367,7 +474,7 @@ export default function ProjectDetailPage() {
             {/* SDGs */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                <Leaf className="h-4 w-4 text-[#2cc295]" />
+                <Leaf className="h-4 w-4 text-myGreen" />
                 SDG Alignment
               </h3>
               {project.sdgs?.length > 0 ? (
@@ -486,18 +593,18 @@ export default function ProjectDetailPage() {
                     className={cn(
                       "flex items-center gap-4 rounded-xl border p-4 transition-all",
                       doc.isVerified
-                        ? "border-[#2cc295]/30 bg-emerald-50/40"
+                        ? "border-myGreen/30 bg-emerald-50/40"
                         : "border-slate-100 bg-white",
                     )}
                   >
                     <div
                       className={cn(
                         "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
-                        doc.isVerified ? "bg-[#2cc295]/20" : "bg-slate-100",
+                        doc.isVerified ? "bg-myGreen/20" : "bg-slate-100",
                       )}
                     >
                       {doc.isVerified ? (
-                        <CheckCircle2 className="h-4 w-4 text-[#178a74]" />
+                        <CheckCircle2 className="h-4 w-4 text-myDarkGreen" />
                       ) : (
                         <FileText className="h-4 w-4 text-slate-400" />
                       )}
@@ -517,7 +624,7 @@ export default function ProjectDetailPage() {
                         className={cn(
                           "rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide",
                           doc.isVerified
-                            ? "bg-[#2cc295]/10 text-[#178a74]"
+                            ? "bg-myGreen/10 text-myDarkGreen"
                             : "bg-amber-50 text-amber-600",
                         )}
                       >
@@ -528,7 +635,7 @@ export default function ProjectDetailPage() {
                           href={doc.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-slate-400 hover:text-[#2cc295] transition-colors"
+                          className="text-slate-400 hover:text-myGreen transition-colors"
                         >
                           <ExternalLink className="h-4 w-4" />
                         </a>
@@ -546,7 +653,7 @@ export default function ProjectDetailPage() {
           {/* Verification results */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h3 className="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-              <Radio className="h-4 w-4 text-[#2cc295]" />
+              <Radio className="h-4 w-4 text-myGreen" />
               Verification Results
             </h3>
 
@@ -562,18 +669,21 @@ export default function ProjectDetailPage() {
                 className="rounded-xl bg-slate-50 border border-dashed border-slate-200 p-10 text-center"
               >
                 <div className="bg-white w-16 h-16 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mx-auto mb-4">
-                  <Radio className="h-8 w-8 text-[#2cc295] animate-pulse" />
+                  <Radio className="h-8 w-8 text-myGreen animate-pulse" />
                 </div>
-                <h4 className="text-base font-bold text-slate-800">Awaiting Sensor Telemetry</h4>
+                <h4 className="text-base font-bold text-slate-800">
+                  Awaiting Sensor Telemetry
+                </h4>
                 <p className="text-sm text-slate-500 mt-2 max-w-sm mx-auto leading-relaxed">
-                  The dMRV pipeline is ready. In production, verification data flows automatically from
-                  on-site IoT sensors. For this demo, you can trigger a full pipeline simulation.
+                  The dMRV pipeline is ready. In production, verification data
+                  flows automatically from on-site IoT sensors. For this demo,
+                  you can trigger a full pipeline simulation.
                 </p>
 
                 <Button
                   onClick={() => simulate()}
                   disabled={isSimulating}
-                  className="mt-6 bg-[#2cc295] hover:bg-[#24a37d] text-white rounded-xl px-6 py-6 h-auto font-bold shadow-lg shadow-[#2cc295]/20 transition-all active:scale-95"
+                  className="mt-6 bg-myGreen hover:bg-myDarkGreen text-white rounded-xl px-6 py-6 h-auto font-bold shadow-lg shadow-myGreen/20 transition-all active:scale-95"
                 >
                   {isSimulating ? (
                     <>
@@ -596,7 +706,7 @@ export default function ProjectDetailPage() {
                     className="rounded-xl border border-slate-100 p-4 space-y-3"
                   >
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <span className="text-xs font-mono text-slate-400 truncate max-w-[260px]">
+                      <span className="text-xs font-mono text-slate-400 truncate max-w-65">
                         {v.verificationEventId}
                       </span>
                       <span
@@ -628,7 +738,7 @@ export default function ProjectDetailPage() {
                         { label: "Geo-fence", value: v.geoFenceStatus ?? "—" },
                         {
                           label: "Methodology",
-                          value: v.methodologyApplied?.split(" - ")[0] ?? "—",
+                          value: v.methodologyApplied?.split(" - ") ?? "—",
                         },
                       ].map(({ label, value }) => (
                         <div key={label}>
@@ -696,7 +806,7 @@ export default function ProjectDetailPage() {
                             )}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-mono text-[#2cc295] hover:underline truncate block mt-0.5"
+                            className="text-xs font-mono text-myGreen hover:underline truncate block mt-0.5"
                           >
                             {a.auditUri}
                           </a>

@@ -13,19 +13,25 @@ export const StorageService = {
    * @returns The relative path of the uploaded object
    */
   uploadFile: async (file: File, path: string): Promise<string> => {
-    const fileName = file.name;
-    const objectKey = `${path}${Date.now()}-${fileName}`.replace(/\/\//g, "/");
+    // 1. Get presigned URL from backend with metadata
+    // We send metadata so the backend can validate and generate a secure key
+    const extension = file.name.split(".").pop() || "";
 
-    // 1. Get presigned URL from backend
-    // Expected backend endpoint: POST /storage/presigned-url { key, contentType }
-    const { data: presignedRes } = await axiosClient.post("/storage/presigned-url", {
-      key: objectKey,
-      contentType: file.type,
-    });
+    const { data: presignedRes } = await axiosClient.post(
+      "/storage/presigned-url",
+      {
+        extension,
+        size: file.size,
+        type: file.type,
+        path: path,
+      },
+    );
 
-    const { uploadUrl } = presignedRes.data;
+    const { uploadUrl, objectKey } = presignedRes.data;
 
     // 2. Upload file to the presigned URL
+    // NOTE: We don't use axiosClient here because we are uploading to a signed URL
+    // that likely doesn't want our auth cookies/headers.
     await axios.put(uploadUrl, file, {
       headers: {
         "Content-Type": file.type,
@@ -45,9 +51,9 @@ export const StorageService = {
     const cleanBase = publicUrlBase.replace(/\/$/, "");
 
     if (Array.isArray(keys)) {
-      return keys.map(key => `${cleanBase}/${key.replace(/^\//, "")}`);
+      return keys.map((key) => `${cleanBase}/${key.replace(/^\//, "")}`);
     }
 
     return `${cleanBase}/${keys.replace(/^\//, "")}`;
-  }
+  },
 };

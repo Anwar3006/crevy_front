@@ -35,7 +35,7 @@ export const DonutChart = ({
 
   let cumAngle = -Math.PI / 2;
   const slices = data.map((d, i) => {
-    const angle = (d.value / total) * 2 * Math.PI;
+    const angle = total > 0 ? (d.value / total) * 2 * Math.PI : 0;
     const startAngle = cumAngle;
     cumAngle += angle;
     const endAngle = cumAngle;
@@ -60,7 +60,12 @@ export const DonutChart = ({
       "Z",
     ].join(" ");
 
-    return { ...d, path, pct: Math.round((d.value / total) * 100), i };
+    return {
+      ...d,
+      path,
+      pct: total > 0 ? Math.round((d.value / total) * 100) : 0,
+      i,
+    };
   });
 
   const handleKeyDown = (e: KeyboardEvent, index: number) => {

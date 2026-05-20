@@ -15,12 +15,13 @@ import {
   Wallet,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
@@ -43,6 +44,10 @@ export default function ProjectOwnerOnboardingForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  // State configurations for conditional checking UI
+  const [isMomoSameAsContact, setIsMomoSameAsContact] = useState(false);
+  const [isAccountNameSameAsUser, setIsAccountNameSameAsUser] = useState(false);
+
   const form = useForm<TProjectOwnerOnboardingInput>({
     resolver: zodResolver(projectOwnerOnboardingSchema) as any,
     defaultValues: {
@@ -55,8 +60,34 @@ export default function ProjectOwnerOnboardingForm() {
       paymentMethod: "momo",
       assignmentType: "primary",
       isB2cAssignment: true,
+      momoNumber: "",
+      momoNetwork: "",
+      bankName: "",
+      accountNumber: "",
+      accountName: "",
     },
   });
+
+  // Watch identity fields to keep computed values synced if checkboxes are active
+  const watchedContactNumber = form.watch("contactNumber");
+  const watchedFirstName = form.watch("firstName");
+  const watchedLastName = form.watch("lastName");
+  const watchedPaymentMethod = form.watch("paymentMethod");
+
+  // Keep MoMo number synced with contact number if checkbox is checked
+  useEffect(() => {
+    if (isMomoSameAsContact && watchedContactNumber) {
+      form.setValue("momoNumber", watchedContactNumber);
+    }
+  }, [isMomoSameAsContact, watchedContactNumber, form]);
+
+  // Keep Account Name synced with Full Name if checkbox is checked
+  useEffect(() => {
+    if (isAccountNameSameAsUser) {
+      const fullName = `${watchedFirstName} ${watchedLastName}`.trim();
+      form.setValue("accountName", fullName);
+    }
+  }, [isAccountNameSameAsUser, watchedFirstName, watchedLastName, form]);
 
   const nextStep = async () => {
     let fieldsToValidate: any[] = [];
@@ -69,10 +100,13 @@ export default function ProjectOwnerOnboardingForm() {
         "countryOfOperation",
       ];
     } else if (currentStep === 2) {
-      const method = form.getValues("paymentMethod");
-      fieldsToValidate = ["paymentMethod"];
-      if (method === "bank") fieldsToValidate.push("bankName", "accountNumber");
-      if (method === "momo") fieldsToValidate.push("momoNetwork", "momoNumber");
+      fieldsToValidate = ["paymentMethod", "accountName"];
+      if (watchedPaymentMethod === "bank") {
+        fieldsToValidate.push("bankName", "accountNumber");
+      }
+      if (watchedPaymentMethod === "momo") {
+        fieldsToValidate.push("momoNetwork", "momoNumber");
+      }
     } else if (currentStep === 3) {
       fieldsToValidate = ["region", "latitude", "longitude", "areaHectares"];
     }
@@ -88,11 +122,55 @@ export default function ProjectOwnerOnboardingForm() {
   const onSubmit = async (data: TProjectOwnerOnboardingInput) => {
     setLoading(true);
     try {
-      // API call to the new v2 endpoint
-      const response = await axios.post("/api/v2/project-owners/onboard", data);
+      const payload = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email || null,
+        contactNumber: data.contactNumber,
+        password: data.password,
+        countryOfOperation: data.countryOfOperation,
+        partnerId: data.partnerId,
+        assignmentType: data.assignmentType,
+        isB2cAssignment: data.isB2cAssignment,
+
+        bankDetails:
+          data.paymentMethod === "bank"
+            ? {
+                bankName: data.bankName!,
+                accountNumber: data.accountNumber!,
+                accountName: data.accountName || null,
+              }
+            : null,
+
+        momoDetails:
+          data.paymentMethod === "momo"
+            ? {
+                network: data.momoNetwork!,
+                number: data.momoNumber!,
+                accountName: data.accountName || null,
+              }
+            : null,
+
+        farmPlot: data.region
+          ? {
+              region: data.region,
+              village: data.village || null,
+              centroid: {
+                lat: Number(data.latitude),
+                lng: Number(data.longitude),
+              },
+              areaHectares: Number(data.areaHectares),
+            }
+          : null,
+      };
+
+      const response = await axios.post(
+        "/api/v2/project-owners/onboard",
+        payload,
+      );
 
       toast.success("Project Owner registered successfully!");
-      router.push("/project-owners");
+      router.push("/dashboard/new-project");
     } catch (error: any) {
       toast.error(
         error.response?.data?.message ||
@@ -266,7 +344,7 @@ export default function ProjectOwnerOnboardingForm() {
                           Preferred Payout Method
                         </Label>
                         <RadioGroup
-                          defaultValue={form.getValues("paymentMethod")}
+                          defaultValue={watchedPaymentMethod}
                           onValueChange={(v) =>
                             form.setValue("paymentMethod", v as "bank" | "momo")
                           }
@@ -311,11 +389,53 @@ export default function ProjectOwnerOnboardingForm() {
                         </RadioGroup>
                       </div>
 
-                      {form.watch("paymentMethod") === "bank" && (
+                      {/* Unified Account Name Strategy with Identity Verification */}
+                      <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
+                        <div className="flex items-center space-x-3">
+                          <Checkbox
+                            id="sameAsUser"
+                            checked={isAccountNameSameAsUser}
+                            onCheckedChange={(checked) => {
+                              setIsAccountNameSameAsUser(!!checked);
+                              if (!checked) form.setValue("accountName", "");
+                            }}
+                          />
+                          <label
+                            htmlFor="sameAsUser"
+                            className="text-xs font-bold text-gray-700 cursor-pointer select-none"
+                          >
+                            Account name is the same as Identity Profile Name
+                          </label>
+                        </div>
+
+                        {isAccountNameSameAsUser && (
+                          <div className="text-xs text-gray-400 pl-7 font-medium">
+                            Reference Display:{" "}
+                            <span className="text-emerald-600 font-bold">
+                              {`${watchedFirstName} ${watchedLastName}`.trim() ||
+                                "(No name entered yet)"}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {!isAccountNameSameAsUser && (
+                        <CustomInput
+                          name="accountName"
+                          label="Registered Account Name"
+                          placeholder="e.g. Daniel Asante"
+                          control={form.control}
+                          type="text"
+                          disabled={loading}
+                        />
+                      )}
+
+                      {/* Bank Fields */}
+                      {watchedPaymentMethod === "bank" && (
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="space-y-5 pt-4"
+                          className="space-y-5 pt-2"
                         >
                           <CustomInput
                             name="bankName"
@@ -333,22 +453,15 @@ export default function ProjectOwnerOnboardingForm() {
                             type="text"
                             disabled={loading}
                           />
-                          <CustomInput
-                            name="accountName"
-                            label="Account Name (Optional)"
-                            placeholder="e.g. Daniel Asante"
-                            control={form.control}
-                            type="text"
-                            disabled={loading}
-                          />
                         </motion.div>
                       )}
 
-                      {form.watch("paymentMethod") === "momo" && (
+                      {/* MoMo Fields */}
+                      {watchedPaymentMethod === "momo" && (
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="space-y-5 pt-4"
+                          className="space-y-5 pt-2"
                         >
                           <CustomInput
                             name="momoNetwork"
@@ -358,14 +471,44 @@ export default function ProjectOwnerOnboardingForm() {
                             type="text"
                             disabled={loading}
                           />
-                          <CustomInput
-                            name="momoNumber"
-                            label="Registered MoMo Number"
-                            placeholder="054..."
-                            control={form.control}
-                            type="text"
-                            disabled={loading}
-                          />
+
+                          <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                            <Checkbox
+                              id="sameAsContact"
+                              checked={isMomoSameAsContact}
+                              onCheckedChange={(checked) => {
+                                setIsMomoSameAsContact(!!checked);
+                                if (!checked) form.setValue("momoNumber", "");
+                              }}
+                            />
+                            <label
+                              htmlFor="sameAsContact"
+                              className="text-xs font-bold text-gray-700 cursor-pointer select-none"
+                            >
+                              MoMo number is the same as Identity Contact Number
+                            </label>
+                          </div>
+
+                          {isMomoSameAsContact && (
+                            <div className="text-xs text-gray-400 px-4 font-medium">
+                              Reference Display:{" "}
+                              <span className="text-emerald-600 font-bold">
+                                {watchedContactNumber ||
+                                  "(No contact number entered yet)"}
+                              </span>
+                            </div>
+                          )}
+
+                          {!isMomoSameAsContact && (
+                            <CustomInput
+                              name="momoNumber"
+                              label="Registered MoMo Number"
+                              placeholder="054..."
+                              control={form.control}
+                              type="text"
+                              disabled={loading}
+                            />
+                          )}
                         </motion.div>
                       )}
                     </div>
