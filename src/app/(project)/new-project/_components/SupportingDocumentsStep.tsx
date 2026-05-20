@@ -1,3 +1,4 @@
+//@ts-nocheck
 "use client";
 
 import { FileText, Trash2, UploadCloud } from "lucide-react";

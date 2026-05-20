@@ -65,7 +65,7 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
           />
         </div>
 
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <Label className="text-slate-500 text-sm">
             Does the project support biodiversity conservation or water
             management?
@@ -107,9 +107,9 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
               </Label>
             </div>
           </RadioGroup>
-        </div>
+        </div> */}
 
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <Label className="text-slate-500 text-sm">
             Do you plan to expand the regenerative practices to other areas in
             the future?
@@ -161,7 +161,7 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
               </Label>
             </div>
           </RadioGroup>
-        </div>
+        </div> */}
 
         <SDGSelection />
 

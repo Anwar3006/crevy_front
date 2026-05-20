@@ -7,6 +7,7 @@ import {
   Clock,
   Leaf,
   MapPin,
+  Ruler,
   TrendingUp,
 } from "lucide-react";
 import Image from "next/image";
@@ -157,7 +158,7 @@ export const ProjectCard = memo(function ProjectCard({
       className="block group outline-none focus-visible:ring-2 focus-visible:ring-[#2CC295] rounded-3xl"
     >
       <motion.article
-        whileHover={{ y: -6, shadow: "0 20px 40px -15px rgba(0,0,0,0.1)" }}
+        // whileHover={{ y: -6, shadow: "0 20px 40px -15px rgba(0,0,0,0.1)" }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className="relative bg-white rounded-3xl overflow-hidden border border-gray-100/80 shadow-sm hover:border-[#2CC295]/30 transition-all duration-300"
       >

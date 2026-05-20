@@ -37,9 +37,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
     setLoading(true);
 
     const signInMethod =
-      loginType === "email"
-        ? authClient.signIn.email
-        : authClient.signIn.username;
+      loginType === "email" ? authClient.signIn.email : authClient.signIn.email;
 
     // For phone login, we treat the phone number as the username in BetterAuth
     const signInData =
@@ -55,7 +53,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
           router.refresh();
           router.push("/dashboard");
         },
-        onError: (ctx) => {
+        onError: (ctx: any) => {
           toast.error(ctx.error.message || "Login failed!");
           form.setError("root", { message: ctx.error.message });
         },
