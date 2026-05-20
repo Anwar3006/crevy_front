@@ -30,17 +30,13 @@ export const StorageService = {
     const { uploadUrl, objectKey } = presignedRes.data;
 
     // 2. Upload file to the presigned URL
-    // NOTE: We don't use axiosClient here because we are uploading to a signed URL
-    // that likely doesn't want our auth cookies/headers.
-    await axios.put(uploadUrl, file, {
-      headers: {
-        "Content-Type": file.type,
-      },
-    });
+    // NOTE: We don't use axiosClient here.
+    // We also OMIT the Content-Type header because it was not signed by the backend.
+    // If we send it, the storage provider will reject the request with a signature mismatch (403).
+    await axios.put(uploadUrl, file);
 
     return objectKey;
   },
-
   /**
    * Resolves a full URL for a given object key or array of keys.
    * @param keys A single key or an array of keys

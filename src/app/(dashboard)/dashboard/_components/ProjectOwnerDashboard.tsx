@@ -258,7 +258,7 @@ export default function ProjectOwnerDashboard({
                   <tr
                     key={p.id}
                     className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors cursor-pointer"
-                    onClick={() => router.push(`/project-profile/${p.id}`)}
+                    onClick={() => router.push(`/projects/${p.id}`)}
                   >
                     <td className="px-5 py-4">
                       <span className="font-medium text-[#131927]">
@@ -317,7 +317,7 @@ export default function ProjectOwnerDashboard({
             className="mt-3 text-center"
           >
             <Link
-              href="/project-profile"
+              href="/projects"
               className="text-xs font-semibold text-[#2cc295] hover:text-[#178a74] transition-colors"
             >
               View all projects →

@@ -15,10 +15,14 @@ interface DashboardLayoutClientProps {
   user: TBetterAuthUser | null;
 }
 
+import { usePathname } from "next/navigation";
+
 export const DashboardLayoutClient = ({
   children,
   user,
 }: DashboardLayoutClientProps) => {
+  const pathname = usePathname();
+
   return (
     <SidebarProvider>
       {/* Sidebar */}
@@ -36,9 +40,11 @@ export const DashboardLayoutClient = ({
         {/* Main Content */}
         <main className="flex flex-1 flex-col">
           {/* Dashboard Header */}
-          <div className="mb-6 px-4 md:px-6 shadow-lg shadow-gray-200">
-            <DashboardHeader user={user} />
-          </div>
+          {!pathname.startsWith("/projects") && (
+            <div className="mb-6 px-4 md:px-6 shadow-lg shadow-gray-200">
+              <DashboardHeader user={user} />
+            </div>
+          )}
 
           {/* Content Container with max-width */}
           <div className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-6 md:px-6 md:py-8">

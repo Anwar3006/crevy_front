@@ -92,7 +92,10 @@ const NewProject = () => {
             return files.map(async (file: File) => {
               // 1. Upload to Object Store
               const storagePath = `project_doc/${projectCode}/`;
-              const objectKey = await StorageService.uploadFile(file, storagePath);
+              const objectKey = await StorageService.uploadFile(
+                file,
+                storagePath,
+              );
               const fullUrl = StorageService.resolveUrl(objectKey) as string;
 
               // 2. Register metadata on backend
@@ -118,15 +121,15 @@ const NewProject = () => {
         }
       }
 
-            // 3. Trigger MRV simulation (async, non-blocking)
+      // 3. Trigger MRV simulation (async, non-blocking)
       try {
         await ProjectService.simulateMrv(projectId);
       } catch (simError) {
         console.warn("MRV simulation failed to trigger:", simError);
       }
 
-toast.success("Project registered successfully!");
-      router.push(`/project-profile/${projectId}`);
+      toast.success("Project registered successfully!");
+      router.push(`/projects/${projectId}`);
     } catch (error: any) {
       console.error("Error registering project:", error);
       toast.error(

@@ -63,6 +63,23 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       ],
       sections: [
         {
+          title: "PROJECT OWNERS",
+          items: [
+            {
+              title: "All Project Owners",
+              url: "/project-owners",
+              // @ts-expect-error
+              icon: UserGroupIcon,
+            },
+            {
+              title: "Onboard Owner",
+              url: "/project-owners/register",
+              // @ts-expect-error
+              icon: PropertyAddIcon,
+            },
+          ],
+        },
+        {
           title: "OVERSIGHT",
           items: [
             {
@@ -192,6 +209,23 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       ],
       sections: [
         {
+          title: "PROJECT OWNERS",
+          items: [
+            {
+              title: "My Project Owners",
+              url: "/project-owners",
+              // @ts-expect-error
+              icon: UserGroupIcon,
+            },
+            {
+              title: "Onboard Owner",
+              url: "/project-owners/register",
+              // @ts-expect-error
+              icon: PropertyAddIcon,
+            },
+          ],
+        },
+        {
           title: "OVERSIGHT",
           items: [
             {
@@ -234,8 +268,8 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "MY PROJECTS",
           items: [
             {
-              title: "Project Profiles",
-              url: "/project-profile",
+              title: "Projects",
+              url: "/projects",
               // @ts-expect-error
               icon: ViewIcon,
             },

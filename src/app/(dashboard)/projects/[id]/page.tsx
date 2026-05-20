@@ -110,19 +110,51 @@ export default function ProjectDetailPage() {
   const { data: verifRes, isLoading: loadingVerif } = useQuery({
     queryKey: ["project-verifications", id],
     queryFn: () => ProjectService.getProjectVerifications(id),
-    enabled: !!id && activeTab === "mrv",
+    enabled: !!id,
   });
 
   const { data: anchorRes, isLoading: loadingAnchors } = useQuery({
     queryKey: ["project-anchors", id],
     queryFn: () => ProjectService.getProjectAnchors(id),
-    enabled: !!id && activeTab === "mrv",
+    enabled: !!id,
   });
 
   const project = projectRes?.data;
   const documents = docsRes?.data ?? [];
   const verifications = verifRes?.data ?? [];
   const anchors = anchorRes?.data ?? [];
+
+  const totalSequestration = verifications
+    .filter(
+      (v: any) =>
+        v.verificationStatus === "SUCCESS" && v.netCreditsIssued != null,
+    )
+    .reduce((sum: number, v: any) => sum + Number(v.netCreditsIssued), 0);
+
+  const formatSeq = (num: number) => {
+    if (num >= 1000) return (num / 1000).toFixed(1) + "k";
+    return num.toFixed(1);
+  };
+
+  const hasAnchors = anchors.length > 0;
+  const hasVerifications = verifications.length > 0;
+
+  let auditPhaseCode = "P0";
+  let auditPhaseStatus = "Pending";
+  let auditPhaseDesc = "Awaiting Data";
+
+  if (hasAnchors) {
+    auditPhaseCode = "P2";
+    auditPhaseStatus = "Verified";
+    auditPhaseDesc = "On-Chain Anchor";
+  } else if (hasVerifications) {
+    auditPhaseCode = "P1";
+    auditPhaseStatus = "Verified";
+    auditPhaseDesc = "MRV Evaluated";
+  }
+
+  const methodology =
+    verifications[0]?.methodologyApplied?.split(" - ")[0] || "VM0042";
 
   if (loadingProject) {
     return (
@@ -138,7 +170,7 @@ export default function ProjectDetailPage() {
       <div className="max-w-5xl mx-auto py-16 text-center text-slate-500">
         <p className="text-lg font-semibold">Project not found.</p>
         <Link
-          href="/project-profile"
+          href="/projects"
           className="text-sm text-myGreen mt-2 block hover:underline"
         >
           ← Back to Projects
@@ -153,7 +185,7 @@ export default function ProjectDetailPage() {
     <div className="max-w-5xl mx-auto py-8 px-4 space-y-6">
       {/* Breadcrumb */}
       <Link
-        href="/project-profile"
+        href="/projects"
         className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-myGreen transition-colors"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -254,7 +286,9 @@ export default function ProjectDetailPage() {
                   <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">
                     Issue Vintage
                   </p>
-                  <p className="text-2xl font-black">2024</p>
+                  <p className="text-2xl font-black">
+                    {anchors?.vintage ?? 2026}
+                  </p>
                 </div>
               </div>
             </div>
@@ -351,13 +385,20 @@ export default function ProjectDetailPage() {
                   className="text-3xl font-black text-[#131927]"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
-                  12.5k
+                  {formatSeq(totalSequestration)}
                 </span>
                 <span className="text-xs font-bold text-gray-400">tCO₂e</span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-50">
-                <p className="text-[10px] font-bold text-[#178a74]">
-                  +2.4% vs baseline
+                <p
+                  className={cn(
+                    "text-[10px] font-bold",
+                    totalSequestration > 0 ? "text-[#178a74]" : "text-gray-400",
+                  )}
+                >
+                  {totalSequestration > 0
+                    ? "+ Verified"
+                    : "Awaiting validation"}
                 </p>
               </div>
             </div>
@@ -397,12 +438,14 @@ export default function ProjectDetailPage() {
                   className="text-xl font-black text-[#131927]"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
-                  VM0042
+                  {methodology}
                 </span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-50">
                 <p className="text-[10px] font-bold text-amber-600">
-                  Verra Standard
+                  {methodology === "VM0042"
+                    ? "Verra Standard"
+                    : "Gold Standard"}
                 </p>
               </div>
             </div>
@@ -419,15 +462,15 @@ export default function ProjectDetailPage() {
                   className="text-3xl font-black text-[#131927]"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
-                  P2
+                  {auditPhaseCode}
                 </span>
                 <span className="text-xs font-bold text-gray-400">
-                  Verified
+                  {auditPhaseStatus}
                 </span>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-50">
                 <p className="text-[10px] font-bold text-purple-600">
-                  On-Chain Anchor
+                  {auditPhaseDesc}
                 </p>
               </div>
             </div>

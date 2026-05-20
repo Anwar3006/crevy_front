@@ -154,7 +154,7 @@ export const ProjectCard = memo(function ProjectCard({
 
   return (
     <Link
-      href={`/project-profile/${project.id}`}
+      href={`/projects/${project.id}`}
       className="block group outline-none focus-visible:ring-2 focus-visible:ring-[#2CC295] rounded-3xl"
     >
       <motion.article

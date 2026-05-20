@@ -178,7 +178,7 @@ export default function TrackVerificationPage() {
                     stageProjects.map((p: any) => (
                       <Link
                         key={p.id}
-                        href={`/project-profile/${p.id}`}
+                        href={`/projects/${p.id}`}
                         className="block rounded-xl border border-gray-100 bg-white shadow-sm p-4 hover:border-emerald-200 hover:shadow-md transition-all"
                       >
                         {/* Project name */}

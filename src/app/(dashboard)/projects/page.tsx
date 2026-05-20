@@ -43,9 +43,7 @@ export default function ProjectProfilePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#131927]">
-            Project Profiles
-          </h1>
+          <h1 className="text-2xl font-bold text-[#131927]">Projects</h1>
           <p className="text-slate-400 text-sm mt-0.5">
             All your registered green projects.
           </p>
@@ -98,7 +96,7 @@ export default function ProjectProfilePage() {
           {projects.map((p: any) => (
             <Link
               key={p.id}
-              href={`/project-profile/${p.id}`}
+              href={`/projects/${p.id}`}
               className="block rounded-2xl border border-gray-100 bg-white p-5 shadow-sm hover:border-emerald-200 hover:shadow-md transition-all"
             >
               {/* Sector pill */}
