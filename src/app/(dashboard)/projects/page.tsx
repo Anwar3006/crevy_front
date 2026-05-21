@@ -5,11 +5,8 @@ import {
   type ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { format } from "date-fns";
 import {
   Activity,
   ChevronLeft,
@@ -23,9 +20,8 @@ import {
   Search,
   ShieldCheck,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
