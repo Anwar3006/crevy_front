@@ -114,6 +114,13 @@ export const ProjectService = {
     return response.data;
   },
 
+  getProjectTransactions: async (projectId: string) => {
+    const response = await axiosClient.get("/credits/transactions", {
+      params: { projectId },
+    });
+    return response.data;
+  },
+
   simulateMrv: async (projectId: string) => {
     const response = await axiosClient.post(`/mrv/simulate/${projectId}`);
     return response.data;

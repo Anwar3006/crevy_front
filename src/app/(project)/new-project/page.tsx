@@ -102,7 +102,7 @@ const NewProject = () => {
               return ProjectService.uploadDocument(projectId, {
                 documentType,
                 fileName: file.name,
-                fileUrl: fullUrl,
+                fileUrl: objectKey,
                 fileSize: file.size,
                 mimeType: file.type,
               });

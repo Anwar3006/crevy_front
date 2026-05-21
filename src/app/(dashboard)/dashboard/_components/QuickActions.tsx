@@ -51,7 +51,7 @@ const QuickActions = ({ role }: QuickActionsProps) => {
             description: "Manage platform users and businesses",
             icon: <Users className="h-6 w-6 stroke-white" />,
             color: "bg-indigo-500",
-            href: "/assigned-businesses",
+            href: "/user-management",
           },
           {
             title: "Log Site Visit",

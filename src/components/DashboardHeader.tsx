@@ -35,8 +35,8 @@ const navigationTabs = [
     icon: Store,
   },
   {
-    title: "Verification",
-    href: "/verification",
+    title: "Track Verification",
+    href: "/track-verification",
     icon: ShieldCheck,
   },
   {

@@ -102,7 +102,7 @@ const HeroSection = ({ role, userName }: HeroSectionProps) => {
       desc: "Manage platform health, approve users, and oversee the project verification lifecycle.",
       cta: {
         label: "View User Management",
-        url: "/assigned-businesses",
+        url: "/user-management",
         icon: Target,
       },
       badge: { text: "Super Admin", color: "bg-purple-50 text-purple-700" },

@@ -1,9 +1,11 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
+  ArrowRightLeft,
   Award,
   CheckCircle2,
   ChevronLeft,
@@ -28,6 +30,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectService } from "@/lib/services/project-service";
+import { StorageService } from "@/lib/services/storage-service";
 import { cn } from "@/lib/utils";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -113,6 +116,12 @@ export default function ProjectDetailPage() {
     enabled: !!id,
   });
 
+  const { data: txRes, isLoading: loadingTx } = useQuery({
+    queryKey: ["project-transactions", id],
+    queryFn: () => ProjectService.getProjectTransactions(id),
+    enabled: !!id && activeTab === "history",
+  });
+
   const { data: anchorRes, isLoading: loadingAnchors } = useQuery({
     queryKey: ["project-anchors", id],
     queryFn: () => ProjectService.getProjectAnchors(id),
@@ -123,6 +132,7 @@ export default function ProjectDetailPage() {
   const documents = docsRes?.data ?? [];
   const verifications = verifRes?.data ?? [];
   const anchors = anchorRes?.data ?? [];
+  const transactions = txRes?.data ?? [];
 
   const totalSequestration = verifications
     .filter(
@@ -357,6 +367,7 @@ export default function ProjectDetailPage() {
             { value: "overview", label: "Overview", icon: Layers },
             { value: "documents", label: "Documents", icon: FileText },
             { value: "mrv", label: "MRV Data", icon: Radio },
+            { value: "history", label: "Credit History", icon: ArrowRightLeft },
           ].map(({ value, label, icon: Icon }) => (
             <TabsTrigger
               key={value}
@@ -675,7 +686,9 @@ export default function ProjectDetailPage() {
                       </span>
                       {doc.fileUrl && doc.fileUrl !== "/pending" && (
                         <a
-                          href={doc.fileUrl}
+                          href={
+                            StorageService.resolveUrl(doc.fileUrl) as string
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-slate-400 hover:text-myGreen transition-colors"
@@ -861,6 +874,150 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           )}
+        </TabsContent>
+
+        {/* ── Credit History ────────────────────────────────────────────────── */}
+        <TabsContent value="history" className="space-y-6 pt-2">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="p-8 border-b border-gray-50 bg-slate-50/30 flex items-center justify-between">
+              <div>
+                <h3
+                  className="text-lg font-bold text-[#131927]"
+                  style={{ fontFamily: "var(--font-syne)" }}
+                >
+                  Transaction Ledger
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Full chain of custody for credits issued by this project.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <div className="bg-emerald-50 text-[#178a74] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-100/50">
+                  Immutable
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-50">
+                    <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                      Reference
+                    </th>
+                    <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                      Entity
+                    </th>
+                    <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                      Amount
+                    </th>
+                    <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                      Date
+                    </th>
+                    <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadingTx ? (
+                    <tr>
+                      <td colSpan={5} className="px-8 py-20 text-center">
+                        <Loader2 className="h-6 w-6 animate-spin mx-auto text-myGreen mb-3" />
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                          Loading ledger...
+                        </p>
+                      </td>
+                    </tr>
+                  ) : transactions.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-8 py-20 text-center">
+                        <div className="max-w-xs mx-auto">
+                          <p className="text-sm font-bold text-slate-400 mb-1">
+                            No transactions recorded.
+                          </p>
+                          <p className="text-xs text-slate-400">
+                            Issued credits will appear here once they are
+                            purchased or transferred.
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    transactions.map((tx: any) => (
+                      <tr
+                        key={tx.id}
+                        className="border-b border-gray-50 hover:bg-slate-50/50 transition-colors"
+                      >
+                        <td className="px-8 py-5">
+                          <span className="text-xs font-mono font-bold text-slate-600 tracking-tight">
+                            {tx.transactionRef}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5">
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-xs font-bold text-slate-800">
+                              {tx.buyerName}
+                            </span>
+                            <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
+                              Buyer
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-5">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-sm font-black text-[#131927]">
+                              {parseFloat(tx.quantity).toLocaleString()}
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase">
+                              tCO₂e
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 mt-0.5">
+                            @{tx.pricePerCredit} {tx.currencyCode}
+                          </p>
+                        </td>
+                        <td className="px-8 py-5">
+                          <span className="text-xs font-medium text-slate-500">
+                            {format(
+                              new Date(tx.transactionDate),
+                              "MMM d, yyyy",
+                            )}
+                          </span>
+                        </td>
+                        <td className="px-8 py-5">
+                          <span
+                            className={cn(
+                              "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider",
+                              tx.transactionStatus === "completed"
+                                ? "bg-emerald-50 text-[#178a74]"
+                                : "bg-amber-50 text-amber-700",
+                            )}
+                          >
+                            <div
+                              className={cn(
+                                "w-1 h-1 rounded-full",
+                                tx.transactionStatus === "completed"
+                                  ? "bg-[#178a74]"
+                                  : "bg-amber-600",
+                              )}
+                            />
+                            {tx.transactionStatus}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="p-6 bg-slate-50/50 border-t border-gray-50 text-center">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                End of verifiable ledger
+              </p>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

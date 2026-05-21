@@ -50,7 +50,7 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
         },
         {
           title: "User Management",
-          url: "/assigned-businesses",
+          url: "/user-management",
           // @ts-expect-error
           icon: UserGroupIcon,
         },
@@ -196,7 +196,7 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
         },
         {
           title: "User Management",
-          url: "/assigned-businesses",
+          url: "/user-management",
           // @ts-expect-error
           icon: UserGroupIcon,
         },

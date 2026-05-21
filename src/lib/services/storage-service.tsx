@@ -46,10 +46,19 @@ export const StorageService = {
     const publicUrlBase = process.env.NEXT_PUBLIC_STORAGE_URL || "";
     const cleanBase = publicUrlBase.replace(/\/$/, "");
 
+    const resolveSingle = (key: string) => {
+      if (!key) return "";
+      // If it's already a full URL, return it as is
+      if (key.startsWith("http://") || key.startsWith("https://")) {
+        return key;
+      }
+      return `${cleanBase}/${key.replace(/^\//, "")}`;
+    };
+
     if (Array.isArray(keys)) {
-      return keys.map((key) => `${cleanBase}/${key.replace(/^\//, "")}`);
+      return keys.map(resolveSingle);
     }
 
-    return `${cleanBase}/${keys.replace(/^\//, "")}`;
+    return resolveSingle(keys);
   },
 };

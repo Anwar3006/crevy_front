@@ -58,4 +58,14 @@ export const UserService = {
       throw error;
     }
   },
+
+  listUsers: async (filter?: { role?: string }) => {
+    try {
+      const response = await axiosClient.get("/rbac/users", { params: filter });
+      return response.data;
+    } catch (error) {
+      console.error("Error listing users:", error);
+      throw error;
+    }
+  },
 };
