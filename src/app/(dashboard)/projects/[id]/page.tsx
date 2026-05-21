@@ -137,7 +137,8 @@ export default function ProjectDetailPage() {
   const totalSequestration = verifications
     .filter(
       (v: any) =>
-        v.verificationStatus === "SUCCESS" && v.netCreditsIssued != null,
+        v.verificationStatus?.toLowerCase() === "success" &&
+        v.netCreditsIssued != null,
     )
     .reduce((sum: number, v: any) => sum + Number(v.netCreditsIssued), 0);
 
@@ -768,7 +769,9 @@ export default function ProjectDetailPage() {
                       <span
                         className={cn(
                           "rounded-full px-2.5 py-0.5 text-xs font-bold uppercase",
-                          verificationStatusColor[v.verificationStatus] ?? "",
+                          verificationStatusColor[
+                            v.verificationStatus?.toLowerCase()
+                          ] ?? "",
                         )}
                       >
                         {v.verificationStatus}
