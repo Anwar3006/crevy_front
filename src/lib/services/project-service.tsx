@@ -49,7 +49,7 @@ export const ProjectService = {
 
   getMarketplaceProjects: async (params?: Record<string, unknown>) => {
     const response = await axiosClient.get("/projects", {
-      params: { projectStatus: "active", ...params },
+      params: { projectStatus: "active", projectStage: "completed", ...params },
     });
     return response.data;
   },

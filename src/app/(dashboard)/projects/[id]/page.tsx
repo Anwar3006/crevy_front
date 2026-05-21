@@ -281,6 +281,14 @@ export default function ProjectDetailPage() {
                 </p>
               </div>
 
+              {project.projectStatus === "active" && (
+                <Button className="w-full sm:w-auto h-14 px-10 rounded-2xl bg-[#2CC295] hover:bg-[#27a37b] text-white font-black uppercase tracking-widest text-xs shadow-[0_15px_30px_-5px_rgba(44,194,149,0.3)] group">
+                  <Zap className="w-4 h-4 mr-2 fill-current" />
+                  Purchase Carbon Credits
+                  <ArrowRightLeft className="w-4 h-4 ml-3 opacity-50 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              )}
+
               <div className="grid grid-cols-2 gap-4 w-full sm:w-auto">
                 <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 min-w-[140px] backdrop-blur-sm group hover:bg-white/10 transition-colors">
                   <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">
@@ -295,10 +303,10 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="bg-white/5 rounded-[2rem] p-6 border border-white/10 min-w-[140px] backdrop-blur-sm group hover:bg-white/10 transition-colors">
                   <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">
-                    Issue Vintage
+                    Verified Vintage
                   </p>
                   <p className="text-2xl font-black">
-                    {anchors?.vintage ?? 2026}
+                    {anchors[0]?.vintage ?? 2024}
                   </p>
                 </div>
               </div>

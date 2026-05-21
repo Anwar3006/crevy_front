@@ -83,7 +83,14 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "OVERSIGHT",
           items: [
             {
+              title: "Projects",
+              url: "/projects",
+              // @ts-expect-error
+              icon: ViewIcon,
+            },
+            {
               title: "Project Vetting",
+
               url: "/track-verification",
               // @ts-expect-error
               icon: CheckListIcon,
@@ -173,7 +180,14 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "OVERSIGHT",
           items: [
             {
+              title: "Projects",
+              url: "/projects",
+              // @ts-expect-error
+              icon: ViewIcon,
+            },
+            {
               title: "Project Vetting",
+
               url: "/track-verification",
               // @ts-expect-error
               icon: CheckListIcon,
@@ -229,7 +243,14 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "OVERSIGHT",
           items: [
             {
+              title: "Projects",
+              url: "/projects",
+              // @ts-expect-error
+              icon: ViewIcon,
+            },
+            {
               title: "Project Vetting",
+
               url: "/track-verification",
               // @ts-expect-error
               icon: CheckListIcon,
