@@ -150,14 +150,14 @@ export default function UserManagementPage() {
             value="users"
             className="rounded-lg px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-wider"
           >
-            <UserCircle className="w-3.5 h-3.5 mr-2" /> Participants
+            <UserCircle className="w-3.5 h-3.5 mr-2" /> Admins & Users
           </TabsTrigger>
           {isSuperAdmin && (
             <TabsTrigger
               value="rbac"
               className="rounded-lg px-6 py-2.5 data-[state=active]:bg-white data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-wider"
             >
-              <Key className="w-3.5 h-3.5 mr-2" /> RBAC Controls
+              <Key className="w-3.5 h-3.5 mr-2" /> IAM
             </TabsTrigger>
           )}
         </TabsList>
@@ -329,7 +329,10 @@ function UsersTab() {
                 Admin Actions
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
+              <DropdownMenuItem
+                onClick={() => router.push(`/profile/${row.original.id}`)}
+                className="gap-2 rounded-lg cursor-pointer"
+              >
                 <UserCircle className="h-4 w-4 text-slate-400" /> View Profile
               </DropdownMenuItem>
               <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
@@ -387,8 +390,17 @@ function UsersTab() {
             <SelectItem value="project_owner">Project Owner</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="rounded-xl bg-[#131927] hover:bg-[#1e2d42] font-bold gap-2 ml-auto">
-          <UserCheck className="h-4 w-4" /> Add Participant
+        <Button
+          variant="outline"
+          className="rounded-xl border-slate-200 font-bold gap-2 text-xs"
+        >
+          <Mail className="h-3.5 w-3.5" /> Invite Admin
+        </Button>
+        <Button
+          onClick={() => router.push("/project-owners/register")}
+          className="rounded-xl bg-[#131927] hover:bg-[#1e2d42] font-bold gap-2"
+        >
+          <UserCheck className="h-4 w-4" /> Onboard Project Owner
         </Button>
       </div>
 
@@ -508,7 +520,17 @@ function PermissionsTable() {
     queryFn: RBACService.getPermissions,
   });
 
-  const permissions = data?.data || [];
+  const permissions = useMemo(() => {
+    const raw = data?.data || [];
+    const unique = new Map();
+    for (const p of raw) {
+      const key = `${p.resource}:${p.action}`;
+      if (!unique.has(key)) {
+        unique.set(key, p);
+      }
+    }
+    return Array.from(unique.values()) as Permission[];
+  }, [data]);
 
   const columns = useMemo<ColumnDef<Permission>[]>(
     () => [

@@ -45,9 +45,13 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface EditProfileFormProps {
   user: any;
+  readOnly?: boolean;
 }
 
-export function EditProfileForm({ user }: EditProfileFormProps) {
+export function EditProfileForm({
+  user,
+  readOnly = false,
+}: EditProfileFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
 
@@ -68,6 +72,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
   });
 
   const onSubmit = async (values: ProfileFormValues) => {
+    if (readOnly) return;
     setIsSubmitting(true);
     try {
       // Structure the data according to userType
@@ -112,7 +117,9 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           <div>
             <CardTitle className="text-lg">Personal Information</CardTitle>
             <CardDescription>
-              Update your personal and business details
+              {readOnly
+                ? "Viewing user profile data"
+                : "Update your personal and business details"}
             </CardDescription>
           </div>
         </div>
@@ -122,7 +129,11 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" {...form.register("firstName")} />
+              <Input
+                id="firstName"
+                {...form.register("firstName")}
+                disabled={readOnly}
+              />
               {form.formState.errors.firstName && (
                 <p className="text-xs text-red-500">
                   {form.formState.errors.firstName.message}
@@ -131,7 +142,11 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" {...form.register("lastName")} />
+              <Input
+                id="lastName"
+                {...form.register("lastName")}
+                disabled={readOnly}
+              />
               {form.formState.errors.lastName && (
                 <p className="text-xs text-red-500">
                   {form.formState.errors.lastName.message}
@@ -143,13 +158,18 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input id="phoneNumber" {...form.register("phoneNumber")} />
+              <Input
+                id="phoneNumber"
+                {...form.register("phoneNumber")}
+                disabled={readOnly}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="sex">Sex</Label>
               <Select
                 defaultValue={user.sex}
                 onValueChange={(val) => form.setValue("sex", val)}
+                disabled={readOnly}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select sex" />
@@ -166,13 +186,18 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="contactNumber">Contact Number</Label>
-              <Input id="contactNumber" {...form.register("contactNumber")} />
+              <Input
+                id="contactNumber"
+                {...form.register("contactNumber")}
+                disabled={readOnly}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="countryOfOperation">Country of Operation</Label>
               <Input
                 id="countryOfOperation"
                 {...form.register("countryOfOperation")}
+                disabled={readOnly}
               />
             </div>
           </div>
@@ -188,6 +213,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   <Input
                     id="legalBusinessName"
                     {...form.register("legalBusinessName")}
+                    disabled={readOnly}
                   />
                 </div>
                 <div className="space-y-2">
@@ -195,6 +221,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   <Input
                     id="businessAddress"
                     {...form.register("businessAddress")}
+                    disabled={readOnly}
                   />
                 </div>
               </div>
@@ -212,6 +239,7 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   <Input
                     id="projectCategory"
                     {...form.register("projectCategory")}
+                    disabled={readOnly}
                   />
                 </div>
                 <div className="space-y-2">
@@ -219,24 +247,27 @@ export function EditProfileForm({ user }: EditProfileFormProps) {
                   <Input
                     id="projectStartDate"
                     {...form.register("projectStartDate")}
+                    disabled={readOnly}
                   />
                 </div>
               </div>
             </div>
           )}
 
-          <Button
-            type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4 mr-2" />
-            )}
-            Save Changes
-          </Button>
+          {!readOnly && (
+            <Button
+              type="submit"
+              className="w-full bg-emerald-600 hover:bg-emerald-700"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
+              Save Changes
+            </Button>
+          )}
         </form>
       </CardContent>
     </Card>

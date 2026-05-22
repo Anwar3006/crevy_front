@@ -217,9 +217,7 @@ export default function AllProjectsPage() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() =>
-                  router.push(`/project-profile/${row.original.id}`)
-                }
+                onClick={() => router.push(`/projects/${row.original.id}`)}
                 className="gap-2 rounded-lg cursor-pointer"
               >
                 <ExternalLink className="h-4 w-4 text-slate-400" /> View Profile
