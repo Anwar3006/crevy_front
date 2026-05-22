@@ -26,6 +26,7 @@ import {
   UserCircle,
   UserX,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type React from "react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -118,6 +119,7 @@ export default function UserManagementPage() {
   const { data: session } = authClient.useSession();
   const sessionUser = session?.user as any;
   const isSuperAdmin = sessionUser?.role === "super_admin";
+  const router = useRouter();
 
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("users");
@@ -213,6 +215,7 @@ export default function UserManagementPage() {
 function UsersTab() {
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [globalFilter, setGlobalFilter] = useState("");
+  const router = useRouter();
 
   const { data, isLoading } = useQuery({
     queryKey: ["users", roleFilter],
@@ -347,7 +350,7 @@ function UsersTab() {
         ),
       },
     ],
-    [],
+    [router.push],
   );
 
   const table = useReactTable({
