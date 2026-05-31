@@ -1,10 +1,11 @@
-import PlaceholderPage from "@/components/PlaceholderPage";
+"use client";
+
+import ESGPortfolioView from "./_components/ESGPortfolioView";
 
 export default function CompliancePage() {
   return (
-    <PlaceholderPage
-      title="Compliance Oversight"
-      description="The compliance management system is currently being integrated with the verification pipeline. Check back soon for regulatory reporting and audit trails."
-    />
+    <main className="p-4 lg:p-8 max-w-[1600px] mx-auto min-h-screen">
+      <ESGPortfolioView />
+    </main>
   );
 }

@@ -147,7 +147,13 @@ const NewProject = () => {
       <AssignmentCheckModal
         isOpen={isModalOpen}
         role={role}
-        onProceed={() => setIsModalOpen(false)}
+        onProceed={(projectOwnerId, assignedAdminId) => {
+          methods.setValue("projectOwnerId", projectOwnerId);
+          if (assignedAdminId) {
+            methods.setValue("assignedAdminId", assignedAdminId);
+          }
+          setIsModalOpen(false);
+        }}
       />
 
       {/* Header */}

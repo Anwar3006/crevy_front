@@ -298,13 +298,17 @@ const Step3_Documents = ({
         <Button
           type="button"
           onClick={onSubmit}
-          disabled={isSubmitting}
-          className="flex-1 bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all"
+          disabled={isSubmitting || !allRequiredFilled}
+          className="flex-1 bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
             <span className="flex items-center gap-2">
               <Loader2 className="h-5 w-5 animate-spin" />
               Submitting…
+            </span>
+          ) : !allRequiredFilled ? (
+            <span className="flex items-center gap-2">
+              Missing Required Docs
             </span>
           ) : (
             "Submit Project"

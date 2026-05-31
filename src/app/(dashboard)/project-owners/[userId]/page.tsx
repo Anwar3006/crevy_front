@@ -388,7 +388,7 @@ export default function ProjectOwnerDetailPage() {
               </h2>
               <dl className="space-y-2.5">
                 {[
-                  { label: "Owner ID", value: owner.id },
+                  { label: "Project Owner ID", value: owner.id },
                   { label: "User ID", value: owner.userId },
                   { label: "Code", value: owner.code },
                 ].map(({ label, value }) => (

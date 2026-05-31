@@ -22,6 +22,8 @@ export const ProjectService = {
       projectTags: data.projectTags,
       description: data.description,
       sdgs: data.sdgs,
+      projectOwnerId: data.projectOwnerId || undefined,
+      assignedAdminId: data.assignedAdminId || undefined,
     };
     const response = await axiosClient.post("/projects", payload);
     return response.data;
@@ -48,9 +50,23 @@ export const ProjectService = {
   },
 
   getMarketplaceProjects: async (params?: Record<string, unknown>) => {
-    const response = await axiosClient.get("/projects", {
-      params: { projectStatus: "active", projectStage: "completed", ...params },
+    const response = await axiosClient.get("/projects/marketplace", {
+      params,
     });
+    return response.data;
+  },
+
+  getProjectMarketplaceDetail: async (id: string) => {
+    // This will be used for the high-fidelity marketplace project detail page
+    const response = await axiosClient.get(`/projects/marketplace/${id}`);
+    return response.data;
+  },
+
+  getProjectPriceHistory: async (projectId: string) => {
+    // Fetch average credit price per month over 12 months
+    const response = await axiosClient.get(
+      `/projects/${projectId}/price-history`,
+    );
     return response.data;
   },
 

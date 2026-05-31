@@ -147,7 +147,7 @@ export const ProjectCard = memo(function ProjectCard({
     [project.totalAreaHectares],
   );
 
-  const durationYears = useMemo(
+  const _durationYears = useMemo(
     () => Math.floor((project.durationMonths || 12) / 12),
     [project.durationMonths],
   );
@@ -254,22 +254,32 @@ export const ProjectCard = memo(function ProjectCard({
           </div>
 
           {/* Price + CTA row */}
-          <div className="flex items-center justify-between pt-2 border-t border-gray-50">
+          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
             <div>
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">
-                Fixed Price
+              <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-1">
+                Market Price
               </p>
               <div className="flex items-baseline gap-1">
                 <span
                   className="text-2xl font-black text-[#131927] leading-none"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
-                  $52
+                  $
+                  {project.pricePerCredit
+                    ? parseFloat(project.pricePerCredit).toFixed(2)
+                    : "0.00"}
                 </span>
                 <span className="text-[10px] font-bold text-gray-400">
                   / tCO₂e
                 </span>
               </div>
+              <p className="text-[8px] font-bold text-slate-300 uppercase tracking-tighter italic mt-1">
+                Vol:{" "}
+                {project.availableCredits
+                  ? parseFloat(project.availableCredits).toLocaleString()
+                  : "0"}{" "}
+                t
+              </p>
             </div>
 
             <div

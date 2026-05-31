@@ -202,7 +202,11 @@ export const createProjectInputSchema = z.object({
     name: z.string().min(1, "Select a currency"),
   }),
 
+  projectOwnerId: z.string().uuid("Please select a valid project owner"),
+  assignedAdminId: z.string().uuid().optional(),
+
   // Step 2 — Practices & Context
+
   projectTags: z.array(z.string()).default([]),
   description: z
     .string()
@@ -227,6 +231,8 @@ export const createProjectDefaultValues: TCreateProject = {
   endDate: undefined,
   totalAreaHectares: 0,
   currency: { code: "", name: "" },
+  projectOwnerId: "",
+  assignedAdminId: "",
   projectTags: [],
   description: "",
   sdgs: [],
