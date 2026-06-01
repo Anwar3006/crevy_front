@@ -8,9 +8,11 @@ import {
   Clock,
   MapPin,
   Rocket,
+  Search,
   ShieldCheck,
   Sparkles,
   Target,
+  TrendingUp,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth";
@@ -146,6 +148,49 @@ const HeroSection = ({ role, userName }: HeroSectionProps) => {
       ],
       gradFrom: "#178a74",
       gradTo: "#131927",
+    },
+    org_admin: {
+      title: "Institutional Oversight",
+      desc: "Manage your carbon portfolio, institutional members, and compliance reporting.",
+      cta: {
+        label: "Manage Organization",
+        url: "/compliance",
+        icon: ShieldCheck,
+      },
+      badge: { text: "Org Admin", color: "bg-teal-50 text-teal-700" },
+      nextSteps: [
+        { icon: Clock, text: "Invite new team members to your organization" },
+        { icon: CheckCircle2, text: "Generate latest ESG compliance report" },
+      ],
+      gradFrom: "#0d9488",
+      gradTo: "#115e59",
+    },
+    sustainability_manager: {
+      title: "ESG Performance Dashboard",
+      desc: "Monitor your carbon credit portfolio and maintain institutional impact records.",
+      cta: { label: "View Portfolio", url: "/compliance", icon: TrendingUp },
+      badge: {
+        text: "Sustainability Manager",
+        color: "bg-emerald-50 text-emerald-700",
+      },
+      nextSteps: [
+        { icon: Clock, text: "Analyze emission scope breakdown" },
+        { icon: CheckCircle2, text: "Generate ESG report for Q2" },
+      ],
+      gradFrom: "#059669",
+      gradTo: "#065f46",
+    },
+    org_auditor: {
+      title: "Compliance Audit Access",
+      desc: "Review institutional records, verify blockchain anchors, and validate credit retirements.",
+      cta: { label: "View Audit Ledger", url: "/compliance", icon: Search },
+      badge: { text: "Auditor", color: "bg-slate-100 text-slate-700" },
+      nextSteps: [
+        { icon: Clock, text: "Verify recent credit retirement proofs" },
+        { icon: CheckCircle2, text: "Cross-reference financial disbursements" },
+      ],
+      gradFrom: "#475569",
+      gradTo: "#1e293b",
     },
   };
 

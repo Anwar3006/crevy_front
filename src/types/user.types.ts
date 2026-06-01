@@ -83,4 +83,7 @@ export type TRole =
   | "financial_admin"
   | "mrv_admin"
   | "project_manager"
-  | "project_owner";
+  | "project_owner"
+  | "org_admin"
+  | "sustainability_manager"
+  | "org_auditor";

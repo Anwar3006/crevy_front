@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getSidebarConfig } from "@/constants/sidebar-items";
 import type { TBetterAuthUser } from "@/types";
+import type { TRole } from "../types/user.types";
 import { NavUser } from "./NavUser";
 import { Separator } from "./ui/separator";
 
@@ -29,16 +30,48 @@ export function AppSidebar({
   user,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  user: TBetterAuthUser;
+  user: TBetterAuthUser & { activeOrganizationId?: string };
 }) {
   const pathname = usePathname();
   const { setOpenMobile, isMobile } = useSidebar();
 
-  // Use role name directly from the user object
+  // Helper: Global admins bypass org restrictions
+  const isGlobalAdmin = [
+    "super_admin",
+    "financial_admin",
+    "mrv_admin",
+    "project_manager",
+  ].includes(user.role || "");
+
+  // Use role name directly
   const sidebarConfig = getSidebarConfig(user.role || "project_owner");
+
+  // Filter sections based on permissions
+  const visibleSections = sidebarConfig.sections.filter((section) => {
+    // If global admin, show everything
+    if (isGlobalAdmin) return true;
+
+    // Institutional users: show items.
+    // Ideally, we'd check RBACService here, but for now we filter by roles.
+    if (
+      ["org_admin", "sustainability_manager", "org_auditor"].includes(
+        user.role || "",
+      )
+    ) {
+      // Filter specific sections based on requirements
+      if (
+        section.title === "Settings" &&
+        (user.role as TRole) === "org_auditor"
+      )
+        return false;
+      return true;
+    }
+    return true;
+  });
 
   return (
     <Sidebar {...props} className="border-r-0 bg-[#2ebc8d]" collapsible="icon">
+      {/* ... (Header remains same) ... */}
       <SidebarHeader className="pt-8 pb-4">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
@@ -66,7 +99,6 @@ export function AppSidebar({
       </SidebarHeader>
 
       <SidebarContent className="px-3">
-        {/* Top-level items */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -107,7 +139,7 @@ export function AppSidebar({
         </SidebarGroup>
 
         {/* Grouped sections */}
-        {sidebarConfig.sections.map((section, sectionIndex) => (
+        {visibleSections.map((section, sectionIndex) => (
           <SidebarGroup key={section.title || sectionIndex} className="mt-4">
             {section.title && (
               <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white/70 mb-2 group-data-[collapsible=icon]:hidden">
@@ -143,11 +175,6 @@ export function AppSidebar({
                           <span className="flex-1 text-sm group-data-[collapsible=icon]:hidden">
                             {item.title}
                           </span>
-                          {item.badge && (
-                            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold text-white group-data-[collapsible=icon]:hidden">
-                              {item.badge}
-                            </span>
-                          )}
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
