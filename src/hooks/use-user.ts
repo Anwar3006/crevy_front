@@ -1,7 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth";
 import { UserService } from "@/lib/services/user-service";
 import type { TUserRegistrationInput } from "@/types/user.types";
+
+export const useUser = () => {
+  const { data: session, isPending, error } = authClient.useSession();
+
+  return {
+    user: session?.user,
+    session,
+    isPending,
+    error,
+    isAuthenticated: !!session,
+  };
+};
 
 export const useGetUserProfile = (userId: string) => {
   return useQuery<any, Error, any>({

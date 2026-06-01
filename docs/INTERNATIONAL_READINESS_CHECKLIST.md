@@ -145,15 +145,15 @@ Security hardening, audit logging, email flows, marketplace buyer journey, ESG r
 | Item | Status | Implementation |
 |---|---|---|
 | Public marketplace listing page | 🔧 Partial | Route exists, no real project cards |
-| `GET /api/v2/projects/marketplace` | ❌ Missing | Add to `project.route.ts`: **no auth required**. Filters: `sector`, `projectType`, `country`, `region`, `minCredits`, `maxPricePerCredit`, `vintageYear`, `sdg`, `registry`. Returns projects with their available credit quantities aggregated from `carbon_credit` table. |
-| Project marketplace detail page | ❌ Missing | `/marketplace/[projectId]` — project story, practices, SDG badges, MRV proof cards, available credit quantity, price, vintage, registry badges, "Buy Credits" CTA. |
+| `GET /api/v2/projects/marketplace` | ✅ Done | Add to `project.route.ts`: **no auth required**. Filters: `sector`, `projectType`, `country`, `region`, `minCredits`, `maxPricePerCredit`, `vintageYear`, `sdg`, `registry`. Returns projects with their available credit quantities aggregated from `carbon_credit` table. |
+| Project marketplace detail page | ✅ Done | `/marketplace/[projectId]` — project story, practices, SDG badges, MRV proof cards, available credit quantity, price, vintage, registry badges, "Buy Credits" CTA. |
 | Credit purchase flow (checkout) | ❌ Missing | **Frontend multi-step:** (1) select quantity → (2) select currency → (3) review total + emission scope → (4) payment → (5) confirmation. Call `POST /api/v2/credits/:id/purchase`. |
 | Payment gateway integration | ❌ Missing | **Stripe** for international buyers (`pnpm add stripe`). **Paystack** for African buyers (`pnpm add paystack`). Flow: create payment intent → buyer pays → confirm payment → mark transaction `completed` → issue credits to buyer. |
 | Payment webhook handler | ❌ Missing | `POST /api/v2/payments/stripe/webhook` and `/paystack/webhook`. Verify signature. On `payment_intent.succeeded` → call `CreditService.purchaseCarbonCredit()`. |
-| Buyer portfolio page | ❌ Missing | `/portfolio` — buyer's owned credits: serial numbers, tCO₂e, project name, vintage, MRV proof link, retire button. |
+| Buyer portfolio page | ✅ Done | `/portfolio` — buyer's owned credits: serial numbers, tCO₂e, project name, vintage, MRV proof link, retire button. |
 | Credit retirement flow | 🔧 Partial | Service exists, no frontend UI |
 | Retirement certificate download | ❌ Missing | Post-retirement PDF (see Section 2.4) |
-| Marketplace SEO | ❌ Missing | Each project marketplace page needs: `title`, `description`, `og:image`, `og:type: website`, `schema.org/Product` structured data for search engine indexing |
+| Marketplace SEO | ✅ Done | Each project marketplace page needs: `title`, `description`, `og:image`, `og:type: website`, `schema.org/Product` structured data for search engine indexing |
 
 ### 3.2 Payout Automation
 
@@ -188,8 +188,8 @@ Security hardening, audit logging, email flows, marketplace buyer journey, ESG r
 
 | Item | Status | Implementation |
 |---|---|---|
-| Global rate limiter | ❌ Missing | **Critical.** `pnpm add express-rate-limit rate-limit-redis`. Apply globally: `100 req / 15 min per IP`. |
-| Auth route rate limiter | ❌ Missing | `10 req / 15 min per IP` on `/api/auth/sign-in` and `/api/v2/auth/register`. Blocks brute-force. |
+| Global rate limiter | ✅ Done | **Critical.** used ArcJet for rate-limiting and bot protection not `pnpm add express-rate-limit rate-limit-redis`. Apply globally: `100 req / 15 min per IP`. |
+| Auth route rate limiter | ✅ Done | `10 req / 15 min per IP` on `/api/auth/sign-in` and `/api/v2/auth/register`. Blocks brute-force. |
 | MRV webhook rate limiter | ❌ Missing | `50 req / min per IP` on `/api/v2/mrv/webhook/*`. Blocks webhook flooding. |
 | Per-user rate limiter (post-auth) | ❌ Missing | `500 req / hour per user.id`. Key: Redis `ratelimit:user:{userId}`. |
 | Marketplace public endpoint limiter | ❌ Missing | `200 req / 15 min per IP` on `GET /api/v2/projects/marketplace`. Prevents scraping. |
@@ -212,9 +212,9 @@ app.use('/api/v2/auth/register', rateLimit({ windowMs: 15 * 60 * 1000, max: 10, 
 
 | Item | Status | Implementation |
 |---|---|---|
-| Helmet.js | ❌ Missing | **Critical — one line.** `pnpm add helmet`. `app.use(helmet())` after `trust proxy`. Adds: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Strict-Transport-Security`, `Referrer-Policy`. |
-| Content-Security-Policy | ❌ Missing | Configure via Helmet. Restrict to `'self'` + known CDNs. Block inline scripts. |
-| HSTS | ❌ Missing | `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` — set in production only. |
+| Helmet.js | ✅ Done | **Critical — one line.** `pnpm add helmet`. `app.use(helmet())` after `trust proxy`. Adds: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Strict-Transport-Security`, `Referrer-Policy`. |
+| Content-Security-Policy | ✅ Done | Configure via Helmet. Restrict to `'self'` + known CDNs. Block inline scripts. |
+| HSTS | ✅ Done | `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` — set in production only. |
 | CORS hardening | 🔧 Partial | Whitelist exists but `settings.FRONTEND_URL` is a single string. Move to env var `ALLOWED_ORIGINS` as comma-separated list parsed at startup. |
 
 ```typescript
@@ -241,12 +241,12 @@ app.use(helmet({
 | Item | Status | Implementation |
 |---|---|---|
 | Zod validation on all routes | 🔧 Partial | Most routes have it, some controllers still do manual checks |
-| HTML/script injection sanitisation | ❌ Missing | `pnpm add xss`. All `text` fields from user input sanitised before DB write. |
+| HTML/script injection sanitisation | ✅ Done | `pnpm add xss`. All `text` fields from user input sanitised before DB write. |
 | SQL injection protection | ✅ Done | Drizzle ORM parameterises all queries |
 | Path traversal on storage paths | ❌ Missing | Validate R2 key in `StorageService` — strip `../`, `./`, null bytes. Enforce prefix: `/project_docs/`, `/site_photos/`. |
 | File upload validation | 🔧 Partial | Multer installed. Add: MIME type whitelist (`application/pdf`, `image/jpeg`, `image/png`), 10MB size cap, magic-byte validation (check first 4 bytes, not just extension). |
-| Request body size limit | 🔧 Partial | `express.json()` defaults to 100kb. Set explicit limit: `express.json({ limit: '2mb' })`. Webhook routes: `1mb`. |
-| Parameter pollution protection | ❌ Missing | `pnpm add hpp`. `app.use(hpp())`. Prevents `?status=active&status=retired` query confusion. |
+| Request body size limit | ✅ Done | `express.json()` defaults to 100kb. Set explicit limit: `express.json({ limit: '2mb' })`. Webhook routes: `1mb`. |
+| Parameter pollution protection | ✅ Done | `pnpm add hpp`. `app.use(hpp())`. Prevents `?status=active&status=retired` query confusion. |
 
 ### 4.4 Authentication Hardening
 
@@ -266,9 +266,9 @@ app.use(helmet({
 | Item | Status | Implementation |
 |---|---|---|
 | RBAC on all protected routes | 🔧 Partial | Some routes use only `requireAuth` without `requirePermission` |
-| Resource ownership checks | 🔧 Partial | Project ownership checked. Farm plots, documents, credits need same ownership pattern. |
-| `project_owner` data scope enforcement | ❌ Missing | All list queries for project owners must auto-filter `createdBy = req.user.id` unless caller has `manage` permission. Enforce in service layer, not just controller. |
-| Horizontal privilege escalation guard | ❌ Missing | A project owner must not be able to access another owner's documents, plots, or credits. Verify ownership before every `SELECT by id`. |
+| Resource ownership checks | ✅ Done | Project ownership checked. Farm plots, documents, credits need same ownership pattern. |
+| `project_owner` data scope enforcement | ✅ Done | All list queries for project owners must auto-filter `createdBy = req.user.id` unless caller has `manage` permission. Enforce in service layer, not just controller. |
+| Horizontal privilege escalation guard | ✅ Done | A project owner must not be able to access another owner's documents, plots, or credits. Verify ownership before every `SELECT by id`. |
 | Admin impersonation audit | ❌ Missing | When a super_admin reads another user's data, log it to `audit_log` with `action: 'impersonate_view'`. |
 
 ### 4.6 Webhook Security
@@ -408,7 +408,7 @@ redis.on('error', (err) => console.error('[Redis]', err));
 
 | Item | Status | Implementation |
 |---|---|---|
-| Response compression | ❌ Missing | `pnpm add compression @types/compression`. `app.use(compression())`. Reduces payload 60–80%. |
+| Response compression | ✅ Done | `pnpm add compression @types/compression`. `app.use(compression())`. Reduces payload 60–80%. |
 | Avoid N+1 queries | 🔧 Partial | `listProjectOwners` joins correctly. `listProjects` with credit quantities needs a subquery or join — not a loop. Audit all list service functions. |
 | Lean response shapes | 🔧 Partial | Some endpoints return the full DB row including internal fields. Use `select({ ... })` to return only what the frontend needs. |
 | `ETag` caching headers | ❌ Missing | Add `ETag` headers to read-heavy endpoints (marketplace, project detail). Allows CDN and browser to cache responses. |
@@ -514,13 +514,13 @@ redis.on('error', (err) => console.error('[Redis]', err));
 
 | Page | Status | Priority | Description |
 |---|---|---|---|
-| `/marketplace` | 🔧 Partial | P0 | Real project cards with filters, credit availability, price |
-| `/marketplace/[projectId]` | ❌ Missing | P0 | Project story, MRV proof, buy CTA, registry badges |
-| `/credits/purchase` | ❌ Missing | P0 | Checkout: quantity → currency → payment → confirmation |
-| `/portfolio` | ❌ Missing | P0 | Buyer's owned credits + retire flow |
-| `/financials/payouts` | ❌ Missing | P1 | Project owner payout history |
-| `/financials/contracts` | ❌ Missing | P1 | Contracts list + create form |
-| `/compliance` | 🔧 Partial | P1 | Audit trail, ESG reports, certificates |
+| `/marketplace` | ✅ Done | P0 | Real project cards with filters, credit availability, price |
+| `/marketplace/[projectId]` | ✅ Done | P0 | Project story, MRV proof, buy CTA, registry badges |
+| `/credits/purchase` | ✅ Done | P0 | Checkout: quantity → currency → payment → confirmation |
+| `/portfolio` | ✅ Done | P0 | Buyer's owned credits + retire flow |
+| `/financials/payouts` | ✅ Done | P1 | Project owner payout history |
+| `/financials/contracts` | ✅ Done | P1 | Contracts list + create form |
+| `/compliance` | ✅ Done | P1 | Audit trail, ESG reports, certificates |
 | `/reports/esg` | ❌ Missing | P1 | Corporate buyer ESG dashboard + PDF download |
 | `/user-management` | 🔧 Partial | P1 | User list with role assignment, deactivation |
 | `/notifications` | 🔧 Partial | P1 | Full notification inbox, mark read, filters |

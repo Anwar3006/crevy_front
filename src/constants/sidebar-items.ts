@@ -1,11 +1,13 @@
 import {
+  AnalyticsUpIcon,
   CalculateIcon,
-  Calendar03Icon,
   CheckListIcon,
   CheckmarkCircle03Icon,
   CustomerService01Icon,
   DashboardSquareAddIcon,
   DiscoverCircleIcon,
+  LicenseIcon,
+  MoneyReceiveIcon,
   Notification01Icon,
   OrganicFoodIcon,
   PropertyAddIcon,
@@ -49,12 +51,6 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           icon: DashboardSquareAddIcon,
         },
         {
-          title: "User Management",
-          url: "/user-management",
-          // @ts-expect-error
-          icon: UserGroupIcon,
-        },
-        {
           title: "Compliance",
           url: "/compliance",
           // @ts-expect-error
@@ -63,25 +59,14 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       ],
       sections: [
         {
-          title: "PROJECT OWNERS",
+          title: "OVERSIGHT",
           items: [
             {
-              title: "All Project Owners",
-              url: "/project-owners",
+              title: "User Management",
+              url: "/user-management",
               // @ts-expect-error
               icon: UserGroupIcon,
             },
-            {
-              title: "Onboard Owner",
-              url: "/project-owners/register",
-              // @ts-expect-error
-              icon: PropertyAddIcon,
-            },
-          ],
-        },
-        {
-          title: "OVERSIGHT",
-          items: [
             {
               title: "Projects",
               url: "/projects",
@@ -89,23 +74,155 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               icon: ViewIcon,
             },
             {
-              title: "Project Vetting",
-
-              url: "/track-verification",
+              title: "Financial Control",
+              url: "/financials",
               // @ts-expect-error
-              icon: CheckListIcon,
+              icon: MoneyReceiveIcon,
+            },
+          ],
+        },
+        {
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
+        },
+      ],
+    },
+    org_admin: {
+      topItems: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+          // @ts-expect-error
+          icon: DashboardSquareAddIcon,
+        },
+        {
+          title: "Marketplace",
+          url: "/marketplace",
+          // @ts-expect-error
+          icon: DiscoverCircleIcon,
+        },
+        {
+          title: "Institutional Impact",
+          url: "/compliance",
+          // @ts-expect-error
+          icon: AnalyticsUpIcon,
+        },
+      ],
+      sections: [
+        {
+          title: "PORTFOLIO",
+          items: [
+            {
+              title: "Asset Registry",
+              url: "/portfolio",
+              // @ts-expect-error
+              icon: OrganicFoodIcon,
             },
             {
-              title: "Transaction Log",
-              url: "/data-collection",
+              title: "Acquisitions",
+              url: "/marketplace",
               // @ts-expect-error
-              icon: CalculateIcon,
+              icon: MoneyReceiveIcon,
+            },
+          ],
+        },
+        {
+          title: "ORGANIZATION",
+          items: [
+            {
+              title: "Team Members",
+              url: "/user-management",
+              // @ts-expect-error
+              icon: UserGroupIcon,
             },
             {
-              title: "Site Visits",
-              url: "/site-visits",
+              title: "Contracts & Payouts",
+              url: "/financials",
               // @ts-expect-error
-              icon: Calendar03Icon,
+              icon: LicenseIcon,
+            },
+          ],
+        },
+        {
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
+        },
+      ],
+    },
+    sustainability_manager: {
+      topItems: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+          // @ts-expect-error
+          icon: DashboardSquareAddIcon,
+        },
+        {
+          title: "Institutional Impact",
+          url: "/compliance",
+          // @ts-expect-error
+          icon: AnalyticsUpIcon,
+        },
+      ],
+      sections: [
+        {
+          title: "PORTFOLIO",
+          items: [
+            {
+              title: "Asset Registry",
+              url: "/portfolio",
+              // @ts-expect-error
+              icon: OrganicFoodIcon,
+            },
+          ],
+        },
+        {
+          title: "COMPLIANCE",
+          items: [
+            {
+              title: "ESG Reports",
+              url: "/compliance",
+              // @ts-expect-error
+              icon: CheckmarkCircle03Icon,
+            },
+          ],
+        },
+        {
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
+        },
+      ],
+    },
+    org_auditor: {
+      topItems: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+          // @ts-expect-error
+          icon: DashboardSquareAddIcon,
+        },
+      ],
+      sections: [
+        {
+          title: "AUDIT LEDGER",
+          items: [
+            {
+              title: "Asset Verification",
+              url: "/portfolio",
+              // @ts-expect-error
+              icon: CheckmarkCircle03Icon,
+            },
+            {
+              title: "Institutional Reports",
+              url: "/compliance",
+              // @ts-expect-error
+              icon: CheckmarkCircle03Icon,
+            },
+            {
+              title: "Financial Audit",
+              url: "/financials",
+              // @ts-expect-error
+              icon: MoneyReceiveIcon,
             },
           ],
         },
@@ -187,7 +304,6 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
             },
             {
               title: "Project Vetting",
-
               url: "/track-verification",
               // @ts-expect-error
               icon: CheckListIcon,
@@ -250,7 +366,6 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
             },
             {
               title: "Project Vetting",
-
               url: "/track-verification",
               // @ts-expect-error
               icon: CheckListIcon,

@@ -49,7 +49,7 @@ export default function ProjectMarketplacePage() {
     isError,
   } = useQuery({
     queryKey: ["project-marketplace-detail", projectId],
-    queryFn: () => ProjectService.getProject(projectId),
+    queryFn: () => ProjectService.getProjectMarketplaceDetail(projectId),
   });
 
   // 2. Fetch Price History Data for Chart

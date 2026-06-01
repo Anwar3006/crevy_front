@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
@@ -11,47 +12,46 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
-import { Area, AreaChart, ResponsiveContainer } from "recharts";
 
-// ─── Design Philosophy: Institutional Impact ───────────────────────────────
-// We use an asymmetric, design-forward layout with generous whitespace.
-// Typography is clinical and rhythmic.
-// "Every alignment is the work of countless refinements."
+import { Area, AreaChart, ResponsiveContainer } from "recharts";
+import { toast } from "sonner";
+
+import { useUser } from "@/hooks/use-user";
+import { CreditService } from "@/lib/services/credit-service";
 
 export default function PortfolioOverview() {
-  const [_isRetiring, _setIsRetiring] = useState(false);
+  const { user } = useUser();
 
-  // Mock data for international grade dashboard
-  const credits = [
-    {
-      id: "1",
-      name: "Guanacaste Reforestation",
-      serial: "CRV-GUA-2024-001/500",
-      amount: 500,
-      vintage: 2024,
-      status: "Active",
-      proof: "0x32a...4a2",
-    },
-    {
-      id: "2",
-      name: "Nairobi Biochar Project",
-      serial: "CRV-NBO-2023-442/120",
-      amount: 120,
-      vintage: 2023,
-      status: "Active",
-      proof: "0x88b...11c",
-    },
-    {
-      id: "3",
-      name: "Amazon Basin Preservation",
-      serial: "CRV-AMZ-2025-008/1000",
-      amount: 1000,
-      vintage: 2025,
-      status: "Active",
-      proof: "0xef2...901",
-    },
-  ];
+  // 1. Fetch Owned Credits
+  const { data: creditsRes, isLoading } = useQuery({
+    queryKey: ["portfolio-credits", user?.id],
+    queryFn: () =>
+      CreditService.getCarbonCredits({ currentOwnerId: user?.id, limit: 20 }),
+    enabled: !!user?.id,
+  });
+
+  const credits = creditsRes?.data || [];
+  const totalOwned = credits.reduce(
+    (acc: number, curr: any) => acc + parseFloat(curr.availableAmount),
+    0,
+  );
+  const netValue = totalOwned * 52; // Assuming market avg $52
+
+  const handleRetire = async (id: string, amount: number) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to permanently retire ${amount} tCO2e?`,
+      )
+    )
+      return;
+
+    try {
+      await CreditService.retireCredits(id, { quantity: amount });
+      toast.success("Credits retired and anchored on blockchain.");
+    } catch (err: any) {
+      toast.error(err.message || "Retirement failed");
+    }
+  };
 
   const valueTrend = [
     { day: "01", val: 4200 },
@@ -63,8 +63,15 @@ export default function PortfolioOverview() {
     { day: "30", val: 5600 },
   ];
 
+  if (isLoading)
+    return (
+      <div className="p-20 text-center animate-pulse uppercase font-black tracking-[0.3em] text-slate-400">
+        Syncing Registry Portfolio...
+      </div>
+    );
+
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-12 pb-20 animate-in fade-in duration-700">
       {/* ── Monolithic Header ── */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-200 pb-12">
         <div className="max-w-2xl">
@@ -89,7 +96,9 @@ export default function PortfolioOverview() {
             Portfolio Net Value
           </p>
           <div className="flex items-baseline gap-2">
-            <h2 className="text-5xl font-black">$28,420</h2>
+            <h2 className="text-5xl font-black">
+              ${netValue.toLocaleString()}
+            </h2>
             <span className="text-slate-500 text-xs font-bold uppercase">
               USD
             </span>
@@ -116,7 +125,12 @@ export default function PortfolioOverview() {
           </div>
 
           <div className="space-y-4">
-            {credits.map((credit, i) => (
+            {credits.length === 0 && (
+              <div className="p-12 text-center text-slate-400 uppercase font-black text-[10px] bg-slate-50 rounded-[2rem]">
+                No active assets in registry.
+              </div>
+            )}
+            {credits.map((credit: any, i: number) => (
               <motion.div
                 key={credit.id}
                 initial={{ opacity: 0, x: -20 }}
@@ -129,8 +143,8 @@ export default function PortfolioOverview() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-black text-slate-900 truncate uppercase tracking-tight">
-                      {credit.name}
+                    <h4 className="font-black text-slate-900 truncate uppercase tracking-tight italic">
+                      Carbon Unit Pool
                     </h4>
                     <BadgeCheck
                       size={14}
@@ -138,7 +152,7 @@ export default function PortfolioOverview() {
                     />
                   </div>
                   <p className="text-[10px] font-mono text-slate-400 truncate tracking-tighter">
-                    SERIAL: {credit.serial}
+                    BATCH: {credit.mrv_batch_id.slice(0, 12)}...
                   </p>
                 </div>
                 <div className="grid grid-cols-2 md:flex items-center gap-8 px-4">
@@ -147,7 +161,7 @@ export default function PortfolioOverview() {
                       Volume
                     </p>
                     <p className="text-sm font-black text-slate-900">
-                      {credit.amount} t
+                      {parseFloat(credit.availableAmount).toLocaleString()} t
                     </p>
                   </div>
                   <div className="text-center md:text-right">
@@ -155,24 +169,32 @@ export default function PortfolioOverview() {
                       Vintage
                     </p>
                     <p className="text-sm font-black text-slate-900">
-                      {credit.vintage}
+                      {credit.creditVintage}
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-2 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
                   <button
                     type="button"
-                    className="bg-slate-900 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all"
+                    onClick={() =>
+                      handleRetire(
+                        credit.id,
+                        parseFloat(credit.availableAmount),
+                      )
+                    }
+                    className="bg-slate-900 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg active:scale-95"
                   >
                     Retire
                   </button>
-                  <button
-                    type="button"
+                  <a
+                    href={`https://polygonscan.com/tx/${credit.blockchainTxHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     title="View Proof"
                     className="p-2.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all"
                   >
                     <ExternalLink size={18} />
-                  </button>
+                  </a>
                 </div>
               </motion.div>
             ))}
