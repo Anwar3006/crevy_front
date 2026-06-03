@@ -71,7 +71,7 @@ export default function PortfolioOverview() {
     );
 
   return (
-    <div className="space-y-12 pb-20 animate-in fade-in duration-700">
+    <div className="space-y-12 pb-20 animate-in fade-in duration-700 pt-10">
       {/* ── Monolithic Header ── */}
       <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-200 pb-12">
         <div className="max-w-2xl">
@@ -208,9 +208,12 @@ export default function PortfolioOverview() {
             <h3 className="text-[11px] font-black uppercase tracking-widest text-emerald-700 mb-6">
               Market Performance
             </h3>
-            <div className="h-[180px] w-full">
+            <div className="h-[220px] w-full min-h-[220px]">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={valueTrend}>
+                <AreaChart
+                  data={valueTrend}
+                  margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                >
                   <defs>
                     <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />

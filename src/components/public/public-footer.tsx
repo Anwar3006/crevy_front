@@ -2,21 +2,25 @@
 
 import { ArrowRight, CheckCircle2, MapPin, Zap } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaFacebook, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth";
 
 const FOOTER_LINKS = {
   platform: [
     { title: "Marketplace", href: "/marketplace" },
+    { title: "Public Registry", href: "/public-registry" },
+    { title: "Methodology", href: "/methodology" },
     { title: "Carbon Calculator", href: "/carbon-calculator" },
-    { title: "How It Works", href: "/#how-it-works" },
-    { title: "Register a Project", href: "/new-project" },
-    { title: "Login", href: "/login" },
+    { title: "Register a Project", href: "/register" },
   ],
   company: [
-    { title: "About Us", href: "/about" },
+    { title: "About Us", href: "/about-us" },
     { title: "Support", href: "/support" },
-    { title: "Terms of Service", href: "/terms" },
-    { title: "Privacy Policy", href: "/privacy" },
+    { title: "Terms of Service", href: "/terms-of-service" },
+    { title: "Privacy Policy", href: "/privacy-policy" },
+    { title: "Data Processing Agreement", href: "/data-processing-agreement" },
   ],
   socials: [
     { icon: FaXTwitter, href: "https://twitter.com/crevy", label: "Twitter" },
@@ -35,6 +39,35 @@ const FOOTER_LINKS = {
 };
 
 export function PublicFooter() {
+  const { data: session } = authClient.useSession();
+  const router = useRouter();
+  const user = session?.user as any;
+
+  const handleRegisterProjectClick = (e: React.MouseEvent) => {
+    // 1. Check for session
+    if (!session) {
+      // Not logged in, proceed to standard registration
+      return;
+    }
+
+    // 2. Check role (Privilege Escalation Prevention)
+    const allowedRoles = ["project_owner", "super_admin", "admin"];
+    const userRole = user?.role || "";
+
+    if (!allowedRoles.includes(userRole)) {
+      e.preventDefault();
+      toast.error("Unauthorized Access", {
+        description:
+          "Your current account role does not have permission to register new projects. Please contact support if you believe this is an error.",
+      });
+      return;
+    }
+
+    // If authorized and logged in, redirect to new project creation
+    e.preventDefault();
+    router.push("/new-project");
+  };
+
   return (
     <footer className="bg-myBlue pt-24 pb-12 border-t border-white/5">
       <div className="container mx-auto px-6">
@@ -89,6 +122,11 @@ export function PublicFooter() {
                 <li key={link.title}>
                   <Link
                     href={link.href}
+                    onClick={
+                      link.title === "Register a Project"
+                        ? handleRegisterProjectClick
+                        : undefined
+                    }
                     className="text-white/60 hover:text-myGreen transition-colors text-sm font-medium"
                   >
                     {link.title}
@@ -141,13 +179,13 @@ export function PublicFooter() {
           </p>
           <div className="flex space-x-6">
             <Link
-              href="/terms"
+              href="/terms-of-service"
               className="text-white/40 hover:text-white transition-colors text-xs"
             >
               Terms of Service
             </Link>
             <Link
-              href="/privacy"
+              href="/privacy-policy"
               className="text-white/40 hover:text-white transition-colors text-xs"
             >
               Privacy Policy

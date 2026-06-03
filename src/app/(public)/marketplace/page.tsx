@@ -183,7 +183,7 @@ export default function MarketplacePage() {
         {/* Green glow */}
         <div className="absolute -top-24 right-1/4 w-96 h-96 rounded-full bg-[#2CC295]/10 blur-[100px] pointer-events-none" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-10 pb-14">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-14">
           {/* Breadcrumb */}
           <Link
             href="/dashboard"
@@ -243,7 +243,7 @@ export default function MarketplacePage() {
         </div>
 
         {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#F4F7F4] to-transparent" />
+        {/* <div className="absolute bottom-0 left-0 right-0 h-8" /> */}
       </div>
 
       {/* ── Body ──────────────────────────────────────────────────────────── */}

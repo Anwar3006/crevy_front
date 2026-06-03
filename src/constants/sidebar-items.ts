@@ -21,12 +21,6 @@ import type { TRole } from "@/types/user.types";
 export const getSidebarConfig = (role: TRole): SidebarConfig => {
   const commonAccountItems: SidebarItem[] = [
     {
-      title: "User Profile",
-      url: "/profile",
-      // @ts-expect-error
-      icon: User02Icon,
-    },
-    {
       title: "Notifications",
       url: "/notifications",
       // @ts-expect-error
@@ -38,6 +32,21 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       url: "/support",
       // @ts-expect-error
       icon: CustomerService01Icon,
+    },
+  ];
+
+  const transparencyItems: SidebarItem[] = [
+    {
+      title: "Public Registry",
+      url: "/public-registry",
+      // @ts-expect-error
+      icon: ViewIcon,
+    },
+    {
+      title: "Methodology",
+      url: "/methodology",
+      // @ts-expect-error
+      icon: CalculateIcon,
     },
   ];
 
@@ -80,6 +89,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               icon: MoneyReceiveIcon,
             },
           ],
+        },
+        {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
         },
         {
           title: "ACCOUNT PAGES",
@@ -144,6 +157,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           ],
         },
         {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
+        },
+        {
           title: "ACCOUNT PAGES",
           items: commonAccountItems,
         },
@@ -188,6 +205,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           ],
         },
         {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
+        },
+        {
           title: "ACCOUNT PAGES",
           items: commonAccountItems,
         },
@@ -225,6 +246,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               icon: MoneyReceiveIcon,
             },
           ],
+        },
+        {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
         },
         {
           title: "ACCOUNT PAGES",
@@ -272,6 +297,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           ],
         },
         {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
+        },
+        {
           title: "ACCOUNT PAGES",
           items: commonAccountItems,
         },
@@ -309,6 +338,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               icon: CheckListIcon,
             },
           ],
+        },
+        {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
         },
         {
           title: "ACCOUNT PAGES",
@@ -373,6 +406,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           ],
         },
         {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
+        },
+        {
           title: "ACCOUNT PAGES",
           items: commonAccountItems,
         },
@@ -416,6 +453,10 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               icon: CheckListIcon,
             },
           ],
+        },
+        {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
         },
         {
           title: "ACCOUNT PAGES",

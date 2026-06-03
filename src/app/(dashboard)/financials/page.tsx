@@ -1,26 +1,30 @@
 "use client";
 
-import { LicenseIcon, MoneyReceiveIcon } from "@hugeicons/core-free-icons";
-import { ArrowRight, ShieldCheck, Zap } from "lucide-react";
+// Consolidated all icons into lucide-react to prevent package errors
+import {
+  ArrowRight,
+  FileSignature,
+  Landmark,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 export default function FinancialsDashboard() {
-  const router = useRouter();
-
   const cards = [
     {
       title: "Payout Ledger",
       desc: "Track institutional disbursements, project yield settlements, and registry fees.",
-      icon: MoneyReceiveIcon,
+      // Replaced with Lucide equivalent
+      icon: Landmark,
       url: "/financials/payouts",
       color: "bg-emerald-50 text-emerald-600",
     },
     {
       title: "Contract Registry",
       desc: "Manage legal artifacts, purchase agreements, and framework contracts.",
-      icon: LicenseIcon,
+      // Replaced with Lucide equivalent
+      icon: FileSignature,
       url: "/financials/contracts",
       color: "bg-blue-50 text-blue-600",
     },
@@ -36,31 +40,35 @@ export default function FinancialsDashboard() {
           Financial <br /> Control Center
         </h1>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {cards.map((card, i) => (
-          <Link
-            key={i}
-            href={card.url}
-            className="bg-white border border-slate-200 rounded-[2.5rem] p-12 hover:shadow-2xl hover:border-emerald-500/30 transition-all group cursor-pointer block outline-none focus:ring-2 focus:ring-emerald-500/50"
-          >
-            <div
-              className={`w-16 h-16 ${card.color} rounded-2xl flex items-center justify-center mb-10 group-hover:scale-110 transition-transform duration-500`}
+        {cards.map((card, i) => {
+          // Extract the icon component so React treats it as a component
+          const Icon = card.icon;
+
+          return (
+            <Link
+              key={i}
+              href={card.url}
+              className="bg-white border border-slate-200 rounded-[2.5rem] p-12 hover:shadow-2xl hover:border-emerald-500/30 transition-all group cursor-pointer block outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
-              {/* @ts-expect-error */}
-              <card.icon size={32} />
-            </div>
-            <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-4">
-              {card.title}
-            </h2>
-            <p className="text-slate-500 font-medium text-lg leading-relaxed mb-10">
-              {card.desc}
-            </p>
-            <div className="p-0 text-slate-900 font-black uppercase tracking-widest text-[10px] group-hover:gap-4 transition-all inline-flex items-center">
-              Enter Module <ArrowRight size={16} className="ml-2" />
-            </div>
-          </Link>
-        ))}
+              <div
+                className={`w-16 h-16 ${card.color} rounded-2xl flex items-center justify-center mb-10 group-hover:scale-110 transition-transform duration-500`}
+              >
+                {/* Render the extracted component */}
+                <Icon size={32} />
+              </div>
+              <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-4">
+                {card.title}
+              </h2>
+              <p className="text-slate-500 font-medium text-lg leading-relaxed mb-10">
+                {card.desc}
+              </p>
+              <div className="p-0 text-slate-900 font-black uppercase tracking-widest text-[10px] group-hover:gap-4 transition-all inline-flex items-center">
+                Enter Module <ArrowRight size={16} className="ml-2" />
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
       {/* ── Summary Stats ── */}

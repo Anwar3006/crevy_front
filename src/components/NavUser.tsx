@@ -1,6 +1,12 @@
 "use client";
 
-import { BadgeCheck, ChevronsUpDown, Loader2, LogOut } from "lucide-react";
+import {
+  BadgeCheck,
+  ChevronsUpDown,
+  Loader2,
+  LogOut,
+  UserCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -115,8 +121,12 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
 
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <BadgeCheck className="h-4 w-4 mr-2" />
+                <UserCircle className="h-4 w-4 mr-2" />
                 My Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                <BadgeCheck className="h-4 w-4 mr-2" />
+                Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
 

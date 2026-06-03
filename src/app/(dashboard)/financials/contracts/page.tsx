@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
+  ArrowLeft,
   BadgeCheck,
   Download,
   ExternalLink,
@@ -9,6 +10,7 @@ import {
   Plus,
   ShieldCheck,
 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 // ─── Design Philosophy: High-End Legal Protocol ────────────────────────────
@@ -68,7 +70,6 @@ export default function ContractsPage() {
           <Plus size={16} /> New Agreement
         </button>
       </div>
-
       {/* ── Active Matrix ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {contracts.map((con, i) => (

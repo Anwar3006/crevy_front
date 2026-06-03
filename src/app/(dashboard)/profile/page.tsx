@@ -21,7 +21,13 @@ export default function ProfilePage() {
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ["user-profile", session?.user?.id],
-    queryFn: () => UserService.getUserProfile(session?.user?.id as string),
+    queryFn: async () => {
+      const response = await UserService.getUserProfile(
+        session?.user?.id as string,
+      );
+      console.log("Fetched user data:", response);
+      return response?.data || response;
+    },
     enabled: !!session?.user?.id,
   });
 

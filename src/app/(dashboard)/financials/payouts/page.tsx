@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowLeft,
   ArrowUpRight,
   CheckCircle2,
   Download,
@@ -8,6 +9,7 @@ import {
   Search,
   Wallet,
 } from "lucide-react";
+import Link from "next/link";
 import {
   Bar,
   BarChart,
@@ -60,7 +62,6 @@ export default function PayoutsPage() {
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* ── Chart Section ── */}
         <div className="lg:col-span-2 bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-sm">
