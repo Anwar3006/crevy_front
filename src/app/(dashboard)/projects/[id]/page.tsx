@@ -282,11 +282,33 @@ export default function ProjectDetailPage() {
               </div>
 
               {project.projectStatus === "active" && (
-                <Button className="w-full sm:w-auto h-14 px-10 rounded-2xl bg-[#2CC295] hover:bg-[#27a37b] text-white font-black uppercase tracking-widest text-xs shadow-[0_15px_30px_-5px_rgba(44,194,149,0.3)] group">
-                  <Zap className="w-4 h-4 mr-2 fill-current" />
-                  Purchase Carbon Credits
-                  <ArrowRightLeft className="w-4 h-4 ml-3 opacity-50 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <div className="flex flex-wrap gap-4 w-full sm:w-auto">
+                  <Button className="flex-1 sm:flex-none h-14 px-10 rounded-2xl bg-[#2CC295] hover:bg-[#27a37b] text-white font-black uppercase tracking-widest text-xs shadow-[0_15px_30px_-5px_rgba(44,194,149,0.3)] group">
+                    <Zap className="w-4 h-4 mr-2 fill-current" />
+                    Purchase Credits
+                    <ArrowRightLeft className="w-4 h-4 ml-3 opacity-50 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="flex-1 sm:flex-none h-14 px-8 rounded-2xl border-white/10 bg-white/5 text-white hover:bg-white/10 font-black uppercase tracking-widest text-[10px]"
+                  >
+                    <Link href={`/projects/${id}/telemetry`}>
+                      <Radio className="w-4 h-4 mr-2 text-[#2CC295]" />
+                      Telemetry
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="flex-1 sm:flex-none h-14 px-8 rounded-2xl border-white/10 bg-white/5 text-white hover:bg-white/10 font-black uppercase tracking-widest text-[10px]"
+                  >
+                    <Link href={`/projects/${id}/audit-log`}>
+                      <Clock className="w-4 h-4 mr-2 text-[#2CC295]" />
+                      Audit Log
+                    </Link>
+                  </Button>
+                </div>
               )}
 
               <div className="grid grid-cols-2 gap-4 w-full sm:w-auto">

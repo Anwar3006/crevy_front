@@ -12,10 +12,10 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-
+import Link from "next/link";
 import { Area, AreaChart, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
-
+import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
 import { CreditService } from "@/lib/services/credit-service";
 
@@ -174,18 +174,12 @@ export default function PortfolioOverview() {
                   </div>
                 </div>
                 <div className="flex gap-2 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleRetire(
-                        credit.id,
-                        parseFloat(credit.availableAmount),
-                      )
-                    }
-                    className="bg-slate-900 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg active:scale-95"
+                  <Button
+                    asChild
+                    className="bg-slate-900 hover:bg-emerald-600 text-white px-5 py-2.5 h-auto rounded-xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg active:scale-95"
                   >
-                    Retire
-                  </button>
+                    <Link href={`/portfolio/retire/${credit.id}`}>Retire</Link>
+                  </Button>
                   <a
                     href={`https://polygonscan.com/tx/${credit.blockchainTxHash}`}
                     target="_blank"

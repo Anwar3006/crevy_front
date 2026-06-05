@@ -123,7 +123,7 @@ export default function ProjectHero({ project, visual }: ProjectDetailProps) {
             </div>
 
             <Link
-              href={`/credits/purchase?projectId=${project.id}`}
+              href={`/marketplace/checkout?projectId=${project.id}`}
               className="flex h-16 w-full items-center justify-center gap-3 rounded-[1.5rem] bg-emerald-600 font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-900/20 transition-all active:scale-95 hover:bg-emerald-500 group/btn"
             >
               Initiate Credit Acquisition

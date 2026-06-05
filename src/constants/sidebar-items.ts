@@ -1,5 +1,6 @@
 import {
   AnalyticsUpIcon,
+  Building02Icon,
   CalculateIcon,
   CheckListIcon,
   CheckmarkCircle03Icon,
@@ -48,6 +49,12 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       // @ts-expect-error
       icon: CalculateIcon,
     },
+    {
+      title: "Carbon Ledger",
+      url: "/carbon-credits",
+      // @ts-expect-error
+      icon: CheckListIcon,
+    },
   ];
 
   const configs: Record<TRole, SidebarConfig> = {
@@ -60,10 +67,22 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           icon: DashboardSquareAddIcon,
         },
         {
-          title: "Compliance",
-          url: "/compliance",
+          title: "Projects",
+          url: "/projects",
           // @ts-expect-error
-          icon: CheckmarkCircle03Icon,
+          icon: ViewIcon,
+        },
+        {
+          title: "Track Verification",
+          url: "/track-verification",
+          // @ts-expect-error
+          icon: CheckListIcon,
+        },
+        {
+          title: "Project Owners",
+          url: "/project-owners",
+          // @ts-expect-error
+          icon: UserGroupIcon,
         },
       ],
       sections: [
@@ -77,15 +96,69 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               icon: UserGroupIcon,
             },
             {
-              title: "Projects",
-              url: "/projects",
+              title: "Compliance",
+              url: "/compliance",
               // @ts-expect-error
-              icon: ViewIcon,
+              icon: CheckmarkCircle03Icon,
             },
             {
               title: "Financial Control",
               url: "/financials",
               // @ts-expect-error
+              icon: MoneyReceiveIcon,
+            },
+          ],
+        },
+        {
+          title: "TRANSPARENCY",
+          items: transparencyItems,
+        },
+        {
+          title: "ACCOUNT PAGES",
+          items: commonAccountItems,
+        },
+      ],
+    },
+    admin: {
+      topItems: [
+        {
+          title: "Dashboard",
+          url: "/dashboard",
+          icon: DashboardSquareAddIcon,
+        },
+        {
+          title: "Projects",
+          url: "/projects",
+
+          icon: ViewIcon,
+        },
+        {
+          title: "Track Verification",
+          url: "/track-verification",
+
+          icon: CheckListIcon,
+        },
+        {
+          title: "Project Owners",
+          url: "/project-owners",
+
+          icon: UserGroupIcon,
+        },
+      ],
+      sections: [
+        {
+          title: "OVERSIGHT",
+          items: [
+            {
+              title: "User Management",
+              url: "/user-management",
+
+              icon: UserGroupIcon,
+            },
+            {
+              title: "Financial Control",
+              url: "/financials",
+
               icon: MoneyReceiveIcon,
             },
           ],
@@ -198,7 +271,7 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           items: [
             {
               title: "ESG Reports",
-              url: "/compliance",
+              url: "/compliance/reports",
               // @ts-expect-error
               icon: CheckmarkCircle03Icon,
             },
@@ -235,7 +308,7 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
             },
             {
               title: "Institutional Reports",
-              url: "/compliance",
+              url: "/compliance/reports",
               // @ts-expect-error
               icon: CheckmarkCircle03Icon,
             },
@@ -244,6 +317,12 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               url: "/financials",
               // @ts-expect-error
               icon: MoneyReceiveIcon,
+            },
+            {
+              title: "My Organization",
+              url: "/organization",
+              // @ts-expect-error
+              icon: Building02Icon,
             },
           ],
         },
@@ -294,6 +373,12 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               // @ts-expect-error
               icon: CalculateIcon,
             },
+            {
+              title: "Organization",
+              url: "/organization",
+              // @ts-expect-error
+              icon: Building02Icon,
+            },
           ],
         },
         {
@@ -336,6 +421,12 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
               url: "/track-verification",
               // @ts-expect-error
               icon: CheckListIcon,
+            },
+            {
+              title: "Organization Profile",
+              url: "/organization",
+              // @ts-expect-error
+              icon: Building02Icon,
             },
           ],
         },
@@ -425,7 +516,7 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
         },
         {
           title: "Register Project",
-          url: "/new-project",
+          url: "/projects/new",
           // @ts-expect-error
           icon: PropertyAddIcon,
         },

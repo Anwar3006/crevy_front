@@ -67,7 +67,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
         isNavSolid
-          ? "bg-myBlue/95 backdrop-blur-md border-b border-myGreen/20 py-3"
+          ? "bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 shadow-sm"
           : "bg-transparent",
       )}
     >
@@ -77,7 +77,8 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
           href="/"
           className={cn(
             "font-[family-name:var(--font-syne)] font-bold text-2xl transition-colors",
-            "text-white hover:text-myGreen",
+            isNavSolid ? "text-myBlue" : "text-white",
+            "hover:text-myGreen",
           )}
         >
           Crevy
@@ -91,7 +92,9 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
               href={link.href}
               className={cn(
                 "text-sm font-medium transition-colors",
-                "text-white/80 hover:text-myGreen",
+                isNavSolid
+                  ? "text-slate-600 hover:text-myGreen"
+                  : "text-white/80 hover:text-myGreen",
               )}
             >
               {link.name}
@@ -105,7 +108,14 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             <>
               {user ? (
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full backdrop-blur-sm">
+                  <div
+                    className={cn(
+                      "flex items-center gap-3 border px-4 py-1.5 rounded-full backdrop-blur-sm transition-colors",
+                      isNavSolid
+                        ? "bg-slate-50 border-slate-200"
+                        : "bg-white/5 border-white/10",
+                    )}
+                  >
                     <Avatar className="h-7 w-7 border border-myGreen/30">
                       <AvatarImage
                         src={user.image || undefined}
@@ -115,7 +125,12 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                         {getInitials(user.name)}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-xs font-bold text-white/90 uppercase tracking-wider leading-none">
+                    <span
+                      className={cn(
+                        "text-xs font-bold uppercase tracking-wider leading-none",
+                        isNavSolid ? "text-slate-900" : "text-white/90",
+                      )}
+                    >
                       {user.name.split(" ")[0]}
                     </span>
                   </div>
@@ -134,13 +149,18 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                   <Button
                     variant="ghost"
                     asChild
-                    className="text-white border border-white/30 hover:bg-white/10 hover:text-white"
+                    className={cn(
+                      "transition-all",
+                      isNavSolid
+                        ? "text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-myBlue"
+                        : "text-white border border-white/30 hover:bg-white/10 hover:text-white",
+                    )}
                   >
                     <Link href="/login">Login</Link>
                   </Button>
                   <Button
                     asChild
-                    className="bg-myGreen text-white hover:bg-myDarkGreen border-none"
+                    className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold"
                   >
                     <Link href="/register">Get Started</Link>
                   </Button>
@@ -153,7 +173,10 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
         {/* Mobile Menu Toggle */}
         <button
           type="button"
-          className="md:hidden text-white"
+          className={cn(
+            isNavSolid ? "text-slate-900" : "text-white",
+            "md:hidden",
+          )}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
           aria-expanded={isMobileMenuOpen}
@@ -186,7 +209,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
               </button>
             </div>
 
-            <nav className="flex flex-col space-y-6">
+            <nav className="flex flex-col space-y-6 text-left">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -214,7 +237,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                             {getInitials(user.name)}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
+                        <div className="text-left">
                           <p className="text-white font-bold leading-none">
                             {user.name}
                           </p>
