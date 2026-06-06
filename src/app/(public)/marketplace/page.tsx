@@ -4,14 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   ChevronDown,
-  Filter,
-  Leaf,
+  Globe2,
   RotateCcw,
   Search,
+  ShieldCheck,
   SlidersHorizontal,
   TrendingUp,
   X,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   useCallback,
@@ -80,13 +81,24 @@ const STATUSES = [
 ];
 
 const HERO_STATS = [
-  { value: "200+", label: "Verified Projects", icon: "🌱" },
-  { value: "$52", label: "Avg. Price / tCO₂e", icon: "💹" },
-  { value: "50K+", label: "tCO₂e Available", icon: "🌍" },
-  { value: "6", label: "Project Categories", icon: "📋" },
+  {
+    value: "200+",
+    label: "Verified Projects",
+    icon: <ShieldCheck size={18} />,
+  },
+  {
+    value: "$52.40",
+    label: "Avg. Price / tCO₂e",
+    icon: <TrendingUp size={18} />,
+  },
+  {
+    value: "50K+",
+    label: "tCO₂e Liquid Inventory",
+    icon: <Globe2 size={18} />,
+  },
 ];
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── Page Component ───────────────────────────────────────────────────────────
 
 export default function MarketplacePage() {
   const [filters, dispatch] = useReducer(filterReducer, INITIAL_FILTERS);
@@ -94,10 +106,8 @@ export default function MarketplacePage() {
   const [sortBy, setSortBy] = useState<"newest" | "impact" | "price">("newest");
   const searchRef = useRef<HTMLInputElement>(null);
 
-  // Defer the search input so typing never blocks the UI
   const deferredSearch = useDeferredValue(filters.search);
 
-  // Build query params for API — memoised so reference is stable
   const queryFilters = useMemo(
     () => ({
       region: filters.region || undefined,
@@ -117,7 +127,6 @@ export default function MarketplacePage() {
 
   const { data: projects, isLoading } = useMarketplace(queryFilters);
 
-  // Sorted projects — memoised so we only re-sort when projects or sort changes
   const sortedProjects = useMemo(() => {
     if (!projects) return [];
     const clone = [...projects] as Record<string, any>[];
@@ -129,7 +138,9 @@ export default function MarketplacePage() {
       );
     } else if (sortBy === "price") {
       clone.sort(
-        (a, b) => Number(a.pricePerTonne || 52) - Number(b.pricePerTonne || 52),
+        (a, b) =>
+          Number(a.pricePerCredit || a.pricePerTonne || 0) -
+          Number(b.pricePerCredit || b.pricePerTonne || 0),
       );
     }
     return clone;
@@ -144,7 +155,6 @@ export default function MarketplacePage() {
     [filters.region, filters.projectType, filters.status, filters.sdgs],
   );
 
-  // ── Stable callbacks ──────────────────────────────────────────────────────
   const setRegion = useCallback(
     (v: string) => dispatch({ type: "SET", key: "region", value: v }),
     [],
@@ -168,88 +178,95 @@ export default function MarketplacePage() {
   const resetFilters = useCallback(() => dispatch({ type: "RESET" }), []);
 
   return (
-    <div className="min-h-screen bg-[#F4F7F4]">
-      {/* ── Hero Banner ───────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-[#131927]">
-        {/* Subtle grid texture */}
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-        {/* Green glow */}
-        <div className="absolute -top-24 right-1/4 w-96 h-96 rounded-full bg-[#2CC295]/10 blur-[100px] pointer-events-none" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-14">
-          {/* Breadcrumb */}
+    <div className="min-h-screen bg-white font-sans selection:bg-slate-900 selection:text-white">
+      {/* ── Luxe Editorial Hero ───────────────────────────────────────────── */}
+      <div className="bg-slate-50 pt-24 pb-12 border-b border-slate-200">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 text-white/40 hover:text-white/70 text-xs font-semibold transition-colors mb-6 group"
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-900 text-[10px] font-bold uppercase tracking-widest transition-colors mb-8 group"
           >
-            <ArrowRight className="w-3 h-3 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
-            Dashboard
+            <ArrowRight className="w-3 h-3 rotate-180 group-hover:-translate-x-1 transition-transform" />
+            Return to Dashboard
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-end gap-8">
-            <div className="flex-1">
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="inline-flex items-center gap-2 bg-[#2CC295]/15 border border-[#2CC295]/20 text-[#2CC295] text-xs font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full mb-4">
-                  <TrendingUp className="w-3 h-3" />
-                  Live Carbon Marketplace
-                </div>
-                <h1 className="text-3xl md:text-4xl xl:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
-                  Invest in Africa&apos;s
-                  <br />
-                  <span className="text-[#2CC295]">Green Future</span>
-                </h1>
-                <p className="text-white/50 max-w-xl text-sm md:text-base leading-relaxed">
-                  Browse science-verified carbon credit projects across the
-                  continent. Every credit is independently audited and traceable
-                  to its source.
-                </p>
-              </motion.div>
+          <div className="mb-12">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <div className="w-8 h-[1px] bg-slate-900"></div>
+              <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                The Primary Marketplace
+              </span>
+              <div className="w-8 h-[1px] bg-slate-900"></div>
             </div>
 
-            {/* Stats strip */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-3"
-            >
-              {HERO_STATS.map((s) => (
-                <div
-                  key={s.label}
-                  className="bg-white/5 border border-white/8 rounded-2xl px-4 py-3 text-center min-w-[110px]"
-                >
-                  <div className="text-lg mb-0.5">{s.icon}</div>
-                  <p className="text-[#2CC295] font-extrabold text-xl leading-none">
+            <h1 className="text-5xl md:text-7xl font-serif text-slate-900 tracking-tight leading-[1.05] mb-6 max-w-4xl">
+              Curated Environmental Assets. <br />
+              <span className="italic text-slate-500">Global Impact.</span>
+            </h1>
+            <p className="text-slate-500 text-lg md:text-xl font-light leading-relaxed max-w-2xl">
+              Acquire verified carbon credits directly from high-integrity
+              projects across Africa. Every asset is strictly audited,
+              satellite-verified, and ready for immutable retirement.
+            </p>
+          </div>
+
+          {/* Asymmetrical Image Grid (Airbnb Luxe Inspiration) */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[400px] md:h-[500px] mb-12">
+            <div className="md:col-span-8 relative h-full group overflow-hidden bg-slate-200">
+              <Image
+                src="https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                alt="Canopy"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-1000"
+              />
+              <div className="absolute inset-0 bg-slate-900/10 transition-opacity group-hover:bg-transparent"></div>
+            </div>
+            <div className="hidden md:flex md:col-span-4 flex-col gap-4 h-full">
+              <div className="relative flex-1 group overflow-hidden bg-slate-200">
+                <Image
+                  src="https://images.pexels.com/photos/259280/pexels-photo-259280.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Soil"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                />
+              </div>
+              <div className="relative flex-1 group overflow-hidden bg-slate-200">
+                <Image
+                  src="https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Wind"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Bar */}
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 border-y border-slate-200 bg-white">
+            {HERO_STATS.map((s, idx) => (
+              <div key={idx} className="py-6 px-8 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-none border border-slate-200 flex items-center justify-center text-emerald-700 bg-slate-50">
+                  {s.icon}
+                </div>
+                <div>
+                  <p className="text-2xl font-mono text-slate-900 font-bold leading-none mb-1">
                     {s.value}
                   </p>
-                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider mt-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
                     {s.label}
                   </p>
                 </div>
-              ))}
-            </motion.div>
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Bottom fade */}
-        {/* <div className="absolute bottom-0 left-0 right-0 h-8" /> */}
       </div>
 
-      {/* ── Body ──────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
-        {/* Mobile: search + filter toggle row */}
-        <div className="flex gap-3 mb-6 xl:hidden">
+      {/* ── Market Interface ───────────────────────────────────────────────── */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12">
+        {/* Mobile Filter Toggle */}
+        <div className="flex gap-4 mb-8 xl:hidden">
           <SearchBar
             value={filters.search}
             onChange={setSearch}
@@ -259,21 +276,20 @@ export default function MarketplacePage() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className="relative flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:border-[#2CC295]/40 transition-colors shadow-sm shrink-0"
+            className="relative flex items-center gap-2 px-5 py-3 bg-slate-900 text-white font-bold text-[10px] uppercase tracking-widest transition-colors shrink-0"
           >
-            <SlidersHorizontal className="w-4 h-4" />
-            Filters
+            <SlidersHorizontal className="w-4 h-4" /> Filters
             {activeFilterCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#2CC295] text-white text-[10px] font-black flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center rounded-none border border-emerald-900">
                 {activeFilterCount}
               </span>
             )}
           </button>
         </div>
 
-        <div className="flex gap-8">
-          {/* ── Sidebar ─────────────────────────────────────────────────── */}
-          <aside className="hidden xl:block w-[260px] shrink-0">
+        <div className="flex gap-12 items-start">
+          {/* ── Institutional Sidebar ───────────────────────────────────── */}
+          <aside className="hidden xl:block w-[280px] shrink-0 sticky top-8">
             <FilterPanel
               filters={filters}
               activeFilterCount={activeFilterCount}
@@ -285,29 +301,28 @@ export default function MarketplacePage() {
             />
           </aside>
 
-          {/* ── Main ────────────────────────────────────────────────────── */}
+          {/* ── Main Grid ───────────────────────────────────────────────── */}
           <main className="flex-1 min-w-0">
-            {/* Desktop search + sort bar */}
-            <div className="hidden xl:flex items-center gap-4 mb-7">
-              <SearchBar
-                value={filters.search}
-                onChange={setSearch}
-                ref={searchRef}
-                className="flex-1"
-              />
-              <SortSelector value={sortBy} onChange={setSortBy} />
-            </div>
-
-            {/* Mobile sort */}
-            <div className="xl:hidden mb-5 flex justify-end">
+            {/* Desktop Toolbar */}
+            <div className="hidden xl:flex items-center justify-between gap-6 mb-8 border-b border-slate-200 pb-6">
+              <div className="w-1/2">
+                <SearchBar
+                  value={filters.search}
+                  onChange={setSearch}
+                  ref={searchRef}
+                />
+              </div>
               <SortSelector value={sortBy} onChange={setSortBy} />
             </div>
 
             {/* Result count */}
             {!isLoading && (
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-5">
-                {sortedProjects.length} project
-                {sortedProjects.length !== 1 ? "s" : ""} found
+              <p className="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-6">
+                Query Returned:{" "}
+                <span className="text-slate-900 font-bold">
+                  {sortedProjects.length}
+                </span>{" "}
+                verified assets
               </p>
             )}
 
@@ -315,16 +330,15 @@ export default function MarketplacePage() {
             {isLoading ? (
               <SkeletonGrid />
             ) : sortedProjects.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
                 {sortedProjects.map((p, idx) => (
                   <motion.div
                     key={p.id as string}
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      delay: Math.min(idx * 0.06, 0.4),
-                      duration: 0.45,
-                      ease: "easeOut",
+                      delay: Math.min(idx * 0.05, 0.3),
+                      duration: 0.4,
                     }}
                   >
                     <ProjectCard project={p} />
@@ -349,28 +363,29 @@ export default function MarketplacePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-40"
+              className="fixed inset-0 bg-slate-900/60 z-40 backdrop-blur-sm"
               onClick={() => setMobileFiltersOpen(false)}
             />
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 260 }}
-              className="fixed inset-y-0 left-0 w-80 bg-white z-50 shadow-2xl overflow-y-auto"
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed inset-y-0 left-0 w-[85vw] max-w-[340px] bg-white z-50 shadow-2xl overflow-y-auto border-r border-slate-200"
             >
-              <div className="flex items-center justify-between p-5 border-b border-gray-100">
-                <h2 className="font-extrabold text-[#131927]">Filters</h2>
+              <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-slate-50">
+                <h2 className="font-serif text-xl text-slate-900">
+                  Screener Filters
+                </h2>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                  aria-label="Close filters"
+                  className="p-2 text-slate-400 hover:text-slate-900 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-5">
+              <div className="p-6">
                 <FilterPanel
                   filters={filters}
                   activeFilterCount={activeFilterCount}
@@ -389,7 +404,7 @@ export default function MarketplacePage() {
   );
 }
 
-// ─── Filter Panel ─────────────────────────────────────────────────────────────
+// ─── Filter Panel (Editorial Style) ──────────────────────────────────────────
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -411,44 +426,35 @@ function FilterPanel({
   onReset,
 }: FilterPanelProps) {
   return (
-    <div className="sticky top-6 space-y-1">
-      {/* Header */}
-      <div className="flex items-center justify-between px-1 mb-4">
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-[#2CC295]" />
-          <span className="font-extrabold text-[#131927] text-sm">Filters</span>
-          {activeFilterCount > 0 && (
-            <span className="bg-[#2CC295] text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">
-              {activeFilterCount}
-            </span>
-          )}
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b-2 border-slate-900">
+        <span className="font-bold text-[10px] uppercase tracking-[0.2em] text-slate-900">
+          Market Screener
+        </span>
         {activeFilterCount > 0 && (
           <button
             type="button"
             onClick={onReset}
-            className="text-xs text-gray-400 hover:text-[#2CC295] transition-colors flex items-center gap-1 font-semibold"
+            className="text-[10px] text-slate-400 hover:text-slate-900 uppercase tracking-widest font-bold flex items-center gap-1 transition-colors"
           >
-            <RotateCcw className="w-3 h-3" />
-            Reset
+            <RotateCcw className="w-3 h-3" /> Reset
           </button>
         )}
       </div>
 
-      {/* Region */}
-      <FilterSection title="Region">
-        <div className="space-y-2">
+      <FilterSection title="Geographic Region">
+        <div className="space-y-1">
           <button
             type="button"
             onClick={() => onRegion("")}
             className={cn(
-              "w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition-colors",
+              "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-widest transition-colors",
               !filters.region
-                ? "bg-[#131927] text-white"
-                : "text-gray-500 hover:bg-gray-50",
+                ? "bg-slate-900 text-white"
+                : "text-slate-500 hover:bg-slate-50",
             )}
           >
-            All Regions
+            Global Index
           </button>
           {REGIONS.map((r) => (
             <button
@@ -456,10 +462,10 @@ function FilterPanel({
               key={r}
               onClick={() => onRegion(r)}
               className={cn(
-                "w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition-colors",
+                "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-widest transition-colors",
                 filters.region === r
-                  ? "bg-[#131927] text-white"
-                  : "text-gray-500 hover:bg-gray-50",
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-500 hover:bg-slate-50",
               )}
             >
               {r}
@@ -468,20 +474,19 @@ function FilterPanel({
         </div>
       </FilterSection>
 
-      {/* Project Type */}
-      <FilterSection title="Project Type">
-        <div className="space-y-1.5">
+      <FilterSection title="Methodology Type">
+        <div className="space-y-1">
           <button
             type="button"
             onClick={() => onProjectType("")}
             className={cn(
-              "w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition-colors",
+              "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-widest transition-colors",
               !filters.projectType
-                ? "bg-[#2CC295]/10 text-[#2CC295]"
-                : "text-gray-500 hover:bg-gray-50",
+                ? "bg-slate-900 text-white"
+                : "text-slate-500 hover:bg-slate-50",
             )}
           >
-            All Types
+            All Methodologies
           </button>
           {PROJECT_TYPES.map((t) => (
             <button
@@ -489,10 +494,10 @@ function FilterPanel({
               key={t.id}
               onClick={() => onProjectType(t.id)}
               className={cn(
-                "w-full text-left px-3 py-2 rounded-xl text-sm font-semibold transition-colors",
+                "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-widest transition-colors",
                 filters.projectType === t.id
-                  ? "bg-[#2CC295]/10 text-[#2CC295]"
-                  : "text-gray-500 hover:bg-gray-50",
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-500 hover:bg-slate-50",
               )}
             >
               {t.title}
@@ -501,28 +506,35 @@ function FilterPanel({
         </div>
       </FilterSection>
 
-      {/* Verification */}
-      <FilterSection title="Verification">
+      <FilterSection title="Audit Status">
         <RadioGroup
           value={filters.status || "all"}
           onValueChange={(v) => onStatus(v === "all" ? "" : v)}
-          className="space-y-2"
+          className="space-y-3 pt-2"
         >
-          <div className="flex items-center gap-2">
-            <RadioGroupItem value="all" id="status-all" />
+          <div className="flex items-center gap-3">
+            <RadioGroupItem
+              value="all"
+              id="status-all"
+              className="border-slate-300 text-slate-900"
+            />
             <Label
               htmlFor="status-all"
-              className="text-sm font-semibold text-gray-600 cursor-pointer"
+              className="text-xs font-bold uppercase tracking-widest text-slate-600 cursor-pointer"
             >
-              All Status
+              All Statuses
             </Label>
           </div>
           {STATUSES.map((s) => (
-            <div key={s.value} className="flex items-center gap-2">
-              <RadioGroupItem value={s.value} id={`status-${s.value}`} />
+            <div key={s.value} className="flex items-center gap-3">
+              <RadioGroupItem
+                value={s.value}
+                id={`status-${s.value}`}
+                className="border-slate-300 text-slate-900"
+              />
               <Label
                 htmlFor={`status-${s.value}`}
-                className="text-sm font-semibold text-gray-600 cursor-pointer"
+                className="text-xs font-bold uppercase tracking-widest text-slate-600 cursor-pointer"
               >
                 {s.label}
               </Label>
@@ -531,42 +543,29 @@ function FilterPanel({
         </RadioGroup>
       </FilterSection>
 
-      {/* SDGs */}
-      <FilterSection title="SDGs">
-        <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+      <FilterSection title="UN SDGs">
+        <div className="space-y-3 max-h-60 overflow-y-auto pr-2 pt-2 custom-scrollbar">
           {SDGS.map((sdg) => (
-            <div key={sdg.id} className="flex items-center gap-2">
+            <div key={sdg.id} className="flex items-start gap-3">
               <Checkbox
                 id={`sdg-${sdg.id}`}
                 checked={filters.sdgs.includes(sdg.id)}
                 onCheckedChange={() => onToggleSdg(sdg.id)}
+                className="mt-0.5 rounded-none border-slate-300 data-[state=checked]:bg-slate-900 data-[state=checked]:border-slate-900"
               />
               <Label
                 htmlFor={`sdg-${sdg.id}`}
-                className="text-xs font-semibold text-gray-600 cursor-pointer leading-snug"
+                className="text-xs font-medium text-slate-600 cursor-pointer leading-tight"
               >
-                <span className="font-black text-gray-400">#{sdg.id}</span>{" "}
+                <span className="font-mono font-bold text-emerald-700 mr-1">
+                  #{sdg.id}
+                </span>
                 {sdg.title}
               </Label>
             </div>
           ))}
         </div>
       </FilterSection>
-
-      {/* Help block */}
-      <div className="mt-3 bg-[#131927] rounded-2xl p-5">
-        <Leaf className="w-5 h-5 text-[#2CC295] mb-2" />
-        <p className="text-white font-bold text-sm mb-1">Need guidance?</p>
-        <p className="text-white/50 text-xs leading-relaxed mb-3">
-          Our experts can help you evaluate projects for your portfolio.
-        </p>
-        <Link
-          href="/support"
-          className="text-[#2CC295] text-xs font-bold hover:underline"
-        >
-          Talk to our team →
-        </Link>
-      </div>
     </div>
   );
 }
@@ -580,11 +579,11 @@ function FilterSection({
 }) {
   const [open, setOpen] = useState(true);
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden mb-2">
+    <div className="border-b border-slate-200 pb-4">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3.5 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-[#131927] transition-colors"
+        className="w-full flex items-center justify-between py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 hover:text-emerald-700 transition-colors"
       >
         {title}
         <ChevronDown
@@ -594,12 +593,23 @@ function FilterSection({
           )}
         />
       </button>
-      {open && <div className="px-4 pb-4">{children}</div>}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="pt-2">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-// ─── Search Bar ───────────────────────────────────────────────────────────────
+// ─── Search Bar (Minimalist) ───────────────────────────────────────────────────
 
 const SearchBar = ({
   value,
@@ -613,21 +623,20 @@ const SearchBar = ({
   ref?: React.Ref<HTMLInputElement>;
 }) => (
   <div className={cn("relative group", className)}>
-    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#2CC295] transition-colors pointer-events-none" />
+    <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors pointer-events-none" />
     <input
       ref={ref}
       type="search"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder="Search projects, regions, types…"
-      className="w-full h-12 bg-white border border-gray-200 rounded-xl pl-11 pr-4 text-sm font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#2CC295]/50 focus:ring-3 focus:ring-[#2CC295]/10 shadow-sm transition-all"
+      placeholder="Query by asset, region, or serial..."
+      className="w-full bg-transparent border-none border-b-2 border-slate-200 pl-8 pr-8 py-2 text-base md:text-lg font-serif text-slate-900 placeholder:text-slate-300 placeholder:font-sans placeholder:text-base focus:outline-none focus:border-slate-900 transition-colors rounded-none"
     />
     {value && (
       <button
         type="button"
         onClick={() => onChange("")}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-        aria-label="Clear search"
+        className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-colors"
       >
         <X className="w-4 h-4" />
       </button>
@@ -645,17 +654,17 @@ function SortSelector({
   onChange: (v: "newest" | "impact" | "price") => void;
 }) {
   return (
-    <div className="relative">
+    <div className="relative shrink-0">
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as any)}
-        className="appearance-none h-12 bg-white border border-gray-200 rounded-xl pl-4 pr-8 text-sm font-semibold text-gray-700 focus:outline-none focus:border-[#2CC295]/50 shadow-sm cursor-pointer"
+        className="appearance-none bg-transparent border border-slate-300 rounded-none pl-4 pr-10 py-2.5 text-[10px] font-bold uppercase tracking-widest text-slate-900 focus:outline-none focus:border-slate-900 cursor-pointer hover:border-slate-500 transition-colors"
       >
-        <option value="newest">Sort: Newest</option>
-        <option value="impact">Sort: Highest Impact</option>
+        <option value="newest">Sort: Newly Listed</option>
+        <option value="impact">Sort: Max Impact</option>
         <option value="price">Sort: Lowest Price</option>
       </select>
-      <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
     </div>
   );
 }
@@ -664,22 +673,21 @@ function SortSelector({
 
 function SkeletonGrid() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="h-[460px] bg-white rounded-3xl animate-pulse border border-gray-100"
+          className="h-[500px] border border-slate-200 bg-white animate-pulse flex flex-col"
         >
-          <div className="h-56 bg-gray-100 rounded-t-3xl" />
-          <div className="p-5 space-y-3">
-            <div className="h-4 bg-gray-100 rounded-full w-1/3" />
-            <div className="h-6 bg-gray-100 rounded-full w-3/4" />
-            <div className="h-3 bg-gray-100 rounded-full w-1/2" />
-            <div className="grid grid-cols-3 gap-3 pt-4">
-              {[1, 2, 3].map((j) => (
-                <div key={j} className="h-16 bg-gray-50 rounded-2xl" />
-              ))}
+          <div className="h-56 bg-slate-100" />
+          <div className="p-6 flex-1 flex flex-col space-y-4">
+            <div className="h-6 bg-slate-100 w-3/4" />
+            <div className="h-4 bg-slate-100 w-1/2" />
+            <div className="mt-auto grid grid-cols-2 gap-4">
+              <div className="h-12 bg-slate-50" />
+              <div className="h-12 bg-slate-50" />
             </div>
+            <div className="h-12 bg-slate-100 w-full mt-4" />
           </div>
         </div>
       ))}
@@ -697,26 +705,25 @@ function EmptyState({
   hasFilters: boolean;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-20 h-20 bg-white border border-gray-100 rounded-full flex items-center justify-center mb-6 shadow-sm">
-        <Leaf className="w-9 h-9 text-gray-300" />
+    <div className="flex flex-col items-center justify-center py-32 text-center border border-slate-200 bg-slate-50">
+      <div className="w-16 h-16 border border-slate-300 flex items-center justify-center mb-6 bg-white">
+        <Search className="w-6 h-6 text-slate-300" />
       </div>
-      <h3 className="text-xl font-extrabold text-[#131927] mb-2">
-        No projects found
+      <h3 className="text-2xl font-serif text-slate-900 mb-2">
+        No Assets Match Criteria
       </h3>
-      <p className="text-gray-500 text-sm mb-6 max-w-xs leading-relaxed">
+      <p className="text-slate-500 text-sm mb-8 max-w-sm">
         {hasFilters
-          ? "Try adjusting your filters to find more projects."
-          : "No projects are available at the moment. Check back soon."}
+          ? "Adjust your screener parameters to view available inventory."
+          : "The marketplace currently has no liquid inventory matching this query."}
       </p>
       {hasFilters && (
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#131927] text-white rounded-xl text-sm font-bold hover:bg-[#1e2d40] transition-colors"
+          className="px-6 py-3 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
         >
-          <RotateCcw className="w-4 h-4" />
-          Reset Filters
+          Clear Screener Filters
         </button>
       )}
     </div>

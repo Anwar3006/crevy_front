@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
-import type { Control, FieldPath, FieldValues } from "react-hook-form";
+import type { FieldPath, FieldValues } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar"; // You'll need to create this using react-day-picker

@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   ChevronRight,
   CreditCard,
-  Globe,
   Info,
   ShieldCheck,
   Wallet,
@@ -34,7 +33,8 @@ export default function PurchaseCreditsPage() {
   // 1. Fetch Project Details for Checkout Context
   const { data: projectRes, isLoading } = useQuery({
     queryKey: ["project-checkout", projectId],
-    queryFn: () => ProjectService.getProjectMarketplaceDetail(projectId!),
+    queryFn: () =>
+      ProjectService.getProjectMarketplaceDetail(projectId as string),
     enabled: !!projectId,
   });
 
@@ -130,7 +130,7 @@ export default function PurchaseCreditsPage() {
                         value={quantity}
                         onChange={(e) =>
                           setQuantity(
-                            Math.max(1, parseInt(e.target.value) || 0),
+                            Math.max(1, parseInt(e.target.value, 10) || 0),
                           )
                         }
                         className="h-16 text-3xl font-black rounded-2xl border-2 border-slate-100 focus:border-emerald-500 transition-all"

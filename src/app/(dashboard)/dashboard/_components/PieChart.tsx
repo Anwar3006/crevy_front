@@ -106,7 +106,6 @@ export const DonutChart = ({
               /* Use a <g> tag with role="button" to satisfy a11y requirements */
               <g
                 key={s.i}
-                // biome-ignore lint/a11y/useSemanticElements: SVG elements cannot be buttons
                 role="button"
                 tabIndex={0}
                 aria-label={`${s.label}: ${s.pct}%`}

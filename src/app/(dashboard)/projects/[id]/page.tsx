@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Activity,
   ArrowRightLeft,
@@ -18,7 +18,6 @@ import {
   Loader2,
   MapPin,
   Radio,
-  Ruler,
   ShieldCheck,
   Tag,
   Zap,
@@ -35,14 +34,14 @@ import { cn } from "@/lib/utils";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const statusPill: Record<string, string> = {
+const _statusPill: Record<string, string> = {
   draft: "bg-gray-100 text-gray-500",
   active: "bg-myGreen/10 text-myDarkGreen",
   suspended: "bg-red-50 text-red-600",
   closed: "bg-slate-100 text-slate-500",
 };
 
-const stagePill: Record<string, string> = {
+const _stagePill: Record<string, string> = {
   registration: "bg-amber-50 text-amber-700",
   active: "bg-blue-50 text-blue-700",
   verification: "bg-purple-50 text-purple-700",
@@ -122,7 +121,7 @@ export default function ProjectDetailPage() {
     enabled: !!id && activeTab === "history",
   });
 
-  const { data: anchorRes, isLoading: loadingAnchors } = useQuery({
+  const { data: anchorRes } = useQuery({
     queryKey: ["project-anchors", id],
     queryFn: () => ProjectService.getProjectAnchors(id),
     enabled: !!id,
@@ -143,7 +142,7 @@ export default function ProjectDetailPage() {
     .reduce((sum: number, v: any) => sum + Number(v.netCreditsIssued), 0);
 
   const formatSeq = (num: number) => {
-    if (num >= 1000) return (num / 1000).toFixed(1) + "k";
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
     return num.toFixed(1);
   };
 

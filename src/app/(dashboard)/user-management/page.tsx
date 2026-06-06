@@ -26,9 +26,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type React from "react";
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
 import { InviteAdminModal } from "@/components/InviteAdminModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -91,7 +89,7 @@ export default function UserManagementPage() {
   const { data: session } = authClient.useSession();
   const sessionUser = session?.user as any;
   const isSuperAdmin = sessionUser?.role === "super_admin";
-  const router = useRouter();
+  const _router = useRouter();
 
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 

@@ -39,9 +39,15 @@ export const DashboardLayoutClient = ({
 
         {/* Main Content */}
         <main className="flex flex-1 flex-col">
-          {/* Dashboard Header */}
+          {/* Dashboard Header - Hidden on deep-dive management and asset pages */}
           {!pathname.startsWith("/projects") &&
-            !pathname.startsWith("/financials") && (
+            !pathname.startsWith("/financials") &&
+            !pathname.startsWith("/portfolio") &&
+            !pathname.startsWith("/compliance") &&
+            !pathname.startsWith("/track-verification") &&
+            !pathname.startsWith("/project-owners") &&
+            !pathname.startsWith("/user-management") &&
+            !pathname.startsWith("/credits-ledger") && (
               <div className="mb-6 px-4 md:px-6 shadow-lg shadow-gray-200">
                 <DashboardHeader user={user} />
               </div>

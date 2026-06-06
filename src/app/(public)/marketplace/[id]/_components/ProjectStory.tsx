@@ -3,7 +3,6 @@
 import {
   BadgeCheck,
   ExternalLink,
-  FlaskConical,
   Globe,
   Layers,
   Shield,

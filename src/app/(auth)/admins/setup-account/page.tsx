@@ -39,7 +39,7 @@ function AdminSetupContent() {
 
       toast.success("Account setup successful!");
       router.push("/login");
-    } catch (error) {
+    } catch (_error) {
       toast.error("An error occurred during setup");
     } finally {
       setLoading(false);

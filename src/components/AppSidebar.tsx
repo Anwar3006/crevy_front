@@ -71,7 +71,6 @@ export function AppSidebar({
 
   return (
     <Sidebar {...props} className="border-r-0 bg-[#2ebc8d]" collapsible="icon">
-      {/* ... (Header remains same) ... */}
       <SidebarHeader className="pt-8 pb-4">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center gap-3">

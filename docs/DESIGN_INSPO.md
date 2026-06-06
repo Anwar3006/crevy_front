@@ -27,6 +27,11 @@ This document maps each inspiration resource to the Crevy pages where it should 
 
 ---
 
+- For Buyer Dashboard inspo - https://dribbble.com/shots/27216264-GreenLedger-Enterprise-ESG-Carbon-Tracking-Dashboard - https://dribbble.com/shots/24851190-Carbon-Footprint-Reduction-SaaS-Application
+- For Project Owner - Internals - https://dribbble.com/shots/18781231-CX2-Carbon-Credit-Platform-Website
+- Landing page - https://dribbble.com/shots/25271958-Case-Study-Superly-Identity-and-Website-Design
+
+
 ## Marketplace
 
 ### Observable — observablehq.com

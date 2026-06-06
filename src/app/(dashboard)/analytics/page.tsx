@@ -1,25 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Activity,
-  ArrowUpRight,
   BarChart3,
-  ChevronDown,
   Download,
   Filter,
-  Layers,
-  Leaf,
-  LineChart,
-  PieChart as PieChartIcon,
-  ShieldCheck,
   TrendingUp,
 } from "lucide-react";
 import {
   Area,
   AreaChart,
-  Bar,
-  BarChart,
   CartesianGrid,
   Cell,
   Pie,
@@ -185,7 +175,7 @@ export default function AnalyticsDashboardPage() {
                     paddingAngle={8}
                     dataKey="value"
                   >
-                    {distributionData.map((entry, index) => (
+                    {distributionData.map((_entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}

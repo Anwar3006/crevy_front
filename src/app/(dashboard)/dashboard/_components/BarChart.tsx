@@ -148,7 +148,6 @@ export const GroupedBarChart = ({
                 opacity={isHovA ? 1 : 0.85}
                 onMouseEnter={() => setHovered({ i, which: "a" })}
                 className="cursor-pointer transition-opacity"
-                // biome-ignore lint/a11y/useSemanticElements: SVG elements cannot be buttons
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) =>
@@ -167,7 +166,6 @@ export const GroupedBarChart = ({
                 opacity={isHovB ? 0.7 : 0.35}
                 onMouseEnter={() => setHovered({ i, which: "b" })}
                 className="cursor-pointer transition-opacity"
-                // biome-ignore lint/a11y/useSemanticElements: SVG elements cannot be buttons
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) =>

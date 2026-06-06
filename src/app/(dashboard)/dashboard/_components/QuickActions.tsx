@@ -68,7 +68,6 @@ const QuickActions = ({ role }: QuickActionsProps) => {
             href: "/track-verification",
           },
         ];
-      case "project_owner":
       default:
         return [
           {

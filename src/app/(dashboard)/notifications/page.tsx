@@ -1,23 +1,15 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
   CheckCircle2,
   ChevronRight,
   Clock,
-  Filter,
-  Info,
-  Mail,
-  MoreVertical,
-  Search,
   ShieldCheck,
   Zap,
 } from "lucide-react";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export default function NotificationsPage() {
   const [filter, setFilter] = useState("all");

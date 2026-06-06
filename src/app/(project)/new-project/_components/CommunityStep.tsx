@@ -5,7 +5,6 @@ import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { TCreateProject } from "@/constants/new-project";
 import { SDGSelection } from "./SDGSelection";
 
@@ -15,7 +14,7 @@ type CommunityStepProps = {
 };
 
 const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
-  const { control, watch, setValue } = useFormContext<TCreateProject>();
+  const { control, watch } = useFormContext<TCreateProject>();
   const projectType = watch("projectType") || "Regenerative Agriculture";
 
   return (

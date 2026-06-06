@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ArrowLeft,
   ArrowUpRight,
   CheckCircle2,
   Download,
@@ -9,7 +8,6 @@ import {
   Search,
   Wallet,
 } from "lucide-react";
-import Link from "next/link";
 import {
   Bar,
   BarChart,

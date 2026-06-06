@@ -1,7 +1,6 @@
 "use client";
 
-import { Info, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Info } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { CurrencySelect } from "@/components/CurrencySelect";
 import CustomDatePicker from "@/components/CustomDatePicker";
@@ -9,15 +8,7 @@ import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { CountryDropdown } from "@/components/ui/country-dropdown";
 import { Progress } from "@/components/ui/progress";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PROJECT_TYPES, type TCreateProject } from "@/constants/new-project";
-import { ProjectService } from "@/lib/services/project-service";
 
 const Step1_ProjectProfile = ({
   onNext,

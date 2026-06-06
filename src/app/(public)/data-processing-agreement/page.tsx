@@ -1,13 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Database,
-  FileLock,
-  Gavel,
-  ShieldCheck,
-  UserCheck,
-} from "lucide-react";
+import { Database, FileLock, UserCheck } from "lucide-react";
 
 export default function DataProcessingAgreementPage() {
   return (

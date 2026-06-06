@@ -16,7 +16,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { signInSchema, type TSignInInput } from "@/types/user.types";

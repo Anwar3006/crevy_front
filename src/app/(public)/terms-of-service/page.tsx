@@ -18,7 +18,6 @@ import {
   UserCheck,
   Wallet,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 

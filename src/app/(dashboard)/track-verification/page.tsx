@@ -1,56 +1,57 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, Clock, Loader2, Radio } from "lucide-react";
+import {
+  Activity,
+  Cpu,
+  FileText,
+  Hexagon,
+  Loader2,
+  Network,
+  Radio,
+} from "lucide-react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
 
-// ─── Pipeline configuration ───────────────────────────────────────────────────
+// ─── Pipeline Configuration ───────────────────────────────────────────────────
 
 const PIPELINE = [
   {
     key: "registration",
-    label: "Registered",
-    desc: "Profile created and documents submitted.",
-    icon: "📋",
+    label: "Project Baseline",
+    desc: "Documentation & boundary geo-fencing.",
+    icon: FileText,
   },
   {
     key: "active",
-    label: "Active",
-    desc: "Sensors deployed. Live MRV data flowing.",
-    icon: "📡",
+    label: "Telemetry Ingress",
+    desc: "Field-to-cloud observation payloads.", //
+    icon: Activity,
   },
   {
     key: "verification",
-    label: "Under Verification",
-    desc: "CraftedClimate reviewing MRV batch data.",
-    icon: "🔬",
+    label: "Worker Verification",
+    desc: "AI methodology inference & auditing.", //
+    icon: Cpu,
   },
   {
     key: "completed",
-    label: "Completed",
-    desc: "Credits issued and listed on marketplace.",
-    icon: "✅",
+    label: "On-Chain Anchor",
+    desc: "Polygon ledger state finality.", //
+    icon: Network,
   },
 ];
 
-const stageOrder: Record<string, number> = {
-  registration: 0,
-  active: 1,
-  verification: 2,
-  completed: 3,
+const statusStyles: Record<string, string> = {
+  draft: "text-slate-400 border-slate-200",
+  active: "text-emerald-700 border-emerald-700",
+  suspended: "text-red-700 border-red-700",
+  closed: "text-slate-900 border-slate-900",
 };
 
-const statusColor: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-500",
-  active: "bg-[#2cc295]/10 text-[#178a74]",
-  suspended: "bg-red-50 text-red-600",
-  closed: "bg-slate-100 text-slate-500",
-};
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── Page Component ───────────────────────────────────────────────────────────
 
 export default function TrackVerificationPage() {
   const { data: session } = authClient.useSession();
@@ -71,176 +72,173 @@ export default function TrackVerificationPage() {
   }, {});
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-[#131927]">
-          Track Verification
-        </h1>
-        <p className="text-slate-400 text-sm mt-0.5">
-          Follow your projects through each stage of the Crevy verification
-          pipeline.
-        </p>
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-slate-900 selection:text-white">
+      {/* Editorial Header */}
+      <div className="bg-white border-b border-slate-200 pt-16 pb-12">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="inline-flex items-center justify-center gap-3 mb-6">
+            <div className="w-8 h-[1px] bg-slate-900"></div>
+            <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em]">
+              Verification Matrix
+            </span>
+            <div className="w-8 h-[1px] bg-slate-900"></div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight mb-4">
+            Pipeline <span className="italic text-slate-500">Oversight.</span>
+          </h1>
+          <p className="text-slate-500 text-sm max-w-xl leading-relaxed">
+            Monitor the cryptographic lifecycle of your environmental assets.
+            Track projects from initial baseline registration through continuous
+            dMRV observation, down to final ledger anchoring.
+          </p>
+        </div>
       </div>
 
-      {/* Pipeline legend */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-5">
-          Verification Pipeline
-        </p>
-        <div className="relative flex items-start overflow-x-auto">
-          <div className="absolute left-4 top-4 h-0.5 w-[calc(100%-2rem)] bg-slate-100 min-w-[300px]" />
-          {PIPELINE.map((stage, idx) => (
-            <div
-              key={stage.key}
-              className="relative z-10 flex-1 flex flex-col items-center text-center gap-2 px-2 min-w-[100px]"
+      <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10">
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex flex-col items-center justify-center py-32 text-slate-400">
+            <Loader2 className="h-6 w-6 animate-spin mb-4" />
+            <span className="text-xs font-mono uppercase tracking-widest">
+              Querying Ledger...
+            </span>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && projects.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-32 text-center border border-slate-200 bg-white">
+            <Hexagon
+              className="h-12 w-12 text-slate-300 mb-6"
+              strokeWidth={1}
+            />
+            <p className="font-serif text-2xl text-slate-900 mb-2">
+              The matrix is empty.
+            </p>
+            <p className="text-slate-500 text-sm mb-8 max-w-sm">
+              Register an environmental project to initialize the data ingestion
+              and verification pipeline.
+            </p>
+            <Link
+              href="/new-project"
+              className="inline-flex items-center justify-center px-8 py-3 bg-slate-900 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-800 transition-colors"
             >
-              <div
-                className={cn(
-                  "h-8 w-8 rounded-full flex items-center justify-center border-2 text-sm",
-                  "border-slate-200 bg-white text-slate-400",
-                )}
-              >
-                {idx + 1}
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
-                {stage.label}
-              </span>
-              <span className="hidden sm:block text-[9px] text-slate-400 leading-tight px-1">
-                {stage.desc}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Loading state */}
-      {isLoading && (
-        <div className="flex items-center justify-center gap-3 py-20 text-slate-400">
-          <Loader2 className="h-5 w-5 animate-spin" />
-          <span className="text-sm">Loading projects…</span>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!isLoading && projects.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-          <div className="h-16 w-16 rounded-2xl bg-slate-50 flex items-center justify-center text-3xl">
-            📋
+              Initialize Project
+            </Link>
           </div>
-          <div>
-            <p className="font-semibold text-slate-700">
-              No projects to track yet
-            </p>
-            <p className="text-slate-400 text-sm mt-1">
-              Register your first project to begin the verification journey.
-            </p>
-          </div>
-          <Link
-            href="/new-project"
-            className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[#2cc295] px-6 py-3 text-sm font-bold text-white hover:bg-[#178a74] transition-colors"
-          >
-            Register a Project
-          </Link>
-        </div>
-      )}
+        )}
 
-      {/* Kanban columns */}
-      {!isLoading && projects.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          {PIPELINE.map((stage) => {
-            const stageProjects = grouped[stage.key] ?? [];
+        {/* Kanban Matrix */}
+        {!isLoading && projects.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-0 xl:divide-x divide-slate-200 border-y border-slate-200 bg-white shadow-sm">
+            {PIPELINE.map((stage, index) => {
+              const stageProjects = grouped[stage.key] ?? [];
+              const Icon = stage.icon;
 
-            return (
-              <div key={stage.key} className="space-y-3">
-                {/* Column header */}
-                <div className="flex items-center justify-between px-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">{stage.icon}</span>
-                    <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">
-                      {stage.label}
-                    </span>
-                  </div>
-                  {stageProjects.length > 0 && (
-                    <span className="text-[10px] font-bold bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">
-                      {stageProjects.length}
-                    </span>
-                  )}
-                </div>
-
-                {/* Cards */}
-                <div className="space-y-3">
-                  {stageProjects.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-4 text-center">
-                      <p className="text-xs text-slate-400">No projects here</p>
+              return (
+                <div key={stage.key} className="flex flex-col h-full">
+                  {/* Column Header */}
+                  <div className="px-6 py-6 border-b border-slate-200 bg-slate-50/50">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-xs font-mono text-slate-400">
+                        [ 0{index + 1} ]
+                      </span>
+                      <Icon className="h-4 w-4 text-slate-400" />
                     </div>
-                  ) : (
-                    stageProjects.map((p: any) => (
-                      <Link
-                        key={p.id}
-                        href={`/projects/${p.id}`}
-                        className="block rounded-xl border border-gray-100 bg-white shadow-sm p-4 hover:border-emerald-200 hover:shadow-md transition-all"
-                      >
-                        {/* Project name */}
-                        <p className="text-sm font-bold text-[#131927] leading-snug">
-                          {p.name ?? p.code}
-                        </p>
+                    <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-1">
+                      {stage.label}
+                    </h2>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">
+                      {stage.desc}
+                    </p>
 
-                        {/* Type */}
-                        <p className="text-xs text-slate-400 mt-1 capitalize">
-                          {(p.projectType as string).replace(/_/g, " ")}
-                        </p>
+                    {/* Count Indicator */}
+                    <div className="mt-6 flex items-center gap-2">
+                      <div className="h-[1px] flex-1 bg-slate-200"></div>
+                      <span className="text-[10px] font-mono text-slate-400">
+                        {stageProjects.length} ASSETS
+                      </span>
+                      <div className="h-[1px] flex-1 bg-slate-200"></div>
+                    </div>
+                  </div>
 
-                        {/* Location */}
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          {p.region}, {p.country}
+                  {/* Column Cards */}
+                  <div className="p-4 flex-1 space-y-4 bg-slate-50/30">
+                    {stageProjects.length === 0 ? (
+                      <div className="h-32 border border-dashed border-slate-200 flex items-center justify-center">
+                        <p className="text-[10px] font-mono uppercase tracking-widest text-slate-300">
+                          Awaiting Data
                         </p>
-
-                        {/* Status + area */}
-                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
-                          <span
-                            className={cn(
-                              "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase",
-                              statusColor[p.projectStatus] ?? "",
-                            )}
-                          >
-                            {p.projectStatus}
-                          </span>
-                          {p.totalAreaHectares && (
-                            <span className="text-[10px] text-slate-400">
-                              {Number(p.totalAreaHectares).toFixed(1)} ha
+                      </div>
+                    ) : (
+                      stageProjects.map((p: any) => (
+                        <Link
+                          key={p.id}
+                          href={`/projects/${p.id}`}
+                          className="block bg-white border border-slate-200 p-5 hover:border-slate-900 hover:shadow-xl transition-all duration-300 group"
+                        >
+                          <div className="flex justify-between items-start mb-3">
+                            <span className="text-[10px] font-mono text-slate-400">
+                              {p.code || "PRJ-PENDING"}
                             </span>
-                          )}
-                        </div>
+                            <span
+                              className={cn(
+                                "text-[9px] font-bold uppercase tracking-widest border px-1.5 py-0.5",
+                                statusStyles[p.projectStatus] ??
+                                  statusStyles.draft,
+                              )}
+                            >
+                              {p.projectStatus}
+                            </span>
+                          </div>
 
-                        {/* Stage-specific context */}
-                        {stage.key === "verification" && (
-                          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-purple-600 font-medium">
-                            <Radio className="h-3 w-3" />
-                            MRV data under review
+                          <h3 className="font-serif text-lg text-slate-900 leading-tight mb-2 group-hover:text-emerald-800 transition-colors">
+                            {p.name ?? "Unnamed Initiative"}
+                          </h3>
+
+                          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-4">
+                            {(p.projectType as string)?.replace(/_/g, " ")}
+                            {" / "}
+                            {p.region}
                           </div>
-                        )}
-                        {stage.key === "active" && (
-                          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-blue-600 font-medium">
-                            <Clock className="h-3 w-3" />
-                            Awaiting sensor deployment
+
+                          <div className="pt-4 border-t border-slate-100 flex items-end justify-between">
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                Registered Area
+                              </span>
+                              <span className="text-sm font-mono text-slate-900">
+                                {p.totalAreaHectares
+                                  ? Number(p.totalAreaHectares).toFixed(1)
+                                  : "0.0"}{" "}
+                                ha
+                              </span>
+                            </div>
+
+                            {/* Stage-Specific Microcopy */}
+                            {stage.key === "verification" && (
+                              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-600">
+                                <Radio className="h-3 w-3 animate-pulse text-emerald-600" />
+                                INFERENCE_ACTIVE
+                              </div>
+                            )}
+                            {stage.key === "completed" && (
+                              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-600">
+                                <Network className="h-3 w-3 text-emerald-600" />
+                                TX_CONFIRMED
+                              </div>
+                            )}
                           </div>
-                        )}
-                        {stage.key === "completed" && (
-                          <div className="mt-2 flex items-center gap-1.5 text-[10px] text-[#178a74] font-medium">
-                            <CheckCircle2 className="h-3 w-3" />
-                            Credits issued
-                          </div>
-                        )}
-                      </Link>
-                    ))
-                  )}
+                        </Link>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

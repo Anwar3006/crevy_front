@@ -6,11 +6,9 @@ import {
   ArrowLeft,
   ChevronRight,
   CreditCard,
-  Info,
   Loader2,
   ShieldCheck,
   Wallet,
-  Zap,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -33,7 +31,10 @@ function CheckoutContent() {
   // 1. Fetch Project Details for Checkout Context
   const { data: projectRes, isLoading } = useQuery({
     queryKey: ["project-checkout", projectId],
-    queryFn: () => ProjectService.getProjectMarketplaceDetail(projectId!),
+    queryFn: () =>
+      projectId
+        ? ProjectService.getProjectMarketplaceDetail(projectId)
+        : Promise.reject("No Project ID"),
     enabled: !!projectId,
   });
 
@@ -42,10 +43,11 @@ function CheckoutContent() {
   const totalAmount = quantity * pricePerCredit;
 
   const handlePurchase = async () => {
+    if (!projectId) return;
     setIsProcessing(true);
     try {
       const creditsRes = await CreditService.getCarbonCredits({
-        projectId: projectId!,
+        projectId: projectId,
         creditStatus: "available",
         limit: 1,
       });
@@ -119,7 +121,7 @@ function CheckoutContent() {
                         value={quantity}
                         onChange={(e) =>
                           setQuantity(
-                            Math.max(1, parseInt(e.target.value) || 0),
+                            Math.max(1, parseInt(e.target.value, 10) || 0),
                           )
                         }
                         className="h-16 text-3xl font-black rounded-2xl border-2 border-slate-100 focus:border-emerald-500 transition-all"

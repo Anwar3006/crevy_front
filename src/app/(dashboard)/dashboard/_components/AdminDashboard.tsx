@@ -16,7 +16,7 @@ import { GroupedBarChart } from "./BarChart";
 import HeroSection from "./HeroSection";
 import { MultiLineChart } from "./LineChart";
 import OnboardingFlow from "./OnboardingFlow";
-import { RecentActivity, SectionLabel } from "./ProjectOwnerDashboard";
+import { SectionLabel } from "./ProjectOwnerDashboard";
 import { StatCard } from "./StatCard";
 import SystemHealth from "./SystemHealth";
 

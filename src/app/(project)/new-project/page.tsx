@@ -96,7 +96,7 @@ const NewProject = () => {
                 file,
                 storagePath,
               );
-              const fullUrl = StorageService.resolveUrl(objectKey) as string;
+              const _fullUrl = StorageService.resolveUrl(objectKey) as string;
 
               // 2. Register metadata on backend
               return ProjectService.uploadDocument(projectId, {

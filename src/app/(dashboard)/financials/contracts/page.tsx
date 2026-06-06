@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
   BadgeCheck,
   Download,
   ExternalLink,
@@ -10,7 +9,6 @@ import {
   Plus,
   ShieldCheck,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 // ─── Design Philosophy: High-End Legal Protocol ────────────────────────────

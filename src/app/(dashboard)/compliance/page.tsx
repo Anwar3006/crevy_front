@@ -4,7 +4,7 @@ import ESGPortfolioView from "./_components/ESGPortfolioView";
 
 export default function CompliancePage() {
   return (
-    <main className="p-4 lg:p-8 max-w-[1600px] mx-auto min-h-screen">
+    <main className="min-h-screen bg-white font-sans selection:bg-slate-900 selection:text-white">
       <ESGPortfolioView />
     </main>
   );

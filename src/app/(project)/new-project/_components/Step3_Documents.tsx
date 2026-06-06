@@ -31,7 +31,7 @@ const Step3_Documents = ({
   const { watch, setValue } = useFormContext<TCreateProject>();
   const documents = watch("documents") ?? {};
   const fileRefs = useRef<Record<string, HTMLInputElement | null>>({});
-  const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [_previews, setPreviews] = useState<Record<string, string>>({});
 
   // Count how many required slots are filled
   const requiredSlots = DOCUMENT_TYPES.filter((d) => d.required);

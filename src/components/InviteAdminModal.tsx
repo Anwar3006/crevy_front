@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
       toast.success("Admin invitation sent successfully");
       reset();
       onClose();
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to send invitation");
     } finally {
       setLoading(false);

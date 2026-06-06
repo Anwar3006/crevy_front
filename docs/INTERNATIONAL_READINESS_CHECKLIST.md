@@ -115,7 +115,7 @@ Security hardening, audit logging, email flows, marketplace buyer journey, ESG r
 | Immutable audit log table | ✅ Done | **Backend — Critical.** Create `src/v2/audit/models/audit_log.model.ts`: `id`, `actor_id`, `action` (enum: `create`, `update`, `delete`, `approve`, `issue`, `transfer`, `retire`), `resource`, `resource_id`, `old_values` (jsonb), `new_values` (jsonb), `ip_address`, `user_agent`, `created_at`. No `UPDATE` or `DELETE` allowed on this table — ever. Row-level security at DB level: `GRANT INSERT ON audit_log TO app_user` only. |
 | Audit log Synchonization | ✅ Done | Synchronous logging into the audit_log table via transactions for major modules in their service layers |
 | Audit log API | ✅ Done | `GET /api/v2/audit?resource=&resourceId=&actorId=&from=&to=` — super_admin only. Paginated cursor-based. |
-| Frontend audit trail view | ❌ Missing | "Audit Trail" tab on project detail page. Table: timestamp, actor, action, old → new values. |
+| Frontend audit trail view | ✅ Done | "Audit Trail" tab on project detail page. Table: timestamp, actor, action, old → new values. the audit log page, there for all authenticated users |
 | Audit log retention policy | ✅ Done | Minimum 7-year retention (Verra requirement). Document in data governance doc. Archive to cold storage after 2 years. Postgres CronJob to move records older than 90 days to an S3-compatible bucket. Uses 3 extensions: `pg_cron`, `pgduckdb`, `aws_s3` |
 
 ### 2.4 ESG Reporting
@@ -126,7 +126,7 @@ Security hardening, audit logging, email flows, marketplace buyer journey, ESG r
 | ESG report history | ✅ Done | `GET /api/v2/reports/esg/history` — returns list of previously generated reports stored in R2 |
 | Scope 1/2/3 emission breakdown in report | ✅ Done | Requires `emission_scope` field on `carbon_credit` (see 2.1) |
 | Certificate of retirement PDF | ✅ Done | Auto-generated when credits are retired. Includes: credit serial numbers, tCO₂e amount, project name, vintage, blockchain tx hash, Crevy seal. Package: `pdfkit` |
-| ESG dashboard for corporate buyers | ❌ Missing | Frontend: `/reports/esg` — visual breakdown of portfolio, downloadable PDF, shareable public URL |
+| ESG dashboard for corporate buyers | ✅ Done | Frontend: `/compliance/reports` — visual breakdown of portfolio, downloadable PDF, shareable public URL |
 
 ### 2.5 Carbon Price & Market Data
 
@@ -147,12 +147,12 @@ Security hardening, audit logging, email flows, marketplace buyer journey, ESG r
 | Public marketplace listing page | 🔧 Partial | Route exists, no real project cards |
 | `GET /api/v2/projects/marketplace` | ✅ Done | Add to `project.route.ts`: **no auth required**. Filters: `sector`, `projectType`, `country`, `region`, `minCredits`, `maxPricePerCredit`, `vintageYear`, `sdg`, `registry`. Returns projects with their available credit quantities aggregated from `carbon_credit` table. |
 | Project marketplace detail page | ✅ Done | `/marketplace/[projectId]` — project story, practices, SDG badges, MRV proof cards, available credit quantity, price, vintage, registry badges, "Buy Credits" CTA. |
-| Credit purchase flow (checkout) | ❌ Missing | **Frontend multi-step:** (1) select quantity → (2) select currency → (3) review total + emission scope → (4) payment → (5) confirmation. Call `POST /api/v2/credits/:id/purchase`. |
+| Credit purchase flow (checkout) | ✅ Done | **Frontend multi-step:** (1) select quantity → (2) select currency → (3) review total + emission scope → (4) payment → (5) confirmation. Call `POST /api/v2/credits/:id/purchase`. |
 | Payment gateway integration | ❌ Missing | **Stripe** for international buyers (`pnpm add stripe`). **Paystack** for African buyers (`pnpm add paystack`). Flow: create payment intent → buyer pays → confirm payment → mark transaction `completed` → issue credits to buyer. |
 | Payment webhook handler | ❌ Missing | `POST /api/v2/payments/stripe/webhook` and `/paystack/webhook`. Verify signature. On `payment_intent.succeeded` → call `CreditService.purchaseCarbonCredit()`. |
 | Buyer portfolio page | ✅ Done | `/portfolio` — buyer's owned credits: serial numbers, tCO₂e, project name, vintage, MRV proof link, retire button. |
-| Credit retirement flow | 🔧 Partial | Service exists, no frontend UI |
-| Retirement certificate download | ❌ Missing | Post-retirement PDF (see Section 2.4) |
+| Credit retirement flow | ✅ Done | Service exists, no frontend UI |
+| Retirement certificate download | ✅ Done | Post-retirement PDF (see Section 2.4) |
 | Marketplace SEO | ✅ Done | Each project marketplace page needs: `title`, `description`, `og:image`, `og:type: website`, `schema.org/Product` structured data for search engine indexing |
 
 ### 3.2 Payout Automation
@@ -176,7 +176,7 @@ Security hardening, audit logging, email flows, marketplace buyer journey, ESG r
 | Contract status management UI | ❌ Missing | `contract.status`: `draft → active → completed / terminated`. Admin approval step before `active`. |
 | Offtake agreement PDF generation | ❌ Missing | Generate legal PDF on contract activation. Contents: parties, quantity, price, schedule, Crevy T&Cs. Package: `pdfkit` |
 | Contract credit fulfilment tracking | ❌ Missing | Show how many of the committed credits have been delivered vs outstanding. |
-| Contract listing for buyers and admins | ❌ Missing | `/financials/contracts` — filterable list |
+| Contract listing for buyers and admins | ✅ Done | `/financials/contracts` — filterable list |
 
 ---
 
@@ -521,15 +521,15 @@ redis.on('error', (err) => console.error('[Redis]', err));
 | `/financials/payouts` | ✅ Done | P1 | Project owner payout history |
 | `/financials/contracts` | ✅ Done | P1 | Contracts list + create form |
 | `/compliance` | ✅ Done | P1 | Audit trail, ESG reports, certificates |
-| `/reports/esg` | ❌ Missing | P1 | Corporate buyer ESG dashboard + PDF download |
-| `/user-management` | 🔧 Partial | P1 | User list with role assignment, deactivation |
-| `/notifications` | 🔧 Partial | P1 | Full notification inbox, mark read, filters |
-| `/data-collection` | 🔧 Partial | P2 | Transaction log — credit purchases, retirements |
+| `/reports/esg` | ✅ Done | P1 | Corporate buyer ESG dashboard + PDF download |
+| `/user-management` | ✅ Done | P1 | User list with role assignment, deactivation |
+| `/notifications` | ✅ Done | P1 | Full notification inbox, mark read, filters |
+| `/data-collection` | ✅ Done | P2 | Transaction log — credit purchases, retirements |
 | `/site-visits` | 🔧 Partial | P2 | Field visit scheduling, assignment, status |
 | `/settings` | ❌ Missing | P2 | Platform config: fee %, currencies, email templates |
 | `/project-owners/[userId]/projects` | ❌ Missing | P1 | Projects belonging to a specific project owner |
-| `/forgot-password` | ❌ Missing | P1 | Request password reset email |
-| `/reset-password` | ❌ Missing | P1 | Set new password from reset link |
+| `/forgot-password` | ✅ Done | P1 | Request password reset email |
+| `/reset-password` | ✅ Done | P1 | Set new password from reset link |
 | `/verify-email` | ❌ Missing | P1 | Email verification landing page |
 | `/project-profile/[id]/credits` | ❌ Missing | P1 | Credits issued for a specific project with buyer info |
 

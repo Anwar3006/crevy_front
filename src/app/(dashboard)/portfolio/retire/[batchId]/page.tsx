@@ -1,28 +1,36 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { ArrowLeft, Flame, Info, ShieldAlert, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  Building2,
+  CheckCircle2,
+  CreditCard,
+  Flame,
+  Globe2,
+  ShieldAlert,
+  Wallet,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { CreditService } from "@/lib/services/credit-service";
+import { cn } from "@/lib/utils";
 
 export default function CreditRetirementPage() {
   const { batchId } = useParams<{ batchId: string }>();
   const router = useRouter();
-  const [isRetiring, setIsRetiring] = useState(false);
+
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<
+    "card" | "mobile_money" | "wire"
+  >("card");
   const [formData, setFormData] = useState({
     amount: 0,
+    beneficiary: "",
     reason: "",
   });
 
-  // 1. Fetch the specific credit batch for context
-  // Note: We use getCarbonCredits with ID filter as a proxy for getBatch
   const { data: creditRes, isLoading } = useQuery({
     queryKey: ["credit-batch", batchId],
     queryFn: () => CreditService.getCarbonCredits({ id: batchId }),
@@ -31,158 +39,289 @@ export default function CreditRetirementPage() {
 
   const credit = creditRes?.data?.[0];
 
-  const handleRetire = async (e: React.FormEvent) => {
+  const handleCheckoutAndRetire = async (e: React.FormEvent) => {
     e.preventDefault();
     if (
       formData.amount <= 0 ||
       formData.amount > parseFloat(credit?.availableAmount || "0")
     ) {
-      toast.error("Invalid retirement amount");
-      return;
+      return toast.error("Invalid retirement volume specified.");
     }
 
-    setIsRetiring(true);
+    setIsProcessing(true);
     try {
+      // 1. In the future, trigger Stripe or Paystack modal here
+      // await PaymentService.processTransaction(...)
+
+      // 2. Execute on-chain burn
       await CreditService.retireCredits(batchId as string, {
         quantity: formData.amount,
-        reason: formData.reason,
+        reason: `${formData.beneficiary} - ${formData.reason}`,
       });
-      toast.success("Credits successfully retired.");
+
+      toast.success("Transaction verified. Assets successfully burned.");
       router.push("/portfolio");
     } catch (err: any) {
-      toast.error(err.message || "Retirement protocol failed");
+      toast.error(
+        err.message || "Protocol execution failed. No funds captured.",
+      );
     } finally {
-      setIsRetiring(false);
+      setIsProcessing(false);
     }
   };
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <div className="p-20 text-center animate-pulse font-black uppercase text-slate-400">
-        Loading Batch...
+      <div className="min-h-screen flex items-center justify-center font-mono text-sm uppercase tracking-widest text-slate-400">
+        Initiating Checkout Session...
       </div>
     );
-  if (!credit)
+  }
+
+  if (!credit) {
     return (
-      <div className="p-20 text-center font-black uppercase text-red-500">
-        Batch Not Found
+      <div className="min-h-screen flex items-center justify-center font-mono text-sm uppercase tracking-widest text-red-500">
+        Asset Batch Not Found.
       </div>
     );
+  }
+
+  // Simulated Pricing for the UI
+  const networkFeePerTon = 1.5;
+  const totalFee = formData.amount * networkFeePerTon;
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-6">
-      <button
-        type="button"
-        onClick={() => router.back()}
-        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-10 hover:text-slate-900 transition-colors"
-      >
-        <ArrowLeft size={14} /> Back to Registry
-      </button>
+    <div className="min-h-screen bg-slate-50 font-sans">
+      {/* Top Navigation */}
+      <div className="bg-white border-b border-slate-200 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
+          >
+            <ArrowLeft size={14} /> Cancel & Return
+          </button>
+          <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
+            <Globe2 size={12} /> SECURE CHECKOUT
+          </div>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-        <div className="lg:col-span-3 space-y-8">
-          <div className="space-y-2">
-            <h1 className="text-4xl font-black text-slate-900 uppercase italic tracking-tighter">
-              Retirement Flow
-            </h1>
-            <p className="text-slate-500 font-medium leading-relaxed">
-              Permanently burn carbon credits from the active registry to claim
-              legitimate environmental offsets.
-            </p>
+      <div className="max-w-6xl mx-auto py-12 px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+          {/* ── LEFT: The Form & Payment ── */}
+          <div className="lg:col-span-7 space-y-10">
+            <div>
+              <h1 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                Execution Details
+              </h1>
+              <p className="text-slate-500 text-sm">
+                Specify the retirement parameters and complete payment for the
+                network execution fees.
+              </p>
+            </div>
+
+            <form
+              id="retirement-form"
+              onSubmit={handleCheckoutAndRetire}
+              className="space-y-8"
+            >
+              {/* Volume Input */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-end border-b border-slate-900 pb-2">
+                  <div className="text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                    Retirement Volume
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500">
+                    MAX AVAILABLE: {credit.availableAmount} tCO₂e
+                  </span>
+                </div>
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={formData.amount || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        amount: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                    className="w-full bg-transparent text-5xl font-mono text-slate-900 placeholder:text-slate-200 outline-none"
+                    placeholder="0.00"
+                    required
+                  />
+                  <span className="absolute right-0 bottom-2 text-xl font-serif text-slate-400">
+                    tCO₂e
+                  </span>
+                </div>
+              </div>
+
+              {/* Beneficiary Details */}
+              <div className="space-y-6 pt-4">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="corporate-beneficiary"
+                    className="text-[11px] font-bold uppercase tracking-widest text-slate-900"
+                  >
+                    Corporate Beneficiary
+                  </label>
+                  <div className="relative">
+                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      id="corporate-beneficiary"
+                      type="text"
+                      placeholder="e.g. Acme Corporation PLC"
+                      value={formData.beneficiary}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          beneficiary: e.target.value,
+                        })
+                      }
+                      className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-none outline-none focus:border-slate-900 transition-colors text-sm"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                    Public Retirement Reason
+                  </div>
+                  <textarea
+                    placeholder="e.g. Offsetting 2025 Scope 1 & 2 Logistics Emissions."
+                    value={formData.reason}
+                    onChange={(e) =>
+                      setFormData({ ...formData, reason: e.target.value })
+                    }
+                    className="w-full p-4 bg-white border border-slate-200 rounded-none outline-none focus:border-slate-900 transition-colors text-sm min-h-24 resize-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Payment Method Selector (Preparing for Stripe/Paystack) */}
+              <div className="space-y-4 pt-6 border-t border-slate-200">
+                <div className="text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                  Payment Method (Network Fees)
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("card")}
+                    className={cn(
+                      "flex flex-col items-start p-4 border text-left transition-all",
+                      paymentMethod === "card"
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-slate-400",
+                    )}
+                  >
+                    <CreditCard size={18} className="mb-3" />
+                    <span className="text-sm font-bold">Credit Card</span>
+                    <span className="text-[10px] opacity-70">
+                      Stripe Integration
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("mobile_money")}
+                    className={cn(
+                      "flex flex-col items-start p-4 border text-left transition-all",
+                      paymentMethod === "mobile_money"
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-slate-200 bg-white text-slate-500 hover:border-slate-400",
+                    )}
+                  >
+                    <Wallet size={18} className="mb-3" />
+                    <span className="text-sm font-bold">Mobile Money</span>
+                    <span className="text-[10px] opacity-70">
+                      Paystack / Flutterwave
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
 
-          <form
-            onSubmit={handleRetire}
-            className="bg-white border border-slate-200 rounded-[2rem] p-10 shadow-sm space-y-8"
-          >
-            <div className="space-y-4">
-              <div className="flex justify-between items-end">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                  Retirement Volume (tCO2e)
-                </Label>
-                <span className="text-[10px] font-bold text-emerald-600">
-                  Available: {credit.availableAmount} t
+          {/* ── RIGHT: Order Summary / Context ── */}
+          <div className="lg:col-span-5">
+            <div className="bg-white border border-slate-200 p-8 sticky top-8">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-6 border-b border-slate-200 pb-4">
+                Order Summary
+              </h3>
+
+              <div className="space-y-4 font-mono text-sm text-slate-600 mb-8">
+                <div className="flex justify-between">
+                  <span>Target Asset Batch</span>
+                  <span
+                    className="text-slate-900 truncate ml-4"
+                    title={batchId}
+                  >
+                    {batchId.slice(0, 12)}...
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Vintage</span>
+                  <span className="text-slate-900">{credit.creditVintage}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Volume Requested</span>
+                  <span className="text-slate-900">
+                    {formData.amount || 0} tCO₂e
+                  </span>
+                </div>
+                <div className="flex justify-between text-slate-400">
+                  <span>Processing Fee ($1.50/t)</span>
+                  <span>${totalFee.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="border-y border-slate-200 py-4 mb-8 flex justify-between items-center">
+                <span className="text-sm font-serif text-slate-900">
+                  Total Due Today
+                </span>
+                <span className="text-3xl font-mono font-bold text-slate-900">
+                  ${totalFee.toFixed(2)}
                 </span>
               </div>
-              <Input
-                type="number"
-                value={formData.amount}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    amount: parseFloat(e.target.value) || 0,
-                  })
-                }
-                className="h-16 text-3xl font-black rounded-2xl border-slate-100"
-              />
-            </div>
 
-            <div className="space-y-4">
-              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                Retirement Beneficiary / Reason
-              </Label>
-              <Textarea
-                placeholder="e.g. Offsetting 2025 Scope 1 Logistics Emissions"
-                className="rounded-2xl border-slate-100 min-h-32 resize-none p-6 font-medium"
-                value={formData.reason}
-                onChange={(e) =>
-                  setFormData({ ...formData, reason: e.target.value })
-                }
-                required
-              />
-            </div>
-
-            <div className="p-6 bg-red-50 rounded-2xl border border-red-100 flex gap-4">
-              <ShieldAlert className="text-red-500 shrink-0" size={20} />
-              <p className="text-[11px] text-red-700 font-bold leading-relaxed uppercase italic">
-                Warning: Retirement is irreversible. These credits will be
-                removed from circulation and anchored as retired on the public
-                ledger.
-              </p>
-            </div>
-
-            <Button
-              type="submit"
-              disabled={isRetiring}
-              className="w-full h-16 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-red-900/20"
-            >
-              {isRetiring ? "Executing Burn Protocol..." : "Execute Retirement"}{" "}
-              <Flame size={16} className="ml-2" />
-            </Button>
-          </form>
-        </div>
-
-        <div className="lg:col-span-2">
-          <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-8 opacity-10">
-              <ShieldCheck size={80} className="text-emerald-400" />
-            </div>
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400 mb-8">
-              Asset context
-            </h3>
-            <div className="space-y-6">
-              <div>
-                <p className="text-[9px] font-black text-slate-500 uppercase">
-                  Serial Batch
-                </p>
-                <p className="font-mono text-xs text-white/70 break-all">
-                  {batchId}
-                </p>
+              {/* Financial Disclosure / Warning */}
+              <div className="bg-slate-50 p-4 border-l-2 border-slate-400 mb-8">
+                <div className="flex gap-3">
+                  <ShieldAlert
+                    className="text-slate-500 shrink-0 mt-0.5"
+                    size={16}
+                  />
+                  <p className="text-[10px] text-slate-600 leading-relaxed font-serif italic">
+                    By confirming this transaction, you authorize the permanent
+                    cryptographic burn of these assets. This action is immutable
+                    and cannot be reversed. A public ESG certificate will be
+                    minted to the blockchain.
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-[9px] font-black text-slate-500 uppercase">
-                  Vintage
-                </p>
-                <p className="font-black text-white">{credit.creditVintage}</p>
-              </div>
-            </div>
 
-            <div className="mt-12 bg-white/5 border border-white/10 rounded-2xl p-6">
-              <p className="text-[10px] font-bold text-slate-400 uppercase leading-relaxed flex items-start gap-3">
-                <Info size={16} className="text-emerald-500 flex-shrink-0" />
-                Retired assets generate an immutable certificate available in
-                your ESG Reports section.
-              </p>
+              <button
+                form="retirement-form"
+                type="submit"
+                disabled={isProcessing || formData.amount <= 0}
+                className="w-full flex items-center justify-between px-6 py-4 bg-slate-900 text-white font-bold uppercase tracking-widest text-[11px] hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <span>
+                  {isProcessing ? "Processing Payment..." : "Pay & Execute"}
+                </span>
+                {isProcessing ? (
+                  <Flame size={16} className="animate-pulse" />
+                ) : (
+                  <ArrowLeft size={16} className="rotate-180" />
+                )}
+              </button>
+
+              <div className="mt-6 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <CheckCircle2 size={12} /> Encrypted & Secure
+              </div>
             </div>
           </div>
         </div>

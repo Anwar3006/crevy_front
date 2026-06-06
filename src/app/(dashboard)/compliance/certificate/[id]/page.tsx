@@ -1,17 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  BadgeCheck,
   Calendar,
   Download,
   ExternalLink,
   Globe,
-  Info,
   MapPin,
   QrCode,
   ShieldCheck,
-  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";

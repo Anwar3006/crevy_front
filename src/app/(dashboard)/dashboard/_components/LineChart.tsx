@@ -170,7 +170,6 @@ export const MultiLineChart = ({
                 height={chartH}
                 fill="transparent"
                 onMouseEnter={() => setHovered(i)}
-                // biome-ignore lint/a11y/useSemanticElements: SVG elements cannot be buttons
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && setHovered(i)}

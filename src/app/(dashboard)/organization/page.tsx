@@ -1,15 +1,11 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import {
   Building2,
   CheckCircle2,
-  CreditCard,
-  Download,
   Globe,
   Info,
   Mail,
-  MapPin,
   ShieldCheck,
   Tag,
 } from "lucide-react";

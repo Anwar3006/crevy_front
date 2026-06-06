@@ -92,7 +92,7 @@ export function AssignmentCheckModal({
   const owners = ownerData?.pages.flatMap((page: any) => page.data) ?? [];
 
   // 2. Fetch Admins (Only for Super Admin)
-  const { data: adminData, isLoading: isLoadingAdmins } = useQuery({
+  const { data: adminData } = useQuery({
     queryKey: ["admins-dropdown"],
     queryFn: () => UserService.listUsers({ role: "project_manager" }),
     enabled: isOpen && step === 2 && role === "super_admin",

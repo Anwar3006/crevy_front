@@ -29,7 +29,6 @@ const Dashboard = () => {
     case "mrv_admin":
     case "project_manager":
       return <AdminDashboard userName={userName} role={role} />;
-    case "project_owner":
     default:
       return <ProjectOwnerDashboard userName={userName} role={role} />;
   }

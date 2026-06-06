@@ -3,8 +3,6 @@
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
-  Circle,
-  Clock,
   FileText,
   MapPin,
   ShieldCheck,

@@ -1,4 +1,4 @@
-import type { Control, FieldPath, FieldValues } from "react-hook-form";
+import type { FieldPath, FieldValues } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import {
   FormControl,

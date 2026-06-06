@@ -1,8 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Download, FileText, Filter, Search, ShieldCheck } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

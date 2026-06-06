@@ -155,7 +155,7 @@ export const AreaChart = ({
               height={chartH}
               fill="transparent"
               // Add these to satisfy a11y
-              // biome-ignore lint/a11y/useSemanticElements: SVG elements cannot be buttons
+
               role="button"
               tabIndex={0}
               aria-label={`View data for ${p.label}`}

@@ -1,8 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  BookOpen,
   ChevronRight,
   LifeBuoy,
   Mail,
@@ -10,7 +8,6 @@ import {
   Phone,
   Search,
 } from "lucide-react";
-import Link from "next/link";
 
 export default function SupportPage() {
   const faqs = [

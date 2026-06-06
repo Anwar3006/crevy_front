@@ -4,7 +4,7 @@ import PortfolioOverview from "./_components/PortfolioOverview";
 
 export default function PortfolioPage() {
   return (
-    <main className="p-4 lg:p-8 max-w-[1600px] mx-auto min-h-screen pt-32">
+    <main className="min-h-screen bg-slate-50 font-sans selection:bg-slate-900 selection:text-white">
       <PortfolioOverview />
     </main>
   );

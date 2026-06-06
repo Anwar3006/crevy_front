@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import {
   PRACTICES_BY_TYPE,
-  SDGS,
   type TCreateProject,
 } from "@/constants/new-project";
 import { SDGSelection } from "./SDGSelection";

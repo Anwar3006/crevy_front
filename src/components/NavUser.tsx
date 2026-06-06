@@ -32,17 +32,21 @@ import type { TBetterAuthUser } from "@/types";
 const getInitials = (name?: string) => {
   if (!name) return "U";
   const parts = name.trim().split(" ");
-  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  if (parts.length >= 2) return `${parts}${parts[1]}`.toUpperCase();
   return name.substring(0, 2).toUpperCase();
 };
 
-export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
+export const NavUser = ({
+  user,
+  isCollapsed,
+}: {
+  user: TBetterAuthUser | null;
+  isCollapsed?: boolean;
+}) => {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // better-auth returns `image` on the session user object.
-  // TBetterAuthUser exposes both `image` and `avatar` for compat.
   const avatarUrl = user?.image ?? user?.avatar;
 
   const handleLogOut = async () => {
@@ -64,81 +68,99 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 data-[state=open]:bg-white/20 group-data-[collapsible=icon]:!p-2"
+              className={`
+                bg-slate-900/50 hover:bg-slate-800 text-white border border-slate-800 transition-colors
+                data-[state=open]:bg-slate-800
+                ${isCollapsed ? "justify-center !p-0 h-10 w-10 mx-auto" : ""}
+              `}
             >
               {loading ? (
                 <div className="flex items-center justify-center w-full">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />
                 </div>
               ) : (
                 <>
-                  <Avatar className="h-8 w-8 rounded-lg">
+                  <Avatar className="h-7 w-7 rounded-md shrink-0">
                     <AvatarImage src={avatarUrl} alt={user?.name} />
-                    <AvatarFallback className="rounded-lg bg-emerald-600 text-white font-semibold text-xs">
+                    <AvatarFallback className="rounded-md bg-emerald-900 text-emerald-400 font-bold text-[10px]">
                       {getInitials(user?.name)}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                    <span className="text-[11px] font-medium text-white/80">
-                      Welcome back 👋
-                    </span>
-                    <span className="truncate font-semibold text-white">
-                      {user?.name || "User"}
-                    </span>
-                  </div>
-                  <ChevronsUpDown className="ml-auto h-4 w-4 text-white/60 group-data-[collapsible=icon]:hidden" />
+                  {!isCollapsed && (
+                    <>
+                      <div className="grid flex-1 text-left text-sm leading-tight ml-2">
+                        <span className="truncate font-bold text-slate-200">
+                          {user?.name || "User"}
+                        </span>
+                        <span className="truncate text-[10px] text-slate-500 font-mono uppercase tracking-widest">
+                          {user?.role?.replace("_", " ") || "Member"}
+                        </span>
+                      </div>
+                      <ChevronsUpDown className="ml-auto h-4 w-4 text-slate-500 shrink-0" />
+                    </>
+                  )}
                 </>
               )}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg bg-slate-900 border-slate-800 text-slate-300 shadow-2xl"
             side={isMobile ? "bottom" : "right"}
             align="end"
-            sideOffset={4}
+            sideOffset={16}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+              <div className="flex items-center gap-3 px-2 py-2.5 text-left text-sm">
+                <Avatar className="h-9 w-9 rounded-md">
                   <AvatarImage src={avatarUrl} alt={user?.name} />
-                  <AvatarFallback className="rounded-lg bg-emerald-100 text-emerald-700 font-semibold text-xs">
+                  <AvatarFallback className="rounded-md bg-emerald-900 text-emerald-400 font-bold text-xs">
                     {getInitials(user?.name)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
+                  <span className="truncate font-bold text-white">
                     {user?.name || "User"}
                   </span>
-                  <span className="truncate text-xs text-muted-foreground">
+                  <span className="truncate text-[10px] font-mono text-slate-500">
                     {user?.email || ""}
                   </span>
                 </div>
               </div>
             </DropdownMenuLabel>
 
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-slate-800" />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <UserCircle className="h-4 w-4 mr-2" />
+              <DropdownMenuItem
+                onClick={() => router.push("/profile")}
+                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+              >
+                <UserCircle className="h-4 w-4 mr-3 text-slate-400" />
                 My Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
-                <BadgeCheck className="h-4 w-4 mr-2" />
-                Settings
+              <DropdownMenuItem
+                onClick={() => router.push("/settings")}
+                className="focus:bg-slate-800 focus:text-white cursor-pointer py-2"
+              >
+                <BadgeCheck className="h-4 w-4 mr-3 text-slate-400" />
+                System Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-slate-800" />
 
-            <DropdownMenuItem onClick={handleLogOut} disabled={loading}>
+            <DropdownMenuItem
+              onClick={handleLogOut}
+              disabled={loading}
+              className="focus:bg-red-900/30 focus:text-red-400 cursor-pointer py-2 text-red-500"
+            >
               {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                <Loader2 className="h-4 w-4 animate-spin mr-3" />
               ) : (
-                <LogOut className="h-4 w-4 mr-2" />
+                <LogOut className="h-4 w-4 mr-3" />
               )}
-              Log out
+              Log out securely
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

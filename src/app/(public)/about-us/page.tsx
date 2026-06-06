@@ -1,16 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  ArrowRight,
-  Award,
-  Heart,
-  Leaf,
-  Lightbulb,
-  Shield,
-  Target,
-  Zap,
-} from "lucide-react";
+import { Heart, Leaf, Lightbulb, Shield, Target, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -280,11 +271,7 @@ function CoreValuesSection({
   );
 }
 
-function ImpactSection({
-  shouldReduceMotion,
-}: {
-  shouldReduceMotion?: boolean;
-}) {
+function ImpactSection() {
   return (
     <section className="py-24 bg-myBlue">
       <div className="container mx-auto px-6 text-center">
@@ -379,7 +366,7 @@ function MilestonesSection({
   );
 }
 
-function AboutCTA({ shouldReduceMotion }: { shouldReduceMotion?: boolean }) {
+function AboutCTA() {
   return (
     <section className="py-28 bg-myBlue text-center text-white">
       <h2 className="text-4xl md:text-6xl font-bold mb-8">

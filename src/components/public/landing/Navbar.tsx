@@ -42,6 +42,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
   // Pages that sit on white background and need a solid/dark navbar by default
   const forceSolid =
     solid ||
+    pathname.startsWith("/marketplace") ||
     pathname.startsWith("/portfolio") ||
     pathname.startsWith("/public-registry") ||
     pathname.startsWith("/about-us") ||
@@ -104,70 +105,67 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
 
         {/* Desktop CTA / Auth Section */}
         <div className="hidden md:flex items-center space-x-4">
-          {!isPending && (
-            <>
-              {user ? (
-                <div className="flex items-center gap-4">
-                  <div
+          {!isPending &&
+            (user ? (
+              <div className="flex items-center gap-4">
+                <div
+                  className={cn(
+                    "flex items-center gap-3 border px-4 py-1.5 rounded-full backdrop-blur-sm transition-colors",
+                    isNavSolid
+                      ? "bg-slate-50 border-slate-200"
+                      : "bg-white/5 border-white/10",
+                  )}
+                >
+                  <Avatar className="h-7 w-7 border border-myGreen/30">
+                    <AvatarImage
+                      src={user.image || undefined}
+                      alt={user.name}
+                    />
+                    <AvatarFallback className="bg-myGreen text-white text-[10px] font-bold">
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span
                     className={cn(
-                      "flex items-center gap-3 border px-4 py-1.5 rounded-full backdrop-blur-sm transition-colors",
-                      isNavSolid
-                        ? "bg-slate-50 border-slate-200"
-                        : "bg-white/5 border-white/10",
+                      "text-xs font-bold uppercase tracking-wider leading-none",
+                      isNavSolid ? "text-slate-900" : "text-white/90",
                     )}
                   >
-                    <Avatar className="h-7 w-7 border border-myGreen/30">
-                      <AvatarImage
-                        src={user.image || undefined}
-                        alt={user.name}
-                      />
-                      <AvatarFallback className="bg-myGreen text-white text-[10px] font-bold">
-                        {getInitials(user.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span
-                      className={cn(
-                        "text-xs font-bold uppercase tracking-wider leading-none",
-                        isNavSolid ? "text-slate-900" : "text-white/90",
-                      )}
-                    >
-                      {user.name.split(" ")[0]}
-                    </span>
-                  </div>
-                  <Button
-                    asChild
-                    className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold uppercase tracking-widest text-[10px] px-6"
-                  >
-                    <Link href="/dashboard">
-                      <LayoutDashboard className="w-3.5 h-3.5 mr-2" />
-                      Back to Dashboard
-                    </Link>
-                  </Button>
+                    {user.name.split(" ")[0]}
+                  </span>
                 </div>
-              ) : (
-                <>
-                  <Button
-                    variant="ghost"
-                    asChild
-                    className={cn(
-                      "transition-all",
-                      isNavSolid
-                        ? "text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-myBlue"
-                        : "text-white border border-white/30 hover:bg-white/10 hover:text-white",
-                    )}
-                  >
-                    <Link href="/login">Login</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold"
-                  >
-                    <Link href="/register">Get Started</Link>
-                  </Button>
-                </>
-              )}
-            </>
-          )}
+                <Button
+                  asChild
+                  className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold uppercase tracking-widest text-[10px] px-6"
+                >
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="w-3.5 h-3.5 mr-2" />
+                    Back to Dashboard
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className={cn(
+                    "transition-all",
+                    isNavSolid
+                      ? "text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-myBlue"
+                      : "text-white border border-white/30 hover:bg-white/10 hover:text-white",
+                  )}
+                >
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold"
+                >
+                  <Link href="/register">Get Started</Link>
+                </Button>
+              </>
+            ))}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -223,74 +221,71 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             </nav>
 
             <div className="mt-auto flex flex-col space-y-4">
-              {!isPending && (
-                <>
-                  {user ? (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-4 rounded-2xl">
-                        <Avatar className="h-10 w-10 border border-myGreen/30">
-                          <AvatarImage
-                            src={user.image || undefined}
-                            alt={user.name}
-                          />
-                          <AvatarFallback className="bg-myGreen text-white font-bold">
-                            {getInitials(user.name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="text-left">
-                          <p className="text-white font-bold leading-none">
-                            {user.name}
-                          </p>
-                          <p className="text-white/40 text-xs mt-1">
-                            {user.email}
-                          </p>
-                        </div>
+              {!isPending &&
+                (user ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <Avatar className="h-10 w-10 border border-myGreen/30">
+                        <AvatarImage
+                          src={user.image || undefined}
+                          alt={user.name}
+                        />
+                        <AvatarFallback className="bg-myGreen text-white font-bold">
+                          {getInitials(user.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="text-left">
+                        <p className="text-white font-bold leading-none">
+                          {user.name}
+                        </p>
+                        <p className="text-white/40 text-xs mt-1">
+                          {user.email}
+                        </p>
                       </div>
-                      <Button
-                        asChild
-                        size="lg"
-                        className="w-full bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold uppercase tracking-widest text-xs"
-                      >
-                        <Link
-                          href="/dashboard"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <LayoutDashboard className="w-4 h-4 mr-2" />
-                          Back to Dashboard
-                        </Link>
-                      </Button>
                     </div>
-                  ) : (
-                    <>
-                      <Button
-                        variant="ghost"
-                        asChild
-                        size="lg"
-                        className="w-full text-white border border-white/30 hover:bg-white/10"
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold uppercase tracking-widest text-xs"
+                    >
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <Link
-                          href="/login"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          Login
-                        </Link>
-                      </Button>
-                      <Button
-                        asChild
-                        size="lg"
-                        className="w-full bg-myGreen text-white hover:bg-myDarkGreen border-none"
+                        <LayoutDashboard className="w-4 h-4 mr-2" />
+                        Back to Dashboard
+                      </Link>
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      variant="ghost"
+                      asChild
+                      size="lg"
+                      className="w-full text-white border border-white/30 hover:bg-white/10"
+                    >
+                      <Link
+                        href="/login"
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <Link
-                          href="/register"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          Get Started
-                        </Link>
-                      </Button>
-                    </>
-                  )}
-                </>
-              )}
+                        Login
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full bg-myGreen text-white hover:bg-myDarkGreen border-none"
+                    >
+                      <Link
+                        href="/register"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Get Started
+                      </Link>
+                    </Button>
+                  </>
+                ))}
             </div>
           </motion.div>
         )}

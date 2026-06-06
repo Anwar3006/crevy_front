@@ -154,7 +154,7 @@ export default function ProjectOwnersPage() {
   const hasActiveFilters = search || statusFilter || countryFilter;
 
   // ── Query ────────────────────────────────────────────────────────────────────
-  const queryClient = useQueryClient();
+  const _queryClient = useQueryClient();
 
   const filters: ProjectOwnerFilters = useMemo(
     () => ({

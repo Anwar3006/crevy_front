@@ -24,7 +24,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import {
@@ -136,8 +135,8 @@ export default function ProjectOwnerOnboardingForm() {
         bankDetails:
           data.paymentMethod === "bank"
             ? {
-                bankName: data.bankName!,
-                accountNumber: data.accountNumber!,
+                bankName: data.bankName || "",
+                accountNumber: data.accountNumber || "",
                 accountName: data.accountName || null,
               }
             : null,
@@ -145,8 +144,8 @@ export default function ProjectOwnerOnboardingForm() {
         momoDetails:
           data.paymentMethod === "momo"
             ? {
-                network: data.momoNetwork!,
-                number: data.momoNumber!,
+                network: data.momoNetwork || "",
+                number: data.momoNumber || "",
                 accountName: data.accountName || null,
               }
             : null,
@@ -164,7 +163,7 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      const response = await axios.post(
+      const _response = await axios.post(
         "/api/v2/project-owners/onboard",
         payload,
       );

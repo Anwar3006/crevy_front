@@ -12,7 +12,6 @@ import {
   Notification01Icon,
   OrganicFoodIcon,
   PropertyAddIcon,
-  User02Icon,
   UserGroupIcon,
   ViewIcon,
 } from "@hugeicons/core-free-icons";
@@ -50,8 +49,8 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       icon: CalculateIcon,
     },
     {
-      title: "Carbon Ledger",
-      url: "/carbon-credits",
+      title: "Credits Ledger",
+      url: "/credits-ledger",
       // @ts-expect-error
       icon: CheckListIcon,
     },
@@ -65,6 +64,12 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           url: "/dashboard",
           // @ts-expect-error
           icon: DashboardSquareAddIcon,
+        },
+        {
+          title: "Asset Portfolio",
+          url: "/portfolio",
+          // @ts-expect-error
+          icon: OrganicFoodIcon,
         },
         {
           title: "Projects",
@@ -125,6 +130,11 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "Dashboard",
           url: "/dashboard",
           icon: DashboardSquareAddIcon,
+        },
+        {
+          title: "Asset Portfolio",
+          url: "/portfolio",
+          icon: OrganicFoodIcon,
         },
         {
           title: "Projects",
@@ -362,8 +372,8 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "INVESTMENTS",
           items: [
             {
-              title: "My Carbon Credits",
-              url: "/carbon-credits",
+              title: "Asset Registry",
+              url: "/portfolio",
               // @ts-expect-error
               icon: OrganicFoodIcon,
             },
