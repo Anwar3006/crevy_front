@@ -5,7 +5,6 @@ import { LayoutDashboard, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -13,15 +12,13 @@ import { cn } from "@/lib/utils";
 const getInitials = (name?: string) => {
   if (!name) return "U";
   const parts = name.trim().split(" ");
-  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  if (parts.length >= 2) return `${parts}${parts}`.toUpperCase();
   return name.substring(0, 2).toUpperCase();
 };
 
 /**
- * Navbar component for the public landing page.
- * Includes sticky behavior, mobile menu drawer, and responsive layout.
- *
- * @returns {JSX.Element} The rendered Navbar component.
+ * Institutional Navbar Protocol
+ * Enforces rigid typography, sharp borders, and high-contrast states.
  */
 export function Navbar({ solid = false }: { solid?: boolean }) {
   const { data: session, isPending } = authClient.useSession();
@@ -32,14 +29,12 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 80);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Pages that sit on white background and need a solid/dark navbar by default
+  // Force solid background on specific institutional routes
   const forceSolid =
     solid ||
     pathname.startsWith("/marketplace") ||
@@ -52,9 +47,8 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
   const navLinks = [
     { name: "Marketplace", href: "/marketplace" },
     { name: "Public Registry", href: "/public-registry" },
-    { name: "Portfolio", href: "/portfolio" },
     { name: "Methodology", href: "/methodology" },
-    { name: "About", href: "/about-us" },
+    { name: "Corporate", href: "/about-us" },
     { name: "Support", href: "/support" },
   ];
 
@@ -64,227 +58,239 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
+        "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
         isNavSolid
-          ? "bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 shadow-sm"
-          : "bg-transparent",
+          ? "bg-white border-b border-slate-200 py-4"
+          : "bg-transparent py-6",
       )}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between">
+        {/* ── Brand Identifier ── */}
         <Link
           href="/"
           className={cn(
-            "font-[family-name:var(--font-syne)] font-bold text-2xl transition-colors",
-            isNavSolid ? "text-myBlue" : "text-white",
-            "hover:text-myGreen",
+            "font-serif font-bold text-3xl tracking-tight transition-colors",
+            isNavSolid ? "text-slate-900" : "text-white",
+            "hover:text-emerald-700",
           )}
         >
-          Crevy
+          Crevy.
         </Link>
 
-        {/* Desktop Nav Links */}
+        {/* ── Desktop Navigation ── */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
               className={cn(
-                "text-sm font-medium transition-colors",
+                "text-[10px] font-bold uppercase tracking-[0.2em] transition-colors relative group",
                 isNavSolid
-                  ? "text-slate-600 hover:text-myGreen"
-                  : "text-white/80 hover:text-myGreen",
+                  ? "text-slate-500 hover:text-slate-900"
+                  : "text-white/70 hover:text-white",
               )}
             >
               {link.name}
+              {/* Institutional Underline Hover */}
+              <span
+                className={cn(
+                  "absolute -bottom-2 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full",
+                  isNavSolid ? "bg-slate-900" : "bg-white",
+                )}
+              ></span>
             </Link>
           ))}
         </div>
 
-        {/* Desktop CTA / Auth Section */}
+        {/* ── Desktop Auth Protocol ── */}
         <div className="hidden md:flex items-center space-x-4">
           {!isPending &&
             (user ? (
               <div className="flex items-center gap-4">
+                {/* Sharp Identity Block */}
                 <div
                   className={cn(
-                    "flex items-center gap-3 border px-4 py-1.5 rounded-full backdrop-blur-sm transition-colors",
+                    "flex items-center gap-3 px-3 py-2 border transition-colors",
                     isNavSolid
                       ? "bg-slate-50 border-slate-200"
-                      : "bg-white/5 border-white/10",
+                      : "bg-white/5 border-white/20 backdrop-blur-md",
                   )}
                 >
-                  <Avatar className="h-7 w-7 border border-myGreen/30">
-                    <AvatarImage
-                      src={user.image || undefined}
-                      alt={user.name}
-                    />
-                    <AvatarFallback className="bg-myGreen text-white text-[10px] font-bold">
-                      {getInitials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span
+                  <div
                     className={cn(
-                      "text-xs font-bold uppercase tracking-wider leading-none",
-                      isNavSolid ? "text-slate-900" : "text-white/90",
+                      "w-6 h-6 flex items-center justify-center font-serif text-[11px] font-bold",
+                      isNavSolid
+                        ? "bg-slate-900 text-white"
+                        : "bg-white text-slate-900",
                     )}
                   >
-                    {user.name.split(" ")[0]}
+                    {getInitials(user.name)}
+                  </div>
+                  <span
+                    className={cn(
+                      "text-[10px] font-mono font-bold uppercase tracking-widest",
+                      isNavSolid ? "text-slate-900" : "text-white",
+                    )}
+                  >
+                    {user.name.split(" ")}
                   </span>
                 </div>
+
                 <Button
                   asChild
-                  className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold uppercase tracking-widest text-[10px] px-6"
+                  className={cn(
+                    "rounded-none font-bold uppercase tracking-widest text-[10px] px-6 h-10 transition-colors",
+                    isNavSolid
+                      ? "bg-slate-900 hover:bg-emerald-900 text-white"
+                      : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
+                  )}
                 >
                   <Link href="/dashboard">
-                    <LayoutDashboard className="w-3.5 h-3.5 mr-2" />
-                    Back to Dashboard
+                    Access Terminal{" "}
+                    <LayoutDashboard className="w-3.5 h-3.5 ml-2" />
                   </Link>
                 </Button>
               </div>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  asChild
+                <Link
+                  href="/login"
                   className={cn(
-                    "transition-all",
+                    "text-[10px] font-bold uppercase tracking-widest transition-colors px-4 py-2",
                     isNavSolid
-                      ? "text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-myBlue"
-                      : "text-white border border-white/30 hover:bg-white/10 hover:text-white",
+                      ? "text-slate-600 hover:text-slate-900"
+                      : "text-white/80 hover:text-white",
                   )}
                 >
-                  <Link href="/login">Login</Link>
-                </Button>
+                  Authenticate
+                </Link>
                 <Button
                   asChild
-                  className="bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold"
+                  className={cn(
+                    "rounded-none font-bold uppercase tracking-widest text-[10px] px-8 h-10 transition-colors",
+                    isNavSolid
+                      ? "bg-slate-900 hover:bg-emerald-900 text-white"
+                      : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
+                  )}
                 >
-                  <Link href="/register">Get Started</Link>
+                  <Link href="/register">Initialize</Link>
                 </Button>
               </>
             ))}
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* ── Mobile Menu Toggle ── */}
         <button
           type="button"
           className={cn(
+            "md:hidden transition-colors",
             isNavSolid ? "text-slate-900" : "text-white",
-            "md:hidden",
           )}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
+          aria-label="Toggle Navigation"
         >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* ── Mobile Navigation Drawer ── */}
       <AnimatePresence mode="wait">
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-0 top-0 right-0 h-screen w-full bg-myBlue z-50 flex flex-col p-8 md:hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 top-0 left-0 h-screen w-full bg-slate-950 z-50 flex flex-col p-6 md:hidden overflow-y-auto"
           >
-            <div className="flex justify-between items-center mb-12">
-              <span className="font-[family-name:var(--font-syne)] font-bold text-2xl text-myGreen">
-                Crevy
+            <div className="flex justify-between items-center mb-16 border-b border-slate-800 pb-6">
+              <span className="font-serif font-bold text-2xl text-white">
+                Crevy.
               </span>
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-white"
+                className="text-slate-400 hover:text-white transition-colors"
                 aria-label="Close menu"
               >
-                <X size={28} />
+                <X size={24} />
               </button>
             </div>
 
-            <nav className="flex flex-col space-y-6 text-left">
+            <nav className="flex flex-col space-y-0 text-left border-t border-slate-800">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-2xl font-[family-name:var(--font-syne)] font-bold text-white/90 hover:text-myGreen transition-colors"
+                  className="py-6 border-b border-slate-800 text-sm font-bold uppercase tracking-[0.2em] text-slate-300 hover:text-emerald-500 transition-colors flex justify-between items-center"
                 >
                   {link.name}
+                  <span className="text-slate-700 font-mono text-[10px]">
+                    +
+                  </span>
                 </Link>
               ))}
             </nav>
 
-            <div className="mt-auto flex flex-col space-y-4">
+            <div className="mt-auto pt-12 flex flex-col space-y-4">
               {!isPending &&
                 (user ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4 bg-white/5 border border-white/10 p-4 rounded-2xl">
-                      <Avatar className="h-10 w-10 border border-myGreen/30">
-                        <AvatarImage
-                          src={user.image || undefined}
-                          alt={user.name}
-                        />
-                        <AvatarFallback className="bg-myGreen text-white font-bold">
-                          {getInitials(user.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="text-left">
-                        <p className="text-white font-bold leading-none">
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4">
+                      <div className="w-10 h-10 bg-white text-slate-900 flex items-center justify-center font-serif text-lg font-bold shrink-0">
+                        {getInitials(user.name)}
+                      </div>
+                      <div className="text-left overflow-hidden">
+                        <p className="text-white font-serif font-bold truncate">
                           {user.name}
                         </p>
-                        <p className="text-white/40 text-xs mt-1">
+                        <p className="text-slate-500 font-mono text-[10px] uppercase tracking-widest truncate mt-1">
                           {user.email}
                         </p>
                       </div>
                     </div>
                     <Button
                       asChild
-                      size="lg"
-                      className="w-full bg-myGreen text-white hover:bg-myDarkGreen border-none font-bold uppercase tracking-widest text-xs"
+                      className="w-full rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
                     >
                       <Link
                         href="/dashboard"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Back to Dashboard
+                        Access Terminal{" "}
+                        <LayoutDashboard className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
                   </div>
                 ) : (
-                  <>
+                  <div className="grid grid-cols-2 gap-4">
                     <Button
-                      variant="ghost"
                       asChild
-                      size="lg"
-                      className="w-full text-white border border-white/30 hover:bg-white/10"
+                      variant="outline"
+                      className="rounded-none border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white font-bold uppercase tracking-widest text-[10px] h-12"
                     >
                       <Link
                         href="/login"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Login
+                        Authenticate
                       </Link>
                     </Button>
                     <Button
                       asChild
-                      size="lg"
-                      className="w-full bg-myGreen text-white hover:bg-myDarkGreen border-none"
+                      className="rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
                     >
                       <Link
                         href="/register"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Get Started
+                        Initialize
                       </Link>
                     </Button>
-                  </>
+                  </div>
                 ))}
             </div>
           </motion.div>

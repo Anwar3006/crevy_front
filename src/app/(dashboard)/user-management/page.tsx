@@ -44,7 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { authClient } from "@/lib/auth";
+import { useUser } from "@/hooks/use-user";
 import { UserService } from "@/lib/services/user-service";
 import { cn } from "@/lib/utils";
 
@@ -65,9 +65,10 @@ interface User {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function UserManagementPage() {
-  const { data: session } = authClient.useSession();
-  const sessionUser = session?.user as any;
-  const isSuperAdmin = sessionUser?.role === "super_admin";
+  const { user } = useUser();
+  const isSuperAdmin = user?.role === "super_admin";
+  const isOrgAdmin = user?.role === "org_admin";
+  const organizationId = (user as any)?.organizationId;
   const router = useRouter();
 
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -75,10 +76,14 @@ export default function UserManagementPage() {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["users", roleFilter],
+    queryKey: ["users", roleFilter, organizationId],
     queryFn: () =>
       UserService.listUsers(
-        roleFilter === "all" ? undefined : { role: roleFilter },
+        isOrgAdmin
+          ? { organizationId }
+          : roleFilter === "all"
+            ? undefined
+            : { role: roleFilter },
       ),
   });
 

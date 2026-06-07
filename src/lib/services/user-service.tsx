@@ -59,7 +59,7 @@ export const UserService = {
     }
   },
 
-  listUsers: async (filter?: { role?: string }) => {
+  listUsers: async (filter?: { role?: string; organizationId?: string }) => {
     try {
       const response = await axiosClient.get("/rbac/users", { params: filter });
       return response.data;
