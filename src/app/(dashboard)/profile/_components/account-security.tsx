@@ -5,108 +5,87 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { authClient } from "@/lib/auth";
 import { UserService } from "@/lib/services/user-service";
 
-interface AccountSecurityProps {
-  user: any;
-}
-
-export function AccountSecurity({ user }: AccountSecurityProps) {
+export function AccountSecurity({ user }: { user: any }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
   const handleDeleteAccount = async () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete your account? This action is permanent and cannot be undone.",
-    );
-
-    if (!confirmed) return;
-
+    if (
+      !window.confirm(
+        "CRITICAL WARNING: Permanent ledger deletion. This action cannot be reversed. Proceed?",
+      )
+    )
+      return;
     setIsDeleting(true);
     try {
       await UserService.deleteUserProfile(user.id);
       await authClient.signOut();
-      toast.success("Account deleted successfully");
+      toast.success("Entity ledger permanently purged.");
       router.push("/register");
     } catch (error: any) {
-      toast.error(error.message || "Failed to delete account");
+      toast.error(
+        error.message || "Failed to purge ledger. Contact Governance.",
+      );
     } finally {
       setIsDeleting(false);
     }
   };
 
   return (
-    <Card className="border-red-100 shadow-sm border">
-      <CardHeader className="border-b bg-red-50/30">
-        <div className="flex items-center gap-2">
-          <div className="p-2 bg-red-100 rounded-lg">
-            <AlertTriangle className="w-5 h-5 text-red-600" />
-          </div>
-          <div>
-            <CardTitle className="text-lg text-red-900">
-              Advanced Settings
-            </CardTitle>
-            <CardDescription className="text-red-700/70">
-              Critical account actions and safety settings
-            </CardDescription>
-          </div>
+    <div className="border border-red-200 bg-white">
+      <div className="p-6 border-b border-red-200 bg-red-50 flex items-center gap-4">
+        <AlertTriangle className="w-5 h-5 text-red-600" />
+        <div>
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-red-900">
+            Critical Protocols
+          </h2>
+          <p className="text-xs text-red-700/70 font-mono mt-1">
+            Irreversible system actions
+          </p>
         </div>
-      </CardHeader>
-      <CardContent className="p-6">
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50">
-            <div className="flex gap-4">
-              <div className="p-2 bg-emerald-100 rounded-lg h-fit">
-                <ShieldCheck className="w-5 h-5 text-emerald-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900">
-                  Two-Factor Authentication
-                </p>
-                <p className="text-sm text-slate-500">
-                  Add an extra layer of security to your account.
-                </p>
-              </div>
-            </div>
-            <Button
-              variant="outline"
-              className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 pointer-events-none opacity-50"
-            >
-              Coming Soon
-            </Button>
-          </div>
+      </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl border border-red-100 bg-red-50/20">
-            <div className="flex gap-4">
-              <div className="p-2 bg-red-100 rounded-lg h-fit">
-                <Trash2 className="w-5 h-5 text-red-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-red-950">Delete Account</p>
-                <p className="text-sm text-red-700/70">
-                  Permanently remove your account and all associated data.
-                </p>
-              </div>
-            </div>
-            <Button
-              variant="destructive"
-              className="bg-red-600 hover:bg-red-700"
-              onClick={handleDeleteAccount}
-              disabled={isDeleting}
-            >
-              Delete My Account
-            </Button>
+      <div className="p-6 space-y-6">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 p-6 border border-slate-200 bg-slate-50">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 flex items-center gap-2 mb-1">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Multi-Factor
+              Auth (MFA)
+            </p>
+            <p className="text-xs font-mono text-slate-500">
+              Require cryptographic secondary verification for access.
+            </p>
           </div>
+          <Button
+            variant="outline"
+            className="rounded-none border-slate-300 text-[10px] font-bold uppercase tracking-widest h-10 px-6 opacity-50 cursor-not-allowed"
+          >
+            Offline (Pending Setup)
+          </Button>
         </div>
-      </CardContent>
-    </Card>
+
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 p-6 border border-red-200 bg-red-50/50">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-red-900 flex items-center gap-2 mb-1">
+              <Trash2 className="w-4 h-4 text-red-600" /> Purge Entity Ledger
+            </p>
+            <p className="text-xs font-mono text-red-700/70">
+              Permanently erase identity and all linked non-immutable records.
+            </p>
+          </div>
+          <Button
+            variant="destructive"
+            onClick={handleDeleteAccount}
+            disabled={isDeleting}
+            className="rounded-none bg-red-700 hover:bg-red-800 text-white font-bold text-[10px] uppercase tracking-widest h-10 px-6 transition-colors"
+          >
+            {isDeleting ? "Purging..." : "Initiate Purge"}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

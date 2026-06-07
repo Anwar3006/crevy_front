@@ -8,13 +8,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -27,35 +20,29 @@ import {
 import { UserService } from "@/lib/services/user-service";
 
 const profileSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  firstName: z.string().min(2, "Required"),
+  lastName: z.string().min(2, "Required"),
   phoneNumber: z.string().optional(),
   sex: z.string().optional(),
   contactNumber: z.string().optional(),
   countryOfOperation: z.string().optional(),
-  // Company fields
   legalBusinessName: z.string().optional(),
   businessAddress: z.string().optional(),
-  // Project Owner fields
   projectCategory: z.string().optional(),
   projectStartDate: z.string().optional(),
 });
 
-type ProfileFormValues = z.infer<typeof profileSchema>;
-
-interface EditProfileFormProps {
-  user: any;
-  readOnly?: boolean;
-}
-
 export function EditProfileForm({
   user,
   readOnly = false,
-}: EditProfileFormProps) {
+}: {
+  user: any;
+  readOnly?: boolean;
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
 
-  const form = useForm<ProfileFormValues>({
+  const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       firstName: user.firstName || "",
@@ -71,11 +58,10 @@ export function EditProfileForm({
     },
   });
 
-  const onSubmit = async (values: ProfileFormValues) => {
+  const onSubmit = async (values: z.infer<typeof profileSchema>) => {
     if (readOnly) return;
     setIsSubmitting(true);
     try {
-      // Structure the data according to userType
       const updateData: any = {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -85,191 +71,200 @@ export function EditProfileForm({
         countryOfOperation: values.countryOfOperation,
       };
 
-      if (user.role === "financial_admin") {
+      if (user.role === "financial_admin")
         updateData.company = {
           legalBusinessName: values.legalBusinessName,
           businessAddress: values.businessAddress,
         };
-      } else if (user.role === "project_owner") {
+      else if (user.role === "project_owner")
         updateData.projectOwner = {
           projectCategory: values.projectCategory,
           projectStartDate: values.projectStartDate,
         };
-      }
 
       await UserService.updateUserProfile(updateData);
       await queryClient.invalidateQueries({ queryKey: ["user-profile"] });
-      toast.success("Profile updated successfully");
+      toast.success("Identity ledger updated.");
     } catch (error: any) {
-      toast.error(error.message || "Failed to update profile");
+      toast.error(error.message || "Failed to sync protocol.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card className="border-slate-200 shadow-sm">
-      <CardHeader className="border-b bg-slate-50/50">
-        <div className="flex items-center gap-2">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <UserIcon className="w-5 h-5 text-emerald-600" />
+    <div className="border border-slate-200 bg-white">
+      <div className="p-6 md:p-8 border-b border-slate-200 bg-slate-50 flex items-center gap-4">
+        <UserIcon className="w-5 h-5 text-slate-400" />
+        <div>
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            Identity Ledger
+          </h2>
+          <p className="text-xs text-slate-500 font-mono mt-1">
+            {readOnly ? "Read-Only Access" : "Update Operational Parameters"}
+          </p>
+        </div>
+      </div>
+
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="p-6 md:p-8 space-y-8"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Legal First Name
+            </Label>
+            <Input
+              {...form.register("firstName")}
+              disabled={readOnly}
+              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            />
           </div>
-          <div>
-            <CardTitle className="text-lg">Personal Information</CardTitle>
-            <CardDescription>
-              {readOnly
-                ? "Viewing user profile data"
-                : "Update your personal and business details"}
-            </CardDescription>
+          <div className="space-y-3">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Legal Last Name
+            </Label>
+            <Input
+              {...form.register("lastName")}
+              disabled={readOnly}
+              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            />
           </div>
         </div>
-      </CardHeader>
-      <CardContent className="p-6">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                {...form.register("firstName")}
-                disabled={readOnly}
-              />
-              {form.formState.errors.firstName && (
-                <p className="text-xs text-red-500">
-                  {form.formState.errors.firstName.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                {...form.register("lastName")}
-                disabled={readOnly}
-              />
-              {form.formState.errors.lastName && (
-                <p className="text-xs text-red-500">
-                  {form.formState.errors.lastName.message}
-                </p>
-              )}
-            </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input
-                id="phoneNumber"
-                {...form.register("phoneNumber")}
-                disabled={readOnly}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="sex">Sex</Label>
-              <Select
-                defaultValue={user.sex}
-                onValueChange={(val) => form.setValue("sex", val)}
-                disabled={readOnly}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select sex" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Male">Male</SelectItem>
-                  <SelectItem value="Female">Female</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Primary Contact (Tel)
+            </Label>
+            <Input
+              {...form.register("phoneNumber")}
+              disabled={readOnly}
+              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            />
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="contactNumber">Contact Number</Label>
-              <Input
-                id="contactNumber"
-                {...form.register("contactNumber")}
-                disabled={readOnly}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="countryOfOperation">Country of Operation</Label>
-              <Input
-                id="countryOfOperation"
-                {...form.register("countryOfOperation")}
-                disabled={readOnly}
-              />
-            </div>
+          <div className="space-y-3">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Biological Sex
+            </Label>
+            <Select
+              defaultValue={user.sex}
+              onValueChange={(val) => form.setValue("sex", val)}
+              disabled={readOnly}
+            >
+              <SelectTrigger className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900">
+                <SelectValue placeholder="Select indicator" />
+              </SelectTrigger>
+              <SelectContent className="rounded-none border border-slate-200 shadow-xl font-mono text-xs uppercase tracking-widest">
+                <SelectItem value="Male">Male</SelectItem>
+                <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </div>
 
-          {user.role === "financial_admin" && (
-            <div className="space-y-6 pt-6 border-t">
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                Company Data
-              </h3>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="legalBusinessName">Legal Business Name</Label>
-                  <Input
-                    id="legalBusinessName"
-                    {...form.register("legalBusinessName")}
-                    disabled={readOnly}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="businessAddress">Business Address</Label>
-                  <Input
-                    id="businessAddress"
-                    {...form.register("businessAddress")}
-                    disabled={readOnly}
-                  />
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Secondary Contact
+            </Label>
+            <Input
+              {...form.register("contactNumber")}
+              disabled={readOnly}
+              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            />
+          </div>
+          <div className="space-y-3">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Jurisdiction (Country)
+            </Label>
+            <Input
+              {...form.register("countryOfOperation")}
+              disabled={readOnly}
+              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            />
+          </div>
+        </div>
+
+        {user.role === "financial_admin" && (
+          <div className="pt-8 border-t border-slate-200 space-y-6">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+              Institutional Data
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  Registered Corporate Name
+                </Label>
+                <Input
+                  {...form.register("legalBusinessName")}
+                  disabled={readOnly}
+                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                />
+              </div>
+              <div className="space-y-3">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  HQ Address
+                </Label>
+                <Input
+                  {...form.register("businessAddress")}
+                  disabled={readOnly}
+                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {user.role === "project_owner" && (
-            <div className="space-y-6 pt-6 border-t">
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                Project Owner Data
-              </h3>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="projectCategory">Project Category</Label>
-                  <Input
-                    id="projectCategory"
-                    {...form.register("projectCategory")}
-                    disabled={readOnly}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="projectStartDate">Project Start Date</Label>
-                  <Input
-                    id="projectStartDate"
-                    {...form.register("projectStartDate")}
-                    disabled={readOnly}
-                  />
-                </div>
+        {user.role === "project_owner" && (
+          <div className="pt-8 border-t border-slate-200 space-y-6">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+              Originator Operations
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  Asset Methodology Focus
+                </Label>
+                <Input
+                  {...form.register("projectCategory")}
+                  disabled={readOnly}
+                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                />
+              </div>
+              <div className="space-y-3">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                  Genesis Date
+                </Label>
+                <Input
+                  {...form.register("projectStartDate")}
+                  disabled={readOnly}
+                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {!readOnly && (
+        {!readOnly && (
+          <div className="pt-4">
             <Button
               type="submit"
-              className="w-full bg-emerald-600 hover:bg-emerald-700"
               disabled={isSubmitting}
+              className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-12 px-8 transition-colors w-full md:w-auto"
             >
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : (
                 <Save className="w-4 h-4 mr-2" />
               )}
-              Save Changes
+              Commit Ledger Updates
             </Button>
-          )}
-        </form>
-      </CardContent>
-    </Card>
+          </div>
+        )}
+      </form>
+    </div>
   );
 }

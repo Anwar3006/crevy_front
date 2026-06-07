@@ -59,6 +59,12 @@ export default function ProjectOwnerOnboardingForm() {
       bankName: "",
       accountNumber: "",
       accountName: "",
+      region: "",
+      village: "",
+      latitude: "",
+      longitude: "",
+      areaHectares: "",
+      partnerId: "",
     },
   });
 
@@ -67,15 +73,18 @@ export default function ProjectOwnerOnboardingForm() {
   const watchedLastName = form.watch("lastName");
   const watchedPaymentMethod = form.watch("paymentMethod");
 
+  // Sync contact number to momo number if toggled
   useEffect(() => {
     if (isMomoSameAsContact && watchedContactNumber) {
       form.setValue("momoNumber", watchedContactNumber);
     }
   }, [isMomoSameAsContact, watchedContactNumber, form]);
 
+  // Sync account name to entity name if toggled
   useEffect(() => {
     if (isAccountNameSameAsUser) {
-      const fullName = `${watchedFirstName} ${watchedLastName}`.trim();
+      const fullName =
+        `${watchedFirstName || ""} ${watchedLastName || ""}`.trim();
       form.setValue("accountName", fullName);
     }
   }, [isAccountNameSameAsUser, watchedFirstName, watchedLastName, form]);
