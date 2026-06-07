@@ -1,7 +1,8 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ShieldCheck } from "lucide-react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RBACService } from "@/lib/services/rbac-service";
 
 interface InviteAdminModalProps {
   isOpen: boolean;
@@ -37,6 +39,14 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
     },
   });
 
+  const { data: rolesRes, isLoading: loadingRoles } = useQuery({
+    queryKey: ["roles"],
+    queryFn: RBACService.getRoles,
+    enabled: isOpen,
+  });
+
+  const roles = rolesRes?.data || [];
+
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
@@ -46,17 +56,16 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
         body: JSON.stringify({
           email: data.email,
           roleName: data.roleName,
-          // organizationId is intentionally omitted for admins
         }),
       });
 
       if (!response.ok) throw new Error("Failed to send invitation");
 
-      toast.success("Admin invitation sent successfully");
+      toast.success("Governance credential provisioned successfully.");
       reset();
       onClose();
-    } catch (_error) {
-      toast.error("Failed to send invitation");
+    } catch (error) {
+      toast.error("Failed to provision credential. Review system logs.");
     } finally {
       setLoading(false);
     }
@@ -64,56 +73,99 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Invite New Administrator</DialogTitle>
-          <DialogDescription>
-            Send an invitation to a new system administrator.
+      <DialogContent className="sm:max-w-md p-0 rounded-none border border-slate-900 shadow-2xl gap-0 bg-white">
+        {/* ── Institutional Header ── */}
+        <DialogHeader className="p-8 border-b border-slate-200 bg-slate-50">
+          <div className="flex items-center gap-3 mb-4">
+            <ShieldCheck size={20} className="text-slate-900" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+              System Access Control
+            </span>
+          </div>
+          <DialogTitle className="text-3xl font-serif text-slate-900 tracking-tight leading-none mb-2">
+            Provision Administrator.
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 font-light text-sm">
+            Issue access role to a new governance officer. Select appropriate
+            clearance levels carefully.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="admin@crevy.com"
-              {...register("email", { required: true })}
-              required
-            />
+        {/* ── Provisioning Form ── */}
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+          <div className="p-8 space-y-8">
+            <div className="space-y-3">
+              <Label
+                htmlFor="email"
+                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              >
+                Target Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="officer@crevy.com"
+                {...register("email", { required: true })}
+                required
+                className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm text-slate-900 placeholder:text-slate-400 focus-visible:ring-0 focus-visible:border-slate-900 transition-colors"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <Label
+                htmlFor="roleName"
+                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              >
+                Clearance Level (Role)
+              </Label>
+              <Select
+                onValueChange={(val) => setValue("roleName", val)}
+                defaultValue="admin"
+              >
+                <SelectTrigger className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors">
+                  <SelectValue placeholder="Select clearance level" />
+                </SelectTrigger>
+                <SelectContent className="rounded-none border border-slate-200 shadow-xl">
+                  {loadingRoles ? (
+                    <SelectItem
+                      value="loading"
+                      disabled
+                      className="font-mono text-xs"
+                    >
+                      Fetching registry...
+                    </SelectItem>
+                  ) : (
+                    roles.map((role: any) => (
+                      <SelectItem
+                        key={role.name}
+                        value={role.name}
+                        className="font-mono text-xs uppercase tracking-widest focus:bg-slate-50 focus:text-slate-900 cursor-pointer"
+                      >
+                        {role.name.replace(/_/g, " ")}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="roleName">Role</Label>
-            <Select
-              onValueChange={(val) => setValue("roleName", val)}
-              defaultValue="admin"
+          {/* ── Action Footer ── */}
+          <DialogFooter className="p-6 bg-slate-50 border-t border-slate-200 flex sm:justify-between items-center gap-4">
+            <Button
+              variant="ghost"
+              type="button"
+              onClick={onClose}
+              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:bg-transparent"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="admin">System Administrator</SelectItem>
-                <SelectItem value="super_admin">Super Administrator</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <DialogFooter className="pt-4">
-            <Button variant="outline" type="button" onClick={onClose}>
-              Cancel
+              Abort
             </Button>
             <Button
               type="submit"
-              disabled={loading}
-              className="bg-emerald-600 hover:bg-emerald-700"
+              disabled={loading || loadingRoles}
+              className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
-              {loading ? (
-                <Loader2 className="animate-spin h-4 w-4 mr-2" />
-              ) : (
-                "Send Invitation"
-              )}
+              {loading ? "Executing..." : "Dispatch Credential"}
             </Button>
           </DialogFooter>
         </form>

@@ -5,6 +5,8 @@ import {
   ArrowRight,
   ChevronDown,
   Globe2,
+  LayoutGrid,
+  List,
   RotateCcw,
   Search,
   ShieldCheck,
@@ -128,8 +130,11 @@ export default function MarketplacePage() {
   const { data: projects, isLoading } = useMarketplace(queryFilters);
 
   const sortedProjects = useMemo(() => {
-    if (!projects) return [];
-    const clone = [...projects] as Record<string, any>[];
+    // Hardened check: Ensure we handle non-iterable or missing projects data
+    const safeProjects = Array.isArray(projects) ? projects : [];
+
+    const clone = [...safeProjects] as Record<string, any>[];
+
     if (sortBy === "impact") {
       clone.sort(
         (a, b) =>
@@ -211,7 +216,7 @@ export default function MarketplacePage() {
             </p>
           </div>
 
-          {/* Asymmetrical Image Grid (Airbnb Luxe Inspiration) */}
+          {/* Asymmetrical Image Grid */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[400px] md:h-[500px] mb-12">
             <div className="md:col-span-8 relative h-full group overflow-hidden bg-slate-200">
               <Image
