@@ -80,6 +80,22 @@ const HeroSection = ({ role, userName }: HeroSectionProps) => {
       gradFrom: "#2cc295",
       gradTo: "#178a74",
     },
+    admin: {
+      title: "Platform Oversight",
+      desc: "Manage platform health, approve users, and oversee the project verification lifecycle.",
+      cta: {
+        label: "View User Management",
+        url: "/user-management",
+        icon: Target,
+      },
+      badge: { text: "Administrator", color: "bg-purple-50 text-purple-700" },
+      nextSteps: [
+        { icon: Clock, text: "Review pending verification queue" },
+        { icon: CheckCircle2, text: "Monitor platform transaction logs" },
+      ],
+      gradFrom: "#178a74",
+      gradTo: "#131927",
+    },
     financial_admin: {
       title: "Maximize your ESG impact",
       desc: "Invest in verified green projects, track your offset portfolio, and generate compliance-ready reports.",
