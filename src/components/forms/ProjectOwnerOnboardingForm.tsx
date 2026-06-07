@@ -10,9 +10,6 @@ import {
   ChevronRight,
   MapPin,
   Smartphone,
-  User,
-  Users,
-  Wallet,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,7 +17,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
@@ -32,10 +28,10 @@ import {
 } from "@/types/onboarding.types";
 
 const STEPS = [
-  { id: 1, title: "Account", icon: User },
-  { id: 2, title: "Payout", icon: Wallet },
-  { id: 3, title: "Plot", icon: MapPin },
-  { id: 4, title: "Assign", icon: Users },
+  { id: 1, title: "Identity Register" },
+  { id: 2, title: "Payout Vectors" },
+  { id: 3, title: "Spatial Assets" },
+  { id: 4, title: "System Finalization" },
 ];
 
 export default function ProjectOwnerOnboardingForm() {
@@ -43,7 +39,6 @@ export default function ProjectOwnerOnboardingForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // State configurations for conditional checking UI
   const [isMomoSameAsContact, setIsMomoSameAsContact] = useState(false);
   const [isAccountNameSameAsUser, setIsAccountNameSameAsUser] = useState(false);
 
@@ -67,20 +62,17 @@ export default function ProjectOwnerOnboardingForm() {
     },
   });
 
-  // Watch identity fields to keep computed values synced if checkboxes are active
   const watchedContactNumber = form.watch("contactNumber");
   const watchedFirstName = form.watch("firstName");
   const watchedLastName = form.watch("lastName");
   const watchedPaymentMethod = form.watch("paymentMethod");
 
-  // Keep MoMo number synced with contact number if checkbox is checked
   useEffect(() => {
     if (isMomoSameAsContact && watchedContactNumber) {
       form.setValue("momoNumber", watchedContactNumber);
     }
   }, [isMomoSameAsContact, watchedContactNumber, form]);
 
-  // Keep Account Name synced with Full Name if checkbox is checked
   useEffect(() => {
     if (isAccountNameSameAsUser) {
       const fullName = `${watchedFirstName} ${watchedLastName}`.trim();
@@ -90,7 +82,7 @@ export default function ProjectOwnerOnboardingForm() {
 
   const nextStep = async () => {
     let fieldsToValidate: any[] = [];
-    if (currentStep === 1) {
+    if (currentStep === 1)
       fieldsToValidate = [
         "firstName",
         "lastName",
@@ -98,22 +90,17 @@ export default function ProjectOwnerOnboardingForm() {
         "password",
         "countryOfOperation",
       ];
-    } else if (currentStep === 2) {
+    else if (currentStep === 2) {
       fieldsToValidate = ["paymentMethod", "accountName"];
-      if (watchedPaymentMethod === "bank") {
+      if (watchedPaymentMethod === "bank")
         fieldsToValidate.push("bankName", "accountNumber");
-      }
-      if (watchedPaymentMethod === "momo") {
+      if (watchedPaymentMethod === "momo")
         fieldsToValidate.push("momoNetwork", "momoNumber");
-      }
-    } else if (currentStep === 3) {
+    } else if (currentStep === 3)
       fieldsToValidate = ["region", "latitude", "longitude", "areaHectares"];
-    }
 
     const isValid = await form.trigger(fieldsToValidate as any);
-    if (isValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
-    }
+    if (isValid) setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
   };
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -131,7 +118,6 @@ export default function ProjectOwnerOnboardingForm() {
         partnerId: data.partnerId,
         assignmentType: data.assignmentType,
         isB2cAssignment: data.isB2cAssignment,
-
         bankDetails:
           data.paymentMethod === "bank"
             ? {
@@ -140,7 +126,6 @@ export default function ProjectOwnerOnboardingForm() {
                 accountName: data.accountName || null,
               }
             : null,
-
         momoDetails:
           data.paymentMethod === "momo"
             ? {
@@ -149,7 +134,6 @@ export default function ProjectOwnerOnboardingForm() {
                 accountName: data.accountName || null,
               }
             : null,
-
         farmPlot: data.region
           ? {
               region: data.region,
@@ -163,11 +147,7 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      const _response = await axios.post(
-        "/api/v2/project-owners/onboard",
-        payload,
-      );
-
+      await axios.post("/api/v2/project-owners/onboard", payload);
       toast.success("Project Owner registered successfully!");
       router.push("/dashboard/new-project");
     } catch (error: any) {
@@ -183,56 +163,37 @@ export default function ProjectOwnerOnboardingForm() {
   const progress = (currentStep / STEPS.length) * 100;
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Stepper Header */}
-      <div className="mb-10">
-        <div className="flex justify-between items-center mb-6 px-2">
-          {STEPS.map((step) => {
-            const Icon = step.icon;
-            const isActive = currentStep === step.id;
-            const isCompleted = currentStep > step.id;
-            return (
-              <div
-                key={step.id}
-                className="flex flex-col items-center gap-3 group"
-              >
-                <div
-                  className={cn(
-                    "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-sm",
-                    isActive
-                      ? "bg-[#2CC295] text-white ring-4 ring-[#2CC295]/15 scale-110"
-                      : isCompleted
-                        ? "bg-[#2CC295]/10 text-[#2CC295]"
-                        : "bg-white text-gray-300 border border-gray-100",
-                  )}
-                >
-                  {isCompleted ? (
-                    <CheckCircle2 className="w-6 h-6" />
-                  ) : (
-                    <Icon className="w-6 h-6" />
-                  )}
-                </div>
-                <span
-                  className={cn(
-                    "text-[10px] font-bold uppercase tracking-[0.15em] transition-colors duration-300",
-                    isActive
-                      ? "text-[#2CC295]"
-                      : "text-gray-400 group-hover:text-gray-500",
-                  )}
-                >
-                  {step.title}
-                </span>
-              </div>
-            );
-          })}
+    <div className="max-w-3xl mx-auto">
+      {/* ── Editorial Stepper ── */}
+      <div className="mb-12">
+        <div className="flex items-center justify-between mb-4">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            [ STEP 0{currentStep} / 0{STEPS.length} ]
+          </span>
+          <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">
+            {STEPS[currentStep - 1].title}
+          </span>
         </div>
-        <div className="relative h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+        <div className="relative h-[2px] w-full bg-slate-200 overflow-hidden">
           <motion.div
-            className="absolute top-0 left-0 h-full bg-[#2CC295]"
+            className="absolute top-0 left-0 h-full bg-slate-900"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: "circOut" }}
+            transition={{ duration: 0.6, ease: "circOut" }}
           />
+        </div>
+        <div className="flex justify-between mt-3">
+          {STEPS.map((step) => (
+            <span
+              key={step.id}
+              className={cn(
+                "text-[9px] font-bold uppercase tracking-widest transition-colors",
+                currentStep >= step.id ? "text-slate-900" : "text-slate-400",
+              )}
+            >
+              {step.title}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -244,76 +205,203 @@ export default function ProjectOwnerOnboardingForm() {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="bg-white border border-slate-200 p-8 md:p-12 shadow-sm"
             >
-              <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-3xl overflow-hidden">
-                <CardContent className="p-8 md:p-12">
-                  {/* Step 1: Account Info */}
-                  {currentStep === 1 && (
-                    <div className="space-y-6">
-                      <div className="mb-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2CC295]/10 text-[#2CC295] text-[10px] font-bold uppercase tracking-wider mb-3">
-                          <span className="w-1 h-1 rounded-full bg-[#2CC295]" />
-                          Step 01
-                        </div>
-                        <h2 className="text-3xl font-extrabold text-[#131927] tracking-tight">
-                          Identity Profile
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Register the primary credentials for the project
-                          owner.
+              {/* ── Step 1: Account Info ── */}
+              {currentStep === 1 && (
+                <div className="space-y-8">
+                  <div className="border-b border-slate-200 pb-6 mb-8">
+                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                      Identity Profile
+                    </h2>
+                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                      Register primary credentials and jurisdictional data.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <CustomInput
+                      name="firstName"
+                      label="Legal First Name"
+                      placeholder="e.g. Daniel"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                    <CustomInput
+                      name="lastName"
+                      label="Legal Last Name"
+                      placeholder="e.g. Asante"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <CustomInput
+                      name="contactNumber"
+                      label="Primary Phone (ID)"
+                      placeholder="+233..."
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                    <CustomInput
+                      name="email"
+                      label="Email Address (Optional)"
+                      placeholder="contact@domain.com"
+                      control={form.control}
+                      type="email"
+                      disabled={loading}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <CustomInput
+                      name="password"
+                      label="System Access Key"
+                      placeholder="Min. 8 chars"
+                      control={form.control}
+                      type="password"
+                      disabled={loading}
+                    />
+                    <CustomInput
+                      name="countryOfOperation"
+                      label="Operating Jurisdiction"
+                      placeholder="Ghana"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* ── Step 2: Payment Details ── */}
+              {currentStep === 2 && (
+                <div className="space-y-8">
+                  <div className="border-b border-slate-200 pb-6 mb-8">
+                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                      Payout Vectors
+                    </h2>
+                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                      Configure climate revenue disbursement channels.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                      Select Routing Network
+                    </Label>
+                    <RadioGroup
+                      defaultValue={watchedPaymentMethod}
+                      onValueChange={(v) =>
+                        form.setValue("paymentMethod", v as "bank" | "momo")
+                      }
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                    >
+                      <div>
+                        <RadioGroupItem
+                          value="momo"
+                          id="momo"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="momo"
+                          className="flex flex-col items-start p-6 border border-slate-200 bg-slate-50 hover:bg-slate-100 peer-data-[state=checked]:border-slate-900 peer-data-[state=checked]:bg-white cursor-pointer transition-all"
+                        >
+                          <Smartphone
+                            className="h-6 w-6 text-slate-900 mb-4"
+                            strokeWidth={1.5}
+                          />
+                          <span className="font-bold text-sm tracking-widest uppercase text-slate-900">
+                            Mobile Money
+                          </span>
+                        </Label>
+                      </div>
+                      <div>
+                        <RadioGroupItem
+                          value="bank"
+                          id="bank"
+                          className="peer sr-only"
+                        />
+                        <Label
+                          htmlFor="bank"
+                          className="flex flex-col items-start p-6 border border-slate-200 bg-slate-50 hover:bg-slate-100 peer-data-[state=checked]:border-slate-900 peer-data-[state=checked]:bg-white cursor-pointer transition-all"
+                        >
+                          <Building2
+                            className="h-6 w-6 text-slate-900 mb-4"
+                            strokeWidth={1.5}
+                          />
+                          <span className="font-bold text-sm tracking-widest uppercase text-slate-900">
+                            Institutional Transfer
+                          </span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  {/* Account Name Inheritance */}
+                  <div className="p-5 bg-slate-50 border border-slate-200 space-y-3">
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        id="sameAsUser"
+                        checked={isAccountNameSameAsUser}
+                        onCheckedChange={(checked) => {
+                          setIsAccountNameSameAsUser(!!checked);
+                          if (!checked) form.setValue("accountName", "");
+                        }}
+                        className="mt-1 rounded-none border-slate-300 data-[state=checked]:bg-slate-900 data-[state=checked]:border-slate-900"
+                      />
+                      <div>
+                        <label
+                          htmlFor="sameAsUser"
+                          className="text-xs font-bold uppercase tracking-widest text-slate-700 cursor-pointer"
+                        >
+                          Inherit Entity Name
+                        </label>
+                        <p className="text-[10px] font-mono text-slate-400 mt-1">
+                          Use Identity Profile Name for routing:{" "}
+                          <span className="text-slate-900 font-bold">
+                            {isAccountNameSameAsUser
+                              ? `${watchedFirstName} ${watchedLastName}`.trim()
+                              : "UNSET"}
+                          </span>
                         </p>
                       </div>
-                      <div className="grid grid-cols-2 gap-5">
-                        <CustomInput
-                          name="firstName"
-                          label="First Name"
-                          placeholder="e.g. Daniel"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                        <CustomInput
-                          name="lastName"
-                          label="Last Name"
-                          placeholder="e.g. Asante"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                      </div>
+                    </div>
+                  </div>
+
+                  {!isAccountNameSameAsUser && (
+                    <CustomInput
+                      name="accountName"
+                      label="Registered Account Name"
+                      placeholder="e.g. Daniel Asante"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                  )}
+
+                  {watchedPaymentMethod === "bank" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200">
                       <CustomInput
-                        name="contactNumber"
-                        label="Phone Number"
-                        placeholder="+233..."
+                        name="bankName"
+                        label="Institution Name"
+                        placeholder="e.g. Ecobank"
                         control={form.control}
                         type="text"
-                        description="Required for system access (login identifier)."
                         disabled={loading}
                       />
                       <CustomInput
-                        name="email"
-                        label="Email Address (Optional)"
-                        placeholder="daniel@example.com"
-                        control={form.control}
-                        type="email"
-                        disabled={loading}
-                      />
-                      <CustomInput
-                        name="password"
-                        label="Access Password"
-                        placeholder="Min 8 characters"
-                        control={form.control}
-                        type="password"
-                        disabled={loading}
-                      />
-                      <CustomInput
-                        name="countryOfOperation"
-                        label="Country of Operation"
-                        placeholder="Ghana"
+                        name="accountNumber"
+                        label="Routing Number"
+                        placeholder="0000 0000 0000"
                         control={form.control}
                         type="text"
                         disabled={loading}
@@ -321,378 +409,223 @@ export default function ProjectOwnerOnboardingForm() {
                     </div>
                   )}
 
-                  {/* Step 2: Payment Details */}
-                  {currentStep === 2 && (
-                    <div className="space-y-6">
-                      <div className="mb-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2CC295]/10 text-[#2CC295] text-[10px] font-bold uppercase tracking-wider mb-3">
-                          <span className="w-1 h-1 rounded-full bg-[#2CC295]" />
-                          Step 02
-                        </div>
-                        <h2 className="text-3xl font-extrabold text-[#131927] tracking-tight">
-                          Payout Configuration
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Set up secure channels for climate revenue
-                          disbursement.
-                        </p>
-                      </div>
+                  {watchedPaymentMethod === "momo" && (
+                    <div className="space-y-6 pt-4 border-t border-slate-200">
+                      <CustomInput
+                        name="momoNetwork"
+                        label="Network Operator"
+                        placeholder="e.g. MTN, Telecel"
+                        control={form.control}
+                        type="text"
+                        disabled={loading}
+                      />
 
-                      <div className="space-y-5">
-                        <Label className="text-sm font-bold text-gray-700">
-                          Preferred Payout Method
-                        </Label>
-                        <RadioGroup
-                          defaultValue={watchedPaymentMethod}
-                          onValueChange={(v) =>
-                            form.setValue("paymentMethod", v as "bank" | "momo")
-                          }
-                          className="grid grid-cols-2 gap-5"
-                        >
-                          <div>
-                            <RadioGroupItem
-                              value="momo"
-                              id="momo"
-                              className="peer sr-only"
-                            />
-                            <Label
-                              htmlFor="momo"
-                              className="flex flex-col items-center justify-center h-40 gap-4 rounded-3xl border-2 border-gray-100 bg-white p-6 hover:bg-gray-50 peer-data-[state=checked]:border-[#2CC295] peer-data-[state=checked]:bg-[#2CC295]/5 [&:has([data-state=checked])]:border-[#2CC295] cursor-pointer transition-all duration-300"
-                            >
-                              <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 group-peer-data-[state=checked]:bg-[#2CC295]/20 group-peer-data-[state=checked]:text-[#2CC295]">
-                                <Smartphone className="h-6 w-6" />
-                              </div>
-                              <span className="font-bold text-sm tracking-tight">
-                                Mobile Money
-                              </span>
-                            </Label>
-                          </div>
-                          <div>
-                            <RadioGroupItem
-                              value="bank"
-                              id="bank"
-                              className="peer sr-only"
-                            />
-                            <Label
-                              htmlFor="bank"
-                              className="flex flex-col items-center justify-center h-40 gap-4 rounded-3xl border-2 border-gray-100 bg-white p-6 hover:bg-gray-50 peer-data-[state=checked]:border-[#2CC295] peer-data-[state=checked]:bg-[#2CC295]/5 [&:has([data-state=checked])]:border-[#2CC295] cursor-pointer transition-all duration-300"
-                            >
-                              <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400">
-                                <Building2 className="h-6 w-6" />
-                              </div>
-                              <span className="font-bold text-sm tracking-tight">
-                                Bank Transfer
-                              </span>
-                            </Label>
-                          </div>
-                        </RadioGroup>
-                      </div>
-
-                      {/* Unified Account Name Strategy with Identity Verification */}
-                      <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
-                        <div className="flex items-center space-x-3">
+                      <div className="p-5 bg-slate-50 border border-slate-200 space-y-3">
+                        <div className="flex items-start gap-3">
                           <Checkbox
-                            id="sameAsUser"
-                            checked={isAccountNameSameAsUser}
+                            id="sameAsContact"
+                            checked={isMomoSameAsContact}
                             onCheckedChange={(checked) => {
-                              setIsAccountNameSameAsUser(!!checked);
-                              if (!checked) form.setValue("accountName", "");
+                              setIsMomoSameAsContact(!!checked);
+                              if (!checked) form.setValue("momoNumber", "");
                             }}
+                            className="mt-1 rounded-none border-slate-300 data-[state=checked]:bg-slate-900 data-[state=checked]:border-slate-900"
                           />
-                          <label
-                            htmlFor="sameAsUser"
-                            className="text-xs font-bold text-gray-700 cursor-pointer select-none"
-                          >
-                            Account name is the same as Identity Profile Name
-                          </label>
-                        </div>
-
-                        {isAccountNameSameAsUser && (
-                          <div className="text-xs text-gray-400 pl-7 font-medium">
-                            Reference Display:{" "}
-                            <span className="text-emerald-600 font-bold">
-                              {`${watchedFirstName} ${watchedLastName}`.trim() ||
-                                "(No name entered yet)"}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {!isAccountNameSameAsUser && (
-                        <CustomInput
-                          name="accountName"
-                          label="Registered Account Name"
-                          placeholder="e.g. Daniel Asante"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                      )}
-
-                      {/* Bank Fields */}
-                      {watchedPaymentMethod === "bank" && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="space-y-5 pt-2"
-                        >
-                          <CustomInput
-                            name="bankName"
-                            label="Bank Name"
-                            placeholder="e.g. Ecobank"
-                            control={form.control}
-                            type="text"
-                            disabled={loading}
-                          />
-                          <CustomInput
-                            name="accountNumber"
-                            label="Account Number"
-                            placeholder="0000 0000 0000"
-                            control={form.control}
-                            type="text"
-                            disabled={loading}
-                          />
-                        </motion.div>
-                      )}
-
-                      {/* MoMo Fields */}
-                      {watchedPaymentMethod === "momo" && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="space-y-5 pt-2"
-                        >
-                          <CustomInput
-                            name="momoNetwork"
-                            label="Network Provider"
-                            placeholder="e.g. MTN, Telecel"
-                            control={form.control}
-                            type="text"
-                            disabled={loading}
-                          />
-
-                          <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                            <Checkbox
-                              id="sameAsContact"
-                              checked={isMomoSameAsContact}
-                              onCheckedChange={(checked) => {
-                                setIsMomoSameAsContact(!!checked);
-                                if (!checked) form.setValue("momoNumber", "");
-                              }}
-                            />
+                          <div>
                             <label
                               htmlFor="sameAsContact"
-                              className="text-xs font-bold text-gray-700 cursor-pointer select-none"
+                              className="text-xs font-bold uppercase tracking-widest text-slate-700 cursor-pointer"
                             >
-                              MoMo number is the same as Identity Contact Number
+                              Inherit Contact Number
                             </label>
-                          </div>
-
-                          {isMomoSameAsContact && (
-                            <div className="text-xs text-gray-400 px-4 font-medium">
-                              Reference Display:{" "}
-                              <span className="text-emerald-600 font-bold">
-                                {watchedContactNumber ||
-                                  "(No contact number entered yet)"}
+                            <p className="text-[10px] font-mono text-slate-400 mt-1">
+                              Use Primary Phone for MoMo:{" "}
+                              <span className="text-slate-900 font-bold">
+                                {isMomoSameAsContact
+                                  ? watchedContactNumber
+                                  : "UNSET"}
                               </span>
-                            </div>
-                          )}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
 
-                          {!isMomoSameAsContact && (
-                            <CustomInput
-                              name="momoNumber"
-                              label="Registered MoMo Number"
-                              placeholder="054..."
-                              control={form.control}
-                              type="text"
-                              disabled={loading}
-                            />
-                          )}
-                        </motion.div>
+                      {!isMomoSameAsContact && (
+                        <CustomInput
+                          name="momoNumber"
+                          label="Target Number"
+                          placeholder="054..."
+                          control={form.control}
+                          type="text"
+                          disabled={loading}
+                        />
                       )}
                     </div>
                   )}
+                </div>
+              )}
 
-                  {/* Step 3: Land Plot */}
-                  {currentStep === 3 && (
-                    <div className="space-y-6">
-                      <div className="mb-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2CC295]/10 text-[#2CC295] text-[10px] font-bold uppercase tracking-wider mb-3">
-                          <span className="w-1 h-1 rounded-full bg-[#2CC295]" />
-                          Step 03
-                        </div>
-                        <h2 className="text-3xl font-extrabold text-[#131927] tracking-tight">
-                          Spatial Registration
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Locate the primary farm plot for initial mapping.
-                        </p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-5">
-                        <CustomInput
-                          name="region"
-                          label="Region"
-                          placeholder="e.g. Ashanti"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                        <CustomInput
-                          name="village"
-                          label="Village / Settlement"
-                          placeholder="e.g. Ejura"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                      </div>
+              {/* ── Step 3: Land Plot ── */}
+              {currentStep === 3 && (
+                <div className="space-y-8">
+                  <div className="border-b border-slate-200 pb-6 mb-8">
+                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                      Spatial Assets
+                    </h2>
+                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                      Register primary geo-coordinates for verification.
+                    </p>
+                  </div>
 
-                      <div className="p-6 bg-emerald-50/50 rounded-3xl border border-emerald-100 flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-emerald-100 flex items-center justify-center text-[#2CC295] shrink-0">
-                          <MapPin className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-extrabold text-emerald-900 tracking-tight mb-1">
-                            Coordinate Capture
-                          </p>
-                          <p className="text-xs text-emerald-700/80 leading-relaxed">
-                            Captured coordinates from GPS or manual entry. Used
-                            for satellite dMRV verification.
-                          </p>
-                        </div>
-                      </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <CustomInput
+                      name="region"
+                      label="State / Region"
+                      placeholder="e.g. Ashanti"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                    <CustomInput
+                      name="village"
+                      label="Local Settlement"
+                      placeholder="e.g. Ejura"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                  </div>
 
-                      <div className="grid grid-cols-2 gap-5">
-                        <CustomInput
-                          name="latitude"
-                          label="Latitude"
-                          placeholder="6.1234"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                        <CustomInput
-                          name="longitude"
-                          label="Longitude"
-                          placeholder="-0.6543"
-                          control={form.control}
-                          type="text"
-                          disabled={loading}
-                        />
-                      </div>
-                      <CustomInput
-                        name="areaHectares"
-                        label="Estimated Area (Hectares)"
-                        placeholder="e.g. 2.5"
-                        control={form.control}
-                        type="text"
-                        disabled={loading}
-                      />
+                  <div className="p-6 bg-slate-50 border border-slate-200 flex items-start gap-4">
+                    <MapPin className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-1">
+                        Coordinate Mapping
+                      </p>
+                      <p className="text-xs text-slate-500 font-mono leading-relaxed">
+                        Raw coordinates required for initial dMRV satellite
+                        targeting and baseline biomass calculations.
+                      </p>
                     </div>
-                  )}
+                  </div>
 
-                  {/* Step 4: Assignment */}
-                  {currentStep === 4 && (
-                    <div className="space-y-6">
-                      <div className="mb-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2CC295]/10 text-[#2CC295] text-[10px] font-bold uppercase tracking-wider mb-3">
-                          <span className="w-1 h-1 rounded-full bg-[#2CC295]" />
-                          Step 04
-                        </div>
-                        <h2 className="text-3xl font-extrabold text-[#131927] tracking-tight">
-                          Final Review
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Establish agent connectivity and confirm registration.
-                        </p>
-                      </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <CustomInput
+                      name="latitude"
+                      label="Latitude (Y)"
+                      placeholder="6.1234"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                    <CustomInput
+                      name="longitude"
+                      label="Longitude (X)"
+                      placeholder="-0.6543"
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+                  </div>
 
-                      <div className="bg-gray-50/50 p-8 rounded-3xl border border-gray-100 space-y-6">
-                        <div className="flex items-center gap-5">
-                          <div className="w-14 h-14 rounded-2xl bg-[#2CC295]/10 flex items-center justify-center text-[#2CC295]">
-                            <Users className="w-7 h-7" />
-                          </div>
-                          <div>
-                            <p className="text-lg font-bold text-[#131927] tracking-tight">
-                              Agent Connectivity
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              You will be linked as the primary field agent.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="space-y-4">
-                          <CustomInput
-                            name="partnerId"
-                            label="Partner Organization (Optional)"
-                            placeholder="Search organization..."
-                            control={form.control}
-                            type="text"
-                            disabled={loading}
-                          />
-                          <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100">
-                            <span className="text-sm font-bold text-gray-700">
-                              Assignment Type
-                            </span>
-                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#2CC295] bg-[#2CC295]/10 px-3 py-1.5 rounded-full">
-                              Primary
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                  <CustomInput
+                    name="areaHectares"
+                    label="Estimated Scale (Hectares)"
+                    placeholder="e.g. 2.5"
+                    control={form.control}
+                    type="text"
+                    disabled={loading}
+                  />
+                </div>
+              )}
 
-                      <div className="pt-4">
-                        <div className="p-6 bg-amber-50/50 rounded-3xl border border-amber-100 flex items-start gap-4">
-                          <CheckCircle2 className="w-6 h-6 text-amber-500 shrink-0" />
-                          <div>
-                            <p className="text-sm font-extrabold text-amber-900 tracking-tight mb-1">
-                              Pre-submission Confirmation
-                            </p>
-                            <p className="text-xs text-amber-700/80 leading-relaxed">
-                              The project owner profile will remain 'PENDING'
-                              until KYC documents are uploaded and verified by
-                              the admin team.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+              {/* ── Step 4: Assignment ── */}
+              {currentStep === 4 && (
+                <div className="space-y-8">
+                  <div className="border-b border-slate-200 pb-6 mb-8">
+                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                      Finalization Protocol
+                    </h2>
+                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                      Establish chain-of-custody assignments.
+                    </p>
+                  </div>
+
+                  <div className="p-8 bg-slate-50 border border-slate-200 space-y-6">
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-1">
+                        Account Custody
+                      </p>
+                      <p className="text-xs text-slate-500 font-mono">
+                        Current operative will be assigned as primary oversight
+                        agent.
+                      </p>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+
+                    <CustomInput
+                      name="partnerId"
+                      label="Partner Organization Override (Optional)"
+                      placeholder="Search registry..."
+                      control={form.control}
+                      type="text"
+                      disabled={loading}
+                    />
+
+                    <div className="flex items-center justify-between py-4 border-t border-slate-200 mt-4">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                        Assignment Classification
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-slate-900 bg-white border border-slate-200 px-3 py-1">
+                        PRIMARY_AGENT
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6 border border-amber-200 bg-amber-50 flex items-start gap-4">
+                    <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-900 mb-1">
+                        Compliance Hold
+                      </p>
+                      <p className="text-xs text-amber-800/70 font-mono leading-relaxed">
+                        Entity status will default to PENDING_KYC. Manual
+                        documentation review required before asset tokenization.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between items-center px-4">
+          {/* ── Navigation Actions ── */}
+          <div className="flex justify-between items-center pt-4">
             <Button
               type="button"
               variant="ghost"
               onClick={prevStep}
               disabled={currentStep === 1 || loading}
-              className="flex items-center gap-2 text-gray-400 hover:text-gray-900 font-bold transition-colors"
+              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
             >
-              <ChevronLeft className="w-5 h-5" />
-              Back
+              <ChevronLeft className="w-4 h-4 mr-2" /> Back
             </Button>
 
             {currentStep < STEPS.length ? (
               <Button
                 type="button"
                 onClick={nextStep}
-                className="bg-[#2CC295] hover:bg-[#25a37d] text-white px-10 py-7 rounded-2xl flex items-center gap-3 font-extrabold transition-all shadow-xl shadow-[#2CC295]/25"
+                className="rounded-none bg-slate-900 text-white hover:bg-emerald-900 px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
-                Continue
-                <ChevronRight className="w-5 h-5" />
+                Next Section <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-[#131927] hover:bg-black text-white px-12 py-7 rounded-2xl flex items-center gap-3 font-extrabold transition-all shadow-xl shadow-[#131927]/25"
+                className="rounded-none bg-slate-900 text-white hover:bg-emerald-900 px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
-                {loading ? "Synchronizing..." : "Finalize Registration"}
-                <CheckCircle2 className="w-5 h-5" />
+                {loading ? "Executing Protocol..." : "Finalize Registration"}
+                {!loading && <CheckCircle2 className="w-4 h-4 ml-2" />}
               </Button>
             )}
           </div>

@@ -302,6 +302,7 @@ export function FinalCTASection({
           src="https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg"
           alt="Lush green nature background"
           fill
+          sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-myBlue/95 via-myBlue/80 to-transparent" />

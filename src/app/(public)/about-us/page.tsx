@@ -1,214 +1,210 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { Heart, Leaf, Lightbulb, Shield, Target, Zap } from "lucide-react";
-import Image from "next/image";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Globe,
+  Leaf,
+  Lightbulb,
+  Shield,
+  Target,
+  Users,
+  Zap,
+} from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// ─── INSTITUTIONAL DATA ──────────────────────────────────────────────────────
 
 const TEAM_MEMBERS = [
   {
     name: "Kwame Ofori",
-    role: "CEO & Co-Founder",
-    bio: "Former climate policy advisor with 12 years in African carbon markets. Kwame built Crevy to democratise access to green finance for smallholder farmers and local project developers.",
+    role: "Chief Executive Officer",
+    id: "EXEC-001",
+    bio: "Former climate policy advisor with 12 years in African carbon markets. Kwame architected Crevy to democratize institutional access to green finance for local project developers.",
     initials: "KO",
-    color: "from-myGreen/30 to-myGreen/10",
-    accentColor: "text-myGreen",
-    linkedIn: "#",
   },
   {
     name: "Abena Darko",
-    role: "CTO & Co-Founder",
-    bio: "Full-stack engineer and data scientist previously at a London-based climate tech startup. Abena leads Crevy's platform architecture and our carbon calculation engine.",
+    role: "Chief Technology Officer",
+    id: "EXEC-002",
+    bio: "Full-stack engineer and data scientist previously at a London-based climate tech startup. Abena leads platform architecture and our proprietary carbon calculation engine.",
     initials: "AD",
-    color: "from-blue-500/30 to-blue-500/10",
-    accentColor: "text-blue-400",
-    linkedIn: "#",
   },
   {
     name: "Emmanuel Asiedu",
     role: "Head of Carbon Verification",
-    bio: "Certified carbon auditor trained under VCS and Gold Standard methodologies. Emmanuel oversees all project audits and ensures every credit issued on Crevy meets international standards.",
+    id: "EXEC-003",
+    bio: "Certified carbon auditor trained under VCS and Gold Standard methodologies. Emmanuel enforces strict compliance protocols and oversees all project dMRV audits.",
     initials: "EA",
-    color: "from-emerald-500/30 to-emerald-500/10",
-    accentColor: "text-emerald-400",
-    linkedIn: "#",
   },
   {
     name: "Naomi Sarpong",
     role: "Head of Partnerships",
-    bio: "Sustainability strategist with deep experience in corporate ESG programmes across West Africa. Naomi bridges the gap between project owners and the companies that invest in them.",
+    id: "EXEC-004",
+    bio: "Sustainability strategist with deep experience in corporate ESG programmes across West Africa. Naomi manages institutional offtakes and counterparty relationships.",
     initials: "NS",
-    color: "from-purple-500/30 to-purple-500/10",
-    accentColor: "text-purple-400",
-    linkedIn: "#",
   },
 ];
 
 const CORE_VALUES = [
   {
     icon: Shield,
-    title: "Integrity Above All",
+    title: "Cryptographic Integrity",
     description:
-      "Every carbon credit on Crevy is verified by independent auditors. We never compromise on scientific accuracy, no matter the commercial pressure.",
+      "Every credit is verified by independent auditors and permanently anchored. We never compromise on scientific accuracy or verification protocols.",
   },
   {
-    icon: Leaf,
-    title: "Climate-First Thinking",
+    icon: Target,
+    title: "Climate-First Unit Economics",
     description:
-      "Our platform decisions start with one question: does this create genuine climate impact? Revenue follows purpose, not the other way around.",
+      "Our platform decisions start with a single constraint: does this maximize localized climate impact? Capital routing must follow ecological purpose.",
   },
   {
     icon: Users,
-    title: "Community Empowerment",
+    title: "Equitable Market Access",
     description:
-      "We believe African farmers and project developers deserve equitable access to global carbon markets. Crevy removes every barrier we can.",
+      "We dismantle systemic barriers, ensuring African originators and land stewards receive fair-market liquidity for their sequestration assets.",
   },
   {
     icon: Lightbulb,
     title: "Radical Transparency",
     description:
-      "Full audit trails, real-time data, and open methodologies. Buyers and sellers on Crevy always know exactly what they're getting.",
-  },
-  {
-    icon: Globe,
-    title: "Pan-African Vision",
-    description:
-      "We start in Ghana but build for the continent. Our platform is designed to scale across all 54 African nations and their unique ecosystems.",
-  },
-  {
-    icon: Heart,
-    title: "People over Profit",
-    description:
-      "Before we optimize for margins, we optimize for the wellbeing of project communities, the health of local ecosystems, and long-term sustainability.",
+      "Full audit trails, real-time dMRV telemetry, and open methodologies. Counterparties operate with complete informational symmetry.",
   },
 ];
 
-import { Globe, Users } from "lucide-react";
-
 const IMPACT_STATS = [
-  { value: "200+", label: "Verified Projects" },
-  { value: "50K+", label: "tCO₂e Offset" },
-  { value: "80+", label: "Corporate Partners" },
-  { value: "6", label: "Project Categories" },
-  { value: "Ghana", label: "Headquartered In" },
-  { value: "2022", label: "Founded" },
+  { value: "200+", label: "Verified Assets" },
+  { value: "50K+", label: "tCO₂e Sequestered" },
+  { value: "80+", label: "Institutional Partners" },
+  { value: "6", label: "Asset Methodologies" },
 ];
 
 const MILESTONES = [
   {
     year: "2022",
-    title: "Foovante Global is founded in Accra",
-    desc: "Kwame and Abena identify the massive gap between African green projects and international carbon markets. The first Crevy prototype goes live.",
+    quarter: "Q3",
+    title: "Foovante Global Incorporation",
+    desc: "Founders identify the critical liquidity gap between African green projects and international voluntary carbon markets. Initial feasibility studies commence.",
   },
   {
     year: "2023",
-    title: "First 50 projects verified",
-    desc: "Crevy verifies its first cohort of regenerative agriculture and reforestation projects in Ghana, issuing over 8,000 tCO₂e in credits.",
+    quarter: "Q4",
+    title: "Genesis Verification Cohort",
+    desc: "Crevy protocol verifies its first 50 regenerative agriculture assets in Ghana, successfully issuing over 8,000 tCO₂e in high-fidelity credits.",
   },
   {
     year: "2024",
-    title: "Marketplace launches publicly",
-    desc: "The Crevy Marketplace opens to corporate buyers. First international company offsets its Scope 3 emissions through a Volta Basin reforestation project.",
+    quarter: "Q2",
+    title: "Marketplace Infrastructure Live",
+    desc: "The institutional trading desk opens to corporate counterparties. First international enterprise offsets Scope 3 emissions via Volta Basin reforestation deeds.",
   },
   {
     year: "2025",
-    title: "200+ active projects and 80 company partners",
-    desc: "Crevy reaches its first major milestone, with projects spanning 6 categories and partners across Ghana, Nigeria, and Côte d'Ivoire.",
+    quarter: "Q1",
+    title: "Ecosystem Expansion",
+    desc: "Platform reaches 200+ active assets and secures 80 enterprise partners, diversifying into 6 distinct methodologies across West Africa.",
   },
   {
     year: "2026",
-    title: "Continental expansion begins",
-    desc: "Crevy launches its pan-African roadmap, beginning with pilot programmes in Kenya, Rwanda, and Senegal.",
+    quarter: "Q3",
+    title: "Pan-African Deployment",
+    desc: "Strategic continental roadmap initiated, deploying pilot dMRV integrations and liquidity pools in Kenya, Rwanda, and Senegal.",
   },
 ];
 
 export default function AboutPage() {
-  const shouldReduceMotion = useReducedMotion() as boolean;
-
   return (
-    <div className="animate-in fade-in duration-700">
-      <AboutHero shouldReduceMotion={shouldReduceMotion} />
-      <MissionVisionSection shouldReduceMotion={shouldReduceMotion} />
-      <StorySection shouldReduceMotion={shouldReduceMotion} />
-      <CoreValuesSection shouldReduceMotion={shouldReduceMotion} />
-      <ImpactSection shouldReduceMotion={shouldReduceMotion} />
-      <TeamSection shouldReduceMotion={shouldReduceMotion} />
-      <MilestonesSection shouldReduceMotion={shouldReduceMotion} />
-      <AboutCTA shouldReduceMotion={shouldReduceMotion} />
+    <div className="font-sans selection:bg-slate-900 selection:text-white bg-slate-50">
+      <AboutHero />
+      <StorySection />
+      <MissionVisionSection />
+      <ImpactSection />
+      <TeamSection />
+      <MilestonesSection />
+      <AboutCTA />
     </div>
   );
 }
 
-function AboutHero({ shouldReduceMotion }: { shouldReduceMotion?: boolean }) {
+// ─── 1. HERO SECTION ─────────────────────────────────────────────────────────
+
+function AboutHero() {
   return (
-    <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-myBlue pt-20">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg"
-          alt="Lush green African landscape"
-          fill
-          className="object-cover opacity-20"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-myBlue/80 via-myBlue/60 to-myBlue" />
+    <section className="bg-white border-b border-slate-200 pt-32 pb-24 relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
+        <Globe size={400} />
       </div>
-      <div className="container mx-auto px-6 relative z-10 text-center py-24">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center space-x-2 bg-myGreen/10 backdrop-blur-md border border-myGreen/20 px-4 py-2 rounded-full mb-8"
+          className="inline-flex items-center gap-3 mb-8"
         >
-          <Leaf size={14} className="text-myGreen" />
-          <span className="text-myGreen text-xs font-bold tracking-[0.2em] uppercase">
-            Our Story · Our Mission · Our People
+          <div className="w-8 h-[1px] bg-slate-900"></div>
+          <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em]">
+            Corporate Overview
           </span>
         </motion.div>
+
         <motion.h1
-          className="font-extrabold text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight mb-8"
-          style={{ fontFamily: "var(--font-syne)" }}
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
+          className="text-5xl md:text-7xl lg:text-8xl font-serif text-slate-900 tracking-tight leading-[1.05] mb-8 max-w-4xl"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          We're Building Africa's
-          <br />
-          <span className="text-myGreen italic">Green Economy</span>
+          Engineering the{" "}
+          <span className="italic text-slate-500">
+            financial infrastructure
+          </span>{" "}
+          for Africa's climate assets.
         </motion.h1>
       </div>
     </section>
   );
 }
 
-function MissionVisionSection({
-  shouldReduceMotion,
-}: {
-  shouldReduceMotion?: boolean;
-}) {
+// ─── 2. THE NARRATIVE ────────────────────────────────────────────────────────
+
+function StorySection() {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          <div className="bg-myBlue rounded-3xl p-10 relative overflow-hidden group">
-            <Target size={28} className="text-myGreen mb-6" />
-            <h2 className="text-2xl md:text-3xl text-white mb-6 font-bold">
-              Our Mission
+    <section className="py-24 bg-white border-b border-slate-200">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+        <div className="grid md:grid-cols-12 gap-12 lg:gap-24">
+          <div className="md:col-span-4">
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4 border-t border-slate-900 pt-4">
+              The African Climate Paradox
             </h2>
-            <p className="text-white/60">
-              Make voluntary carbon markets work for African communities.
+            <p className="text-3xl font-serif text-slate-900 leading-tight">
+              Africa generates over 30% of the world's carbon sequestration
+              potential, yet receives less than 2% of market revenue.
             </p>
           </div>
-          <div className="bg-myGreen rounded-3xl p-10 relative overflow-hidden group">
-            <Zap size={28} className="text-white mb-6" />
-            <h2 className="text-2xl md:text-3xl text-white mb-6 font-bold">
-              Our Vision
-            </h2>
-            <p className="text-white/80">
-              A continent where every green project earns what it's worth.
+          <div className="md:col-span-8 space-y-8 text-slate-600 text-lg font-light leading-relaxed">
+            <p>
+              <span className="float-left text-7xl font-serif text-slate-900 leading-none pr-4 pt-2">
+                I
+              </span>
+              n 2022, Foovante Global was founded in Accra to address a systemic
+              failure in the voluntary carbon market. The existing
+              infrastructure was built for the Global North, characterized by
+              opaque intermediaries, prohibitive auditing costs, and fractured
+              data pipelines that marginalized smallholder farmers and local
+              project developers.
+            </p>
+            <p>
+              Crevy was engineered as the antidote. We recognized that to unlock
+              Africa’s ecological value, we had to rebuild the trust layer from
+              the ground up. By integrating rigorous digital Measurement,
+              Reporting, and Verification (dMRV) with direct-to-originator
+              payment routing, we remove the friction that has historically
+              suppressed African participation in global ESG markets.
+            </p>
+            <p className="font-medium text-slate-900">
+              We do not just verify carbon; we are establishing a transparent,
+              highly-liquid marketplace that enforces equitable unit economics
+              for the communities actively managing our planet's carbon sinks.
             </p>
           </div>
         </div>
@@ -217,77 +213,92 @@ function MissionVisionSection({
   );
 }
 
-function StorySection({
-  shouldReduceMotion,
-}: {
-  shouldReduceMotion?: boolean;
-}) {
-  return (
-    <section className="py-24 bg-[#F9FBF9]">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl md:text-5xl text-myBlue mb-8 font-bold">
-          The Crevy Story
-        </h2>
-        <p className="max-w-3xl mx-auto text-gray-700 text-lg leading-relaxed">
-          In 2022, Foovante Global was founded in Accra with a single
-          observation: Africa generates over 30% of the world's carbon
-          sequestration potential but receives less than 2% of global voluntary
-          carbon market revenue.
-        </p>
-      </div>
-    </section>
-  );
-}
+// ─── 3. MISSION & VISION ─────────────────────────────────────────────────────
 
-function CoreValuesSection({
-  shouldReduceMotion,
-}: {
-  shouldReduceMotion?: boolean;
-}) {
+function MissionVisionSection() {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl text-myBlue mb-16 text-center font-bold">
-          Our Core Values
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {CORE_VALUES.map((value, idx) => (
-            <div
-              key={idx}
-              className="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm"
-            >
-              <value.icon className="text-myGreen mb-6 w-8 h-8" />
-              <h3 className="text-xl font-bold text-myBlue mb-3">
-                {value.title}
-              </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
-                {value.description}
-              </p>
-            </div>
-          ))}
+    <section className="py-24 bg-slate-50 border-b border-slate-200">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white border border-slate-200 p-12 hover:border-slate-900 transition-colors group">
+            <Target
+              size={24}
+              className="text-slate-400 mb-8 group-hover:text-slate-900 transition-colors"
+            />
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+              Core Mission
+            </h2>
+            <h3 className="text-3xl font-serif text-slate-900 mb-6 leading-tight">
+              To engineer radical transparency and liquidity into African
+              environmental assets.
+            </h3>
+            <p className="text-slate-500 leading-relaxed font-light">
+              We exist to ensure that voluntary carbon markets function as an
+              equitable financial mechanism for African communities, delivering
+              rigorous, auditable climate impact to global enterprises.
+            </p>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-900 p-12">
+            <Zap size={24} className="text-emerald-500 mb-8" />
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-4">
+              Long-Term Vision
+            </h2>
+            <h3 className="text-3xl font-serif text-white mb-6 leading-tight">
+              A continent where localized ecological stewardship is recognized
+              as a premium, highly-valued global asset class.
+            </h3>
+            <p className="text-slate-400 leading-relaxed font-light">
+              We envision a unified pan-African registry where every verifiable
+              green project is instantly bankable, fundamentally shifting the
+              continent from climate victims to climate financiers.
+            </p>
+          </div>
+        </div>
+
+        {/* Core Values Matrix */}
+        <div className="mt-24">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 border-b border-slate-200 pb-4 mb-12">
+            Operational Principles
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+            {CORE_VALUES.map((value, idx) => (
+              <div key={idx} className="group">
+                <value.icon className="text-slate-400 mb-4 w-5 h-5 group-hover:text-emerald-700 transition-colors" />
+                <h3 className="text-sm font-bold uppercase tracking-widest text-slate-900 mb-3">
+                  {value.title}
+                </h3>
+                <p className="text-slate-500 text-sm leading-relaxed font-light">
+                  {value.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+// ─── 4. INSTITUTIONAL IMPACT ─────────────────────────────────────────────────
 
 function ImpactSection() {
   return (
-    <section className="py-24 bg-myBlue">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl md:text-5xl text-white mb-16 font-bold">
-          Our Impact
+    <section className="bg-slate-900 py-24 border-b border-slate-900">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 border-b border-slate-800 pb-4 mb-12">
+          Current Network Telemetry
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-800 border border-slate-800">
           {IMPACT_STATS.map((stat, idx) => (
             <div
               key={idx}
-              className="p-6 bg-white/5 rounded-2xl border border-white/10"
+              className="p-8 bg-slate-900 flex flex-col justify-center"
             >
-              <div className="text-3xl font-bold text-myGreen mb-2">
+              <div className="text-4xl lg:text-5xl font-mono font-bold text-white mb-3 tracking-tight">
                 {stat.value}
               </div>
-              <div className="text-white/60 text-xs font-bold uppercase tracking-widest">
+              <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
                 {stat.label}
               </div>
             </div>
@@ -298,35 +309,52 @@ function ImpactSection() {
   );
 }
 
-function TeamSection({ shouldReduceMotion }: { shouldReduceMotion?: boolean }) {
+// ─── 5. EXECUTIVE DIRECTORY (Meet the Team) ──────────────────────────────────
+
+function TeamSection() {
   return (
-    <section className="py-24 bg-[#F9FBF9]">
-      <div className="container mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl text-myBlue mb-16 text-center font-bold">
-          Meet the Team
-        </h2>
+    <section className="py-24 bg-white border-b border-slate-200">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div>
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 border-t border-slate-900 pt-4 mb-4">
+              Executive Directory
+            </h2>
+            <h3 className="text-4xl font-serif text-slate-900 tracking-tight">
+              Corporate Governance.
+            </h3>
+          </div>
+          <p className="text-slate-500 max-w-sm text-sm font-light">
+            Led by veterans in climate policy, software architecture, and
+            corporate ESG strategy.
+          </p>
+        </div>
+
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {TEAM_MEMBERS.map((member, idx) => (
             <div
               key={idx}
-              className="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm text-center"
+              className="border border-slate-200 bg-slate-50 hover:border-slate-900 transition-colors flex flex-col h-full group"
             >
-              <div
-                className={cn(
-                  "w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center text-xl font-bold bg-gradient-to-br",
-                  member.color,
-                  member.accentColor,
-                )}
-              >
-                {member.initials}
+              <div className="p-6 border-b border-slate-200 flex justify-between items-start bg-white">
+                <div className="w-12 h-12 bg-slate-900 text-white flex items-center justify-center font-serif text-xl">
+                  {member.initials}
+                </div>
+                <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-slate-400 group-hover:text-slate-900 transition-colors">
+                  {member.id}
+                </span>
               </div>
-              <h3 className="text-xl font-bold text-myBlue mb-1">
-                {member.name}
-              </h3>
-              <p className={cn("text-sm font-bold mb-4", member.accentColor)}>
-                {member.role}
-              </p>
-              <p className="text-gray-500 text-sm">{member.bio}</p>
+              <div className="p-6 flex-1 bg-white">
+                <h4 className="text-xl font-serif text-slate-900 mb-1">
+                  {member.name}
+                </h4>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-4">
+                  {member.role}
+                </p>
+                <p className="text-slate-500 text-sm leading-relaxed font-light">
+                  {member.bio}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -335,29 +363,39 @@ function TeamSection({ shouldReduceMotion }: { shouldReduceMotion?: boolean }) {
   );
 }
 
-function MilestonesSection({
-  shouldReduceMotion,
-}: {
-  shouldReduceMotion?: boolean;
-}) {
+// ─── 6. HISTORICAL LEDGER (Our Journey) ──────────────────────────────────────
+
+function MilestonesSection() {
   return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl md:text-5xl text-myBlue mb-16 font-bold">
-          Our Journey
+    <section className="py-24 bg-slate-50 border-b border-slate-200">
+      <div className="max-w-[1000px] mx-auto px-6 lg:px-10">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 border-t border-slate-900 pt-4 mb-16">
+          Institutional Ledger
         </h2>
-        <div className="max-w-3xl mx-auto space-y-12 text-left">
+
+        <div className="space-y-0 border-l border-slate-300 ml-4 md:ml-24">
           {MILESTONES.map((m, idx) => (
-            <div key={idx} className="flex gap-8 items-start">
-              <div className="w-16 h-16 rounded-2xl bg-myBlue border-4 border-myGreen flex items-center justify-center font-bold text-myGreen shrink-0">
-                {m.year}
-              </div>
-              <div className="bg-slate-50 p-6 rounded-2xl flex-1">
-                <h3 className="font-bold text-lg text-myBlue mb-2">
+            <div
+              key={idx}
+              className="relative pl-8 md:pl-16 pb-16 last:pb-0 group"
+            >
+              {/* Timeline Dot */}
+              <div className="absolute left-[-5px] top-0 w-[9px] h-[9px] bg-slate-300 group-hover:bg-slate-900 transition-colors rounded-none"></div>
+
+              <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8 mb-3">
+                <div className="text-slate-900 font-mono font-bold text-lg md:absolute md:-left-24 md:top-[-2px]">
+                  {m.year}{" "}
+                  <span className="text-slate-400 text-[10px] uppercase tracking-widest">
+                    {m.quarter}
+                  </span>
+                </div>
+                <h3 className="font-serif text-2xl text-slate-900 leading-tight">
                   {m.title}
                 </h3>
-                <p className="text-gray-500 text-sm">{m.desc}</p>
               </div>
+              <p className="text-slate-500 text-base leading-relaxed font-light max-w-2xl">
+                {m.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -365,18 +403,30 @@ function MilestonesSection({
     </section>
   );
 }
+
+// ─── 7. CTA ──────────────────────────────────────────────────────────────────
 
 function AboutCTA() {
   return (
-    <section className="py-28 bg-myBlue text-center text-white">
-      <h2 className="text-4xl md:text-6xl font-bold mb-8">
-        Ready to Build Africa's Green Future?
-      </h2>
-      <Link href="/register">
-        <Button className="bg-myGreen text-white px-10 py-6 rounded-2xl text-lg hover:scale-105 transition-transform">
-          Join the Platform
-        </Button>
-      </Link>
+    <section className="py-32 bg-white text-center">
+      <div className="max-w-3xl mx-auto px-6">
+        <Leaf className="w-8 h-8 mx-auto text-emerald-700 mb-8" />
+        <h2 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight mb-8">
+          Initiate Partnership
+        </h2>
+        <p className="text-slate-500 font-light text-lg mb-10 max-w-xl mx-auto">
+          Join leading enterprises and local developers in scaling Africa's
+          verified carbon ecosystem.
+        </p>
+        <Link href="/register">
+          <button
+            type="button"
+            className="bg-slate-900 text-white hover:bg-emerald-900 px-8 py-4 text-[10px] font-bold uppercase tracking-widest transition-colors inline-flex items-center gap-3"
+          >
+            Access Platform <ArrowRight size={14} />
+          </button>
+        </Link>
+      </div>
     </section>
   );
 }

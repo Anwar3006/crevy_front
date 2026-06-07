@@ -80,6 +80,7 @@ export type TSignInInput = z.infer<typeof signInSchema>;
 
 export type TRole =
   | "super_admin"
+  | "admin"
   | "financial_admin"
   | "mrv_admin"
   | "project_manager"
@@ -87,3 +88,14 @@ export type TRole =
   | "org_admin"
   | "sustainability_manager"
   | "org_auditor";
+
+export type TBetterAuthUser = {
+  id: string;
+  email: string;
+  name: string;
+  role?: TRole;
+  image?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  emailVerified: boolean;
+};

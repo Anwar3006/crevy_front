@@ -1,7 +1,7 @@
 "use client";
 
 import { HugeiconsIcon } from "@hugeicons/react";
-import { X } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type * as React from "react";
@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/sidebar";
 import { getSidebarConfig } from "@/constants/sidebar-items";
 import type { TBetterAuthUser } from "@/types";
-import type { TRole } from "../types/user.types";
 import { NavUser } from "./NavUser";
 import { Separator } from "./ui/separator";
 
@@ -33,66 +32,71 @@ export function AppSidebar({
   user: TBetterAuthUser & { activeOrganizationId?: string };
 }) {
   const pathname = usePathname();
-  const { setOpenMobile, isMobile } = useSidebar();
+  const { setOpenMobile, isMobile, state, toggleSidebar } = useSidebar();
 
-  // Helper: Global admins bypass org restrictions
-  const isGlobalAdmin = [
-    "super_admin",
-    "financial_admin",
-    "mrv_admin",
-    "project_manager",
-  ].includes(user.role || "");
+  const role = user.role || "project_owner";
+  const sidebarConfig = getSidebarConfig(role);
 
-  // Use role name directly
-  const sidebarConfig = getSidebarConfig(user.role || "project_owner");
-
-  // Filter sections based on permissions
-  const visibleSections = sidebarConfig.sections.filter((section) => {
-    // If global admin, show everything
-    if (isGlobalAdmin) return true;
-
-    // Institutional users: show items.
-    // Ideally, we'd check RBACService here, but for now we filter by roles.
+  // High-End Role-Based Theme Rendering
+  const getSidebarTheme = (r: string) => {
+    if (r === "super_admin" || r === "admin") return "bg-slate-950"; // Abyssal Slate
     if (
-      ["org_admin", "sustainability_manager", "org_auditor"].includes(
-        user.role || "",
-      )
-    ) {
-      // Filter specific sections based on requirements
-      if (
-        section.title === "Settings" &&
-        (user.role as TRole) === "org_auditor"
-      )
-        return false;
-      return true;
-    }
-    return true;
-  });
+      r.startsWith("org_") ||
+      r === "sustainability_manager" ||
+      r === "financial_admin" ||
+      r === "mrv_admin"
+    )
+      return "bg-[#064e3b]"; // Corporate Emerald
+    return "bg-[#022c22]"; // Deep Forest Canopy
+  };
+
+  const themeClass = getSidebarTheme(role);
 
   return (
-    <Sidebar {...props} className="border-r-0 bg-[#2ebc8d]" collapsible="icon">
-      <SidebarHeader className="pt-8 pb-4">
+    <Sidebar
+      {...props}
+      className={`border-r-0 ${themeClass}`}
+      collapsible="icon"
+    >
+      <SidebarHeader className="pt-6 pb-4">
         <div className="flex items-center justify-between px-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-white tracking-tight group-data-[collapsible=icon]:hidden">
-              Crevy
+          <div className="flex items-center gap-3 overflow-hidden">
+            <h1 className="text-2xl font-serif text-white tracking-tight group-data-[collapsible=icon]:hidden">
+              Crevy.
             </h1>
           </div>
+
+          {/* Collapse Toggle for Desktop */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="hidden md:flex text-white/50 hover:text-white hover:bg-white/10 shrink-0"
+          >
+            {state === "expanded" ? (
+              <PanelLeftClose size={18} />
+            ) : (
+              <PanelLeftOpen size={18} />
+            )}
+          </Button>
+
+          {/* Mobile Close */}
           {isMobile && (
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setOpenMobile(false)}
-              className="text-white hover:bg-white/10"
+              className="text-white hover:bg-white/10 shrink-0"
             >
               <X className="h-5 w-5" />
             </Button>
           )}
         </div>
-        <div className="px-5">
+
+        <div className="px-5 mt-4 group-data-[collapsible=icon]:hidden">
           <Separator
             orientation="horizontal"
-            className="border-b border-white/30"
+            className="border-b border-white/20"
           />
         </div>
       </SidebarHeader>
@@ -105,27 +109,28 @@ export function AppSidebar({
                 const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>
+                    {/* Tooltip reveals on hover when collapsed */}
                     <SidebarMenuButton
                       asChild
+                      tooltip={item.title}
                       className={`
-                        flex items-center gap-3 px-4 py-6 rounded-lg transition-all
+                        flex items-center gap-4 px-3 py-5 rounded-none transition-all border-l-2
                         ${
                           isActive
-                            ? "bg-white text-[#2ebc8d] shadow-md font-medium hover:bg-white hover:text-[#2ebc8d]"
-                            : "text-white/90 hover:bg-white/10 hover:text-white"
+                            ? "bg-white/10 text-white border-white font-medium"
+                            : "border-transparent text-white/60 hover:bg-white/5 hover:text-white"
                         }
                       `}
                     >
                       <Link href={item.url}>
                         <HugeiconsIcon
-                          // @ts-expect-error — HugeIcons type mismatch with React component props
                           icon={item.icon}
-                          size={24}
+                          size={26}
                           color="currentColor"
                           strokeWidth={1.5}
                           className="shrink-0"
                         />
-                        <span className="text-sm group-data-[collapsible=icon]:hidden">
+                        <span className="text-xs font-mono tracking-widest uppercase group-data-[collapsible=icon]:hidden">
                           {item.title}
                         </span>
                       </Link>
@@ -137,11 +142,11 @@ export function AppSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Grouped sections */}
-        {visibleSections.map((section, sectionIndex) => (
+        {/* Clustered Sections (Only rendered if they exist, primarily for Super Admin) */}
+        {sidebarConfig.sections?.map((section, sectionIndex) => (
           <SidebarGroup key={section.title || sectionIndex} className="mt-4">
             {section.title && (
-              <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white/70 mb-2 group-data-[collapsible=icon]:hidden">
+              <SidebarGroupLabel className="px-4 text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-400/70 mb-2 group-data-[collapsible=icon]:hidden">
                 {section.title}
               </SidebarGroupLabel>
             )}
@@ -153,25 +158,25 @@ export function AppSidebar({
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
+                        tooltip={item.title}
                         className={`
-                          flex items-center gap-3 px-4 py-5 rounded-lg transition-all
+                          flex items-center gap-4 px-3 py-5 rounded-none transition-all border-l-2
                           ${
                             isActive
-                              ? "bg-white text-[#2ebc8d] shadow-md font-medium hover:bg-white hover:text-[#2ebc8d]"
-                              : "text-white/90 hover:bg-white/10 hover:text-white"
+                              ? "bg-white/10 text-white border-white font-medium"
+                              : "border-transparent text-white/60 hover:bg-white/5 hover:text-white"
                           }
                         `}
                       >
                         <Link href={item.url}>
                           <HugeiconsIcon
-                            // @ts-expect-error
                             icon={item.icon}
-                            size={24}
+                            size={26}
                             color="currentColor"
                             strokeWidth={1.5}
                             className="shrink-0"
                           />
-                          <span className="flex-1 text-sm group-data-[collapsible=icon]:hidden">
+                          <span className="text-xs font-mono tracking-widest uppercase group-data-[collapsible=icon]:hidden">
                             {item.title}
                           </span>
                         </Link>
@@ -185,10 +190,8 @@ export function AppSidebar({
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="mt-auto p-4">
-        <div className="rounded-xl bg-white/10 p-1 backdrop-blur-sm">
-          <NavUser user={user} />
-        </div>
+      <SidebarFooter className="mt-auto p-4 border-t border-white/10">
+        <NavUser user={user} />
       </SidebarFooter>
 
       <SidebarRail />

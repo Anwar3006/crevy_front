@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/AppSidebar";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { Separator } from "@/components/ui/separator";
@@ -15,8 +16,6 @@ interface DashboardLayoutClientProps {
   user: TBetterAuthUser | null;
 }
 
-import { usePathname } from "next/navigation";
-
 export const DashboardLayoutClient = ({
   children,
   user,
@@ -25,16 +24,18 @@ export const DashboardLayoutClient = ({
 
   return (
     <SidebarProvider>
-      {/* Sidebar */}
+      {/* Sidebar - Dynamic Based on Role */}
       <AppSidebar user={user as TBetterAuthUser} />
 
       {/* Main Container */}
-      <SidebarInset className="flex min-h-screen flex-col bg-gray-50">
+      <SidebarInset className="flex min-h-screen flex-col bg-white">
         {/* Mobile Sidebar Trigger */}
-        <div className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-white px-4 md:hidden">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="h-4" />
-          <h2 className="text-sm font-semibold">Crevy</h2>
+        <div className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-slate-200 bg-white px-4 md:hidden">
+          <SidebarTrigger className="-ml-1 text-slate-900" />
+          <Separator orientation="vertical" className="h-4 bg-slate-300" />
+          <h2 className="text-sm font-serif font-bold text-slate-900 tracking-tight">
+            Crevy.
+          </h2>
         </div>
 
         {/* Main Content */}
@@ -47,25 +48,32 @@ export const DashboardLayoutClient = ({
             !pathname.startsWith("/track-verification") &&
             !pathname.startsWith("/project-owners") &&
             !pathname.startsWith("/user-management") &&
-            !pathname.startsWith("/credits-ledger") && (
-              <div className="mb-6 px-4 md:px-6 shadow-lg shadow-gray-200">
+            !pathname.startsWith("/credits-ledger") &&
+            !pathname.startsWith("/organizations") && (
+              <div className="border-b border-slate-200 bg-slate-50">
                 <DashboardHeader user={user} />
               </div>
             )}
-
-          {/* Content Container with max-width */}
-          <div className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-6 md:px-6 md:py-8">
+          {/* Content Container */}
+          <div className="mx-auto w-full max-w-[1400px] flex-1 px-6 lg:px-12 py-10">
             {/* Page Content */}
-            <div className="flex-1">{children}</div>
+            <div className="flex-1 w-full">{children}</div>
           </div>
 
-          {/* Footer */}
-          <footer className="border-t border-gray-200 bg-white py-4">
-            <div className="mx-auto max-w-[1400px] px-4 md:px-6">
-              <p className="text-center text-[0.65rem] font-medium uppercase tracking-widest text-gray-400">
-                COPYRIGHT © {new Date().getFullYear()} CREVY. ALL RIGHTS
-                RESERVED
+          {/* Institutional Footer */}
+          <footer className="border-t border-slate-200 bg-white py-6 mt-auto">
+            <div className="mx-auto max-w-[1400px] px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                CREVY REGISTRY NETWORK © {new Date().getFullYear()}
               </p>
+              <div className="flex items-center gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+                <span className="hover:text-slate-900 cursor-pointer transition-colors">
+                  Privacy Policy
+                </span>
+                <span className="hover:text-slate-900 cursor-pointer transition-colors">
+                  Terms of Service
+                </span>
+              </div>
             </div>
           </footer>
         </main>

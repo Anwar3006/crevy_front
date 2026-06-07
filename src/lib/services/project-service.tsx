@@ -39,6 +39,11 @@ export const ProjectService = {
     return response.data;
   },
 
+  getProjectBySlug: async (slug: string) => {
+    const response = await axiosClient.get(`/projects/slug/${slug}`);
+    return response.data;
+  },
+
   getProjects: async (params?: Record<string, unknown>) => {
     const response = await axiosClient.get("/projects", { params });
     return response.data;

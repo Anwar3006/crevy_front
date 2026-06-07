@@ -14,6 +14,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
@@ -21,6 +22,11 @@ import { CreditService } from "@/lib/services/credit-service";
 
 export default function PortfolioOverview() {
   const { user } = useUser();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Fetch Owned Credits
   const { data: creditsRes, isLoading } = useQuery({
@@ -67,7 +73,7 @@ export default function PortfolioOverview() {
   return (
     <div className="animate-in fade-in duration-700">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 pt-24 pb-12">
+      <div className="bg-white border-b border-slate-200 py-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row justify-between items-end gap-12">
             <div className="max-w-2xl">
@@ -241,46 +247,60 @@ export default function PortfolioOverview() {
                 </span>
               </h3>
 
-              <div className="h-[180px] w-full mb-6">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart
-                    data={valueTrend}
-                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
-                  >
-                    <defs>
-                      <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
-                        <stop
-                          offset="5%"
-                          stopColor="#0f172a"
-                          stopOpacity={0.1}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#0f172a"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#0f172a",
-                        borderColor: "#0f172a",
-                        color: "#fff",
-                        fontSize: "12px",
-                        fontFamily: "monospace",
-                      }}
-                      itemStyle={{ color: "#fff" }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="val"
-                      stroke="#0f172a"
-                      strokeWidth={2}
-                      fillOpacity={1}
-                      fill="url(#colorVal)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+              <div className="w-full mb-6 min-h-[180px]">
+                {!isMounted ? (
+                  <div className="h-[180px] w-full bg-slate-50 animate-pulse flex items-center justify-center">
+                    <span className="text-[10px] font-black uppercase text-slate-300 tracking-widest">
+                      Waking Chart...
+                    </span>
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%" aspect={2.5}>
+                    <AreaChart
+                      data={valueTrend}
+                      margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                    >
+                      <defs>
+                        <linearGradient
+                          id="colorVal"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#0f172a"
+                            stopOpacity={0.1}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#0f172a"
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
+                      </defs>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          borderColor: "#0f172a",
+                          color: "#fff",
+                          fontSize: "12px",
+                          fontFamily: "monospace",
+                        }}
+                        itemStyle={{ color: "#fff" }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="val"
+                        stroke="#0f172a"
+                        strokeWidth={2}
+                        fillOpacity={1}
+                        fill="url(#colorVal)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                )}
               </div>
 
               <div className="pt-4 border-t border-slate-100 flex justify-between items-end">

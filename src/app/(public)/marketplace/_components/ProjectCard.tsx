@@ -98,7 +98,7 @@ export const ProjectCard = memo(function ProjectCard({
 
   return (
     <Link
-      href={`/projects/${project.id}`}
+      href={`/marketplace/project/${project.slug}`}
       className="block group outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
     >
       <article className="bg-white border border-slate-200 hover:border-slate-900 transition-colors duration-500 h-full flex flex-col relative">

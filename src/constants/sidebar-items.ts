@@ -23,70 +23,34 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
     {
       title: "Notifications",
       url: "/notifications",
-      // @ts-expect-error
       icon: Notification01Icon,
       badge: 3,
     },
-    {
-      title: "Support",
-      url: "/support",
-      // @ts-expect-error
-      icon: CustomerService01Icon,
-    },
+    { title: "Support", url: "/support", icon: CustomerService01Icon },
   ];
 
   const transparencyItems: SidebarItem[] = [
-    {
-      title: "Public Registry",
-      url: "/public-registry",
-      // @ts-expect-error
-      icon: ViewIcon,
-    },
-    {
-      title: "Methodology",
-      url: "/methodology",
-      // @ts-expect-error
-      icon: CalculateIcon,
-    },
-    {
-      title: "Credits Ledger",
-      url: "/credits-ledger",
-      // @ts-expect-error
-      icon: CheckListIcon,
-    },
+    { title: "Public Registry", url: "/public-registry", icon: ViewIcon },
+    { title: "Methodology", url: "/methodology", icon: CalculateIcon },
+    { title: "Credits Ledger", url: "/credits-ledger", icon: CheckListIcon },
   ];
 
   const configs: Record<TRole, SidebarConfig> = {
+    // ── SUPER ADMIN: Gets Clustered Sections ──
     super_admin: {
       topItems: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
-        },
-        {
-          title: "Asset Portfolio",
-          url: "/portfolio",
-          // @ts-expect-error
-          icon: OrganicFoodIcon,
-        },
-        {
-          title: "Projects",
-          url: "/projects",
-          // @ts-expect-error
-          icon: ViewIcon,
-        },
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
+        { title: "Asset Portfolio", url: "/portfolio", icon: OrganicFoodIcon },
+        { title: "Projects", url: "/projects", icon: ViewIcon },
         {
           title: "Track Verification",
           url: "/track-verification",
-          // @ts-expect-error
           icon: CheckListIcon,
         },
         {
           title: "Project Owners",
           url: "/project-owners",
-          // @ts-expect-error
           icon: UserGroupIcon,
         },
       ],
@@ -95,475 +59,232 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           title: "OVERSIGHT",
           items: [
             {
+              title: "Organizations",
+              url: "/organizations",
+              icon: Building02Icon,
+            },
+            {
               title: "User Management",
               url: "/user-management",
-              // @ts-expect-error
               icon: UserGroupIcon,
             },
             {
               title: "Compliance",
               url: "/compliance",
-              // @ts-expect-error
               icon: CheckmarkCircle03Icon,
             },
             {
               title: "Financial Control",
               url: "/financials",
-              // @ts-expect-error
               icon: MoneyReceiveIcon,
             },
           ],
         },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
+        { title: "TRANSPARENCY", items: transparencyItems },
+        { title: "ACCOUNT PAGES", items: commonAccountItems },
       ],
     },
+
+    // ── ALL OTHER ROLES: Straight Nav Items (No Clustering) ──
     admin: {
       topItems: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-          icon: DashboardSquareAddIcon,
-        },
-        {
-          title: "Asset Portfolio",
-          url: "/portfolio",
-          icon: OrganicFoodIcon,
-        },
-        {
-          title: "Projects",
-          url: "/projects",
-
-          icon: ViewIcon,
-        },
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
+        { title: "Asset Portfolio", url: "/portfolio", icon: OrganicFoodIcon },
+        { title: "Projects", url: "/projects", icon: ViewIcon },
         {
           title: "Track Verification",
           url: "/track-verification",
-
           icon: CheckListIcon,
         },
         {
           title: "Project Owners",
           url: "/project-owners",
-
           icon: UserGroupIcon,
         },
+        { title: "Organizations", url: "/organizations", icon: Building02Icon },
+        {
+          title: "User Management",
+          url: "/user-management",
+          icon: UserGroupIcon,
+        },
+        {
+          title: "Financial Control",
+          url: "/financials",
+          icon: MoneyReceiveIcon,
+        },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "OVERSIGHT",
-          items: [
-            {
-              title: "User Management",
-              url: "/user-management",
-
-              icon: UserGroupIcon,
-            },
-            {
-              title: "Financial Control",
-              url: "/financials",
-
-              icon: MoneyReceiveIcon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     org_admin: {
       topItems: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
-        },
-        {
-          title: "Marketplace",
-          url: "/marketplace",
-          // @ts-expect-error
-          icon: DiscoverCircleIcon,
-        },
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
+        { title: "Asset Registry", url: "/portfolio", icon: OrganicFoodIcon },
         {
           title: "Institutional Impact",
           url: "/compliance",
-          // @ts-expect-error
           icon: AnalyticsUpIcon,
         },
+        { title: "Team Members", url: "/user-management", icon: UserGroupIcon },
+        { title: "Contracts & Payouts", url: "/financials", icon: LicenseIcon },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "PORTFOLIO",
-          items: [
-            {
-              title: "Asset Registry",
-              url: "/portfolio",
-              // @ts-expect-error
-              icon: OrganicFoodIcon,
-            },
-            {
-              title: "Acquisitions",
-              url: "/marketplace",
-              // @ts-expect-error
-              icon: MoneyReceiveIcon,
-            },
-          ],
-        },
-        {
-          title: "ORGANIZATION",
-          items: [
-            {
-              title: "Team Members",
-              url: "/user-management",
-              // @ts-expect-error
-              icon: UserGroupIcon,
-            },
-            {
-              title: "Contracts & Payouts",
-              url: "/financials",
-              // @ts-expect-error
-              icon: LicenseIcon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     sustainability_manager: {
       topItems: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
-        },
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
+        { title: "Asset Registry", url: "/portfolio", icon: OrganicFoodIcon },
         {
           title: "Institutional Impact",
           url: "/compliance",
-          // @ts-expect-error
           icon: AnalyticsUpIcon,
         },
+        {
+          title: "ESG Reports",
+          url: "/compliance/reports",
+          icon: CheckmarkCircle03Icon,
+        },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "PORTFOLIO",
-          items: [
-            {
-              title: "Asset Registry",
-              url: "/portfolio",
-              // @ts-expect-error
-              icon: OrganicFoodIcon,
-            },
-          ],
-        },
-        {
-          title: "COMPLIANCE",
-          items: [
-            {
-              title: "ESG Reports",
-              url: "/compliance/reports",
-              // @ts-expect-error
-              icon: CheckmarkCircle03Icon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     org_auditor: {
       topItems: [
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
         {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
+          title: "Asset Verification",
+          url: "/portfolio",
+          icon: CheckmarkCircle03Icon,
         },
+        {
+          title: "Institutional Reports",
+          url: "/compliance/reports",
+          icon: CheckmarkCircle03Icon,
+        },
+        {
+          title: "Financial Audit",
+          url: "/financials",
+          icon: MoneyReceiveIcon,
+        },
+        {
+          title: "My Organization",
+          url: "/organization",
+          icon: Building02Icon,
+        },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "AUDIT LEDGER",
-          items: [
-            {
-              title: "Asset Verification",
-              url: "/portfolio",
-              // @ts-expect-error
-              icon: CheckmarkCircle03Icon,
-            },
-            {
-              title: "Institutional Reports",
-              url: "/compliance/reports",
-              // @ts-expect-error
-              icon: CheckmarkCircle03Icon,
-            },
-            {
-              title: "Financial Audit",
-              url: "/financials",
-              // @ts-expect-error
-              icon: MoneyReceiveIcon,
-            },
-            {
-              title: "My Organization",
-              url: "/organization",
-              // @ts-expect-error
-              icon: Building02Icon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     financial_admin: {
       topItems: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
-        },
-        {
-          title: "Marketplace",
-          url: "/marketplace",
-          // @ts-expect-error
-          icon: DiscoverCircleIcon,
-        },
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
+        { title: "Asset Registry", url: "/portfolio", icon: OrganicFoodIcon },
         {
           title: "Compliance",
           url: "/compliance",
-          // @ts-expect-error
           icon: CheckmarkCircle03Icon,
         },
+        { title: "Impact Analytics", url: "/analytics", icon: CalculateIcon },
+        { title: "Organization", url: "/organization", icon: Building02Icon },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "INVESTMENTS",
-          items: [
-            {
-              title: "Asset Registry",
-              url: "/portfolio",
-              // @ts-expect-error
-              icon: OrganicFoodIcon,
-            },
-            {
-              title: "Impact Analytics",
-              url: "/analytics",
-              // @ts-expect-error
-              icon: CalculateIcon,
-            },
-            {
-              title: "Organization",
-              url: "/organization",
-              // @ts-expect-error
-              icon: Building02Icon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     mrv_admin: {
       topItems: [
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
+        { title: "Projects", url: "/projects", icon: ViewIcon },
         {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
+          title: "Project Vetting",
+          url: "/track-verification",
+          icon: CheckListIcon,
         },
         {
           title: "Compliance",
           url: "/compliance",
-          // @ts-expect-error
           icon: CheckmarkCircle03Icon,
         },
+        {
+          title: "Organization Profile",
+          url: "/organization",
+          icon: Building02Icon,
+        },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "OVERSIGHT",
-          items: [
-            {
-              title: "Projects",
-              url: "/projects",
-              // @ts-expect-error
-              icon: ViewIcon,
-            },
-            {
-              title: "Project Vetting",
-              url: "/track-verification",
-              // @ts-expect-error
-              icon: CheckListIcon,
-            },
-            {
-              title: "Organization Profile",
-              url: "/organization",
-              // @ts-expect-error
-              icon: Building02Icon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     project_manager: {
       topItems: [
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
         {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
+          title: "My Project Owners",
+          url: "/project-owners",
+          icon: UserGroupIcon,
+        },
+        {
+          title: "Onboard Owner",
+          url: "/project-owners/register",
+          icon: PropertyAddIcon,
+        },
+        { title: "Projects", url: "/projects", icon: ViewIcon },
+        {
+          title: "Project Vetting",
+          url: "/track-verification",
+          icon: CheckListIcon,
         },
         {
           title: "User Management",
           url: "/user-management",
-          // @ts-expect-error
           icon: UserGroupIcon,
         },
         {
           title: "Compliance",
           url: "/compliance",
-          // @ts-expect-error
           icon: CheckmarkCircle03Icon,
         },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "PROJECT OWNERS",
-          items: [
-            {
-              title: "My Project Owners",
-              url: "/project-owners",
-              // @ts-expect-error
-              icon: UserGroupIcon,
-            },
-            {
-              title: "Onboard Owner",
-              url: "/project-owners/register",
-              // @ts-expect-error
-              icon: PropertyAddIcon,
-            },
-          ],
-        },
-        {
-          title: "OVERSIGHT",
-          items: [
-            {
-              title: "Projects",
-              url: "/projects",
-              // @ts-expect-error
-              icon: ViewIcon,
-            },
-            {
-              title: "Project Vetting",
-              url: "/track-verification",
-              // @ts-expect-error
-              icon: CheckListIcon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
     project_owner: {
       topItems: [
-        {
-          title: "Dashboard",
-          url: "/dashboard",
-          // @ts-expect-error
-          icon: DashboardSquareAddIcon,
-        },
+        { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
+        { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
         {
           title: "Register Project",
           url: "/projects/new",
-          // @ts-expect-error
           icon: PropertyAddIcon,
+        },
+        { title: "My Projects", url: "/projects", icon: ViewIcon },
+        {
+          title: "Track Verification",
+          url: "/track-verification",
+          icon: CheckListIcon,
         },
         {
           title: "Compliance",
           url: "/compliance",
-          // @ts-expect-error
           icon: CheckmarkCircle03Icon,
         },
+        ...transparencyItems,
+        ...commonAccountItems,
       ],
-      sections: [
-        {
-          title: "MY PROJECTS",
-          items: [
-            {
-              title: "Projects",
-              url: "/projects",
-              // @ts-expect-error
-              icon: ViewIcon,
-            },
-            {
-              title: "Track Verification",
-              url: "/track-verification",
-              // @ts-expect-error
-              icon: CheckListIcon,
-            },
-          ],
-        },
-        {
-          title: "TRANSPARENCY",
-          items: transparencyItems,
-        },
-        {
-          title: "ACCOUNT PAGES",
-          items: commonAccountItems,
-        },
-      ],
+      sections: [],
     },
   };
 

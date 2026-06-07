@@ -218,6 +218,7 @@ export default function MarketplacePage() {
                 src="https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?auto=compress&cs=tinysrgb&w=1200"
                 alt="Canopy"
                 fill
+                sizes="(max-width: 768px) 100vw, 66vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-1000"
               />
               <div className="absolute inset-0 bg-slate-900/10 transition-opacity group-hover:bg-transparent"></div>
@@ -228,6 +229,7 @@ export default function MarketplacePage() {
                   src="https://images.pexels.com/photos/259280/pexels-photo-259280.jpeg?auto=compress&cs=tinysrgb&w=800"
                   alt="Soil"
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
               </div>
@@ -236,6 +238,7 @@ export default function MarketplacePage() {
                   src="https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?auto=compress&cs=tinysrgb&w=800"
                   alt="Wind"
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-1000"
                 />
               </div>

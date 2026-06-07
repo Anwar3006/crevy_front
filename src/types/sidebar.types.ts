@@ -1,7 +1,7 @@
 export type SidebarItem = {
   title: string;
   url: string;
-  icon: React.ElementType;
+  icon: React.ElementType | any;
   badge?: string | number;
 };
 
