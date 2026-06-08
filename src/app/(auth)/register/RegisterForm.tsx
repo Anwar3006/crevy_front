@@ -1,70 +1,50 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldSeparator,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth";
 import { axiosClient } from "@/lib/axiosClient";
 import { cn } from "@/lib/utils";
 
+type EntityType = "organization" | "project_owner";
+
 export default function RegisterForm({
   className,
   ...props
-}: React.ComponentProps<"form">) {
-  const searchParams = useSearchParams();
+}: React.ComponentProps<"div">) {
   const router = useRouter();
-  const token = searchParams.get("token");
 
+  const [entityType, setEntityType] = useState<EntityType>("organization");
   const [loading, setLoading] = useState(false);
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    orgName: "",
-    registrationId: "",
-    taxResidence: "",
+    orgName: "", // For Organization
+    taxResidence: "", // For Organization
+    operatingRegion: "", // For Project Owner
   });
-
-  // Verify invite token on mount
-  useEffect(() => {
-    if (token) {
-      setLoading(true);
-      axiosClient
-        .get(`/auth/invite/verify/${token}`)
-        .then((res) => {
-          setFormData((prev) => ({ ...prev, email: res.data.data.email }));
-        })
-        .catch(() => toast.error("Invalid or expired invitation link"))
-        .finally(() => setLoading(false));
-    }
-  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.password !== confirmPassword) {
-      return toast.error("Passwords do not match");
+      return toast.error("Cryptographic mismatch. Passwords must align.");
     }
     if (formData.password.length < 8) {
-      return toast.error("Password must be at least 8 characters long");
+      return toast.error("Security policy requires at least 8 characters.");
     }
 
     setLoading(true);
 
     try {
+      // 1. Create Base User Auth Entity
       const { data, error } = await authClient.signUp.email({
         email: formData.email,
         password: formData.password,
@@ -76,55 +56,74 @@ export default function RegisterForm({
 
       if (error) throw error;
 
-      if (token) {
-        await axiosClient.post("/auth/register/invite", {
-          userId: data.user.id,
-          token,
-        });
-      } else {
+      // 2. Hydrate Role-Specific Database Tables
+      if (entityType === "organization") {
         await axiosClient.post("/auth/register/organization", {
           userId: data.user.id,
           orgName: formData.orgName,
-          registrationId: formData.registrationId,
           taxResidence: formData.taxResidence,
+        });
+      } else {
+        await axiosClient.post("/auth/register/project-owner", {
+          userId: data.user.id,
+          operatingRegion: formData.operatingRegion,
         });
       }
 
-      toast.success("Registration successful! Welcome to Crevy.");
+      toast.success("Entity initialization complete. Welcome to the registry.");
       router.push("/dashboard");
     } catch (err: any) {
-      toast.error(err.message || "Registration failed. Please try again.");
+      toast.error(err.message || "Initialization failed. Review system logs.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={cn("flex flex-col gap-6", className)}
-      {...props}
-    >
-      <FieldGroup>
-        {/* Form Header */}
-        <div className="flex flex-col items-center gap-1 text-center mb-2">
-          <h1 className="text-2xl font-bold text-slate-900">
-            {token ? "Join your team" : "Create your account"}
-          </h1>
-          <p className="text-sm text-balance text-muted-foreground">
-            {token
-              ? "Complete your profile to accept the invitation and access the platform."
-              : "Fill in the form below to set up your corporate offsetting workspace."}
-          </p>
-        </div>
+    <div className={cn("w-full max-w-md mx-auto", className)} {...props}>
+      {/* ── Entity Selection Tabs ── */}
+      <div className="flex border-b border-slate-200 mb-8">
+        <button
+          type="button"
+          onClick={() => setEntityType("organization")}
+          className={cn(
+            "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
+            entityType === "organization"
+              ? "border-b-2 border-slate-900 text-slate-900"
+              : "text-slate-400 hover:text-slate-600",
+          )}
+        >
+          Institutional Buyer
+        </button>
 
-        {/* Personal Fields Grid */}
-        <div className="grid grid-cols-2 gap-4">
-          <Field>
-            <FieldLabel htmlFor="firstName">First Name</FieldLabel>
-            <Input
-              id="firstName"
+        {/* uncomment later to setup project owner self registration */}
+        {/* <button
+          type="button"
+          onClick={() => setEntityType("project_owner")}
+          className={cn(
+            "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
+            entityType === "project_owner" 
+              ? "border-b-2 border-slate-900 text-slate-900" 
+              : "text-slate-400 hover:text-slate-600"
+          )}
+        >
+          Project Owner
+        </button> */}
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Personal Details */}
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label
+              htmlFor="firstName"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              First Name
+            </label>
+            <input
               type="text"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
               value={formData.firstName}
               onChange={(e) =>
                 setFormData({ ...formData, firstName: e.target.value })
@@ -132,12 +131,17 @@ export default function RegisterForm({
               required
               disabled={loading}
             />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
-            <Input
-              id="lastName"
+          </div>
+          <div className="space-y-3">
+            <label
+              htmlFor="lastName"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Last Name
+            </label>
+            <input
               type="text"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
               value={formData.lastName}
               onChange={(e) =>
                 setFormData({ ...formData, lastName: e.target.value })
@@ -145,126 +149,150 @@ export default function RegisterForm({
               required
               disabled={loading}
             />
-          </Field>
+          </div>
         </div>
 
-        <Field>
-          <FieldLabel htmlFor="email">Work Email</FieldLabel>
-          <Input
-            id="email"
+        <div className="space-y-3">
+          <label
+            htmlFor="email"
+            className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+          >
+            Work Email
+          </label>
+          <input
             type="email"
+            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
             value={formData.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
             }
             required
-            disabled={!!token || loading}
-          />
-          {token && (
-            <FieldDescription>
-              Your email is locked to this invitation.
-            </FieldDescription>
-          )}
-        </Field>
-
-        <Field>
-          <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input
-            id="password"
-            type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required
             disabled={loading}
           />
-          <FieldDescription>
-            Must be at least 8 characters long.
-          </FieldDescription>
-        </Field>
+        </div>
 
-        <Field>
-          <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-          <Input
-            id="confirm-password"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            disabled={loading}
-          />
-        </Field>
+        {/* Security Details */}
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label
+              htmlFor="password"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="space-y-3">
+            <label
+              htmlFor="confirmPassword"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Verify Password
+            </label>
+            <input
+              type="password"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+        </div>
 
-        {/* Organization Fields (Only render if NOT an invite token) */}
-        {!token && (
-          <>
-            <FieldSeparator>Company Information</FieldSeparator>
+        {/* Dynamic Entity Fields */}
+        <div className="pt-6 border-t border-slate-200 space-y-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            {entityType === "organization"
+              ? "Corporate Identity"
+              : "Originator Footprint"}
+          </p>
 
-            <Field>
-              <FieldLabel htmlFor="orgName">Organization Name</FieldLabel>
-              <Input
-                id="orgName"
+          {entityType === "organization" ? (
+            <>
+              <div className="space-y-3">
+                <label
+                  htmlFor="orgName"
+                  className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                >
+                  Registered Organization Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                  value={formData.orgName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, orgName: e.target.value })
+                  }
+                  required
+                  disabled={loading}
+                />
+              </div>
+              <div className="space-y-3">
+                <label
+                  htmlFor="taxResidence"
+                  className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                >
+                  Primary Tax Jurisdiction
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. US, UK, GH"
+                  className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 uppercase focus:ring-0 focus:border-slate-900 transition-colors"
+                  value={formData.taxResidence}
+                  onChange={(e) =>
+                    setFormData({ ...formData, taxResidence: e.target.value })
+                  }
+                  disabled={loading}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="space-y-3">
+              <label
+                htmlFor="operatingRegion"
+                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              >
+                Primary Operational Region
+              </label>
+              <input
                 type="text"
-                value={formData.orgName}
+                placeholder="e.g. West Africa, Volta Basin"
+                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                value={formData.operatingRegion}
                 onChange={(e) =>
-                  setFormData({ ...formData, orgName: e.target.value })
+                  setFormData({ ...formData, operatingRegion: e.target.value })
                 }
                 required
                 disabled={loading}
               />
-            </Field>
+            </div>
+          )}
+        </div>
 
-            <Field>
-              <FieldLabel htmlFor="taxResidence">Tax Residence</FieldLabel>
-              <Input
-                id="taxResidence"
-                type="text"
-                placeholder="e.g. US, UK, GH"
-                value={formData.taxResidence}
-                onChange={(e) =>
-                  setFormData({ ...formData, taxResidence: e.target.value })
-                }
-                disabled={loading}
-              />
-              <FieldDescription>
-                Optional. Used for generating your compliance reports.
-              </FieldDescription>
-            </Field>
-          </>
-        )}
-
-        {/* Submit Action */}
-        <Field className="mt-4">
-          <Button
-            type="submit"
-            className="w-full bg-emerald-700 hover:bg-emerald-800 text-white"
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {token ? "Verifying..." : "Creating Account..."}
-              </>
-            ) : token ? (
-              "Accept Invitation"
-            ) : (
-              "Create Account"
-            )}
-          </Button>
-        </Field>
-
-        {/* Footer Link */}
-        <FieldDescription className="text-center pt-2">
-          Already have an account?{" "}
-          <a
-            href="/login"
-            className="text-emerald-700 hover:underline font-medium"
-          >
-            Sign in
-          </a>
-        </FieldDescription>
-      </FieldGroup>
-    </form>
+        <button
+          type="submit"
+          className="w-full bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] py-6 mt-4 transition-colors flex items-center justify-center gap-2"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin h-4 w-4" /> Processing...
+            </>
+          ) : (
+            "Initialize Entity Record"
+          )}
+        </button>
+      </form>
+    </div>
   );
 }

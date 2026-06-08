@@ -1,96 +1,76 @@
 "use client";
 
-import { CheckCircle, Link as LinkIcon, ShieldCheck } from "lucide-react";
+import {
+  ArrowRightIcon,
+  CheckCircle,
+  Link as LinkIcon,
+  ShieldCheck,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 import RegisterForm from "./RegisterForm";
 
 const VALUE_PROPS = [
   { value: "100%", label: "dMRV Verified", icon: ShieldCheck },
-  { value: "Polygon", label: "Immutable Audit", icon: LinkIcon },
-  { value: "Direct", label: "Farmer Capital", icon: CheckCircle },
+  { value: "Polygon", label: "Immutable Ledger", icon: LinkIcon },
+  { value: "Direct", label: "Originator Liquidity", icon: CheckCircle },
 ];
 
 const RegisterPage = () => {
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-white font-sans">
-      {/* ── Left: Immersive Image & Value Prop Panel ───────────────────────── */}
-      <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] relative overflow-hidden">
-        {/* Full-bleed background image - Aerial lush forest/canopy */}
+    <div className="h-screen w-full flex overflow-hidden bg-white font-sans selection:bg-slate-900 selection:text-white">
+      {/* ── Left: Editorial Media Panel ───────────────────────── */}
+      <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] relative overflow-hidden bg-slate-950">
         <Image
           src="https://images.pexels.com/photos/418831/pexels-photo-418831.jpeg"
           alt="Aerial view of lush green forest"
           fill
           priority
-          className="object-cover scale-105"
+          className="object-cover opacity-40 mix-blend-luminosity"
           sizes="58vw"
         />
 
-        {/* Multi-layer gradient overlay (Matching your brand) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#131927]/90 via-[#131927]/60 to-[#0a3d2e]/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#131927]/80 via-transparent to-transparent" />
+        {/* Strict Editorial Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/50 to-transparent" />
 
-        {/* Decorative green glow */}
-        <div className="absolute top-1/3 left-0 w-96 h-96 rounded-full bg-[#2CC295]/15 blur-[120px] pointer-events-none" />
-
-        {/* Content overlay */}
-        <div className="relative z-10 flex flex-col justify-between w-full p-12 xl:p-16 h-full">
-          {/* Top badge */}
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-4 py-2 w-fit">
-            <span className="text-[#2CC295] text-xs">🌿</span>
-            <span className="text-white/80 text-xs font-bold tracking-[0.15em] uppercase">
-              Corporate Offsetting
+        <div className="relative z-10 flex flex-col justify-between w-full p-12 xl:p-20 h-full border-r border-slate-800">
+          <div className="inline-flex items-center gap-3">
+            <div className="w-8 h-[1px] bg-emerald-500"></div>
+            <span className="text-emerald-500 text-[10px] font-bold tracking-[0.2em] uppercase">
+              Global Carbon Infrastructure
             </span>
           </div>
 
-          {/* Centre Value Proposition */}
-          <div className="space-y-6 max-w-lg mt-auto mb-10">
-            <div className="w-10 h-1 bg-[#2CC295] rounded-full" />
-            <h2 className="text-3xl xl:text-5xl font-extrabold text-white leading-[1.15] tracking-tight">
-              Turn your net-zero goals into{" "}
-              <span className="text-[#2CC295] italic">verifiable impact.</span>
+          <div className="space-y-8 max-w-2xl mt-auto mb-16">
+            <h2 className="text-5xl xl:text-7xl font-serif text-white leading-[1.05] tracking-tight">
+              Turn net-zero obligations into{" "}
+              <span className="text-emerald-500 italic">
+                mathematical proof.
+              </span>
             </h2>
-            <p className="text-white/70 text-base xl:text-lg leading-relaxed">
-              Join the only carbon marketplace that provides mathematical proof
-              of sequestration, protecting your brand from greenwashing risks.
+            <p className="text-slate-400 font-light text-lg xl:text-xl leading-relaxed max-w-xl">
+              Access the only carbon liquidity pool that fuses digital
+              Measurement, Reporting, and Verification (dMRV) with permanent
+              cryptographic anchoring.
             </p>
-
-            {/* Testimonial / Social Proof */}
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 mt-8">
-              <p className="text-white/90 text-sm leading-relaxed italic mb-4">
-                &ldquo;Crevy's platform transformed how we handle our corporate
-                offsets. The immutable tracking makes our annual ESG compliance
-                reporting completely effortless.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#2CC295]/20 border border-[#2CC295]/30 flex items-center justify-center text-[#2CC295] font-bold text-sm">
-                  JD
-                </div>
-                <div>
-                  <p className="text-white font-bold text-sm">Jane Doe</p>
-                  <p className="text-white/50 text-xs">
-                    Chief Sustainability Officer
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Bottom stats strip representing the 3 core pillars */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* Terminal Stats Strip */}
+          <div className="grid grid-cols-3 gap-px bg-slate-800 border border-slate-800">
             {VALUE_PROPS.map((stat, idx) => {
               const Icon = stat.icon;
               return (
                 <div
                   key={idx}
-                  className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-5 text-center flex flex-col items-center justify-center group hover:bg-white/10 transition-colors"
+                  className="bg-slate-950 p-6 flex flex-col justify-between h-32 group"
                 >
-                  <Icon className="w-5 h-5 text-[#2CC295] mb-2 opacity-80 group-hover:opacity-100 transition-opacity" />
-                  <p className="text-white font-extrabold text-xl leading-none mb-1.5">
-                    {stat.value}
-                  </p>
-                  <p className="text-white/50 text-[10px] font-bold uppercase tracking-wider">
+                  <div className="flex justify-between items-start">
+                    <p className="text-white font-mono font-bold text-2xl leading-none">
+                      {stat.value}
+                    </p>
+                    <Icon className="w-4 h-4 text-slate-600 group-hover:text-emerald-500 transition-colors" />
+                  </div>
+                  <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
                     {stat.label}
                   </p>
                 </div>
@@ -101,80 +81,54 @@ const RegisterPage = () => {
       </div>
 
       {/* ── Right: Form Panel ──────────────────────────────────────────────── */}
-      <div className="relative flex flex-col w-full lg:w-[46%] xl:w-[42%] bg-white px-8 md:px-14 py-10 h-full overflow-y-auto">
-        {/* Top nav */}
-        <div className="flex items-center justify-between mb-12 shrink-0">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Image
-              src="/icons/Crevy.png"
-              alt="Crevy"
-              width={96}
-              height={28}
-              priority
-              className="h-7 w-auto"
-            />
+      <div className="relative flex flex-col w-full lg:w-[46%] xl:w-[42%] bg-white px-8 md:px-16 py-12 h-full overflow-y-auto">
+        <div className="flex items-center justify-between mb-16 shrink-0 border-b border-slate-200 pb-6">
+          <Link
+            href="/"
+            className="font-serif font-bold text-3xl text-slate-900 tracking-tight"
+          >
+            Crevy.
           </Link>
           <Link
             href="/login"
-            className="text-sm font-semibold text-gray-500 hover:text-[#2CC295] transition-colors"
+            className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-2"
           >
-            Already have an account?{" "}
-            <span className="text-[#2CC295] underline underline-offset-2">
-              Sign in
-            </span>
+            Authenticate Existing <ArrowRightIcon className="w-3 h-3" />
           </Link>
         </div>
 
-        {/* Form section */}
-        <div className="flex flex-1 flex-col justify-center max-w-md mx-auto w-full">
-          {/* Eyebrow & Headers */}
-          <div className="mb-8">
-            <span className="inline-flex items-center gap-2 bg-[#2CC295]/10 text-[#2CC295] text-xs font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-full mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2CC295] animate-pulse" />
-              Secure Workspace
-            </span>
-            <h1 className="text-3xl font-extrabold text-[#131927] tracking-tight leading-tight">
-              Create your account
+        <div className="flex flex-1 flex-col max-w-md w-full">
+          <div className="mb-10">
+            <h1 className="text-4xl font-serif text-slate-900 tracking-tight leading-none mb-3">
+              Initialize Entity.
             </h1>
-            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Set up your organization's profile to start offsetting with
-              radically transparent carbon credits.
+            <p className="text-sm text-slate-500 font-light leading-relaxed">
+              Register your organization or project to access the verified
+              carbon registry.
             </p>
           </div>
 
-          {/* The Registration Form */}
-          <Suspense
-            fallback={
-              <div className="space-y-4 animate-pulse">
-                <div className="h-10 bg-slate-100 rounded-md"></div>
-                <div className="h-10 bg-slate-100 rounded-md"></div>
-                <div className="h-24 bg-slate-100 rounded-md mt-6"></div>
-                <div className="h-10 bg-slate-200 rounded-md mt-6"></div>
-              </div>
-            }
-          >
-            <RegisterForm />
-          </Suspense>
+          <RegisterForm />
 
-          {/* Footer note */}
-          <p className="mt-8 text-center text-xs text-gray-400 leading-relaxed">
-            By registering, you agree to our{" "}
-            <Link href="/terms" className="text-[#2CC295] hover:underline">
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="text-[#2CC295] hover:underline">
-              Privacy Policy
-            </Link>
-            .
-          </p>
-        </div>
-
-        {/* Bottom brand mark */}
-        <div className="mt-10 shrink-0 text-center">
-          <p className="text-xs text-gray-300 font-medium">
-            © {new Date().getFullYear()} Foovante Global Ltd · Accra, Ghana
-          </p>
+          <div className="mt-12 pt-8 border-t border-slate-200 text-center">
+            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest leading-relaxed">
+              By initializing, you accept the{" "}
+              <Link
+                href="/terms"
+                className="text-slate-900 hover:text-emerald-700 underline underline-offset-4"
+              >
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="/privacy"
+                className="text-slate-900 hover:text-emerald-700 underline underline-offset-4"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </p>
+          </div>
         </div>
       </div>
     </div>
