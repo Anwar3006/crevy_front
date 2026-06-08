@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 const getInitials = (name?: string) => {
   if (!name) return "U";
   const parts = name.trim().split(" ");
-  if (parts.length >= 2) return `${parts}${parts}`.toUpperCase();
+  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
   return name.substring(0, 2).toUpperCase();
 };
 
@@ -106,79 +106,97 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
 
         {/* ── Desktop Auth Protocol ── */}
         <div className="hidden md:flex items-center space-x-4">
-          {!isPending &&
-            (user ? (
-              <div className="flex items-center gap-4">
-                {/* Sharp Identity Block */}
+          {isPending ? (
+            <div
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 border animate-pulse",
+                isNavSolid
+                  ? "bg-slate-50 border-slate-200"
+                  : "bg-white/5 border-white/20 backdrop-blur-md",
+              )}
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
+              <span
+                className={cn(
+                  "text-[10px] font-mono font-bold uppercase tracking-widest",
+                  isNavSolid ? "text-slate-400" : "text-white/40",
+                )}
+              >
+                Synchronizing Ledger...
+              </span>
+            </div>
+          ) : user ? (
+            <div className="flex items-center gap-4">
+              {/* Sharp Identity Block */}
+              <div
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 border transition-colors",
+                  isNavSolid
+                    ? "bg-slate-50 border-slate-200"
+                    : "bg-white/5 border-white/20 backdrop-blur-md",
+                )}
+              >
                 <div
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2 border transition-colors",
+                    "w-6 h-6 flex items-center justify-center font-serif text-[11px] font-bold",
                     isNavSolid
-                      ? "bg-slate-50 border-slate-200"
-                      : "bg-white/5 border-white/20 backdrop-blur-md",
+                      ? "bg-slate-900 text-white"
+                      : "bg-white text-slate-900",
                   )}
                 >
-                  <div
-                    className={cn(
-                      "w-6 h-6 flex items-center justify-center font-serif text-[11px] font-bold",
-                      isNavSolid
-                        ? "bg-slate-900 text-white"
-                        : "bg-white text-slate-900",
-                    )}
-                  >
-                    {getInitials(user.name)}
-                  </div>
-                  <span
-                    className={cn(
-                      "text-[10px] font-mono font-bold uppercase tracking-widest",
-                      isNavSolid ? "text-slate-900" : "text-white",
-                    )}
-                  >
-                    {user.name.split(" ")}
-                  </span>
+                  {getInitials(user.name)}
                 </div>
-
-                <Button
-                  asChild
+                <span
                   className={cn(
-                    "rounded-none font-bold uppercase tracking-widest text-[10px] px-6 h-10 transition-colors",
-                    isNavSolid
-                      ? "bg-slate-900 hover:bg-emerald-900 text-white"
-                      : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
+                    "text-[10px] font-mono font-bold uppercase tracking-widest",
+                    isNavSolid ? "text-slate-900" : "text-white",
                   )}
                 >
-                  <Link href="/dashboard">
-                    Access Terminal{" "}
-                    <LayoutDashboard className="w-3.5 h-3.5 ml-2" />
-                  </Link>
-                </Button>
+                  {user.name.split(" ")}
+                </span>
               </div>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className={cn(
-                    "text-[10px] font-bold uppercase tracking-widest transition-colors px-4 py-2",
-                    isNavSolid
-                      ? "text-slate-600 hover:text-slate-900"
-                      : "text-white/80 hover:text-white",
-                  )}
-                >
-                  Authenticate
+
+              <Button
+                asChild
+                className={cn(
+                  "rounded-none font-bold uppercase tracking-widest text-[10px] px-6 h-10 transition-colors",
+                  isNavSolid
+                    ? "bg-slate-900 hover:bg-emerald-900 text-white"
+                    : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
+                )}
+              >
+                <Link href="/dashboard">
+                  Access Terminal{" "}
+                  <LayoutDashboard className="w-3.5 h-3.5 ml-2" />
                 </Link>
-                <Button
-                  asChild
-                  className={cn(
-                    "rounded-none font-bold uppercase tracking-widest text-[10px] px-8 h-10 transition-colors",
-                    isNavSolid
-                      ? "bg-slate-900 hover:bg-emerald-900 text-white"
-                      : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
-                  )}
-                >
-                  <Link href="/register">Initialize</Link>
-                </Button>
-              </>
-            ))}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className={cn(
+                  "text-[10px] font-bold uppercase tracking-widest transition-colors px-4 py-2",
+                  isNavSolid
+                    ? "text-slate-600 hover:text-slate-900"
+                    : "text-white/80 hover:text-white",
+                )}
+              >
+                Authenticate
+              </Link>
+              <Button
+                asChild
+                className={cn(
+                  "rounded-none font-bold uppercase tracking-widest text-[10px] px-8 h-10 transition-colors",
+                  isNavSolid
+                    ? "bg-slate-900 hover:bg-emerald-900 text-white"
+                    : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
+                )}
+              >
+                <Link href="/register">Initialize</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* ── Mobile Menu Toggle ── */}
@@ -236,62 +254,68 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             </nav>
 
             <div className="mt-auto pt-12 flex flex-col space-y-4">
-              {!isPending &&
-                (user ? (
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4">
-                      <div className="w-10 h-10 bg-white text-slate-900 flex items-center justify-center font-serif text-lg font-bold shrink-0">
-                        {getInitials(user.name)}
-                      </div>
-                      <div className="text-left overflow-hidden">
-                        <p className="text-white font-serif font-bold truncate">
-                          {user.name}
-                        </p>
-                        <p className="text-slate-500 font-mono text-[10px] uppercase tracking-widest truncate mt-1">
-                          {user.email}
-                        </p>
-                      </div>
+              {isPending ? (
+                <div className="bg-slate-900 border border-slate-800 p-6 flex flex-col items-center gap-4 animate-pulse">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-white/40">
+                    Verifying Identity...
+                  </span>
+                </div>
+              ) : user ? (
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4">
+                    <div className="w-10 h-10 bg-white text-slate-900 flex items-center justify-center font-serif text-lg font-bold shrink-0">
+                      {getInitials(user.name)}
                     </div>
-                    <Button
-                      asChild
-                      className="w-full rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
-                    >
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Access Terminal{" "}
-                        <LayoutDashboard className="w-4 h-4 ml-2" />
-                      </Link>
-                    </Button>
+                    <div className="text-left overflow-hidden">
+                      <p className="text-white font-serif font-bold truncate">
+                        {user.name}
+                      </p>
+                      <p className="text-slate-500 font-mono text-[10px] uppercase tracking-widest truncate mt-1">
+                        {user.email}
+                      </p>
+                    </div>
                   </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="rounded-none border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white font-bold uppercase tracking-widest text-[10px] h-12"
+                  <Button
+                    asChild
+                    className="w-full rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
+                  >
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Link
-                        href="/login"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Authenticate
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      className="rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
+                      Access Dashboard{" "}
+                      <LayoutDashboard className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="rounded-none border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white font-bold uppercase tracking-widest text-[10px] h-12"
+                  >
+                    <Link
+                      href="/login"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Link
-                        href="/register"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Initialize
-                      </Link>
-                    </Button>
-                  </div>
-                ))}
+                      Authenticate
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    className="rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
+                  >
+                    <Link
+                      href="/register"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Initialize
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

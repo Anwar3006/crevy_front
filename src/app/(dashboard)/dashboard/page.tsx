@@ -4,34 +4,41 @@ import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth";
 import type { TRole } from "@/types/user.types";
 import AdminDashboard from "./_components/AdminDashboard";
-import CompanyDashboard from "./_components/CompanyDashboard";
+import OrgAdminDashboard from "./_components/OrgAdminDashboard";
 import ProjectOwnerDashboard from "./_components/ProjectOwnerDashboard";
+import SuperAdminDashboard from "./_components/SuperAdminDashboard";
 
-const Dashboard = () => {
+export default function DashboardRouter() {
   const { data: session, isPending } = authClient.useSession();
-  const sessionUser = session?.user as any;
 
   if (isPending) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] text-[#2ebc8d]">
-        <Loader2 className="w-10 h-10 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin" />
+          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
+            Initializing Secure Terminal...
+          </p>
+        </div>
       </div>
     );
   }
 
-  const role: TRole = sessionUser?.role || "project_owner";
-  const userName = session?.user?.name || "User";
+  const role: TRole = (session?.user as any)?.role || "project_owner";
+  const userName = session?.user?.name || "Operative";
 
   switch (role) {
-    case "financial_admin":
-      return <CompanyDashboard userName={userName} role={role} />;
     case "super_admin":
-    case "mrv_admin":
+      return <SuperAdminDashboard userName={userName} />;
     case "project_manager":
+    case "mrv_admin":
+    case "financial_admin":
       return <AdminDashboard userName={userName} role={role} />;
+    case "org_admin":
+    case "sustainability_manager":
+    case "org_auditor":
+      return <OrgAdminDashboard userName={userName} role={role} />;
     default:
       return <ProjectOwnerDashboard userName={userName} role={role} />;
   }
-};
-
-export default Dashboard;
+}

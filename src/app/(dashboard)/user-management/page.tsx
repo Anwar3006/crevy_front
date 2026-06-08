@@ -68,6 +68,10 @@ export default function UserManagementPage() {
   const { user } = useUser();
   const isSuperAdmin = user?.role === "super_admin";
   const isOrgAdmin = user?.role === "org_admin";
+  const isOrgRelated =
+    user?.role === "org_admin" ||
+    user?.role === "sustainability_manager" ||
+    user?.role === "org_auditor";
   const organizationId = (user as any)?.organizationId;
   const router = useRouter();
 
@@ -295,126 +299,129 @@ export default function UserManagementPage() {
               variant="outline"
               className="rounded-none border-slate-300 text-slate-900 hover:border-slate-900 text-[10px] font-bold uppercase tracking-widest"
             >
-              <Mail className="h-3.5 w-3.5 mr-2" /> Provision Admin
+              <Mail className="h-3.5 w-3.5 mr-2" />{" "}
+              {isOrgAdmin ? "Invite Team Member" : "Invite Admin"}
             </Button>
-            <Button
-              onClick={() => router.push("/project-owners/register")}
-              className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white text-[10px] font-bold uppercase tracking-widest transition-colors"
-            >
-              <UserCheck className="h-3.5 w-3.5 mr-2" /> Onboard Originator
-            </Button>
+            {!isOrgRelated && (
+              <Button
+                onClick={() => router.push("/project-owners/register")}
+                className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white text-[10px] font-bold uppercase tracking-widest transition-colors"
+              >
+                <UserCheck className="h-3.5 w-3.5 mr-2" /> Onboard Project Owner
+              </Button>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* ── Identity Ledger ── */}
-        <div className="border border-slate-200 bg-white overflow-x-auto">
-          <Table>
-            <TableHeader className="bg-slate-50">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow
-                  key={headerGroup.id}
-                  className="border-b-2 border-slate-900 hover:bg-slate-50"
+      {/* ── Identity Ledger ── */}
+      <div className="border border-slate-200 bg-white overflow-x-auto">
+        <Table>
+          <TableHeader className="bg-slate-50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="border-b-2 border-slate-900 hover:bg-slate-50"
+              >
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-64 text-center"
                 >
-                  {headerGroup.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
+                  <div className="flex flex-col items-center justify-center gap-4">
+                    <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin" />
+                    <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
+                      Syncing Identity Registry...
+                    </p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className="hover:bg-slate-50 transition-colors border-b border-slate-100"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="py-4 align-middle">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-64 text-center"
-                  >
-                    <div className="flex flex-col items-center justify-center gap-4">
-                      <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin" />
-                      <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
-                        Syncing Identity Registry...
-                      </p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    className="hover:bg-slate-50 transition-colors border-b border-slate-100"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="py-4 align-middle">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-64 text-center"
-                  >
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <UserX
-                        className="h-10 w-10 text-slate-300 mb-2"
-                        strokeWidth={1}
-                      />
-                      <p className="font-serif text-xl text-slate-900">
-                        No Participants Found.
-                      </p>
-                      <p className="text-xs text-slate-500 font-light">
-                        Adjust filtering parameters to query the ledger.
-                      </p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-64 text-center"
+                >
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <UserX
+                      className="h-10 w-10 text-slate-300 mb-2"
+                      strokeWidth={1}
+                    />
+                    <p className="font-serif text-xl text-slate-900">
+                      No Participants Found.
+                    </p>
+                    <p className="text-xs text-slate-500 font-light">
+                      Adjust filtering parameters to query the ledger.
+                    </p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
 
-          {/* Pagination */}
-          <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-slate-200">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-              Displaying{" "}
-              <span className="text-slate-900">
-                {table.getRowModel().rows.length}
-              </span>{" "}
-              identities
-            </p>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
+        {/* Pagination */}
+        <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-slate-200">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            Displaying{" "}
+            <span className="text-slate-900">
+              {table.getRowModel().rows.length}
+            </span>{" "}
+            identities
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>

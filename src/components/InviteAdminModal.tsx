@@ -1,8 +1,8 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ShieldCheck } from "lucide-react";
-import React, { useState } from "react";
+import { Loader2, ShieldCheck } from "lucide-react";
+import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUser } from "@/hooks/use-user";
 import { RBACService } from "@/lib/services/rbac-service";
 
 interface InviteAdminModalProps {
@@ -32,10 +33,14 @@ interface InviteAdminModalProps {
 
 export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
   const [loading, setLoading] = useState(false);
+  const { user } = useUser();
+  const isSuperAdmin = user?.role === "super_admin";
+  const isOrgAdmin = user?.role === "org_admin";
+
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       email: "",
-      roleName: "admin",
+      roleName: isOrgAdmin ? "sustainability_manager" : "admin",
     },
   });
 
@@ -45,7 +50,27 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
     enabled: isOpen,
   });
 
-  const roles = rolesRes?.data || [];
+  const filteredRoles = useMemo(() => {
+    const roles = rolesRes?.data || [];
+
+    // ── Role Filtering Logic ──
+    if (isSuperAdmin) return roles;
+
+    if (isOrgAdmin) {
+      // Org admins can only invite sustainability managers and auditors
+      return roles.filter((r: any) =>
+        ["sustainability_manager", "org_auditor"].includes(r.name),
+      );
+    }
+
+    // Other admins: Everything EXCEPT super_admin, org_admin, sustainability_manager
+    return roles.filter(
+      (r: any) =>
+        !["super_admin", "org_admin", "sustainability_manager"].includes(
+          r.name,
+        ),
+    );
+  }, [rolesRes?.data, isSuperAdmin, isOrgAdmin]);
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -61,11 +86,15 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
 
       if (!response.ok) throw new Error("Failed to send invitation");
 
-      toast.success("Governance credential provisioned successfully.");
+      toast.success(
+        isOrgAdmin
+          ? "Team member invited successfully"
+          : "Admin invitation sent successfully",
+      );
       reset();
       onClose();
     } catch (error) {
-      toast.error("Failed to provision credential. Review system logs.");
+      toast.error("Failed to send invitation");
     } finally {
       setLoading(false);
     }
@@ -79,19 +108,21 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
           <div className="flex items-center gap-3 mb-4">
             <ShieldCheck size={20} className="text-slate-900" />
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
-              System Access Control
+              {isOrgAdmin
+                ? "Organization Access Control"
+                : "System Access Control"}
             </span>
           </div>
           <DialogTitle className="text-3xl font-serif text-slate-900 tracking-tight leading-none mb-2">
-            Provision Administrator.
+            {isOrgAdmin ? "Invite Team Member" : "Provision Credential"}
           </DialogTitle>
           <DialogDescription className="text-slate-500 font-light text-sm">
-            Issue access role to a new governance officer. Select appropriate
-            clearance levels carefully.
+            {isOrgAdmin
+              ? "Issue access to a new member of your organization."
+              : "Issue access role to a new governance officer."}
           </DialogDescription>
         </DialogHeader>
 
-        {/* ── Provisioning Form ── */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <div className="p-8 space-y-8">
             <div className="space-y-3">
@@ -104,7 +135,9 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
               <Input
                 id="email"
                 type="email"
-                placeholder="officer@crevy.com"
+                placeholder={
+                  isOrgAdmin ? "colleague@company.com" : "officer@crevy.com"
+                }
                 {...register("email", { required: true })}
                 required
                 className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm text-slate-900 placeholder:text-slate-400 focus-visible:ring-0 focus-visible:border-slate-900 transition-colors"
@@ -120,7 +153,7 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
               </Label>
               <Select
                 onValueChange={(val) => setValue("roleName", val)}
-                defaultValue="admin"
+                defaultValue={isOrgAdmin ? "sustainability_manager" : "admin"}
               >
                 <SelectTrigger className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors">
                   <SelectValue placeholder="Select clearance level" />
@@ -135,7 +168,7 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
                       Fetching registry...
                     </SelectItem>
                   ) : (
-                    roles.map((role: any) => (
+                    filteredRoles.map((role: any) => (
                       <SelectItem
                         key={role.name}
                         value={role.name}
@@ -150,7 +183,6 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
             </div>
           </div>
 
-          {/* ── Action Footer ── */}
           <DialogFooter className="p-6 bg-slate-50 border-t border-slate-200 flex sm:justify-between items-center gap-4">
             <Button
               variant="ghost"
@@ -158,14 +190,18 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
               onClick={onClose}
               className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:bg-transparent"
             >
-              Abort
+              Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading || loadingRoles}
               className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
-              {loading ? "Executing..." : "Dispatch Credential"}
+              {loading ? (
+                <Loader2 className="animate-spin h-4 w-4 mr-2" />
+              ) : (
+                "Dispatch Credential"
+              )}
             </Button>
           </DialogFooter>
         </form>
