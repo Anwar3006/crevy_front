@@ -1,224 +1,303 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import {
+  ArrowRight,
+  Database,
+  FileDigit,
+  Globe,
+  Lock,
+  Play,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { getOptimizedVideoUrl } from "@/lib/utils/cloudinary";
 
-/**
- * Animated counter component for statistics.
- *
- * @param {object} props - Component props.
- * @param {number} props.value - The target value to count to.
- * @param {string} [props.suffix] - Optional suffix (e.g., "+").
- * @returns {JSX.Element} The rendered Counter component.
- */
-function Counter({ value, suffix }: { value: number; suffix?: string }) {
+// ─── MONOTONIC COUNTER ───
+function Counter({ value }: { value: number }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   useEffect(() => {
     if (!isInView) return;
-
     let startTime: number | null = null;
-    const duration = 2000;
-    let frameId: number;
+    const duration = 2500;
 
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Easing: easeOutExpo
-      const easeOutExpo = 1 - 2 ** (-10 * progress);
-      const currentCount = Math.floor(easeOutExpo * value);
-
-      setCount(currentCount);
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(animate);
-      }
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      // easeOutQuart
+      const easeOutQuart = 1 - (1 - progress) ** 4;
+      setCount(Math.floor(easeOutQuart * value));
+      if (progress < 1) requestAnimationFrame(animate);
     };
-
-    frameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frameId);
+    requestAnimationFrame(animate);
   }, [isInView, value]);
 
   return (
-    <span
-      ref={ref}
-      className="tabular-nums inline-block min-w-[1ch]"
-      style={{ fontVariantNumeric: "tabular-nums" }}
-    >
+    <span ref={ref} className="tabular-nums">
       {count.toLocaleString()}
-      {suffix && <span className="ml-1">{suffix}</span>}
     </span>
   );
 }
 
-/**
- * Statistics strip component.
- *
- * @param {object} props - Component props.
- * @param {boolean} [props.shouldReduceMotion] - Whether to reduce animations.
- * @returns {JSX.Element} The rendered StatsStrip component.
- */
-function StatsStrip({ shouldReduceMotion }: { shouldReduceMotion?: boolean }) {
-  const stats = [
-    { label: "Active Projects", value: 200, suffix: "+" },
-    { label: "Carbon Offset", value: 50000, suffix: "+ tCO₂e" },
-    { label: "Company Partners", value: 80, suffix: "+" },
-    { label: "Project Categories", value: 6, suffix: "" },
-  ];
+// ─── MEDIA CONFIGURATION ───
+const CAROUSEL_DATA = [
+  {
+    id: "v1",
+    src: getOptimizedVideoUrl("vid1.1_vn20nv.mp4"),
+    tag: "Regenerative Agriculture",
+    headlinePrefix: "Restoring Earth's",
+    headlineItalic: "Baseline.",
+    desc: "Financing high-yield carbon sequestration through verified soil rehabilitation across the African continent.",
+  },
+  {
+    id: "v2",
+    src: getOptimizedVideoUrl("vid2_cvgee6.mp4"),
+    tag: "Reforestation Assets",
+    headlinePrefix: "Scaling the",
+    headlineItalic: "Canopy.",
+    desc: "Immutable investment in native tree planting, restoring critical biodiversity while generating premium-grade carbon yields.",
+  },
+  {
+    id: "v3",
+    src: getOptimizedVideoUrl("vid3.1_ywgatv.mp4"),
+    tag: "Renewable Infrastructure",
+    headlinePrefix: "Powering the",
+    headlineItalic: "Future.",
+    desc: "Capital allocation for solar and wind arrays, displacing fossil fuel dependency with audited, clean energy metrics.",
+  },
+];
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.6 }}
-      className="max-w-5xl mx-auto backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl p-6 md:p-10 min-h-[140px]"
-    >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-        {stats.map((stat, idx) => (
-          <div
-            key={idx}
-            className="flex flex-col items-center justify-center text-center"
-          >
-            <div className="font-[family-name:var(--font-syne)] font-bold text-2xl md:text-4xl text-white tracking-tight mb-2">
-              <Counter value={stat.value} suffix={stat.suffix} />
-            </div>
-            <div className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] text-myGreen opacity-90">
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-/**
- * Hero section component for the landing page.
- *
- * @param {object} props - Component props.
- * @param {boolean} [props.shouldReduceMotion] - Whether to reduce animations.
- * @returns {JSX.Element} The rendered HeroSection component.
- */
 export function HeroSection({
   shouldReduceMotion,
 }: {
   shouldReduceMotion?: boolean;
 }) {
-  const fadeInUp = {
-    initial: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
-    animate: { opacity: 1, y: 0 },
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const activeContent = CAROUSEL_DATA[activeIndex];
+
+  // Logic: Change source without unmounting the video element to prevent layout shift
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.src = activeContent.src;
+      videoRef.current.load();
+      if (!shouldReduceMotion) {
+        videoRef.current.play().catch(console.warn);
+      }
+    }
+  }, [shouldReduceMotion, activeContent.src]);
 
   return (
-    <section className="relative min-h-screen w-full flex flex-col overflow-hidden bg-slate-950">
-      {/* Background Layer */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative min-h-[95vh] w-full flex flex-col justify-center overflow-hidden bg-slate-950 pt-24 border-b border-slate-900">
+      {/* ── 1. Stabilized Cinematic Background ── */}
+      {/* The container below forces a stable aspect ratio and blocks layout shifts */}
+      <div className="absolute inset-0 z-0 bg-slate-950">
         <video
-          autoPlay
-          muted
-          loop
+          ref={videoRef}
+          className="w-full h-full object-cover mix-blend-luminosity opacity-40"
           playsInline
-          className="w-full h-full object-cover scale-105"
-          poster="/img/img/background.jpg"
-        >
-          <source
-            src="https://videos.pexels.com/video-files/4629597/4629597-uhd_2560_1440_25fps.mp4"
-            type="video/mp4"
-          />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-myBlue/90" />
+          muted
+          autoPlay={!shouldReduceMotion}
+          onEnded={() =>
+            setActiveIndex((prev) => (prev + 1) % CAROUSEL_DATA.length)
+          }
+        />
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-700/40" /> */}
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-6 relative z-10 flex-grow flex flex-col items-center justify-center pt-20 pb-20">
-        {/* Badge */}
-        <motion.div
-          {...fadeInUp}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-full mb-6 md:mb-10"
-        >
-          <span className="animate-pulse">🌿</span>
-          <span className="text-white/90 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase">
-            Africa's Verified Green Marketplace
-          </span>
-        </motion.div>
+      {/* ── 2. Animated Typography ── */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10 w-full flex-1 flex flex-col justify-center py-12">
+        <div className="max-w-4xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeContent.id}
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-slate-900/50 backdrop-blur-md mb-8">
+                <span className="w-2 h-2 bg-emerald-500 rounded-none animate-pulse" />
+                <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase">
+                  Live Asset Class: {activeContent.tag}
+                </span>
+              </div>
 
-        {/* Headline */}
-        <div className="text-center mb-8">
-          <motion.h1
-            className="font-[family-name:var(--font-syne)] font-extrabold text-4xl md:text-6xl lg:text-8xl text-white leading-[1.1] tracking-tight"
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+              <h1 className="font-serif font-extrabold text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tight mb-8">
+                {activeContent.headlinePrefix} <br />
+                <span className="italic text-slate-400">
+                  {activeContent.headlineItalic}
+                </span>
+              </h1>
+
+              <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed max-w-3xl mb-12">
+                {activeContent.desc}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
           >
-            Turn Green Projects <br className="hidden md:block" />
-            <span className="text-myGreen italic">Into Climate Impact</span>
-          </motion.h1>
-        </div>
-
-        {/* Sub-heading */}
-        <motion.p
-          {...fadeInUp}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="max-w-xl mx-auto text-base md:text-lg text-white mb-10 text-center leading-relaxed font-medium"
-        >
-          Connect with sustainable farmers and energy operators to offset your
-          carbon footprint —
-          <span className="text-white">
-            {" "}
-            transparently, verifiably, and profitably.
-          </span>
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          {...fadeInUp}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
-        >
-          <Button
-            size="lg"
-            asChild
-            className="bg-myGreen text-white hover:bg-myGreen/90 hover:scale-105 transition-all duration-300 border-none px-10 py-7 text-lg rounded-2xl shadow-xl shadow-myGreen/20 w-full sm:w-auto"
-          >
-            <Link href="/register">Get Started Free</Link>
-          </Button>
-
-          <Button
-            size="lg"
-            variant="outline"
-            asChild
-            className="text-black border-white/20 backdrop-blur-md hover:bg-white/10 hover:text-gray-400 px-10 py-7 text-lg rounded-2xl w-full sm:w-auto"
-          >
-            <Link href="/marketplace">Explore Marketplace →</Link>
-          </Button>
-        </motion.div>
-      </div>
-
-      {/* Footer Stats Section */}
-      <div className="relative z-20 w-full pb-12 mt-auto">
-        <div className="container mx-auto px-6">
-          <StatsStrip shouldReduceMotion={shouldReduceMotion} />
+            <Link
+              href="/register"
+              className="w-full sm:w-auto bg-white text-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-emerald-500 hover:text-white transition-colors text-center"
+            >
+              Enter the Registry
+            </Link>
+            <button
+              type="button"
+              className="w-full sm:w-auto border border-slate-700 bg-slate-900/50 text-white px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-800 transition-colors flex items-center justify-center gap-3"
+            >
+              <Play size={14} /> Watch Protocol Brief (60s)
+            </button>
+          </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      {!shouldReduceMotion && (
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/30 hidden lg:block"
-        >
-          <ChevronDown size={28} />
-        </motion.div>
-      )}
+      {/* ── 3. Carousel Progress Indicators ── */}
+      <div className="relative z-20 w-full border-t border-slate-800 bg-slate-950/80 backdrop-blur-sm py-4">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center gap-4">
+          <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 hidden md:block w-32 shrink-0">
+            System Telemetry
+          </p>
+          <div className="flex-1 flex gap-2">
+            {CAROUSEL_DATA.map((item, index) => (
+              <button
+                type="button"
+                key={item.id}
+                className="flex-1 h-1 bg-slate-800 relative cursor-pointer group"
+                onClick={() => setActiveIndex(index)}
+              >
+                {activeIndex === index && (
+                  <motion.div
+                    layoutId="activeProgress"
+                    className="absolute inset-y-0 left-0 bg-emerald-500 w-full origin-left"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 8, ease: "linear" }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] font-mono text-slate-500 shrink-0 w-12 text-right">
+            0{activeIndex + 1} / 0{CAROUSEL_DATA.length}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── TRUST LAYER SECTION ─────────────────────────────────────────────────────
+
+export function TrustLayerSection({
+  shouldReduceMotion,
+}: {
+  shouldReduceMotion?: boolean;
+}) {
+  return (
+    <section className="bg-slate-950 border-t border-slate-900 relative z-20 pb-16 pt-4">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+        {/* ── Live Counter & Ledger Truth ── */}
+        <div className="grid lg:grid-cols-12 gap-px bg-slate-800 border border-slate-800 -mt-12 relative z-30 shadow-2xl shadow-slate-950/50">
+          {/* Live Data Block */}
+          <div className="lg:col-span-4 bg-slate-900 p-8 md:p-10 flex flex-col justify-center">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-4">
+              Live Ledger Telemetry
+            </p>
+            <div className="font-mono text-4xl md:text-6xl text-white font-bold tracking-tight mb-2">
+              <Counter value={1204500} />
+            </div>
+            <p className="text-slate-400 text-xs font-mono uppercase tracking-widest">
+              Tonnes of CO₂e Permanently Retired
+            </p>
+          </div>
+
+          {/* Infographic Process Block */}
+          <div className="lg:col-span-8 bg-slate-950 p-8 md:p-10">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-8">
+              The Serial Number Promise
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              {[
+                {
+                  label: "Project Audit",
+                  icon: Database,
+                  desc: "dMRV Ingestion",
+                },
+                {
+                  label: "Issuance",
+                  icon: FileDigit,
+                  desc: "Unique Serial ID",
+                },
+                {
+                  label: "Escrow Hold",
+                  icon: Lock,
+                  desc: "Buffer Pool Allocation",
+                },
+                {
+                  label: "Retirement",
+                  icon: Globe,
+                  desc: "Public Ledger Lock",
+                },
+              ].map((step, idx, arr) => (
+                <div key={idx} className="flex-1 w-full relative">
+                  <div className="border border-slate-800 bg-slate-900 p-6 flex flex-col items-center text-center group hover:border-emerald-500 transition-colors">
+                    <step.icon
+                      size={24}
+                      className="text-slate-400 mb-4 group-hover:text-emerald-500 transition-colors"
+                    />
+                    <h4 className="text-white font-bold text-sm mb-1">
+                      {step.label}
+                    </h4>
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500">
+                      {step.desc}
+                    </span>
+                  </div>
+                  {/* Arrow Indicator (Hidden on small screens) */}
+                  {idx !== arr.length - 1 && (
+                    <ArrowRight
+                      className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 text-slate-700 z-10 bg-slate-950 rounded-full"
+                      size={16}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Auditor Logos ── */}
+        <div className="pt-4 mt-6 border-t border-slate-900 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 shrink-0">
+            Frameworks & Compliance:
+          </p>
+          <div className="flex flex-wrap gap-6 md:gap-12 font-serif text-xs md:text-xl font-bold text-slate-400">
+            <span className="hover:text-white transition-colors cursor-default">
+              [ ICVCM Aligned ]
+            </span>
+            <span className="hover:text-white transition-colors cursor-default">
+              [ CORSIA Ready ]
+            </span>
+            <span className="hover:text-white transition-colors cursor-default">
+              [ Gold Standard ]
+            </span>
+            <span className="hover:text-white transition-colors cursor-default">
+              [ Verra ]
+            </span>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

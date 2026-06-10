@@ -59,17 +59,17 @@ const LoginPage = () => {
             <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest leading-relaxed">
               By authenticating, you bind yourself to the{" "}
               <Link
-                href="/terms"
+                href="/terms-of-service"
                 className="text-slate-900 hover:text-emerald-700 transition-colors border-b border-slate-300 hover:border-emerald-700"
               >
                 Terms of Service
               </Link>{" "}
               and{" "}
               <Link
-                href="/privacy"
+                href="/privacy-policy"
                 className="text-slate-900 hover:text-emerald-700 transition-colors border-b border-slate-300 hover:border-emerald-700"
               >
-                Privacy Protocol
+                Privacy Policy
               </Link>
               .
             </p>

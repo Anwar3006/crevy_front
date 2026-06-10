@@ -281,7 +281,7 @@ export default function RegisterForm({
 
         <button
           type="submit"
-          className="w-full bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] py-6 mt-4 transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-emerald-700 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] py-6 mt-4 transition-colors flex items-center justify-center gap-2"
           disabled={loading}
         >
           {loading ? (

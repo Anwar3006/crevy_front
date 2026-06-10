@@ -42,13 +42,15 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
     pathname.startsWith("/public-registry") ||
     pathname.startsWith("/about-us") ||
     pathname.startsWith("/methodology") ||
-    pathname.startsWith("/support");
+    pathname.startsWith("/support") ||
+    pathname.startsWith("/privacy-policy") ||
+    pathname.startsWith("/terms-of-service");
 
   const navLinks = [
     { name: "Marketplace", href: "/marketplace" },
     { name: "Public Registry", href: "/public-registry" },
     { name: "Methodology", href: "/methodology" },
-    { name: "Corporate", href: "/about-us" },
+    { name: "About", href: "/about-us" },
     { name: "Support", href: "/support" },
   ];
 
@@ -146,14 +148,14 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 >
                   {getInitials(user.name)}
                 </div>
-                <span
+                {/* <span
                   className={cn(
                     "text-[10px] font-mono font-bold uppercase tracking-widest",
                     isNavSolid ? "text-slate-900" : "text-white",
                   )}
                 >
-                  {user.name.split(" ")}
-                </span>
+                   {user.name.split(" ")} 
+                </span> */}
               </div>
 
               <Button
@@ -166,7 +168,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 )}
               >
                 <Link href="/dashboard">
-                  Access Terminal{" "}
+                  Access Dashboard{" "}
                   <LayoutDashboard className="w-3.5 h-3.5 ml-2" />
                 </Link>
               </Button>

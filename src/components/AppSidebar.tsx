@@ -61,9 +61,12 @@ export function AppSidebar({
       <SidebarHeader className="pt-6 pb-4">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center gap-3 overflow-hidden">
-            <h1 className="text-2xl font-serif text-white tracking-tight group-data-[collapsible=icon]:hidden">
+            <Link
+              href="/"
+              className="text-2xl font-serif text-white tracking-tight group-data-[collapsible=icon]:hidden"
+            >
               Crevy.
-            </h1>
+            </Link>
           </div>
 
           {/* Collapse Toggle for Desktop */}

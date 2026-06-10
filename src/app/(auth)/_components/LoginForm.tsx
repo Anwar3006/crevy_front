@@ -147,7 +147,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
         <button
           type="submit"
           disabled={loading}
-          className="mt-4 w-full rounded-none bg-slate-900 text-white font-bold uppercase tracking-widest text-[10px] py-5 hover:bg-emerald-900 transition-colors disabled:opacity-70 flex items-center justify-center gap-3"
+          className="mt-4 w-full rounded-none bg-emerald-700 text-white font-bold uppercase tracking-widest text-[10px] py-5 hover:bg-emerald-900 transition-colors disabled:opacity-70 flex items-center justify-center gap-3"
         >
           {loading ? (
             <>

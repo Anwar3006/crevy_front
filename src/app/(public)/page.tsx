@@ -1,37 +1,30 @@
 "use client";
 
 import { useReducedMotion } from "framer-motion";
+import { CinematicScrollPitch } from "@/components/public/landing/CinematicScrollPitch";
 import {
-  FeaturedProjectsSection,
   FinalCTASection,
-  TestimonialsSection,
-} from "@/components/public/landing/FeaturedProjectsSection";
-import { HeroSection } from "@/components/public/landing/HeroSection";
-import { HowItWorksSection } from "@/components/public/landing/HowItWorksSection";
-import { ProjectTypesSection } from "@/components/public/landing/ProjectTypesSection";
-import {
   ScrollingMarquee,
-  WhyCrevySection,
-} from "@/components/public/landing/WhyCrevySection";
+} from "@/components/public/landing/FeaturedProjectsSection";
+import {
+  HeroSection,
+  TrustLayerSection,
+} from "@/components/public/landing/HeroSection";
+import { ProjectTypesSection } from "@/components/public/landing/ProjectTypesSection";
+// import { FinalCTASection } from "@/components/public/landing/FinalCTASection";
+import { ThePitchSection } from "@/components/public/landing/ThePitchSection";
 
-/**
- * Main Landing Page component.
- * Assembles all landing page sections into a cohesive whole.
- *
- * @returns {JSX.Element} The rendered LandingPage.
- */
 export default function LandingPage() {
   const shouldReduceMotion = useReducedMotion() as boolean;
 
   return (
-    <div className="animate-in fade-in duration-700">
+    <div className="animate-in fade-in duration-700 bg-slate-50 selection:bg-slate-900 selection:text-white">
       <HeroSection shouldReduceMotion={shouldReduceMotion} />
-      <HowItWorksSection shouldReduceMotion={shouldReduceMotion} />
+      <TrustLayerSection shouldReduceMotion={shouldReduceMotion} />
+      <ThePitchSection shouldReduceMotion={shouldReduceMotion} />
+      <CinematicScrollPitch shouldReduceMotion={shouldReduceMotion} />
       <ProjectTypesSection shouldReduceMotion={shouldReduceMotion} />
-      <WhyCrevySection shouldReduceMotion={shouldReduceMotion} />
       <ScrollingMarquee />
-      <FeaturedProjectsSection shouldReduceMotion={shouldReduceMotion} />
-      <TestimonialsSection shouldReduceMotion={shouldReduceMotion} />
       <FinalCTASection shouldReduceMotion={shouldReduceMotion} />
     </div>
   );
