@@ -9,11 +9,11 @@ import {
 } from "@tanstack/react-table";
 import {
   Activity,
+  Calendar,
   ChevronLeft,
   ChevronRight,
   Download,
   ExternalLink,
-  Filter,
   LayoutGrid,
   List,
   MapPin,
@@ -45,32 +45,68 @@ import { useUser } from "@/hooks/use-user";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+// ─── Institutional Schema ───────────────────────────────────────────────────
 
 interface Project {
   id: string;
-  code: string;
+  code?: string;
   name: string;
-  projectType: string;
-  projectStage: string;
-  projectStatus: string;
-  sector: string;
-  region: string;
-  country: string;
-  totalAreaHectares: string | number;
-  createdAt: string;
+  project_type?: string;
+  projectType?: string;
+  project_stage?: string;
+  projectStage?: string;
+  project_status?: string;
+  projectStatus?: string;
+  sector?: string;
+  region?: string;
+  country?: string;
+  start_date?: string;
+  createdAt?: string;
+  registryStatus?: string;
 }
 
-// ─── Editorial Styles ────────────────────────────────────────────────────────
+// ─── Configuration ───────────────────────────────────────────────────────────
 
-const statusConfig: Record<string, { color: string; bg: string }> = {
-  active: { color: "text-emerald-700", bg: "bg-emerald-500" },
-  draft: { color: "text-slate-500", bg: "bg-slate-400" },
-  suspended: { color: "text-red-700", bg: "bg-red-500" },
-  closed: { color: "text-slate-400", bg: "bg-slate-300" },
+const statusConfig: Record<string, { color: string; dot: string; bg: string }> =
+  {
+    active: {
+      color: "text-emerald-700",
+      dot: "bg-emerald-500",
+      bg: "bg-emerald-500/10",
+    },
+    draft: {
+      color: "text-slate-500",
+      dot: "bg-slate-400",
+      bg: "bg-slate-400/10",
+    },
+    suspended: {
+      color: "text-red-700",
+      dot: "bg-red-500",
+      bg: "bg-red-500/10",
+    },
+    closed: {
+      color: "text-slate-400",
+      dot: "bg-slate-300",
+      bg: "bg-slate-300/10",
+    },
+  };
+
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "—";
+  return new Date(dateString)
+    .toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+    .toUpperCase();
 };
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+const getUnifiedValue = (obj: any, snakeKey: string, camelKey: string) => {
+  return obj[snakeKey] || obj[camelKey] || "";
+};
+
+// ─── Main Protocol ───────────────────────────────────────────────────────────
 
 export default function AllProjectsPage() {
   const router = useRouter();
@@ -80,49 +116,40 @@ export default function AllProjectsPage() {
   const [globalFilter, setGlobalFilter] = useState("");
   const [cursor, setCursor] = useState<string | null>(null);
 
-  // ── Role-Based Oversight Logic ──
   const isSuperAdmin = user?.role === "super_admin";
 
   const { data, isLoading } = useQuery({
-    queryKey: [
-      "all-projects",
-      statusFilter,
-      globalFilter,
-      cursor,
-      user?.id,
-      viewType,
-    ],
+    queryKey: ["all-projects", statusFilter, globalFilter, cursor, user?.id],
     queryFn: () =>
       ProjectService.getProjects({
         projectStatus: statusFilter === "all" ? undefined : statusFilter,
         name: globalFilter || undefined,
         cursor: cursor || undefined,
         limit: viewType === "grid" ? 12 : 10,
-        // If not super_admin, strictly limit query to projects managed by this user
         managerId: isSuperAdmin ? undefined : user?.id,
       }),
-    enabled: !!user, // Wait for user context
+    enabled: !!user,
   });
 
-  const projects = data?.data || [];
+  const projects = data?.data ?? [];
   const nextCursor = data?.nextCursor;
+  // console.log(">---> ", projects);
 
-  // ── List View Columns ──
   const columns = useMemo<ColumnDef<Project>[]>(
     () => [
       {
-        accessorKey: "name",
-        header: "Asset Registry Details",
+        id: "asset_identity",
+        header: "Asset Identity",
         cell: ({ row }) => {
           const p = row.original;
-          const status = p.projectStatus || "draft";
-          const config = statusConfig[status] || statusConfig.draft;
+          const status =
+            getUnifiedValue(p, "project_status", "projectStatus") || "draft";
+          const config =
+            statusConfig[status.toLowerCase()] ?? statusConfig.draft;
           return (
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span
-                  className={cn("w-1.5 h-1.5 rounded-full", config.bg)}
-                ></span>
+                <span className={cn("w-1.5 h-1.5 rounded-none", config.dot)} />
                 <div className="font-serif text-lg text-slate-900 leading-none">
                   {p.name}
                 </div>
@@ -135,52 +162,81 @@ export default function AllProjectsPage() {
         },
       },
       {
-        accessorKey: "projectType",
+        id: "methodology",
         header: "Methodology",
-        cell: ({ row }) => (
-          <div>
-            <div className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">
-              {((row.getValue("projectType") as string) || "").replace(
-                /_/g,
-                " ",
-              )}
-            </div>
-            <div className="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">
-              {(row.original.sector || "").replace(/_/g, " ")}
-            </div>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "projectStage",
-        header: "Lifecycle Stage",
         cell: ({ row }) => {
-          const stage = row.getValue("projectStage") as string;
+          const p = row.original;
+          const typeStr = getUnifiedValue(p, "project_type", "projectType");
           return (
-            <span className="font-mono text-[10px] uppercase tracking-widest text-slate-600 bg-slate-100 px-2 py-1 border border-slate-200">
-              {stage}
-            </span>
+            <div>
+              <div className="text-[10px] font-bold text-slate-900 uppercase tracking-widest">
+                {typeStr.replace(/_/g, " ") || "UNSPECIFIED"}
+              </div>
+              <div className="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">
+                {(p.sector || "General").replace(/_/g, " ")}
+              </div>
+            </div>
           );
         },
       },
       {
-        accessorKey: "location",
-        header: "Coordinates",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-            <MapPin className="h-3 w-3 text-slate-400" />
-            {row.original.region}, {row.original.country}
-          </div>
-        ),
+        id: "status_stage",
+        header: "Lifecycle & Registry",
+        cell: ({ row }) => {
+          const p = row.original;
+          const stage =
+            getUnifiedValue(p, "project_stage", "projectStage") || "initiation";
+          const regStatus = p.registryStatus || "pending_verification";
+          const isVerified = regStatus === "dmrv_verified";
+
+          return (
+            <div className="flex flex-col items-start gap-1.5">
+              <span className="font-mono text-[9px] uppercase tracking-widest text-slate-600 bg-slate-100 px-2 py-0.5 border border-slate-200">
+                Stage: {stage.replace(/_/g, " ")}
+              </span>
+              <span
+                className={cn(
+                  "font-mono text-[9px] uppercase tracking-widest px-2 py-0.5 border",
+                  isVerified
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : "bg-amber-50 text-amber-700 border-amber-200",
+                )}
+              >
+                {isVerified ? "✓ " : "⏳ "}
+                {regStatus.replace(/_/g, " ")}
+              </span>
+            </div>
+          );
+        },
       },
       {
-        accessorKey: "totalAreaHectares",
-        header: "Scale (HA)",
-        cell: ({ row }) => (
-          <div className="text-sm font-mono font-bold text-slate-900">
-            {Number(row.getValue("totalAreaHectares") || 0).toLocaleString()}
-          </div>
-        ),
+        id: "location",
+        header: "Spatial Coordinates",
+        cell: ({ row }) => {
+          const p = row.original;
+          return (
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+              <MapPin className="h-3 w-3 text-slate-400" />
+              {p.region ? `${p.region}, ` : ""}
+              {p.country || "UNKNOWN"}
+            </div>
+          );
+        },
+      },
+      {
+        id: "timeline",
+        header: "Initiation Date",
+        cell: ({ row }) => {
+          const p = row.original;
+          const dateStr = p.start_date || p.createdAt;
+
+          return (
+            <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-900 uppercase tracking-widest">
+              <Calendar className="h-3 w-3 text-slate-400" />
+              {formatDate(dateStr)}
+            </div>
+          );
+        },
       },
       {
         id: "actions",
@@ -190,14 +246,14 @@ export default function AllProjectsPage() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="h-8 w-8 p-0 rounded-none hover:bg-slate-100 text-slate-400"
+                className="h-8 w-8 p-0 rounded-none border border-transparent hover:border-slate-200 hover:bg-slate-50 text-slate-400"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-48 rounded-none border border-slate-200 shadow-xl"
+              className="w-48 rounded-none border-2 border-slate-900 shadow-none bg-white"
             >
               <DropdownMenuLabel className="text-[9px] text-slate-400 uppercase tracking-[0.2em] px-3 py-2 font-bold">
                 Asset Operations
@@ -205,17 +261,17 @@ export default function AllProjectsPage() {
               <DropdownMenuSeparator className="bg-slate-100" />
               <DropdownMenuItem
                 onClick={() => router.push(`/projects/${row.original.id}`)}
-                className="text-xs font-bold uppercase tracking-widest cursor-pointer py-2.5"
+                className="text-xs font-bold uppercase tracking-widest cursor-pointer py-2.5 rounded-none"
               >
                 <ExternalLink className="h-3.5 w-3.5 mr-2 text-slate-400" />{" "}
                 View Dossier
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-xs font-bold uppercase tracking-widest cursor-pointer py-2.5">
+              <DropdownMenuItem className="text-xs font-bold uppercase tracking-widest cursor-pointer py-2.5 rounded-none">
                 <Activity className="h-3.5 w-3.5 mr-2 text-slate-400" />{" "}
                 Telemetry Data
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-slate-100" />
-              <DropdownMenuItem className="text-xs font-bold uppercase tracking-widest text-emerald-700 focus:bg-emerald-50 focus:text-emerald-800 cursor-pointer py-2.5">
+              <DropdownMenuItem className="text-xs font-bold uppercase tracking-widest text-emerald-700 focus:bg-emerald-50 focus:text-emerald-800 cursor-pointer py-2.5 rounded-none">
                 <ShieldCheck className="h-3.5 w-3.5 mr-2" /> Verify Protocol
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -233,14 +289,14 @@ export default function AllProjectsPage() {
   });
 
   return (
-    <div className="animate-in fade-in duration-700 pb-24">
+    <div className="animate-in fade-in duration-700 pb-24 font-sans selection:bg-slate-900 selection:text-white">
       {/* ── Editorial Header ── */}
       <div className="border-b border-slate-200 bg-white pt-12 pb-8">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div>
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-6 h-[1px] bg-slate-900"></div>
+                <div className="w-6 h-[1px] bg-slate-900" />
                 <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em]">
                   {isSuperAdmin ? "Global Registry" : "Managed Portfolio"}
                 </span>
@@ -313,10 +369,10 @@ export default function AllProjectsPage() {
               type="button"
               onClick={() => setViewType("list")}
               className={cn(
-                "p-1.5 transition-colors",
+                "p-1.5 transition-colors rounded-none",
                 viewType === "list"
-                  ? "bg-white text-slate-900 shadow-sm border border-slate-200"
-                  : "text-slate-400 hover:text-slate-900",
+                  ? "bg-white text-slate-900 border border-slate-900 shadow-sm"
+                  : "text-slate-400 hover:text-slate-900 border border-transparent",
               )}
             >
               <List className="w-4 h-4" />
@@ -325,10 +381,10 @@ export default function AllProjectsPage() {
               type="button"
               onClick={() => setViewType("grid")}
               className={cn(
-                "p-1.5 transition-colors",
+                "p-1.5 transition-colors rounded-none",
                 viewType === "grid"
-                  ? "bg-white text-slate-900 shadow-sm border border-slate-200"
-                  : "text-slate-400 hover:text-slate-900",
+                  ? "bg-white text-slate-900 border border-slate-900 shadow-sm"
+                  : "text-slate-400 hover:text-slate-900 border border-transparent",
               )}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -339,7 +395,7 @@ export default function AllProjectsPage() {
         {/* ── Content Area ── */}
         {isLoading ? (
           <div className="py-32 flex flex-col items-center justify-center border border-slate-200 bg-white">
-            <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin mb-4" />
+            <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin mb-4" />
             <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
               Querying distributed ledger...
             </p>
@@ -359,9 +415,9 @@ export default function AllProjectsPage() {
             </p>
           </div>
         ) : viewType === "list" ? (
-          /* List View */
-          <div className="border border-slate-200 bg-white overflow-hidden">
-            <Table>
+          /* ── List View ── */
+          <div className="border border-slate-200 bg-white overflow-x-auto">
+            <Table className="min-w-[900px]">
               <TableHeader className="bg-slate-50">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
@@ -404,16 +460,24 @@ export default function AllProjectsPage() {
             </Table>
           </div>
         ) : (
-          /* Grid View */
+          /* ── Grid View ── */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {projects.map((p: Project) => {
-              const status = p.projectStatus || "draft";
-              const config = statusConfig[status] || statusConfig.draft;
+              const status =
+                getUnifiedValue(p, "project_status", "projectStatus") ||
+                "draft";
+              const stage =
+                getUnifiedValue(p, "project_stage", "projectStage") ||
+                "initiation";
+              const regStatus = p.registryStatus || "pending_verification";
+              const isVerified = regStatus === "dmrv_verified";
+              const config =
+                statusConfig[status.toLowerCase()] ?? statusConfig.draft;
 
               return (
                 <div
                   key={p.id}
-                  className="group border border-slate-200 bg-white hover:border-slate-900 transition-colors flex flex-col h-full"
+                  className="group border border-slate-200 bg-white hover:border-slate-900 transition-colors flex flex-col h-full rounded-none"
                 >
                   <div className="p-6 flex-1">
                     <div className="flex justify-between items-start mb-4">
@@ -422,14 +486,14 @@ export default function AllProjectsPage() {
                       </span>
                       <span
                         className={cn(
-                          "px-2 py-1 text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5",
+                          "px-2 py-1 text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5 border border-transparent",
                           config.color,
-                          `bg-${config.bg}/10`,
+                          config.bg,
                         )}
                       >
                         <span
-                          className={cn("w-1.5 h-1.5 rounded-full", config.bg)}
-                        ></span>
+                          className={cn("w-1.5 h-1.5 rounded-none", config.dot)}
+                        />
                         {status}
                       </span>
                     </div>
@@ -439,46 +503,51 @@ export default function AllProjectsPage() {
                     </h3>
 
                     <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6">
-                      {(p.projectType || "").replace(/_/g, " ")}
+                      {(
+                        getUnifiedValue(p, "project_type", "projectType") ||
+                        "UNSPECIFIED"
+                      ).replace(/_/g, " ")}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 mt-auto">
                       <div>
-                        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
-                          Scale
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
+                          Registry
                         </p>
-                        <p className="font-mono text-slate-900 font-bold">
-                          {Number(p.totalAreaHectares || 0).toLocaleString()}{" "}
-                          <span className="font-sans text-xs font-normal text-slate-500">
-                            HA
-                          </span>
-                        </p>
+                        <span
+                          className={cn(
+                            "font-mono text-[9px] uppercase tracking-widest px-2 py-1 border",
+                            isVerified
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : "bg-amber-50 text-amber-700 border-amber-200",
+                          )}
+                        >
+                          {isVerified ? "✓ " : "⏳ "}
+                          {regStatus.replace(/_/g, " ")}
+                        </span>
                       </div>
                       <div>
                         <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
-                          Location
+                          Initiation
                         </p>
-                        <p
-                          className="text-xs font-medium text-slate-900 truncate"
-                          title={`${p.region}, ${p.country}`}
-                        >
-                          {p.country}
+                        <p className="font-mono text-slate-900 font-bold text-[10px] mt-2">
+                          {formatDate(p.start_date || p.createdAt)}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="border-t border-slate-200 grid grid-cols-2 divide-x divide-slate-200">
+                  <div className="border-t border-slate-200 grid grid-cols-2 divide-x divide-slate-200 bg-slate-50">
                     <button
                       type="button"
                       onClick={() => router.push(`/projects/${p.id}`)}
-                      className="py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                      className="py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                     >
                       Dossier
                     </button>
                     <button
                       type="button"
-                      className="py-3 text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-white hover:bg-emerald-800 transition-colors"
+                      className="py-4 text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-white hover:bg-emerald-800 transition-colors"
                     >
                       Verify
                     </button>
@@ -501,7 +570,7 @@ export default function AllProjectsPage() {
               size="sm"
               className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900"
               disabled={!cursor}
-              onClick={() => setCursor(null)} // Reset to beginning for simplicity
+              onClick={() => setCursor(null)}
             >
               <ChevronLeft className="h-4 w-4 mr-1" /> Prev
             </Button>

@@ -25,7 +25,11 @@ export const projectOwnerOnboardingSchema = z.object({
   areaHectares: z.string().min(1, "Area is required"),
 
   // Step 4: Assignment
-  partnerId: z.string().optional(),
+  partnerId: z.preprocess(
+    (val) => (val === "" || val === undefined ? null : val),
+    z.coerce.number().optional().nullable(),
+  ),
+  assignedAdminId: z.string().optional().nullable(),
   assignmentType: z.enum(["primary", "secondary"]).default("primary"),
   isB2cAssignment: z.boolean().default(true),
 });

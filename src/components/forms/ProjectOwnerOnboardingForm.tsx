@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { authClient } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import {
   projectOwnerOnboardingSchema,
@@ -37,10 +38,23 @@ const STEPS = [
 export default function ProjectOwnerOnboardingForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [admins, setAdmins] = useState<any[]>([]);
   const router = useRouter();
 
   const [isMomoSameAsContact, setIsMomoSameAsContact] = useState(false);
   const [isAccountNameSameAsUser, setIsAccountNameSameAsUser] = useState(false);
+
+  const { data: session } = authClient.useSession();
+  const isAdmin = (session?.user as any)?.role === "super_admin";
+
+  useEffect(() => {
+    if (isAdmin) {
+      axios
+        .get("/api/v2/users/role?role=admin")
+        .then((res) => setAdmins(res.data.data))
+        .catch((err) => console.error("Failed to fetch admins", err));
+    }
+  }, [isAdmin]);
 
   const form = useForm<TProjectOwnerOnboardingInput>({
     resolver: zodResolver(projectOwnerOnboardingSchema) as any,
@@ -64,7 +78,7 @@ export default function ProjectOwnerOnboardingForm() {
       latitude: "",
       longitude: "",
       areaHectares: "",
-      partnerId: "",
+      partnerId: 0,
     },
   });
 
@@ -125,6 +139,7 @@ export default function ProjectOwnerOnboardingForm() {
         password: data.password,
         countryOfOperation: data.countryOfOperation,
         partnerId: data.partnerId,
+        assignedAdminId: data.assignedAdminId,
         assignmentType: data.assignmentType,
         isB2cAssignment: data.isB2cAssignment,
         bankDetails:
@@ -158,7 +173,7 @@ export default function ProjectOwnerOnboardingForm() {
 
       await axios.post("/api/v2/project-owners/onboard", payload);
       toast.success("Project Owner registered successfully!");
-      router.push("/dashboard/new-project");
+      router.push("/projects/new");
     } catch (error: any) {
       toast.error(
         error.response?.data?.message ||
@@ -589,6 +604,27 @@ export default function ProjectOwnerOnboardingForm() {
                       </span>
                     </div>
                   </div>
+
+                  {isAdmin && (
+                    <div className="space-y-4 pt-4 border-t border-slate-200">
+                      <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                        Assign to Administrator
+                      </Label>
+                      <select
+                        onChange={(e) =>
+                          form.setValue("assignedAdminId", e.target.value)
+                        }
+                        className="w-full p-3 border border-slate-300 rounded-lg"
+                      >
+                        <option value="">Select an admin</option>
+                        {admins.map((admin) => (
+                          <option key={admin.id} value={admin.id}>
+                            {admin.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
                   <div className="p-6 border border-amber-200 bg-amber-50 flex items-start gap-4">
                     <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />

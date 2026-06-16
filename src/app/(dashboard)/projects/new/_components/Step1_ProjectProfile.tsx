@@ -114,7 +114,7 @@ const Step1_ProjectProfile = ({
           control={control}
           name="name"
           type="text"
-          label="Asset Designation *"
+          label="Project Name *"
           placeholder="e.g. Volta Basin Regeneration Initiative"
         />
 
@@ -169,7 +169,7 @@ const Step1_ProjectProfile = ({
           control={control}
           name="totalAreaHectares"
           type="number"
-          label="Spatial Scale (Hectares) *"
+          label="Project Plot Size (Hectares) *"
           placeholder="e.g. 50"
         />
 
@@ -188,7 +188,7 @@ const Step1_ProjectProfile = ({
                 shouldValidate: true,
               })
             }
-            placeholder="Select protocol currency"
+            placeholder="Select project currency"
             className="w-full rounded-none border-slate-200"
           />
           {errors.currency && (
