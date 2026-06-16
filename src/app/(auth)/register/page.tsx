@@ -100,11 +100,11 @@ const RegisterPage = () => {
         <div className="flex flex-1 flex-col max-w-md w-full">
           <div className="mb-10">
             <h1 className="text-4xl font-serif text-slate-900 tracking-tight leading-none mb-3">
-              Initialize Entity.
+              Register Entity.
             </h1>
             <p className="text-sm text-slate-500 font-light leading-relaxed">
-              Register your organization or project to access the verified
-              carbon registry.
+              Register your organization to access the verified carbon registry
+              and act on it&apos;s behalf.
             </p>
           </div>
 

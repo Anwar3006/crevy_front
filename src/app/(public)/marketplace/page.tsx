@@ -84,18 +84,18 @@ const STATUSES = [
 
 const HERO_STATS = [
   {
-    value: "200+",
-    label: "Verified Projects",
+    value: "50+",
+    label: "Target Genesis Assets",
     icon: <ShieldCheck size={18} />,
   },
   {
-    value: "$52.40",
-    label: "Avg. Price / tCO₂e",
+    value: "$35.00", // A realistic floor price projection for high-fidelity African credits
+    label: "Projected Floor Price / tCO₂e",
     icon: <TrendingUp size={18} />,
   },
   {
-    value: "50K+",
-    label: "tCO₂e Liquid Inventory",
+    value: "10,000+",
+    label: "Est. Pipeline Vol. (tCO₂e)",
     icon: <Globe2 size={18} />,
   },
 ];
@@ -253,12 +253,23 @@ export default function MarketplacePage() {
           {/* Stats Bar */}
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 border-y border-slate-200 bg-white">
             {HERO_STATS.map((s, idx) => (
-              <div key={idx} className="py-6 px-8 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-none border border-slate-200 flex items-center justify-center text-emerald-700 bg-slate-50">
+              <div
+                key={idx}
+                className="py-6 px-8 flex items-center gap-4 relative group"
+              >
+                {/* ── Transparency Marker ── */}
+                <div className="absolute top-3 right-4">
+                  <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-slate-300 group-hover:text-amber-500 transition-colors">
+                    [ Projected ]
+                  </span>
+                </div>
+
+                <div className="w-12 h-12 rounded-none border border-slate-200 flex shrink-0 items-center justify-center text-emerald-700 bg-slate-50">
                   {s.icon}
                 </div>
+
                 <div>
-                  <p className="text-2xl font-mono text-slate-900 font-bold leading-none mb-1">
+                  <p className="text-2xl font-mono text-slate-900 font-bold leading-none mb-1 mt-1">
                     {s.value}
                   </p>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">

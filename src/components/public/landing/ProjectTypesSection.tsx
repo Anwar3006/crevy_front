@@ -20,7 +20,6 @@ const projectTypes = [
     icon: Sprout,
     desc: "Soil-building farming practices that sequester CO₂ directly into the earth while restoring biodiversity.",
     classId: "REG-AGR-01",
-    permanence: "High (100+ Yrs)",
     standard: "Gold Standard / VCS",
   },
   {
@@ -28,15 +27,13 @@ const projectTypes = [
     icon: Trees,
     desc: "Planting native forests to restore damaged ecosystems and create massive, long-term carbon sinks.",
     classId: "FOR-REF-02",
-    permanence: "High (100+ Yrs)",
     standard: "Verra ARR / CCB",
   },
   {
     title: "Renewable Energy",
     icon: Sun,
-    desc: "Utility-scale solar, wind, and hydro installations actively displacing fossil fuel reliance in developing grids.",
+    desc: "Investing in scalable solar and hydro infrastructure to reduce reliance on traditional energy systems and actively displace fossil fuels.",
     classId: "TEC-REN-03",
-    permanence: "Permanent Avoidance",
     standard: "CDM / Gold Standard",
   },
   {
@@ -44,7 +41,6 @@ const projectTypes = [
     icon: Flame,
     desc: "Converting organic agricultural waste into highly stable, carbon-rich soil amendments through pyrolysis.",
     classId: "TEC-BCH-04",
-    permanence: "Extreme (1000+ Yrs)",
     standard: "Puro.earth / VCS",
   },
   {
@@ -52,7 +48,6 @@ const projectTypes = [
     icon: Waves,
     desc: "Mangrove and coastal wetland restoration that locks up to 4x more carbon per hectare than terrestrial forests.",
     classId: "NAT-BLU-05",
-    permanence: "High (100+ Yrs)",
     standard: "Verra / Blue Carbon",
   },
   {
@@ -60,7 +55,6 @@ const projectTypes = [
     icon: Recycle,
     desc: "Advanced methane capture and waste diversion protocols to prevent catastrophic greenhouse gas emissions.",
     classId: "IND-WST-06",
-    permanence: "Permanent Avoidance",
     standard: "Gold Standard / CDM",
   },
 ];
@@ -175,7 +169,7 @@ export function ProjectTypesSection({
                     href="/register"
                     className="inline-flex items-center justify-center text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-white border border-white/30 px-6 py-4 hover:bg-white hover:text-slate-900 transition-all duration-300 w-full sm:w-fit backdrop-blur-sm group"
                   >
-                    Apply for Listing{" "}
+                    Sign Up{" "}
                     <ArrowRight
                       size={14}
                       className="ml-3 group-hover:translate-x-1 transition-transform"
@@ -183,9 +177,9 @@ export function ProjectTypesSection({
                   </Link>
                 </div>
 
-                {/* 3. Terminal Metadata (Converted to a compact grid for mobile) */}
+                {/* 3. Terminal Metadata */}
                 <div className="lg:col-span-3 flex flex-col justify-end lg:justify-center mt-auto lg:mt-0 font-mono text-[9px] md:text-[10px] text-white/50 uppercase tracking-widest lg:pl-12 border-t border-white/10 lg:border-t-0 pt-6 lg:pt-0">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-col gap-x-4 gap-y-6 lg:gap-8">
+                  <div className="grid grid-cols-2 lg:flex lg:flex-col gap-x-4 gap-y-6 lg:gap-8">
                     <div className="border-b lg:border-white/10 border-transparent pb-0 lg:pb-3">
                       <span className="block text-white/30 mb-1 lg:mb-2">
                         Class ID
@@ -196,15 +190,6 @@ export function ProjectTypesSection({
                     </div>
 
                     <div className="border-b lg:border-white/10 border-transparent pb-0 lg:pb-3">
-                      <span className="block text-white/30 mb-1 lg:mb-2">
-                        Permanence
-                      </span>
-                      <span className="text-white font-bold">
-                        {type.permanence}
-                      </span>
-                    </div>
-
-                    <div className="col-span-2 sm:col-span-1 border-b lg:border-white/10 border-transparent pb-0 lg:pb-3">
                       <span className="block text-white/30 mb-1 lg:mb-2">
                         Standard
                       </span>

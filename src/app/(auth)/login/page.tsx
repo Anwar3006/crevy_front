@@ -28,7 +28,7 @@ const LoginPage = () => {
           >
             No clearance?{" "}
             <span className="text-emerald-700 border-b border-emerald-700 pb-0.5 ml-1">
-              Initialize
+              Sign Up
             </span>
           </Link>
         </div>
@@ -44,11 +44,11 @@ const LoginPage = () => {
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-4">
-              Terminal <span className="italic text-slate-500">Access.</span>
+              Access <span className="italic text-slate-500">Dashboard</span>
             </h1>
             <p className="mt-2 text-sm text-slate-500 font-light leading-relaxed">
-              Provide cryptographic credentials to access the registry, manage
-              carbon assets, and audit institutional yield.
+              Provide credentials to access the registry, manage carbon assets,
+              and audit institutional yield.
             </p>
           </div>
 

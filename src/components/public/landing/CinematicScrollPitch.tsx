@@ -229,7 +229,7 @@ export function CinematicScrollPitch({
                   href="/marketplace"
                   className="bg-white text-slate-900 hover:bg-emerald-500 hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
                 >
-                  Access the Registry <ArrowRight size={14} />
+                  Access the Marketplace <ArrowRight size={14} />
                 </Link>
                 <Link
                   href="/methodology"

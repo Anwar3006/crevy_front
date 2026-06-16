@@ -105,12 +105,12 @@ export function PublicFooter() {
                 <MapPin size={14} className="text-emerald-600" /> Accra, Greater
                 Accra, GH
               </div>
-              <div className="flex items-center gap-3 text-slate-400 font-mono text-[10px] uppercase tracking-widest">
+              {/* <div className="flex items-center gap-3 text-slate-400 font-mono text-[10px] uppercase tracking-widest">
                 <span className="w-3.5 h-3.5 border border-emerald-600 rounded-none flex items-center justify-center text-[8px] text-emerald-600">
                   @
                 </span>
                 info@foovante-global.com
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -167,7 +167,7 @@ export function PublicFooter() {
         <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-4 text-slate-500 text-[10px] font-mono uppercase tracking-widest">
             <span className="text-slate-300">© {new Date().getFullYear()}</span>
-            <span>Foovante Global</span>
+            <span>Operated by Foovante Technologies</span>
             <span className="hidden md:inline">|</span>
             <span className="hidden md:inline">All Rights Reserved.</span>
           </div>

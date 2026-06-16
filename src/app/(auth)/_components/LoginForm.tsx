@@ -120,13 +120,13 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
               htmlFor="password"
               className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
             >
-              Access Cipher
+              Password
             </label>
             <Link
               href="/forgot-password"
               className="text-[9px] font-mono text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest"
             >
-              Reset Cipher?
+              Reset Password?
             </Link>
           </div>
           <input
@@ -154,7 +154,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
               <Loader2 size={14} className="animate-spin" /> Authenticating...
             </>
           ) : (
-            "Grant Access"
+            "Submit"
           )}
         </button>
       </form>

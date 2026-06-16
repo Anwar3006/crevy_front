@@ -15,25 +15,21 @@ export function ThePitchSection({
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 space-y-24">
         {/* ── 1. PROJECT OWNERS (Supply) ── */}
         <PitchBlock
-          tag="For Project Owners (Supply)"
-          headline="Stop Selling Credits. Start Selling Certainty."
-          painPoint="High upfront costs, slow payouts, and low-quality buyers."
+          tag="For Project Originators (Supply)"
+          headline="Smart Carbon, Real Value."
+          painPoint="Complex verification hurdles, delayed issuances, and fragmented buyer networks."
           bullets={[
             {
-              title: "Premium Pricing",
-              desc: "Access Fortune 500 buyers willing to pay a premium for high-integrity credits (CORSIA/ICVCM-aligned).",
+              title: "Diverse Buyer Network",
+              desc: "Connect with a global network of corporate counterparties committed to genuine climate action and high-integrity environmental assets.",
             },
             {
-              title: "Faster Monetization",
-              desc: "Reduce the time from verification to payment. Our smart contracts automate issuance and settlement.",
+              title: "Reduced Verification Timeline",
+              desc: "Minimize the lag from project audit to credit issuance. Our platform streamlines dMRV data ingestion and registry processing.",
             },
             {
-              title: "Non-Permanence Management",
-              desc: "We handle the 'Buffer Pool' dynamically to protect against natural reversals (e.g., forest fires).",
-            },
-            {
-              title: "No Middlemen Drag",
-              desc: "Connect directly to end-buyers. We handle the registry math; you keep the story and the revenue.",
+              title: "Lifecycle Technical Support",
+              desc: "Receive dedicated operational and technical guidance from project inception through the asset's entire verifiable lifetime.",
             },
           ]}
           cta={{ label: "Calculate Your Revenue Potential", href: "/register" }}

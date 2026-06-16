@@ -121,72 +121,36 @@ export default function PublicRegistryPage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200">
-              {records.map((r, i) => (
-                <tr
-                  key={i}
-                  className="group hover:bg-slate-50 transition-colors"
-                >
-                  {/* ID & Date */}
-                  <td className="py-6 pr-6 align-top">
-                    <div className="font-mono text-sm font-semibold text-slate-900">
-                      {r.id}
-                    </div>
-                    <div className="text-[10px] uppercase tracking-wider text-slate-400 mt-1 flex items-center gap-1">
-                      <Calendar size={10} /> {r.date}
-                    </div>
-                  </td>
 
-                  {/* Beneficiary */}
-                  <td className="py-6 pr-6 align-top">
-                    <div className="font-serif text-lg font-medium text-slate-900">
-                      {r.beneficiary}
+            {/* Institutional Blank State */}
+            <tbody className="bg-slate-50/30">
+              <tr>
+                <td colSpan={6} className="py-32 px-6">
+                  <div className="flex flex-col items-center justify-center text-center max-w-lg mx-auto">
+                    <div className="p-4 border border-slate-200 bg-white mb-6">
+                      <LockKeyhole
+                        className="text-slate-300"
+                        size={32}
+                        strokeWidth={1}
+                      />
                     </div>
-                    <div className="text-[10px] uppercase tracking-wider text-slate-400 mt-1 flex items-center gap-1">
-                      <Building2 size={10} /> ESG Compliance Retiree
+                    <h3 className="font-serif text-2xl text-slate-900 mb-4">
+                      Ledger Initialization Pending
+                    </h3>
+                    <div className="space-y-4">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 bg-emerald-50 border border-emerald-100 inline-block px-3 py-1">
+                        System Status: Awaiting Genesis Cohort
+                      </p>
+                      <p className="text-sm font-mono text-slate-500 leading-relaxed">
+                        Public retirement records, cryptographic hashes, and
+                        beneficiary allocations will populate automatically upon
+                        the verification and settlement of the Phase 01 pilot
+                        assets.
+                      </p>
                     </div>
-                  </td>
-
-                  {/* Project & Methodology */}
-                  <td className="py-6 pr-6 align-top">
-                    <div className="font-medium text-slate-900">
-                      {r.project}
-                    </div>
-                    <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1 flex items-center gap-1">
-                      <FileText size={10} /> Method: {r.methodology}
-                    </div>
-                  </td>
-
-                  {/* Vintage */}
-                  <td className="py-6 pr-6 align-top">
-                    <div className="font-mono text-sm text-slate-600">
-                      {r.vintage}
-                    </div>
-                  </td>
-
-                  {/* Volume */}
-                  <td className="py-6 pr-6 align-top text-right">
-                    <div className="font-mono text-lg font-bold text-emerald-800">
-                      {r.volume}
-                    </div>
-                  </td>
-
-                  {/* On-Chain Proof */}
-                  <td className="py-6 pl-6 align-top text-right">
-                    <div className="flex flex-col items-end gap-2">
-                      <span className="inline-flex items-center gap-1.5 border border-slate-200 px-2 py-1 bg-white text-[10px] font-bold uppercase tracking-widest text-slate-600">
-                        <LockKeyhole size={10} /> Retired
-                      </span>
-                      <a
-                        href={`#tx-${r.hash}`}
-                        className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-400 hover:text-emerald-700 transition-colors group-hover:underline underline-offset-4"
-                      >
-                        Tx: {r.hash} <ArrowUpRight size={12} />
-                      </a>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -272,35 +236,39 @@ function LedgerMetrics() {
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 text-center">
           <div className="py-8 px-4 flex flex-col items-center justify-center">
             <Award
-              className="text-emerald-700 mb-3"
+              className="text-slate-400 mb-3"
               size={24}
               strokeWidth={1.5}
             />
-            <p className="text-4xl font-serif text-slate-900 mb-1">124,500</p>
+            <p className="text-4xl font-serif text-slate-900 mb-1">
+              10,000<span className="text-2xl text-slate-400">+</span>
+            </p>
             <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
-              Total Tonnes Retired
+              Projected Pilot Volume (tCO₂e)
             </p>
           </div>
           <div className="py-8 px-4 flex flex-col items-center justify-center">
             <Globe2
-              className="text-emerald-700 mb-3"
+              className="text-slate-400 mb-3"
               size={24}
               strokeWidth={1.5}
             />
-            <p className="text-4xl font-serif text-slate-900 mb-1">14</p>
+            <p className="text-4xl font-serif text-slate-900 mb-1">50</p>
             <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
-              Active Global Projects
+              Genesis Cohort Capacity
             </p>
           </div>
           <div className="py-8 px-4 flex flex-col items-center justify-center">
             <Building2
-              className="text-emerald-700 mb-3"
+              className="text-slate-400 mb-3"
               size={24}
               strokeWidth={1.5}
             />
-            <p className="text-4xl font-serif text-slate-900 mb-1">86</p>
+            <p className="text-4xl font-serif text-slate-900 mb-1">
+              120<span className="text-2xl text-slate-400">+</span>
+            </p>
             <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
-              Corporate Beneficiaries
+              Waitlisted Counterparties
             </p>
           </div>
         </div>

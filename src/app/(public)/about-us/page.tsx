@@ -82,34 +82,34 @@ const IMPACT_STATS = [
 
 const MILESTONES = [
   {
-    year: "2022",
-    quarter: "Q3",
-    title: "Foovante Global Incorporation",
-    desc: "Founders identify the critical liquidity gap between African green projects and international voluntary carbon markets. Initial feasibility studies commence.",
+    id: "01",
+    status: "Completed",
+    title: "Inception & Protocol Architecture",
+    desc: "Foovante Global incorporates. Founders identify the critical liquidity gap between African green projects and international voluntary carbon markets. Initial feasibility and regulatory studies commence.",
   },
   {
-    year: "2023",
-    quarter: "Q4",
-    title: "Genesis Verification Cohort",
-    desc: "Crevy protocol verifies its first 50 regenerative agriculture assets in Ghana, successfully issuing over 8,000 tCO₂e in high-fidelity credits.",
+    id: "02",
+    status: "Active",
+    title: "Registry Engineering & Sandbox",
+    desc: "Development of the Crevy platform's core infrastructure. Designing the institutional ledger, defining Role-Based Access Control (RBAC) matrices, and prototyping digital Measurement, Reporting, and Verification (dMRV) flows.",
   },
   {
-    year: "2024",
-    quarter: "Q2",
-    title: "Marketplace Infrastructure Live",
-    desc: "The institutional trading desk opens to corporate counterparties. First international enterprise offsets Scope 3 emissions via Volta Basin reforestation deeds.",
+    id: "03",
+    status: "Projected",
+    title: "Genesis Pilot Cohort",
+    desc: "Targeting the onboarding of our first closed-beta cohort of regenerative agriculture assets in Ghana. Focus on stress-testing the verification pipeline and generating the first test-net carbon certificates.",
   },
   {
-    year: "2025",
-    quarter: "Q1",
-    title: "Ecosystem Expansion",
-    desc: "Platform reaches 200+ active assets and secures 80 enterprise partners, diversifying into 6 distinct methodologies across West Africa.",
+    id: "04",
+    status: "Projected",
+    title: "Institutional Marketplace Live",
+    desc: "Opening the spot market trading desk to early corporate counterparties. Executing the first official lifecycle: from project audit and issuance to corporate purchase and public ledger retirement.",
   },
   {
-    year: "2026",
-    quarter: "Q3",
-    title: "Pan-African Deployment",
-    desc: "Strategic continental roadmap initiated, deploying pilot dMRV integrations and liquidity pools in Kenya, Rwanda, and Senegal.",
+    id: "05",
+    status: "Projected",
+    title: "Ecosystem Liquidity & Scaling",
+    desc: "Scaling registry infrastructure to support 50+ active assets. Expanding methodology coverage to include Reforestation and Renewable Energy, while integrating automated ESRS/IFRS S2 compliance reporting for enterprise buyers.",
   },
 ];
 
@@ -119,7 +119,7 @@ export default function AboutPage() {
       <AboutHero />
       <StorySection />
       <MissionVisionSection />
-      <ImpactSection />
+      {/* <ImpactSection /> */}
       <TeamSection />
       <MilestonesSection />
       <AboutCTA />
@@ -184,14 +184,14 @@ function StorySection() {
           <div className="md:col-span-8 space-y-8 text-slate-600 text-lg font-light leading-relaxed">
             <p>
               <span className="float-left text-7xl font-serif text-slate-900 leading-none pr-4 pt-2">
-                I
+                C
               </span>
-              n 2022, Foovante Global was founded in Accra to address a systemic
-              failure in the voluntary carbon market. The existing
-              infrastructure was built for the Global North, characterized by
-              opaque intermediaries, prohibitive auditing costs, and fractured
-              data pipelines that marginalized smallholder farmers and local
-              project developers.
+              revy was engineered as the antidote for African climate projects
+              in accessing the global carbon market. The existing infrastructure
+              was built for the Global North, characterized by opaque
+              intermediaries, prohibitive auditing costs, and fractured data
+              pipelines that marginalized smallholder farmers and local project
+              developers.
             </p>
             <p>
               Crevy was engineered as the antidote. We recognized that to unlock
@@ -281,33 +281,33 @@ function MissionVisionSection() {
 }
 
 // ─── 4. INSTITUTIONAL IMPACT ─────────────────────────────────────────────────
-
-function ImpactSection() {
-  return (
-    <section className="bg-slate-900 py-24 border-b border-slate-900">
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
-        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 border-b border-slate-800 pb-4 mb-12">
-          Current Network Telemetry
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-800 border border-slate-800">
-          {IMPACT_STATS.map((stat, idx) => (
-            <div
-              key={idx}
-              className="p-8 bg-slate-900 flex flex-col justify-center"
-            >
-              <div className="text-4xl lg:text-5xl font-mono font-bold text-white mb-3 tracking-tight">
-                {stat.value}
-              </div>
-              <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+// Was asked to remove entirely by CEO
+// function ImpactSection() {
+//   return (
+//     <section className="bg-slate-900 py-24 border-b border-slate-900">
+//       <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
+//         <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 border-b border-slate-800 pb-4 mb-12">
+//           Current Network Telemetry
+//         </h2>
+//         <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-800 border border-slate-800">
+//           {IMPACT_STATS.map((stat, idx) => (
+//             <div
+//               key={idx}
+//               className="p-8 bg-slate-900 flex flex-col justify-center"
+//             >
+//               <div className="text-4xl lg:text-5xl font-mono font-bold text-white mb-3 tracking-tight">
+//                 {stat.value}
+//               </div>
+//               <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+//                 {stat.label}
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
 
 // ─── 5. EXECUTIVE DIRECTORY (Meet the Team) ──────────────────────────────────
 
@@ -370,10 +370,10 @@ function MilestonesSection() {
     <section className="py-24 bg-slate-50 border-b border-slate-200">
       <div className="max-w-[1000px] mx-auto px-6 lg:px-10">
         <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 border-t border-slate-900 pt-4 mb-16">
-          Institutional Ledger
+          Infrastructure Roadmap
         </h2>
 
-        <div className="space-y-0 border-l border-slate-300 ml-4 md:ml-24">
+        <div className="space-y-0 border-l border-slate-300 ml-4 md:ml-28">
           {MILESTONES.map((m, idx) => (
             <div
               key={idx}
@@ -383,12 +383,15 @@ function MilestonesSection() {
               <div className="absolute left-[-5px] top-0 w-[9px] h-[9px] bg-slate-300 group-hover:bg-slate-900 transition-colors rounded-none"></div>
 
               <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8 mb-3">
-                <div className="text-slate-900 font-mono font-bold text-lg md:absolute md:-left-24 md:top-[-2px]">
-                  {m.year}{" "}
-                  <span className="text-slate-400 text-[10px] uppercase tracking-widest">
-                    {m.quarter}
+                {/* Milestone ID & Status */}
+                <div className="text-slate-900 font-mono font-bold text-2xl md:absolute md:-left-24 md:top-[-4px] md:text-right md:w-16">
+                  {m.id}
+                  <span className="text-slate-400 text-[9px] uppercase tracking-widest block mt-1">
+                    {m.status}
                   </span>
                 </div>
+
+                {/* Title */}
                 <h3 className="font-serif text-2xl text-slate-900 leading-tight">
                   {m.title}
                 </h3>

@@ -8,6 +8,7 @@ import {
   Globe,
   Lock,
   Play,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -150,14 +151,14 @@ export function HeroSection({
               href="/register"
               className="w-full sm:w-auto bg-white text-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-emerald-500 hover:text-white transition-colors text-center"
             >
-              Enter the Registry
+              Enter the Marketplace
             </Link>
-            <button
+            {/* <button
               type="button"
               className="w-full sm:w-auto border border-slate-700 bg-slate-900/50 text-white px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-800 transition-colors flex items-center justify-center gap-3"
             >
               <Play size={14} /> Watch Protocol Brief (60s)
-            </button>
+            </button> */}
           </motion.div>
         </div>
       </div>
@@ -218,7 +219,7 @@ export function TrustLayerSection({
               <Counter value={1204500} />
             </div>
             <p className="text-slate-400 text-xs font-mono uppercase tracking-widest">
-              Tonnes of CO₂e Permanently Retired
+              Tonnes of CO₂e Projected to be Retired by 2030
             </p>
           </div>
 
@@ -231,24 +232,19 @@ export function TrustLayerSection({
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               {[
                 {
-                  label: "Project Audit",
+                  label: "Baseline Assessment",
                   icon: Database,
-                  desc: "dMRV Ingestion",
+                  desc: "Phase One: Project Onboarding",
                 },
                 {
-                  label: "Issuance",
+                  label: "Pre-Verification",
+                  icon: ShieldCheck,
+                  desc: "Phase Two: Registry Onboarding",
+                },
+                {
+                  label: "Marketplace & Issuance",
                   icon: FileDigit,
-                  desc: "Unique Serial ID",
-                },
-                {
-                  label: "Escrow Hold",
-                  icon: Lock,
-                  desc: "Buffer Pool Allocation",
-                },
-                {
-                  label: "Retirement",
-                  icon: Globe,
-                  desc: "Public Ledger Lock",
+                  desc: "Phase Three: Asset Generation",
                 },
               ].map((step, idx, arr) => (
                 <div key={idx} className="flex-1 w-full relative">
@@ -286,9 +282,9 @@ export function TrustLayerSection({
             <span className="hover:text-white transition-colors cursor-default">
               [ ICVCM Aligned ]
             </span>
-            <span className="hover:text-white transition-colors cursor-default">
+            {/* <span className="hover:text-white transition-colors cursor-default">
               [ CORSIA Ready ]
-            </span>
+            </span> */}
             <span className="hover:text-white transition-colors cursor-default">
               [ Gold Standard ]
             </span>

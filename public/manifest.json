@@ -1,0 +1,86 @@
+{
+  "name": "Crevy — Carbon Registry",
+  "short_name": "Crevy",
+  "description": "Field agent tool for registering green projects and project owners.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#131927",
+  "theme_color": "#2cc295",
+  "lang": "en",
+  "categories": ["business", "productivity", "environment"],
+  "icons": [
+    {
+      "src": "/icons/pwa/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/pwa/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Register Project Owner",
+      "short_name": "Onboard",
+      "description": "Onboard a new project owner",
+      "url": "/project-owners/register",
+      "icons": [{ "src": "/icons/pwa/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Register Project",
+      "short_name": "New Project",
+      "description": "Register a new green project",
+      "url": "/new-project",
+      "icons": [{ "src": "/icons/pwa/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

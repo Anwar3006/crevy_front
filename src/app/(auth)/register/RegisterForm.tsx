@@ -242,7 +242,7 @@ export default function RegisterForm({
                   htmlFor="taxResidence"
                   className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
                 >
-                  Primary Tax Jurisdiction
+                  Primary Tax Jurisdiction(Country of Operation)
                 </label>
                 <input
                   type="text"

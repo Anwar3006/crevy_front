@@ -184,7 +184,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                     : "text-white/80 hover:text-white",
                 )}
               >
-                Authenticate
+                Login
               </Link>
               <Button
                 asChild
@@ -195,7 +195,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                     : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
                 )}
               >
-                <Link href="/register">Initialize</Link>
+                <Link href="/register">Sign Up</Link>
               </Button>
             </>
           )}
