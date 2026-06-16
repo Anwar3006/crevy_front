@@ -16,7 +16,6 @@
     "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-radio-group": "^1.3.8",
     "@radix-ui/react-slot": "^1.2.4",
-    "@serwist/next": "^9.0.0",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.5",
@@ -43,7 +42,6 @@
     "react-icons": "^5.6.0",
     "react-is": "^19.2.6",
     "recharts": "^3.8.1",
-    "serwist": "^9.0.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.3.6"
@@ -57,7 +55,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-is": "^19.2.0",
-    "@types/serviceworker": "^0.0.108",
     "baseline-browser-mapping": "^2.9.19",
     "lefthook": "^2.0.11",
     "tailwindcss": "^4",

@@ -9,16 +9,6 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  async headers() {
-    return [
-      {
-        // manifest.json — short cache so icon/name changes propagate quickly
-        source: "/manifest.json",
-        headers: [{ key: "Cache-Control", value: "public, max-age=3600" }],
-      },
-    ];
-  },
-
   async rewrites() {
     return [
       {
