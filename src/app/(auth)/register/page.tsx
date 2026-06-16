@@ -18,7 +18,7 @@ const VALUE_PROPS = [
 
 const RegisterPage = () => {
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-white font-sans selection:bg-slate-900 selection:text-white">
+    <div className="w-full flex bg-white font-sans selection:bg-slate-900 selection:text-white lg:h-screen lg:overflow-hidden">
       {/* ── Left: Editorial Media Panel ───────────────────────── */}
       <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] relative overflow-hidden bg-slate-950">
         <Image

@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Syne } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import OfflineBanner from "@/components/offline/OfflineBanner";
-import SyncListener from "@/components/offline/SyncListener";
+// import OfflineBanner from "@/components/offline/OfflineBanner";
+// import SyncListener from "@/components/offline/SyncListener";
 import QueryProvider from "@/components/providers/query-provider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 
@@ -26,7 +26,7 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  // Removed: maximumScale: 1
 };
 
 export const metadata: Metadata = {
@@ -70,9 +70,9 @@ export default function RootLayout({
         <QueryProvider>
           <SmoothScroll>
             {/* Shows when device loses network — sticks to the top of screen */}
-            <OfflineBanner />
+            {/* <OfflineBanner /> */}
             {/* Listens for DRAIN_QUEUE messages posted by the service worker */}
-            <SyncListener />
+            {/* <SyncListener /> */}
             {children}
           </SmoothScroll>
         </QueryProvider>

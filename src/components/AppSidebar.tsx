@@ -37,17 +37,16 @@ export function AppSidebar({
   const role = user.role || "project_owner";
   const sidebarConfig = getSidebarConfig(role);
 
-  // High-End Role-Based Theme Rendering
   const getSidebarTheme = (r: string) => {
-    if (r === "super_admin" || r === "admin") return "bg-slate-950"; // Abyssal Slate
+    if (r === "super_admin" || r === "admin") return "bg-slate-950";
     if (
       r.startsWith("org_") ||
       r === "sustainability_manager" ||
       r === "financial_admin" ||
       r === "mrv_admin"
     )
-      return "bg-[#064e3b]"; // Corporate Emerald
-    return "bg-[#022c22]"; // Deep Forest Canopy
+      return "bg-[#064e3b]";
+    return "bg-[#022c22]";
   };
 
   const themeClass = getSidebarTheme(role);
@@ -55,10 +54,11 @@ export function AppSidebar({
   return (
     <Sidebar
       {...props}
-      className={`border-r-0 ${themeClass}`}
+      className={`border-r-0 h-full ${themeClass}`}
       collapsible="icon"
     >
-      <SidebarHeader className="pt-6 pb-4">
+      <SidebarHeader className="pt-6 pb-4 shrink-0">
+        {/* ... header content stays exactly the same ... */}
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center gap-3 overflow-hidden">
             <Link
@@ -69,7 +69,6 @@ export function AppSidebar({
             </Link>
           </div>
 
-          {/* Collapse Toggle for Desktop */}
           <Button
             variant="ghost"
             size="icon"
@@ -83,7 +82,6 @@ export function AppSidebar({
             )}
           </Button>
 
-          {/* Mobile Close */}
           {isMobile && (
             <Button
               variant="ghost"
@@ -104,7 +102,8 @@ export function AppSidebar({
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="px-3">
+      {/* KEY FIXES: overflow-y-auto + data-lenis-prevent */}
+      <SidebarContent className="px-3 overflow-y-auto" data-lenis-prevent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -112,7 +111,6 @@ export function AppSidebar({
                 const isActive = pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>
-                    {/* Tooltip reveals on hover when collapsed */}
                     <SidebarMenuButton
                       asChild
                       tooltip={item.title}
@@ -145,7 +143,6 @@ export function AppSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Clustered Sections (Only rendered if they exist, primarily for Super Admin) */}
         {sidebarConfig.sections?.map((section, sectionIndex) => (
           <SidebarGroup key={section.title || sectionIndex} className="mt-4">
             {section.title && (
@@ -193,7 +190,7 @@ export function AppSidebar({
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="mt-auto p-4 border-t border-white/10">
+      <SidebarFooter className="mt-auto p-4 border-t border-white/10 shrink-0">
         <NavUser user={user} />
       </SidebarFooter>
 

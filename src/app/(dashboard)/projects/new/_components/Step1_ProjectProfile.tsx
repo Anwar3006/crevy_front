@@ -1,14 +1,13 @@
 "use client";
 
-import { Info } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { CurrencySelect } from "@/components/CurrencySelect";
 import CustomDatePicker from "@/components/CustomDatePicker";
 import CustomInput from "@/components/CustomInput";
-import { Button } from "@/components/ui/button";
 import { CountryDropdown } from "@/components/ui/country-dropdown";
-import { Progress } from "@/components/ui/progress";
 import { PROJECT_TYPES, type TCreateProject } from "@/constants/new-project";
+import { cn } from "@/lib/utils";
 
 const Step1_ProjectProfile = ({
   onNext,
@@ -52,29 +51,21 @@ const Step1_ProjectProfile = ({
   };
 
   return (
-    <div className="space-y-10">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl md:text-3xl font-bold mb-1">Project Profile</h2>
-        <p className="text-slate-400 text-sm">Tell us about your project.</p>
-        <div className="flex items-center gap-4 mt-4 mb-1">
-          <Progress
-            value={33}
-            className="h-2 bg-slate-100"
-            indicatorClassName="bg-emerald-500"
-          />
-          <span className="text-sm font-medium text-slate-400 whitespace-nowrap">
-            Step 1 of 3
-          </span>
-        </div>
+    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="border-b-2 border-slate-900 pb-4">
+        <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] mb-2">
+          Phase 01 / 03
+        </p>
+        <h2 className="text-2xl font-serif text-slate-900 tracking-tight">
+          Asset Telemetry
+        </h2>
       </div>
 
-      {/* Project Type */}
       <div>
-        <p className="text-sm font-semibold text-slate-700 mb-3">
-          Project Type <span className="text-red-500">*</span>
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-4">
+          Methodology Class <span className="text-emerald-600">*</span>
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
           {PROJECT_TYPES.map((type) => {
             const isSelected = selectedType === type.id;
             const disabled = !type.pilotEnabled;
@@ -87,24 +78,24 @@ const Step1_ProjectProfile = ({
                 onClick={() =>
                   handleTypeSelect(type.id, type.sector, type.pilotEnabled)
                 }
-                className={[
-                  "relative p-5 rounded-2xl border-2 text-left transition-all",
+                className={cn(
+                  "relative p-6 text-left transition-all bg-white",
                   isSelected
-                    ? "border-emerald-500 bg-emerald-50/60"
+                    ? "ring-2 ring-inset ring-slate-900 bg-slate-50"
                     : disabled
-                      ? "border-slate-100 bg-slate-50 opacity-60 cursor-not-allowed"
-                      : "border-slate-100 hover:border-emerald-200 cursor-pointer",
-                ].join(" ")}
+                      ? "opacity-50 cursor-not-allowed bg-slate-50"
+                      : "hover:bg-slate-50",
+                )}
               >
                 {disabled && (
-                  <span className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full">
-                    Coming Soon
+                  <span className="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-widest bg-slate-200 text-slate-500 px-2 py-1">
+                    Pending
                   </span>
                 )}
-                <p className="font-bold text-slate-800 text-sm mt-1">
+                <p className="font-serif font-bold text-slate-900 text-lg mb-2">
                   {type.title}
                 </p>
-                <p className="text-slate-500 text-xs leading-relaxed mt-1">
+                <p className="text-slate-500 text-xs leading-relaxed font-light">
                   {type.description}
                 </p>
               </button>
@@ -112,35 +103,33 @@ const Step1_ProjectProfile = ({
           })}
         </div>
         {errors.projectType && (
-          <p className="text-red-500 text-xs mt-2">
+          <p className="text-red-500 text-xs mt-2 font-mono">
             {errors.projectType.message}
           </p>
         )}
       </div>
 
-      {/* Core fields */}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <CustomInput
           control={control}
           name="name"
           type="text"
-          label="Project Name *"
+          label="Asset Designation *"
           placeholder="e.g. Volta Basin Regeneration Initiative"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* CountryDropdown stores alpha3 codes (e.g. "GHA") — default "GHA" */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <CountryDropdown
             control={control}
             name="country"
-            label="Country *"
+            label="Jurisdiction *"
             placeholder="Select country"
           />
           <CustomInput
             control={control}
             name="region"
             type="text"
-            label="Region / Area *"
+            label="Region / District *"
             placeholder="e.g. Ashanti Region"
           />
         </div>
@@ -149,30 +138,29 @@ const Step1_ProjectProfile = ({
           control={control}
           name="gpsCoordinates"
           type="text"
-          label="GPS Coordinates"
+          label="Spatial Coordinates (GPS)"
           placeholder="lat, lng — e.g. 6.5244, -1.3792"
         />
 
-        <div className="bg-emerald-50 rounded-xl p-4 flex gap-3 border border-emerald-100">
-          <Info className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
-          <p className="text-xs text-emerald-700 font-medium">
-            Precise GPS coordinates help our dMRV partner's field team locate
-            your land for sensor deployment. Open Google Maps, right-click your
-            land, and copy the coordinates shown.
+        <div className="bg-slate-50 border-l-2 border-slate-900 p-4 flex gap-3">
+          <Info className="h-4 w-4 text-slate-900 shrink-0 mt-0.5" />
+          <p className="text-xs text-slate-600 font-mono leading-relaxed">
+            Precise GPS coordinates enable dMRV sensor mapping. Extract lat/lng
+            directly from GIS software or Google Maps.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <CustomDatePicker
             control={control}
             name="startDate"
-            label="Project Start Date *"
+            label="Implementation Start *"
             enableFutureDates
           />
           <CustomDatePicker
             control={control}
             name="endDate"
-            label="Project End Date (Optional)"
+            label="Projected End (Optional)"
             enableFutureDates
           />
         </div>
@@ -181,19 +169,17 @@ const Step1_ProjectProfile = ({
           control={control}
           name="totalAreaHectares"
           type="number"
-          label="Total Land Area (hectares) *"
+          label="Spatial Scale (Hectares) *"
           placeholder="e.g. 50"
         />
 
-        {/* Currency */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <label
-            className="text-sm font-medium text-slate-700"
             htmlFor="currency"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900"
           >
-            Preferred Currency *
+            Settlement Currency *
           </label>
-
           <CurrencySelect
             value={currency}
             onChange={(val) =>
@@ -202,33 +188,32 @@ const Step1_ProjectProfile = ({
                 shouldValidate: true,
               })
             }
-            placeholder="Select project currency"
-            className="w-full"
+            placeholder="Select protocol currency"
+            className="w-full rounded-none border-slate-200"
           />
-
           {errors.currency && (
-            <p className="text-red-500 text-xs">{errors.currency.message}</p>
+            <p className="text-red-500 text-xs font-mono">
+              {errors.currency.message}
+            </p>
           )}
         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="flex gap-4 pt-2">
-        <Button
+      <div className="flex gap-4 pt-8 border-t border-slate-100">
+        <button
           type="button"
-          variant="ghost"
           onClick={onPrev}
-          className="px-8 py-3 text-slate-400 font-bold"
+          className="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border border-transparent hover:border-slate-200 transition-all"
         >
-          Back
-        </Button>
-        <Button
+          Abort
+        </button>
+        <button
           type="button"
           onClick={handleNext}
-          className="flex-1 bg-[#2ebc8d] hover:bg-[#27a37b] py-6 text-lg rounded-xl font-bold transition-all"
+          className="flex-1 bg-slate-900 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
         >
-          Next: Practices &amp; Context
-        </Button>
+          Commit & Proceed <ArrowRight size={14} />
+        </button>
       </div>
     </div>
   );

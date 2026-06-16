@@ -11,9 +11,9 @@ const STATS = [
 
 const LoginPage = () => {
   return (
-    <div className="h-screen w-full flex overflow-hidden font-sans bg-white selection:bg-emerald-900 selection:text-white">
+    <div className="w-full flex font-sans bg-white selection:bg-emerald-900 selection:text-white lg:h-screen lg:overflow-hidden">
       {/* ── Left: Authentication Terminal ────────────────────────────────────── */}
-      <div className="relative flex flex-col w-full lg:w-[45%] xl:w-[40%] bg-white px-8 md:px-16 py-12 h-full overflow-y-auto border-r border-slate-200 z-10">
+      <div className="relative flex flex-col w-full lg:w-[45%] xl:w-[40%] bg-white px-8 md:px-16 py-12 lg:h-full overflow-y-auto border-r border-slate-200 z-10">
         {/* Top Header */}
         <div className="flex items-center justify-between mb-16 shrink-0 border-b border-slate-900 pb-6">
           <Link

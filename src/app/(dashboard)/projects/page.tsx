@@ -140,10 +140,13 @@ export default function AllProjectsPage() {
         cell: ({ row }) => (
           <div>
             <div className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">
-              {(row.getValue("projectType") as string).replace(/_/g, " ")}
+              {((row.getValue("projectType") as string) || "").replace(
+                /_/g,
+                " ",
+              )}
             </div>
             <div className="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">
-              {row.original.sector.replace(/_/g, " ")}
+              {(row.original.sector || "").replace(/_/g, " ")}
             </div>
           </div>
         ),
@@ -260,7 +263,7 @@ export default function AllProjectsPage() {
                 <Download className="w-4 h-4 mr-2" /> Export Roster
               </Button>
               <Button
-                onClick={() => router.push("/new-project")}
+                onClick={() => router.push("/projects/new")}
                 className="rounded-none bg-slate-900 hover:bg-emerald-900 text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
                 <Plus className="h-4 w-4 mr-2" /> Register Asset
@@ -436,7 +439,7 @@ export default function AllProjectsPage() {
                     </h3>
 
                     <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6">
-                      {p.projectType.replace(/_/g, " ")}
+                      {(p.projectType || "").replace(/_/g, " ")}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 mt-auto">
