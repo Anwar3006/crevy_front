@@ -175,48 +175,70 @@ export const SDGS = [
 // The project service maps this value straight to the backend which now
 // accepts min(2).max(3).
 
-export const createProjectInputSchema = z.object({
-  // Step 1 — Project Profile
-  projectType: z.string().min(1, "Select a project type"),
-  sector: z.string().min(1, "Sector is required"),
-  name: z.string().min(1, "Project name is required").max(255),
-  country: z.string().min(2, "Select a country").max(3),
-  region: z.string().min(1, "Region / area is required"),
-  gpsCoordinates: z
-    .string()
-    .regex(
-      /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/,
-      "Format: lat, lng — e.g. 6.5244, -1.3792",
-    )
-    .optional()
-    .or(z.literal("")),
-  startDate: z.coerce.date({
-    error: () => ({ message: "Enter a valid start date" }),
-  }),
-  endDate: z.coerce.date().optional(),
-  totalAreaHectares: z.coerce
-    .number()
-    .positive("Land area must be greater than 0"),
-  currency: z.object({
-    code: z.string().min(3, "Select a currency").max(3),
-    name: z.string().min(1, "Select a currency"),
-  }),
+export const createProjectInputSchema = z
+  .object({
+    // Step 1 — Project Profile
+    projectType: z.string().min(1, "Select a project type"),
+    sector: z.string().min(1, "Sector is required"),
+    name: z.string().min(1, "Project name is required").max(255),
+    country: z.string().min(2, "Select a country").max(3),
+    region: z.string().min(1, "Region / area is required"),
+    gpsCoordinates: z
+      .string()
+      .regex(
+        /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/,
+        "Format: lat, lng — e.g. 6.5244, -1.3792",
+      )
+      .optional()
+      .or(z.literal("")),
+    startDate: z.coerce.date({
+      error: () => ({ message: "Enter a valid start date" }),
+    }),
+    endDate: z.coerce
+      .date()
+      .optional()
+      .refine((date) => {
+        if (!date) return true;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date >= today;
+      }, "End date must be today or in the future"),
+    totalAreaHectares: z.coerce
+      .number()
+      .positive("Land area must be greater than 0"),
+    currency: z.object({
+      code: z.string().min(3, "Select a currency").max(3),
+      name: z.string().min(1, "Select a currency"),
+    }),
 
-  projectOwnerId: z.string().uuid("Please select a valid project owner"),
-  assignedAdminId: z.string().uuid().optional(),
+    projectOwnerId: z
+      .string()
+      .uuid("Please select a valid project owner")
+      .optional()
+      .or(z.literal("")),
+    assignedAdminId: z.string().optional(),
 
-  // Step 2 — Practices & Context
+    // Step 2 — Practices & Context
 
-  projectTags: z.array(z.string()).default([]),
-  description: z
-    .string()
-    .min(20, "Please describe your project (at least 20 characters)")
-    .max(1000),
-  sdgs: z.array(z.string()).default([]),
+    projectTags: z.array(z.string()).default([]),
+    description: z
+      .string()
+      .min(20, "Please describe your project (at least 20 characters)")
+      .max(1000),
+    sdgs: z.array(z.string()).default([]),
 
-  // Step 3 — Documents (tracked client-side, uploaded separately)
-  documents: z.record(z.string(), z.any().nullable()).default({}),
-});
+    // Step 3 — Documents (tracked client-side, uploaded separately)
+    documents: z.record(z.string(), z.any().nullable()).default({}),
+  })
+  .superRefine((data, ctx) => {
+    if (data.endDate && data.startDate && data.endDate < data.startDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "End date cannot be earlier than start date",
+        path: ["endDate"],
+      });
+    }
+  });
 
 export type TCreateProject = z.infer<typeof createProjectInputSchema>;
 

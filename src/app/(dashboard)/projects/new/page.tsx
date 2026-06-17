@@ -67,12 +67,15 @@ const NewProject = () => {
   }
 
   const onSubmit = async (data: TCreateProject) => {
+    console.log("Submitting Project Data:", data);
     setIsSubmitting(true);
     try {
       const projectRes = await ProjectService.createProject(data);
       const projectId: string = projectRes?.data?.id;
 
-      if (!projectId) throw new Error("Project creation did not return an ID");
+      if (!projectId) {
+        throw new Error("Registry did not return a valid asset ID.");
+      }
 
       const documentEntries = Object.entries(data.documents ?? {}).filter(
         ([, file]) => file != null,
@@ -105,7 +108,7 @@ const NewProject = () => {
         const failed = uploadResults.filter((r) => r.status === "rejected");
         if (failed.length > 0) {
           toast.warning(
-            `Project created but ${failed.length} document upload(s) failed. Retry via dashboard.`,
+            `Asset registered but ${failed.length} artifact(s) failed to sync.`,
           );
         }
       }
@@ -116,19 +119,35 @@ const NewProject = () => {
         console.warn("MRV simulation failed to trigger:", simError);
       }
 
-      toast.success("Asset registered successfully.");
+      toast.success("Asset successfully committed to registry.");
       router.push(`/projects/${projectId}`);
     } catch (error: any) {
+      console.error("Submission Error:", error);
       toast.error(
         error?.response?.data?.message ??
+          error?.message ??
           "Failed to register asset. Protocol aborted.",
       );
+    } finally {
       setIsSubmitting(false);
     }
   };
 
+  const onInvalid = (errors: any) => {
+    console.error("Form Validation Errors:", errors);
+    const errorList = Object.entries(errors);
+    if (errorList.length > 0) {
+      const [field, error]: [string, any] = errorList[0];
+      toast.error(
+        `Validation Error [${field}]: ${error.message || "Invalid input"}`,
+      );
+    } else {
+      toast.error("Please review all registration phases for missing data.");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-slate-900 selection:text-white font-sans">
+    <div className="min-h-screen bg-slate-50 selection:bg-slate-900 selection:text-white font-sans overflow-x-hidden">
       {isSubmitting && <ProcessingStep />}
 
       <AssignmentCheckModal
@@ -143,27 +162,30 @@ const NewProject = () => {
         }}
       />
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12 flex flex-col md:flex-row gap-12 lg:gap-24">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 py-8 md:py-12 flex flex-col lg:flex-row gap-8 lg:gap-14">
         {/* ── Progress Sidebar ── */}
-        <aside className="md:w-72 shrink-0 h-fit md:sticky top-12">
+        <aside className="w-full lg:w-72 shrink-0 h-fit lg:sticky top-12">
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 flex items-center gap-2 mb-12 transition-colors"
+            className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 flex items-center gap-2 mb-8 md:mb-12 transition-colors"
           >
             <ChevronLeft size={14} /> Abort Registration
           </button>
 
           <h1 className="font-serif text-3xl md:text-4xl text-slate-900 leading-tight mb-8">
-            Asset <br />
+            Asset <br className="hidden lg:block" />
             <span className="italic text-slate-500">Ingestion.</span>
           </h1>
 
-          <SidebarProgress currentStep={currentStep} steps={STEPS} />
+          {/* Hidden on mobile, shown on desktop for cleaner UX */}
+          <div className="hidden md:block">
+            <SidebarProgress currentStep={currentStep} steps={STEPS} />
+          </div>
 
-          <div className="mt-16 p-6 bg-white border border-slate-200 rounded-none">
+          <div className="mt-8 md:mt-16 p-5 md:p-6 bg-white border border-slate-200 rounded-none">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-2">
-              Protocol Support
+              Project Support
             </p>
             <p className="text-xs text-slate-500 leading-relaxed mb-4">
               Require assistance with methodology alignment or document mapping?
@@ -179,7 +201,17 @@ const NewProject = () => {
         </aside>
 
         {/* ── Form Payload ── */}
-        <main className="flex-1 min-w-0 bg-white border border-slate-200 p-8 md:p-14">
+        <main className="flex-1 min-w-0 bg-white border border-slate-200 p-5 sm:p-8 md:p-14">
+          {/* Mobile Progress Indicator */}
+          <div className="md:hidden mb-8 border-b-2 border-slate-900 pb-4">
+            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em]">
+              Phase 0{currentStep + 1} / 03
+            </p>
+            <h2 className="text-xl font-serif text-slate-900 tracking-tight mt-1">
+              {STEPS[currentStep]}
+            </h2>
+          </div>
+
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
               {currentStep === 0 && (
@@ -195,7 +227,7 @@ const NewProject = () => {
                 <Step3_Documents
                   onPrev={prevStep}
                   isSubmitting={isSubmitting}
-                  onSubmit={() => methods.handleSubmit(onSubmit)()}
+                  onSubmit={() => methods.handleSubmit(onSubmit, onInvalid)()}
                 />
               )}
             </form>

@@ -4,18 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import {
   Activity,
-  ChevronLeft,
-  Clock,
-  Cpu,
-  Database,
-  Download,
-  ExternalLink,
-  Eye,
-  FileText,
   History,
-  Info,
-  Layers,
-  Leaf,
   Loader2,
   Lock,
   Map as MapIcon,
@@ -79,6 +68,8 @@ export default function ProjectAdministrativeDossier() {
 
   const project = projectRes?.data;
   const verifications = verifRes?.data ?? [];
+  const owner = project?.owner;
+  const auditLogs = project?.auditLogs ?? [];
 
   // Redirect if not authorized
   useEffect(() => {
@@ -177,12 +168,19 @@ export default function ProjectAdministrativeDossier() {
         <div className="flex flex-col lg:flex-row justify-between items-start gap-20">
           <div className="max-w-2xl space-y-10">
             <div className="space-y-6">
-              <Link
-                href="/projects"
-                className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2 hover:text-slate-900 transition-colors"
-              >
-                <ChevronLeft size={12} /> Back to Asset Registry
-              </Link>
+              {/* ── Breadcrumb ── */}
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6">
+                <Link
+                  href="/projects"
+                  className="hover:text-slate-900 transition-colors"
+                >
+                  All Projects
+                </Link>
+                <span>/</span>
+                <span className="text-slate-900 truncate max-w-[200px]">
+                  {project.name}
+                </span>
+              </div>
               <h1 className="text-5xl md:text-7xl font-serif text-slate-900 tracking-tighter leading-none italic uppercase">
                 Administrative <br /> Dossier.
               </h1>
@@ -200,7 +198,9 @@ export default function ProjectAdministrativeDossier() {
                       Legal Name
                     </p>
                     <p className="font-bold text-slate-900 uppercase">
-                      Emmanuel Osei-Wusu
+                      {owner
+                        ? `${owner.firstName} ${owner.lastName}`
+                        : "Loading..."}
                     </p>
                   </div>
                   <div>
@@ -208,15 +208,19 @@ export default function ProjectAdministrativeDossier() {
                       Contact Terminal
                     </p>
                     <p className="text-sm font-mono text-slate-600 font-bold">
-                      +233 24 556 0991
+                      {owner?.contactNumber || "N/A"}
                     </p>
                     <p className="text-sm font-mono text-slate-600">
-                      emmanuel.osei@originate.gh
+                      {owner?.email || "N/A"}
                     </p>
                   </div>
-                  <Badge className="bg-emerald-600 text-white border-none text-[9px] font-black uppercase tracking-widest rounded-none">
-                    KYC: Verified
-                  </Badge>
+                  {owner && (
+                    <Badge
+                      className={`bg-${owner.verificationStatus === "verified" ? "emerald" : "amber"}-600 text-white border-none text-[9px] font-black uppercase tracking-widest rounded-none`}
+                    >
+                      KYC: {owner.verificationStatus}
+                    </Badge>
+                  )}
                 </div>
               </div>
 
@@ -488,42 +492,15 @@ export default function ProjectAdministrativeDossier() {
         </div>
 
         <div className="space-y-12 max-w-4xl">
-          {[
-            {
-              actor: "Kwame Ofori",
-              action: "Updated Project Status",
-              date: "May 20, 2026",
-              details: "DRAFT → ACTIVE",
-              icon: Activity,
-            },
-            {
-              actor: "System Protocol",
-              action: "dMRV Payload Ingested",
-              date: "May 18, 2026",
-              details: "Verified 1,200 tCO2e",
-              icon: Database,
-            },
-            {
-              actor: "Abena Darko",
-              action: "Modified Metadata",
-              date: "May 15, 2026",
-              details: "Revised methodology to VM0042",
-              icon: FileText,
-            },
-            {
-              actor: "Emmanuel Asiedu",
-              action: "Authorized Onboarding",
-              date: "May 12, 2026",
-              details: "KYC Finalized",
-              icon: ShieldCheck,
-            },
-          ].map((log, i) => (
-            <div key={i} className="flex gap-12 group">
+          {auditLogs.map((log: any, i: any) => (
+            <div key={log.id} className="flex gap-12 group">
               <div className="flex flex-col items-center">
                 <div className="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-500">
-                  <log.icon size={18} />
+                  <Activity size={18} />
                 </div>
-                {i < 3 && <div className="w-[1px] h-20 bg-slate-100 mt-2" />}
+                {i < auditLogs.length - 1 && (
+                  <div className="w-[1px] h-20 bg-slate-100 mt-2" />
+                )}
               </div>
               <div className="flex-1 space-y-2 pt-2">
                 <div className="flex justify-between items-center">
@@ -531,15 +508,15 @@ export default function ProjectAdministrativeDossier() {
                     {log.action}
                   </h4>
                   <span className="text-[10px] font-mono font-bold text-slate-300 uppercase">
-                    {log.date}
+                    {new Date(log.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <p className="text-[10px] font-mono text-slate-500 uppercase bg-slate-50 p-4 border border-slate-100 inline-block">
-                  {log.details}
+                  {log.newValue ? "Record updated" : "Action performed"}
                 </p>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
                   Executed by:{" "}
-                  <span className="text-slate-900">{log.actor}</span>
+                  <span className="text-slate-900">{log.actorId}</span>
                 </p>
               </div>
             </div>

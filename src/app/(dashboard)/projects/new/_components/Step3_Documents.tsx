@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Download, Loader2, Trash2, Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   DOCUMENT_TYPES,
@@ -39,7 +39,7 @@ const Step3_Documents = ({
     const files = Array.from(e.target.files);
     setValue(
       "documents",
-      { ...documents, [docTypeId]: multiple ? files : files[0] },
+      { ...documents, [docTypeId]: multiple ? files : files },
       { shouldTouch: true },
     );
     e.target.value = "";
@@ -65,15 +65,15 @@ const Step3_Documents = ({
       <div
         key={doc.id}
         className={cn(
-          "p-6 border transition-all",
+          "p-4 md:p-6 border transition-all",
           hasFile
             ? "border-emerald-500 bg-emerald-50/20"
             : "border-dashed border-slate-300 bg-white",
         )}
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <p className="font-serif font-bold text-slate-900">{doc.label}</p>
               {doc.required ? (
                 <span className="text-[9px] font-bold uppercase tracking-widest text-rose-600 bg-rose-50 px-2 py-0.5 border border-rose-100">
@@ -85,12 +85,12 @@ const Step3_Documents = ({
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-500 font-light max-w-md">
+            <p className="text-[11px] md:text-xs text-slate-500 font-light max-w-md">
               {doc.description}
             </p>
           </div>
 
-          <div className="shrink-0 flex flex-col items-end gap-2">
+          <div className="shrink-0 flex flex-col items-start lg:items-end gap-3 w-full lg:w-auto mt-2 lg:mt-0 border-t border-slate-100 lg:border-none pt-4 lg:pt-0">
             <input
               type="file"
               ref={(el) => {
@@ -109,15 +109,17 @@ const Step3_Documents = ({
             />
 
             {hasFile ? (
-              <div className="flex items-center gap-3 bg-white border border-emerald-200 px-4 py-2">
-                <Check size={14} className="text-emerald-500" />
-                <span className="font-mono text-xs text-slate-900 max-w-[150px] truncate">
-                  {fileName}
-                </span>
+              <div className="flex items-center justify-between w-full lg:w-auto gap-3 bg-white border border-emerald-200 px-3 py-2">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <Check size={14} className="text-emerald-500 shrink-0" />
+                  <span className="font-mono text-[10px] md:text-xs text-slate-900 max-w-[120px] md:max-w-[200px] truncate">
+                    {fileName}
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => removeFile(doc.id as DocumentTypeId)}
-                  className="text-slate-400 hover:text-rose-500 transition-colors ml-2"
+                  className="text-slate-400 hover:text-rose-500 transition-colors shrink-0"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -126,7 +128,7 @@ const Step3_Documents = ({
               <button
                 type="button"
                 onClick={() => fileRefs.current[doc.id]?.click()}
-                className="px-6 py-2 border border-slate-900 text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:bg-slate-900 hover:text-white transition-colors flex items-center gap-2"
+                className="w-full lg:w-auto px-6 py-3 border border-slate-900 text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:bg-slate-900 hover:text-white transition-colors flex items-center justify-center gap-2"
               >
                 <Upload size={12} /> Select File
               </button>
@@ -139,7 +141,7 @@ const Step3_Documents = ({
                   href={doc.templateUrl as string}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[9px] font-mono text-emerald-600 hover:underline uppercase tracking-widest flex items-center gap-1"
+                  className="text-[9px] font-mono text-emerald-600 hover:underline uppercase tracking-widest flex items-center gap-1 self-start lg:self-end"
                 >
                   <Download size={10} /> Fetch Template
                 </a>
@@ -151,8 +153,8 @@ const Step3_Documents = ({
   };
 
   return (
-    <div className="space-y-12 animate-in fade-in slide-in-from-right-8 duration-500">
-      <div className="border-b-2 border-slate-900 pb-4">
+    <div className="space-y-8 md:space-y-12 animate-in fade-in slide-in-from-right-8 duration-500">
+      <div className="hidden md:block border-b-2 border-slate-900 pb-4">
         <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] mb-2">
           Phase 03 / 03
         </p>
@@ -165,7 +167,7 @@ const Step3_Documents = ({
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-2">
           Mandatory Artifacts
         </p>
@@ -174,7 +176,7 @@ const Step3_Documents = ({
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-2">
           Supplementary Artifacts
         </p>
@@ -191,12 +193,12 @@ const Step3_Documents = ({
         </div>
       )}
 
-      <div className="flex gap-4 pt-8 border-t border-slate-100">
+      <div className="flex flex-col-reverse sm:flex-row gap-4 pt-8 border-t border-slate-100">
         <button
           type="button"
           onClick={onPrev}
           disabled={isSubmitting}
-          className="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border border-slate-200 hover:border-slate-400 transition-all"
+          className="w-full sm:w-auto px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border border-slate-200 hover:border-slate-400 transition-all text-center"
         >
           Retreat
         </button>
@@ -204,7 +206,7 @@ const Step3_Documents = ({
           type="button"
           onClick={onSubmit}
           disabled={isSubmitting || !allRequiredFilled}
-          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full sm:flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>

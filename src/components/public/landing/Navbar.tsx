@@ -124,7 +124,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                   isNavSolid ? "text-slate-400" : "text-white/40",
                 )}
               >
-                Synchronizing Ledger...
+                Authenticating...
               </span>
             </div>
           ) : user ? (

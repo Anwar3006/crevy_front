@@ -25,6 +25,7 @@ type CustomDatePickerProps<T extends FieldValues> = {
   disabled?: boolean;
   className?: string;
   enableFutureDates?: boolean;
+  minDate?: Date;
 };
 
 const CustomDatePicker = <T extends FieldValues>({
@@ -36,6 +37,7 @@ const CustomDatePicker = <T extends FieldValues>({
   disabled = false,
   className,
   enableFutureDates = false,
+  minDate,
 }: CustomDatePickerProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -79,18 +81,26 @@ const CustomDatePicker = <T extends FieldValues>({
                 startMonth={new Date(1900, 0)}
                 endMonth={
                   enableFutureDates
-                    ? new Date(new Date().getFullYear() + 5, 0)
+                    ? new Date(new Date().getFullYear() + 40, 0)
                     : new Date()
                 }
                 disabled={(date) => {
-                  const minDate = new Date("1900-01-01");
+                  const absoluteMinDate = new Date("1900-01-01");
                   const today = new Date();
+                  today.setHours(0, 0, 0, 0);
 
                   // Always block dates before 1900
-                  if (date < minDate) return true;
+                  if (date < absoluteMinDate) return true;
 
                   // Block future dates unless explicitly allowed
                   if (!enableFutureDates && date > today) return true;
+
+                  // Respect provided minDate
+                  if (minDate) {
+                    const normalizedMinDate = new Date(minDate);
+                    normalizedMinDate.setHours(0, 0, 0, 0);
+                    if (date < normalizedMinDate) return true;
+                  }
 
                   return false;
                 }}

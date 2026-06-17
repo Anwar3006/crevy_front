@@ -3,6 +3,7 @@
 import { format } from "date-fns";
 import type { TCreateProject } from "@/constants/new-project";
 import { axiosClient } from "../axiosClient";
+import { slugify } from "../utils";
 
 export const ProjectService = {
   // ─── Projects ──────────────────────────────────────────────────────────────
@@ -12,6 +13,7 @@ export const ProjectService = {
       projectType: data.projectType,
       sector: data.sector,
       name: data.name,
+      slug: slugify(data.name),
       country: data.country,
       region: data.region,
       gpsCoordinates: data.gpsCoordinates || undefined,

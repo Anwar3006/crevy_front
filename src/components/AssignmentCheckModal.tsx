@@ -88,7 +88,7 @@ export function AssignmentCheckModal({
   const owners = ownerData?.pages.flatMap((page: any) => page.data) ?? [];
 
   // 2. Fetch Admins (Only for Super Admin)
-  const { data: adminData } = useQuery({
+  const { data: adminData, isLoading: isLoadingAdmins } = useQuery({
     queryKey: ["admins-dropdown"],
     queryFn: () => UserService.listUsers({ role: "project_manager" }),
     enabled: isOpen && step === 2 && role === "super_admin",
@@ -249,40 +249,47 @@ export function AssignmentCheckModal({
                             className="font-mono text-xs"
                           />
                           <CommandList>
-                            <CommandEmpty className="py-6 text-center text-xs font-mono text-slate-500">
-                              No operatives found.
-                            </CommandEmpty>
-                            <CommandGroup>
-                              {admins.map((admin: any) => (
-                                <CommandItem
-                                  key={admin.id}
-                                  value={admin.id}
-                                  onSelect={() => {
-                                    setSelectedAdminId(admin.id);
-                                    setSelectedOwnerId("");
-                                    setIsAdminPopoverOpen(false);
-                                  }}
-                                  className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-none hover:bg-slate-50 data-[selected=true]:bg-slate-100"
-                                >
-                                  <Check
-                                    className={cn(
-                                      "h-4 w-4 text-slate-900",
-                                      selectedAdminId === admin.id
-                                        ? "opacity-100"
-                                        : "opacity-0",
-                                    )}
-                                  />
-                                  <div className="flex flex-col">
-                                    <span className="font-serif font-bold text-slate-900">
-                                      {admin.firstName} {admin.lastName}
-                                    </span>
-                                    <span className="text-[10px] text-slate-500 font-mono">
-                                      {admin.email}
-                                    </span>
-                                  </div>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
+                            {isLoadingAdmins ? (
+                              <div className="p-6 text-center">
+                                <Loader2 className="h-5 w-5 animate-spin mx-auto text-slate-900" />
+                              </div>
+                            ) : admins.length === 0 ? (
+                              <CommandEmpty className="py-6 text-center text-xs font-mono text-slate-500">
+                                No operatives found.
+                              </CommandEmpty>
+                            ) : (
+                              <CommandGroup>
+                                {admins.map((admin: any) => (
+                                  <CommandItem
+                                    key={admin.id}
+                                    value={admin.id}
+                                    onSelect={() => {
+                                      setSelectedAdminId(admin.id);
+                                      setSelectedOwnerId("");
+                                      setIsAdminPopoverOpen(false);
+                                    }}
+                                    className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-none hover:bg-slate-50 data-[selected=true]:bg-slate-100"
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "h-4 w-4 text-slate-900",
+                                        selectedAdminId === admin.id
+                                          ? "opacity-100"
+                                          : "opacity-0",
+                                      )}
+                                    />
+                                    <div className="flex flex-col">
+                                      <span className="font-serif font-bold text-slate-900">
+                                        {admin.firstName} {admin.lastName}
+                                      </span>
+                                      <span className="text-[10px] text-slate-500 font-mono">
+                                        {admin.email}
+                                      </span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            )}
                           </CommandList>
                         </Command>
                       </PopoverContent>
