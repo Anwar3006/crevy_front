@@ -8,18 +8,21 @@ import {
   CreditCard,
   Flame,
   Globe2,
+  Loader2,
   ShieldAlert,
   Wallet,
+  XCircle,
 } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { CreditService } from "@/lib/services/credit-service";
 import { cn } from "@/lib/utils";
 
-export default function CreditRetirementPage() {
-  const { batchId } = useParams<{ batchId: string }>();
+function CreditRetirementContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const batchId = searchParams.get("batchId");
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<
@@ -33,7 +36,7 @@ export default function CreditRetirementPage() {
 
   const { data: creditRes, isLoading } = useQuery({
     queryKey: ["credit-batch", batchId],
-    queryFn: () => CreditService.getCarbonCredits({ id: batchId }),
+    queryFn: () => CreditService.getCarbonCredits({ id: batchId! }),
     enabled: !!batchId,
   });
 
@@ -42,6 +45,7 @@ export default function CreditRetirementPage() {
   const handleCheckoutAndRetire = async (e: React.FormEvent) => {
     e.preventDefault();
     if (
+      !batchId ||
       formData.amount <= 0 ||
       formData.amount > parseFloat(credit?.availableAmount || "0")
     ) {
@@ -50,10 +54,6 @@ export default function CreditRetirementPage() {
 
     setIsProcessing(true);
     try {
-      // 1. In the future, trigger Stripe or Paystack modal here
-      // await PaymentService.processTransaction(...)
-
-      // 2. Execute on-chain burn
       await CreditService.retireCredits(batchId as string, {
         quantity: formData.amount,
         reason: `${formData.beneficiary} - ${formData.reason}`,
@@ -73,6 +73,7 @@ export default function CreditRetirementPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center font-mono text-sm uppercase tracking-widest text-slate-400">
+        <Loader2 className="w-6 h-6 animate-spin mr-2" />
         Initiating Checkout Session...
       </div>
     );
@@ -80,7 +81,8 @@ export default function CreditRetirementPage() {
 
   if (!credit) {
     return (
-      <div className="min-h-screen flex items-center justify-center font-mono text-sm uppercase tracking-widest text-red-500">
+      <div className="min-h-screen flex flex-col items-center justify-center font-mono text-sm uppercase tracking-widest text-red-500">
+        <XCircle className="w-10 h-10 mb-4" />
         Asset Batch Not Found.
       </div>
     );
@@ -201,47 +203,6 @@ export default function CreditRetirementPage() {
                   />
                 </div>
               </div>
-
-              {/* Payment Method Selector (Preparing for Stripe/Paystack) */}
-              <div className="space-y-4 pt-6 border-t border-slate-200">
-                <div className="text-[11px] font-bold uppercase tracking-widest text-slate-900">
-                  Payment Method (Network Fees)
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("card")}
-                    className={cn(
-                      "flex flex-col items-start p-4 border text-left transition-all",
-                      paymentMethod === "card"
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-slate-200 bg-white text-slate-500 hover:border-slate-400",
-                    )}
-                  >
-                    <CreditCard size={18} className="mb-3" />
-                    <span className="text-sm font-bold">Credit Card</span>
-                    <span className="text-[10px] opacity-70">
-                      Stripe Integration
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("mobile_money")}
-                    className={cn(
-                      "flex flex-col items-start p-4 border text-left transition-all",
-                      paymentMethod === "mobile_money"
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-slate-200 bg-white text-slate-500 hover:border-slate-400",
-                    )}
-                  >
-                    <Wallet size={18} className="mb-3" />
-                    <span className="text-sm font-bold">Mobile Money</span>
-                    <span className="text-[10px] opacity-70">
-                      Paystack / Flutterwave
-                    </span>
-                  </button>
-                </div>
-              </div>
             </form>
           </div>
 
@@ -257,9 +218,9 @@ export default function CreditRetirementPage() {
                   <span>Target Asset Batch</span>
                   <span
                     className="text-slate-900 truncate ml-4"
-                    title={batchId}
+                    title={batchId || ""}
                   >
-                    {batchId.slice(0, 12)}...
+                    {batchId ? `${batchId.slice(0, 12)}...` : "N/A"}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -327,5 +288,19 @@ export default function CreditRetirementPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CreditRetirementPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+        </div>
+      }
+    >
+      <CreditRetirementContent />
+    </Suspense>
   );
 }

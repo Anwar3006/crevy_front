@@ -1,8 +1,11 @@
 // src/lib/axiosClient.tsx
 import axios from "axios";
 
+const backendUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiVersion = process.env.NEXT_PUBLIC_API_VERSION || "v2";
+
 export const axiosClient = axios.create({
-  baseURL: "/api/v2",
+  baseURL: `${backendUrl}/api/${apiVersion}`,
   headers: {
     "Content-Type": "application/json",
   },

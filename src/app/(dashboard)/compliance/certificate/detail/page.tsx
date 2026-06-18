@@ -5,27 +5,32 @@ import {
   Download,
   ExternalLink,
   Globe,
+  Loader2,
   MapPin,
   QrCode,
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 
-export default function ComplianceCertificatePage() {
-  const { id } = useParams<{ id: string }>();
+function ComplianceCertificateContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   return (
     <div className="bg-[#f8fafc] min-h-screen py-20 px-6 animate-in fade-in duration-1000">
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-between items-center mb-10">
-          <Link
-            href="/compliance"
+          <button
+            type="button"
+            onClick={() => router.push("/compliance")}
             className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 hover:text-slate-900 transition-colors"
           >
             &larr; Back to Registry
-          </Link>
+          </button>
           <div className="flex gap-4">
             <Button
               variant="outline"
@@ -137,5 +142,19 @@ export default function ComplianceCertificatePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ComplianceCertificatePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+        </div>
+      }
+    >
+      <ComplianceCertificateContent />
+    </Suspense>
   );
 }

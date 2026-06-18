@@ -50,7 +50,7 @@ export default function ProjectOwnerOnboardingForm() {
   useEffect(() => {
     if (isAdmin) {
       axios
-        .get("/api/v2/users/role?role=admin")
+        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v2/users/role?role=admin`)
         .then((res) => setAdmins(res.data.data))
         .catch((err) => console.error("Failed to fetch admins", err));
     }
@@ -171,7 +171,10 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      await axios.post("/api/v2/project-owners/onboard", payload);
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v2/project-owners/onboard`,
+        payload,
+      );
       toast.success("Project Owner registered successfully!");
       router.push("/projects/new");
     } catch (error: any) {

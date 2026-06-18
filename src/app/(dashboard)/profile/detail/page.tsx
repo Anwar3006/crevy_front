@@ -1,8 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, ChevronLeft } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { AlertCircle, ChevronLeft, Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,9 +13,10 @@ import { UserService } from "@/lib/services/user-service";
 import { EditProfileForm } from "../_components/edit-profile-form";
 import { ProfileHeader } from "../_components/profile-header";
 
-export default function UserProfileDetailPage() {
-  const { id } = useParams<{ id: string }>();
+function ProfileDetailContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   const { data: session } = authClient.useSession();
   const isOwnProfile = session?.user?.id === id;
 
@@ -85,5 +87,19 @@ export default function UserProfileDetailPage() {
         <EditProfileForm user={user} readOnly={!isOwnProfile} />
       </div>
     </div>
+  );
+}
+
+export default function UserProfileDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+        </div>
+      }
+    >
+      <ProfileDetailContent />
+    </Suspense>
   );
 }

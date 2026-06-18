@@ -76,11 +76,14 @@ function AdminSetupTerminal() {
       const userId = signUpData.user.id;
 
       // 2. Provision institutional access (Complete invitation)
-      const response = await fetch("/api/v2/auth/register/invite", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, userId }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/register/invite`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, userId }),
+        },
+      );
 
       if (!response.ok) {
         const errData = await response.json();

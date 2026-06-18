@@ -1,19 +1,18 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProjectService } from "@/lib/services/project-service";
-import MarketplaceSEO from "./_components/MarketplaceSEO";
-import ProjectHero from "./_components/ProjectHero";
-import ProjectPriceChart from "./_components/ProjectPriceChart";
-import ProjectStory from "./_components/ProjectStory";
+import MarketplaceSEO from "../_components/MarketplaceSEO";
+import ProjectHero from "../_components/ProjectHero";
+import ProjectPriceChart from "../_components/ProjectPriceChart";
+import ProjectStory from "../_components/ProjectStory";
 
 // ─── Visual Mapping ──────────────────────────────────────────────────────────
-
 const PROJECT_VISUAL: Record<string, any> = {
   regenerative_agriculture: {
     heroImage:
@@ -37,10 +36,10 @@ const PROJECT_VISUAL: Record<string, any> = {
   },
 };
 
-export default function ProjectMarketplacePage() {
-  const params = useParams();
+function MarketplaceProjectDetailContent() {
   const router = useRouter();
-  const projectId = params.id as string;
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("id");
 
   // 1. Fetch Project Data
   const {
@@ -49,21 +48,23 @@ export default function ProjectMarketplacePage() {
     isError,
   } = useQuery({
     queryKey: ["project-marketplace-detail", projectId],
-    queryFn: () => ProjectService.getProjectMarketplaceDetail(projectId),
+    queryFn: () => ProjectService.getProjectMarketplaceDetail(projectId!),
+    enabled: !!projectId,
   });
+
+  // ... (rest of the component logic)
+  // ...
+  const project = projectRes?.data;
+  const visual = useMemo(() => {
+    return PROJECT_VISUAL[project?.projectType] || PROJECT_VISUAL.default;
+  }, [project?.projectType]);
 
   // 2. Fetch Price History Data for Chart
   const { data: priceHistoryRes } = useQuery({
     queryKey: ["project-price-history", projectId],
-    queryFn: () => ProjectService.getProjectPriceHistory(projectId),
+    queryFn: () => ProjectService.getProjectPriceHistory(projectId!),
     enabled: !!projectRes,
   });
-
-  const project = projectRes?.data;
-
-  const visual = useMemo(() => {
-    return PROJECT_VISUAL[project?.projectType] || PROJECT_VISUAL.default;
-  }, [project?.projectType]);
 
   // Mock price data if real history is unavailable for demo
   const priceData = useMemo(() => {
@@ -88,7 +89,7 @@ export default function ProjectMarketplacePage() {
         title={project.name}
         description={project.description || ""}
         image={visual.heroImage}
-        projectId={projectId}
+        projectId={projectId!}
         price="52.00"
       />
 
@@ -115,6 +116,20 @@ export default function ProjectMarketplacePage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function ProjectMarketplacePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+        </div>
+      }
+    >
+      <MarketplaceProjectDetailContent />
+    </Suspense>
   );
 }
 
@@ -153,3 +168,4 @@ function ProjectNotFoundState() {
     </div>
   );
 }
+// ...

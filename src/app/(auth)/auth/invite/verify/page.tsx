@@ -1,13 +1,13 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
-export default function InviteVerifyPage() {
+function InviteVerifyContent() {
   const router = useRouter();
-  const params = useParams();
-  const token = params.token as string;
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   useEffect(() => {
     if (token) {
@@ -27,5 +27,19 @@ export default function InviteVerifyPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function InviteVerifyPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+          <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+        </div>
+      }
+    >
+      <InviteVerifyContent />
+    </Suspense>
   );
 }
