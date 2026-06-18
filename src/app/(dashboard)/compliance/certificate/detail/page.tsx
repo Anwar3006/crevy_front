@@ -15,6 +15,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 
+export const runtime = "edge";
+
 function ComplianceCertificateContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

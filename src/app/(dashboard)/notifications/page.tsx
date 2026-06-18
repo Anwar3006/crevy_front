@@ -11,6 +11,8 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
+export const runtime = "edge";
+
 export default function NotificationsPage() {
   const [filter, setFilter] = useState("all");
 

@@ -17,7 +17,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { CreditService } from "@/lib/services/credit-service";
-import { cn } from "@/lib/utils";
+
+export const runtime = "edge";
 
 function CreditRetirementContent() {
   const router = useRouter();

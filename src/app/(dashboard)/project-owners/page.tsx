@@ -33,6 +33,8 @@ import {
 } from "@/lib/services/project-owner-service";
 import { cn } from "@/lib/utils";
 
+export const runtime = "edge";
+
 // ─── Editorial Configs ────────────────────────────────────────────────────────
 
 const verificationConfig: Record<

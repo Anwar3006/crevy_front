@@ -19,6 +19,8 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 
+export const runtime = "edge";
+
 export default function PayoutsPage() {
   const chartData = [
     { name: "JAN", amount: 4000, pending: 0 },

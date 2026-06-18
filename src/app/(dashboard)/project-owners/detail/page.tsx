@@ -4,13 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
+
 import {
   type ProjectOwnerRecord,
   ProjectOwnerService,
 } from "@/lib/services/project-owner-service";
 import { cn } from "@/lib/utils";
+
+export const runtime = "edge";
 
 // ─── Editorial Configs ────────────────────────────────────────────────────────
 

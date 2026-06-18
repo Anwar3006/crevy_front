@@ -45,6 +45,8 @@ import { useUser } from "@/hooks/use-user";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
 
+export const runtime = "edge";
+
 // ─── Institutional Schema ───────────────────────────────────────────────────
 
 interface Project {

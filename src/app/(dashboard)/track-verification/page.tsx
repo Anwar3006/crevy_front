@@ -15,6 +15,8 @@ import { authClient } from "@/lib/auth";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
 
+export const runtime = "edge";
+
 // ─── Pipeline Configuration ───────────────────────────────────────────────────
 
 const PIPELINE = [

@@ -1,20 +1,10 @@
 "use client";
 
-import {
-  ArrowLeft,
-  Building2,
-  Flame,
-  Loader2,
-  MoreVertical,
-  ShieldCheck,
-  Users,
-  Zap,
-} from "lucide-react";
+import { ArrowLeft, Building2, Flame, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+
+export const runtime = "edge";
 
 // ─── Data & Configuration ─────────────────────────────────────────────────────
 

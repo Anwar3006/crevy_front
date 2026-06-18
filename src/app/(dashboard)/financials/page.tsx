@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+export const runtime = "edge";
+
 export default function FinancialsDashboard() {
   return (
     <div className="animate-in fade-in duration-700 pb-24">

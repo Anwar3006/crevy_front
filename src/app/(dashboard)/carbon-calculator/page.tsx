@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+export const runtime = "edge";
+
 export default function CarbonCalculator() {
   const [_activeTab, setActiveTab] = useState("home");
 

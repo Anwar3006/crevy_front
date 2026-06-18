@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 
 const COLORS = ["#10b981", "#3b82f6", "#f59e0b", "#6366f1"];
 
+export const runtime = "edge";
+
 export default function AnalyticsDashboardPage() {
   const yieldData = [
     { name: "Jan", yield: 4000, price: 42 },

@@ -2,26 +2,21 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  Building2,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   Filter,
   Globe,
   MoreHorizontal,
   Plus,
   Search,
-  Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -34,6 +29,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+
+export const runtime = "edge";
 
 // Simulated Service
 const OrgService = {
