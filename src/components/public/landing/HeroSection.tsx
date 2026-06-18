@@ -148,17 +148,17 @@ export function HeroSection({
             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
           >
             <Link
-              href="/register"
+              href="/marketplace"
               className="w-full sm:w-auto bg-white text-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-emerald-500 hover:text-white transition-colors text-center"
             >
               Enter the Marketplace
             </Link>
-            {/* <button
-              type="button"
+            <Link
+              href="/register"
               className="w-full sm:w-auto border border-slate-700 bg-slate-900/50 text-white px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-800 transition-colors flex items-center justify-center gap-3"
             >
-              <Play size={14} /> Watch Protocol Brief (60s)
-            </button> */}
+              <Play size={14} /> Join Us
+            </Link>
           </motion.div>
         </div>
       </div>
