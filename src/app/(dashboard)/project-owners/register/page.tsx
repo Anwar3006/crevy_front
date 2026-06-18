@@ -2,8 +2,6 @@ import { ChevronRight, Home, Users } from "lucide-react";
 import Link from "next/link";
 import ProjectOwnerOnboardingForm from "@/components/forms/ProjectOwnerOnboardingForm";
 
-export const runtime = "edge";
-
 export default function ProjectOwnerRegisterPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-slate-900 selection:text-white pb-24">

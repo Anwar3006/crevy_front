@@ -30,8 +30,6 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
 // Simulated Service
 const OrgService = {
   listOrganizations: async () => {

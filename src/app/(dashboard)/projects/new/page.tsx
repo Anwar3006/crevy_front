@@ -22,8 +22,6 @@ import Step1_ProjectProfile from "./_components/Step1_ProjectProfile";
 import Step2_PracticesContext from "./_components/Step2_PracticesContext";
 import Step3_Documents from "./_components/Step3_Documents";
 
-export const runtime = "edge";
-
 const STEPS = [
   "Asset Telemetry",
   "Operational Context",

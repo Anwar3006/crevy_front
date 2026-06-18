@@ -7,8 +7,6 @@ import OrgAdminDashboard from "./_components/OrgAdminDashboard";
 import ProjectOwnerDashboard from "./_components/ProjectOwnerDashboard";
 import SuperAdminDashboard from "./_components/SuperAdminDashboard";
 
-export const runtime = "edge";
-
 const LOADING_UI = (
   <div className="min-h-screen flex items-center justify-center bg-slate-50">
     <div className="flex flex-col items-center gap-4">

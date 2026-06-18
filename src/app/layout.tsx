@@ -2,10 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Syne } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-// import OfflineBanner from "@/components/offline/OfflineBanner";
-// import SyncListener from "@/components/offline/SyncListener";
 import QueryProvider from "@/components/providers/query-provider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
+import { TransitionProvider } from "@/context/TransitionContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -42,7 +41,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${syne.variable} antialiased`}
       >
         <QueryProvider>
-          <SmoothScroll>{children}</SmoothScroll>
+          <TransitionProvider>
+            <SmoothScroll>{children}</SmoothScroll>
+          </TransitionProvider>
         </QueryProvider>
         <Toaster position="top-right" richColors />
       </body>

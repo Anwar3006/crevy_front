@@ -29,8 +29,6 @@ import { useUser } from "@/hooks/use-user";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
 // ─── Administrative Oversight Visual System ──────────────────────────────────
 
 function ProjectDetailContent() {

@@ -10,8 +10,6 @@ import { PayoutSection } from "./_components/PayoutSection";
 import { ProfileSection } from "./_components/ProfileSection";
 import { SecuritySection } from "./_components/SecuritySection";
 
-export const runtime = "edge";
-
 export default function SettingsPage() {
   const { user } = useUser();
   const role = user?.role || "guest";

@@ -13,8 +13,6 @@ import { UserService } from "@/lib/services/user-service";
 import { EditProfileForm } from "../_components/edit-profile-form";
 import { ProfileHeader } from "../_components/profile-header";
 
-export const runtime = "edge";
-
 function ProfileDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

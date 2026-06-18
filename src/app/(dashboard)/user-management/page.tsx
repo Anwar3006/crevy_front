@@ -48,8 +48,6 @@ import { useUser } from "@/hooks/use-user";
 import { UserService } from "@/lib/services/user-service";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface User {

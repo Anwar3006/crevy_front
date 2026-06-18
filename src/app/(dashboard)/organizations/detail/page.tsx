@@ -4,8 +4,6 @@ import { ArrowLeft, Building2, Flame, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
-export const runtime = "edge";
-
 // ─── Data & Configuration ─────────────────────────────────────────────────────
 
 const scopeData = [

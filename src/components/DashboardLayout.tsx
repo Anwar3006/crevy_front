@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { Separator } from "@/components/ui/separator";
@@ -9,6 +10,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useTransition } from "@/context/TransitionContext";
 import type { TBetterAuthUser } from "@/types";
 
 interface DashboardLayoutClientProps {
@@ -21,6 +23,11 @@ export const DashboardLayoutClient = ({
   user,
 }: DashboardLayoutClientProps) => {
   const pathname = usePathname();
+  const { finishTransition } = useTransition();
+
+  useEffect(() => {
+    finishTransition();
+  }, [finishTransition]);
 
   return (
     <SidebarProvider>

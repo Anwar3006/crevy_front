@@ -18,8 +18,6 @@ import { Suspense, useState } from "react";
 import { toast } from "sonner";
 import { CreditService } from "@/lib/services/credit-service";
 
-export const runtime = "edge";
-
 function CreditRetirementContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

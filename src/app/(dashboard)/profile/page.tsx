@@ -10,8 +10,6 @@ import { ChangePasswordForm } from "./_components/change-password-form";
 import { EditProfileForm } from "./_components/edit-profile-form";
 import { ProfileHeader } from "./_components/profile-header";
 
-export const runtime = "edge";
-
 export default function ProfilePage() {
   const {
     data: session,

@@ -45,9 +45,7 @@ import { useUser } from "@/hooks/use-user";
 import { ProjectService } from "@/lib/services/project-service";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
-// ─── Institutional Schema ───────────────────────────────────────────────────
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface Project {
   id: string;
@@ -104,11 +102,10 @@ const formatDate = (dateString?: string) => {
     .toUpperCase();
 };
 
-const getUnifiedValue = (obj: any, snakeKey: string, camelKey: string) => {
-  return obj[snakeKey] || obj[camelKey] || "";
-};
+const getUnifiedValue = (obj: any, snakeKey: string, camelKey: string) =>
+  obj[snakeKey] || obj[camelKey] || "";
 
-// ─── Main Protocol ───────────────────────────────────────────────────────────
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AllProjectsPage() {
   const router = useRouter();
@@ -135,7 +132,6 @@ export default function AllProjectsPage() {
 
   const projects = data?.data ?? [];
   const nextCursor = data?.nextCursor;
-  // console.log(">---> ", projects);
 
   const columns = useMemo<ColumnDef<Project>[]>(
     () => [
@@ -190,7 +186,6 @@ export default function AllProjectsPage() {
             getUnifiedValue(p, "project_stage", "projectStage") || "initiation";
           const regStatus = p.registryStatus || "pending_verification";
           const isVerified = regStatus === "dmrv_verified";
-
           return (
             <div className="flex flex-col items-start gap-1.5">
               <span className="font-mono text-[9px] uppercase tracking-widest text-slate-600 bg-slate-100 px-2 py-0.5 border border-slate-200">
@@ -230,12 +225,10 @@ export default function AllProjectsPage() {
         header: "Initiation Date",
         cell: ({ row }) => {
           const p = row.original;
-          const dateStr = p.start_date || p.createdAt;
-
           return (
             <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-900 uppercase tracking-widest">
               <Calendar className="h-3 w-3 text-slate-400" />
-              {formatDate(dateStr)}
+              {formatDate(p.start_date || p.createdAt)}
             </div>
           );
         },
@@ -292,7 +285,6 @@ export default function AllProjectsPage() {
 
   return (
     <div className="animate-in fade-in duration-700 pb-24 font-sans selection:bg-slate-900 selection:text-white">
-      {/* ── Editorial Header ── */}
       <div className="border-b border-slate-200 bg-white pt-12 pb-8">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
@@ -308,11 +300,9 @@ export default function AllProjectsPage() {
               </h1>
               <p className="text-slate-500 text-sm max-w-xl leading-relaxed">
                 Complete inventory of carbon sequestration assets under
-                management. Monitor lifecycle stages, review telemetry, and
-                approve methodologies for market listing.
+                management.
               </p>
             </div>
-
             <div className="flex items-center gap-3 shrink-0">
               <Button
                 variant="outline"
@@ -332,12 +322,10 @@ export default function AllProjectsPage() {
       </div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-8">
-        {/* ── Control Bar ── */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4 w-full md:w-auto">
-            {/* Search */}
             <div className="relative group w-full md:w-72">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-slate-900 transition-colors pointer-events-none" />
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
               <input
                 placeholder="Query by asset name or code..."
                 value={globalFilter}
@@ -345,18 +333,16 @@ export default function AllProjectsPage() {
                   setGlobalFilter(e.target.value);
                   setCursor(null);
                 }}
-                className="w-full bg-transparent border-none border-b-2 border-slate-200 pl-7 pr-4 py-2 text-sm font-serif text-slate-900 placeholder:text-slate-400 placeholder:font-sans focus:outline-none focus:border-slate-900 transition-colors rounded-none"
+                className="w-full bg-transparent border-none border-b-2 border-slate-200 pl-7 pr-4 py-2 text-sm font-serif text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors rounded-none"
               />
             </div>
-
-            {/* Native Select for strict styling */}
             <select
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
                 setCursor(null);
               }}
-              className="appearance-none bg-transparent border-none border-b-2 border-slate-200 py-2 pl-2 pr-8 text-[10px] font-bold uppercase tracking-widest text-slate-500 focus:outline-none focus:border-slate-900 focus:text-slate-900 cursor-pointer transition-colors"
+              className="appearance-none bg-transparent border-none border-b-2 border-slate-200 py-2 pl-2 pr-8 text-[10px] font-bold uppercase tracking-widest text-slate-500 focus:outline-none focus:border-slate-900 cursor-pointer transition-colors"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
@@ -364,8 +350,6 @@ export default function AllProjectsPage() {
               <option value="suspended">Suspended</option>
             </select>
           </div>
-
-          {/* View Toggles */}
           <div className="flex items-center gap-1 border border-slate-200 bg-slate-50 p-1 shrink-0">
             <button
               type="button"
@@ -394,7 +378,6 @@ export default function AllProjectsPage() {
           </div>
         </div>
 
-        {/* ── Content Area ── */}
         {isLoading ? (
           <div className="py-32 flex flex-col items-center justify-center border border-slate-200 bg-white">
             <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin mb-4" />
@@ -412,30 +395,28 @@ export default function AllProjectsPage() {
               No Assets Located
             </p>
             <p className="text-xs text-slate-500 max-w-sm text-center">
-              The query returned zero results. Adjust filtering parameters or
-              register a new project to populate the registry.
+              Adjust filtering parameters or register a new project.
             </p>
           </div>
         ) : viewType === "list" ? (
-          /* ── List View ── */
           <div className="border border-slate-200 bg-white overflow-x-auto">
             <Table className="min-w-[900px]">
               <TableHeader className="bg-slate-50">
-                {table.getHeaderGroups().map((headerGroup) => (
+                {table.getHeaderGroups().map((hg) => (
                   <TableRow
-                    key={headerGroup.id}
+                    key={hg.id}
                     className="border-b-2 border-slate-900 hover:bg-slate-50"
                   >
-                    {headerGroup.headers.map((header) => (
+                    {hg.headers.map((h) => (
                       <TableHead
-                        key={header.id}
+                        key={h.id}
                         className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14"
                       >
-                        {header.isPlaceholder
+                        {h.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
+                              h.column.columnDef.header,
+                              h.getContext(),
                             )}
                       </TableHead>
                     ))}
@@ -462,24 +443,19 @@ export default function AllProjectsPage() {
             </Table>
           </div>
         ) : (
-          /* ── Grid View ── */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {projects.map((p: Project) => {
               const status =
                 getUnifiedValue(p, "project_status", "projectStatus") ||
                 "draft";
-              const stage =
-                getUnifiedValue(p, "project_stage", "projectStage") ||
-                "initiation";
               const regStatus = p.registryStatus || "pending_verification";
               const isVerified = regStatus === "dmrv_verified";
               const config =
                 statusConfig[status.toLowerCase()] ?? statusConfig.draft;
-
               return (
                 <div
                   key={p.id}
-                  className="group border border-slate-200 bg-white hover:border-slate-900 transition-colors flex flex-col h-full rounded-none"
+                  className="group border border-slate-200 bg-white hover:border-slate-900 transition-colors flex flex-col h-full"
                 >
                   <div className="p-6 flex-1">
                     <div className="flex justify-between items-start mb-4">
@@ -488,30 +464,25 @@ export default function AllProjectsPage() {
                       </span>
                       <span
                         className={cn(
-                          "px-2 py-1 text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5 border border-transparent",
+                          "px-2 py-1 text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5",
                           config.color,
                           config.bg,
                         )}
                       >
-                        <span
-                          className={cn("w-1.5 h-1.5 rounded-none", config.dot)}
-                        />
+                        <span className={cn("w-1.5 h-1.5", config.dot)} />
                         {status}
                       </span>
                     </div>
-
-                    <h3 className="font-serif text-xl text-slate-900 leading-tight mb-2 group-hover:text-emerald-800 transition-colors">
+                    <h3 className="font-serif text-xl text-slate-900 leading-tight mb-2">
                       {p.name}
                     </h3>
-
                     <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6">
                       {(
                         getUnifiedValue(p, "project_type", "projectType") ||
                         "UNSPECIFIED"
                       ).replace(/_/g, " ")}
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 mt-auto">
+                    <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
                       <div>
                         <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
                           Registry
@@ -538,7 +509,6 @@ export default function AllProjectsPage() {
                       </div>
                     </div>
                   </div>
-
                   <div className="border-t border-slate-200 grid grid-cols-2 divide-x divide-slate-200 bg-slate-50">
                     <button
                       type="button"
@@ -560,7 +530,6 @@ export default function AllProjectsPage() {
           </div>
         )}
 
-        {/* ── Pagination Footer ── */}
         <div className="flex items-center justify-between pt-6 mt-6 border-t border-slate-200">
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
             Ledger Returns:{" "}

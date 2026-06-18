@@ -20,8 +20,6 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
 export default function ContractsPage() {
   // ── Mock Data Mapped to Drizzle Schema ──
   const contracts = [

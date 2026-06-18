@@ -34,8 +34,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { RBACService } from "@/lib/services/rbac-service";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
 interface Permission {
   id: number;
   resource: string;

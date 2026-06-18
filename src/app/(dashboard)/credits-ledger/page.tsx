@@ -7,8 +7,6 @@ import { useState } from "react";
 import { CreditService } from "@/lib/services/credit-service";
 import { cn } from "@/lib/utils";
 
-export const runtime = "edge";
-
 export default function PlatformCreditsLedgerPage() {
   const [globalFilter, setGlobalFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
