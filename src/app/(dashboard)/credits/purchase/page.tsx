@@ -21,6 +21,8 @@ import { Label } from "@/components/ui/label";
 import { CreditService } from "@/lib/services/credit-service";
 import { ProjectService } from "@/lib/services/project-service";
 
+export const runtime = "edge";
+
 export default function PurchaseCreditsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
