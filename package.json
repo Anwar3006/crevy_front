@@ -5,7 +5,8 @@
   "packageManager": "pnpm@10.11.1",
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "next build && npx @cloudflare/next-on-pages",
+    "build": "next build",
+    "pages:build": "npx @cloudflare/next-on-pages",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
