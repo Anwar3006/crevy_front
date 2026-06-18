@@ -5,16 +5,12 @@ import {
   Activity,
   ArrowLeft,
   History,
-  Loader2,
   Lock,
   Map as MapIcon,
   MapPin,
-  MoreVertical,
   Radio,
   ShieldAlert,
-  ShieldCheck,
   UserCheck,
-  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -83,7 +79,7 @@ function ProjectDetailContent() {
 
   if (loadingProject || !isMounted) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+      <div className="min-h-[80vh] flex flex-col items-center justify-center bg-slate-50">
         <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin mb-4" />
         <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
           Decrypting Ledger...
@@ -401,5 +397,23 @@ function ProjectDetailContent() {
         )}
       </section>
     </div>
+  );
+}
+
+// ─── DEFAULT EXPORT & SUSPENSE BOUNDARY ────────────────────────────────────
+export default function ProjectDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+          <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin mb-4" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
+            Initializing Secure Environment...
+          </span>
+        </div>
+      }
+    >
+      <ProjectDetailContent />
+    </Suspense>
   );
 }
