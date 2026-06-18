@@ -119,7 +119,7 @@ function ProjectOwnerDetailContent() {
     <div className="animate-in fade-in duration-700 pb-24">
       {/* ── Editorial Header ── */}
       <div className="bg-white border-b border-slate-200 pt-12 pb-12">
-        <div className="max-w-[1000px] mx-auto px-6 lg:px-10">
+        <div className="max-w-250 mx-auto px-6 lg:px-10">
           <button
             type="button"
             onClick={() => router.push("/project-owners")}
