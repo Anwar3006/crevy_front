@@ -284,7 +284,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                       href="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Authenticate
+                      Login
                     </Link>
                   </Button>
                   <Button
@@ -295,7 +295,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                       href="/register"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Initialize
+                      Sign Up
                     </Link>
                   </Button>
                 </div>

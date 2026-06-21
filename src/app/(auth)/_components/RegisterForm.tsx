@@ -1,153 +1,298 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import type React from "react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import CustomInput from "@/components/CustomInput";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { useRegisterUser } from "@/hooks/use-user";
+import { authClient } from "@/lib/auth";
+import { axiosClient } from "@/lib/axiosClient";
 import { cn } from "@/lib/utils";
-import {
-  type TUserRegistrationInput,
-  userRegistrationSchema,
-} from "@/types/user.types";
 
-const RegisterForm = ({
+type EntityType = "organization" | "project_owner";
+
+export default function RegisterForm({
   className,
   ...props
-}: React.ComponentProps<"form">) => {
+}: React.ComponentProps<"div">) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutateAsync, isPending } = useRegisterUser();
-  const isLoading = isSubmitting || isPending;
 
-  const form = useForm<TUserRegistrationInput>({
-    resolver: zodResolver(userRegistrationSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      contactNumber: "",
-      countryOfOperation: "",
-    },
+  const [entityType, setEntityType] = useState<EntityType>("organization");
+  const [loading, setLoading] = useState(false);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    orgName: "", // For Organization
+    taxResidence: "", // For Organization
+    operatingRegion: "", // For Project Owner
   });
 
-  const handleSubmit = async (data: TUserRegistrationInput) => {
-    setIsSubmitting(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (formData.password !== confirmPassword) {
+      return toast.error("Cryptographic mismatch. Passwords must align.");
+    }
+    if (formData.password.length < 8) {
+      return toast.error("Security policy requires at least 8 characters.");
+    }
+
+    setLoading(true);
+
     try {
-      const result = await mutateAsync(data);
-      if (result?.success) {
-        toast.success("Account created! Please log in.");
-        router.push("/login");
+      // 1. Create Base User Auth Entity
+      const { data, error } = await authClient.signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: `${formData.firstName} ${formData.lastName}`,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        profileCompleted: true,
+      } as any);
+
+      if (error) throw error;
+
+      // 2. Hydrate Role-Specific Database Tables
+      if (entityType === "organization") {
+        await axiosClient.post("/auth/register/organization", {
+          userId: data.user.id,
+          orgName: formData.orgName,
+          taxResidence: formData.taxResidence,
+        });
+      } else {
+        await axiosClient.post("/auth/register/project-owner", {
+          userId: data.user.id,
+          operatingRegion: formData.operatingRegion,
+        });
       }
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ??
-        error?.message ??
-        "Registration failed. Please try again.";
-      toast.error(message);
+
+      toast.success("Entity initialization complete. Welcome to the registry.");
+      router.push("/dashboard");
+    } catch (err: any) {
+      toast.error(err.message || "Initialization failed. Review system logs.");
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className={cn("flex flex-col gap-4", className)}
-        noValidate
-        {...props}
-      >
-        {/* Name row */}
-        <div className="grid grid-cols-2 gap-4">
-          <CustomInput
-            control={form.control}
-            name="firstName"
-            type="text"
-            label="First Name"
-            placeholder="Rebecca"
-          />
-          <CustomInput
-            control={form.control}
-            name="lastName"
-            type="text"
-            label="Last Name"
-            placeholder="Yekple"
-          />
-        </div>
-
-        {/* Email */}
-        <CustomInput
-          control={form.control}
-          name="email"
-          type="email"
-          label="Email Address"
-          placeholder="rebecca@example.com"
-          description="This will be your login email."
-        />
-
-        {/* Phone */}
-        <CustomInput
-          control={form.control}
-          name="contactNumber"
-          type="text"
-          label="Phone Number"
-          placeholder="+233 55 555 5555"
-        />
-
-        {/* Password row */}
-        <div className="grid grid-cols-2 gap-4">
-          <CustomInput
-            control={form.control}
-            name="password"
-            type="password"
-            label="Password"
-            placeholder="Min. 6 characters"
-          />
-          <CustomInput
-            control={form.control}
-            name="confirmPassword"
-            type="password"
-            label="Confirm Password"
-            placeholder="Repeat password"
-          />
-        </div>
-
-        {/* Submit */}
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="w-full py-5 bg-[#2CC295] hover:bg-[#27a37b] text-white font-bold rounded-xl mt-2 transition-colors"
-        >
-          {isLoading ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Creating account…
-            </span>
-          ) : (
-            "Create Account"
+    <div className={cn("w-full max-w-md mx-auto", className)} {...props}>
+      {/* ── Entity Selection Tabs ── */}
+      <div className="flex border-b border-slate-200 mb-8">
+        <button
+          type="button"
+          onClick={() => setEntityType("organization")}
+          className={cn(
+            "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
+            entityType === "organization"
+              ? "border-b-2 border-slate-900 text-slate-900"
+              : "text-slate-400 hover:text-slate-600",
           )}
-        </Button>
+        >
+          Institutional Buyer
+        </button>
 
-        <p className="text-center text-sm text-gray-500">
-          Already have an account?{" "}
-          <a
-            href="/login"
-            className="text-[#2CC295] font-semibold hover:underline"
+        {/* uncomment later to setup project owner self registration */}
+        {/* <button
+          type="button"
+          onClick={() => setEntityType("project_owner")}
+          className={cn(
+            "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
+            entityType === "project_owner" 
+              ? "border-b-2 border-slate-900 text-slate-900" 
+              : "text-slate-400 hover:text-slate-600"
+          )}
+        >
+          Project Owner
+        </button> */}
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Personal Details */}
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label
+              htmlFor="firstName"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              value={formData.firstName}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="space-y-3">
+            <label
+              htmlFor="lastName"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              value={formData.lastName}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
+              required
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <label
+            htmlFor="email"
+            className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
           >
-            Log in
-          </a>
-        </p>
-      </form>
-    </Form>
-  );
-};
+            Work Email
+          </label>
+          <input
+            type="email"
+            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+            required
+            disabled={loading}
+          />
+        </div>
 
-export default RegisterForm;
+        {/* Security Details */}
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label
+              htmlFor="password"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="space-y-3">
+            <label
+              htmlFor="confirmPassword"
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+            >
+              Verify Password
+            </label>
+            <input
+              type="password"
+              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              disabled={loading}
+            />
+          </div>
+        </div>
+
+        {/* Dynamic Entity Fields */}
+        <div className="pt-6 border-t border-slate-200 space-y-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            {entityType === "organization"
+              ? "Corporate Identity"
+              : "Originator Footprint"}
+          </p>
+
+          {entityType === "organization" ? (
+            <>
+              <div className="space-y-3">
+                <label
+                  htmlFor="orgName"
+                  className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                >
+                  Registered Organization Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                  value={formData.orgName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, orgName: e.target.value })
+                  }
+                  required
+                  disabled={loading}
+                />
+              </div>
+              <div className="space-y-3">
+                <label
+                  htmlFor="taxResidence"
+                  className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                >
+                  Primary Tax Jurisdiction(Country of Operation)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. US, UK, GH"
+                  className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 uppercase focus:ring-0 focus:border-slate-900 transition-colors"
+                  value={formData.taxResidence}
+                  onChange={(e) =>
+                    setFormData({ ...formData, taxResidence: e.target.value })
+                  }
+                  disabled={loading}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="space-y-3">
+              <label
+                htmlFor="operatingRegion"
+                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              >
+                Primary Operational Region
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. West Africa, Volta Basin"
+                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                value={formData.operatingRegion}
+                onChange={(e) =>
+                  setFormData({ ...formData, operatingRegion: e.target.value })
+                }
+                required
+                disabled={loading}
+              />
+            </div>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-emerald-700 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] py-6 mt-4 transition-colors flex items-center justify-center gap-2"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin h-4 w-4" /> Processing...
+            </>
+          ) : (
+            "Initialize Entity Record"
+          )}
+        </button>
+      </form>
+    </div>
+  );
+}

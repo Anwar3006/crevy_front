@@ -75,19 +75,10 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v2/auth/invite`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: data.email,
-            roleName: data.roleName,
-          }),
-        },
-      );
-
-      if (!response.ok) throw new Error("Failed to send invitation");
+      await RBACService.inviteUser({
+        email: data.email,
+        roleName: data.roleName,
+      });
 
       toast.success(
         isOrgAdmin
@@ -203,7 +194,7 @@ export function InviteAdminModal({ isOpen, onClose }: InviteAdminModalProps) {
               {loading ? (
                 <Loader2 className="animate-spin h-4 w-4 mr-2" />
               ) : (
-                "Dispatch Credential"
+                "Send Invite"
               )}
             </Button>
           </DialogFooter>
