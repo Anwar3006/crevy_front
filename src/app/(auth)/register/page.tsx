@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import BackButton from "../_components/BackButton";
 import RegisterForm from "../_components/RegisterForm";
 
 const VALUE_PROPS = [
@@ -96,6 +97,8 @@ const RegisterPage = () => {
             Authenticate Existing <ArrowRightIcon className="w-3 h-3" />
           </Link>
         </div>
+
+        <BackButton href="/" label="Back to Home" className="mb-8 -mt-8" />
 
         <div className="flex flex-1 flex-col max-w-md w-full">
           <div className="mb-10">
