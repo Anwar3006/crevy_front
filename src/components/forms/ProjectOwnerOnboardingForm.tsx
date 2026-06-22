@@ -22,6 +22,7 @@ import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { authClient } from "@/lib/auth";
+import { axiosClient } from "@/lib/axiosClient";
 import { cn } from "@/lib/utils";
 import {
   projectOwnerOnboardingSchema,
@@ -171,7 +172,7 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      await axios.post(
+      await axiosClient.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v2/project-owners/onboard`,
         payload,
       );
@@ -419,7 +420,7 @@ export default function ProjectOwnerOnboardingForm() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200">
                       <CustomInput
                         name="bankName"
-                        label="Institution Name"
+                        label="Bank Name"
                         placeholder="e.g. Ecobank"
                         control={form.control}
                         type="text"
@@ -427,7 +428,7 @@ export default function ProjectOwnerOnboardingForm() {
                       />
                       <CustomInput
                         name="accountNumber"
-                        label="Routing Number"
+                        label="Account Number"
                         placeholder="0000 0000 0000"
                         control={form.control}
                         type="text"

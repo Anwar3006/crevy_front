@@ -1,6 +1,11 @@
+import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  //Add optimizePackageImports to your next.config to force Next.js to tree-shake specific heavy UI or utility libraries
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@hugeicons/react"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
@@ -33,4 +38,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})(nextConfig);
