@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Building2,
@@ -23,6 +22,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { authClient } from "@/lib/auth";
 import { axiosClient } from "@/lib/axiosClient";
+import { ProjectOwnerService } from "@/lib/services/project-owner-service";
 import { cn } from "@/lib/utils";
 import {
   projectOwnerOnboardingSchema,
@@ -50,8 +50,8 @@ export default function ProjectOwnerOnboardingForm() {
 
   useEffect(() => {
     if (isAdmin) {
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v2/users/role?role=admin`)
+      axiosClient
+        .get("/users/role?role=admin")
         .then((res) => setAdmins(res.data.data))
         .catch((err) => console.error("Failed to fetch admins", err));
     }
@@ -172,10 +172,7 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      await axiosClient.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v2/project-owners/onboard`,
-        payload,
-      );
+      await ProjectOwnerService.onboardProjectOwner(payload);
       toast.success("Project Owner registered successfully!");
       router.push("/projects/new");
     } catch (error: any) {

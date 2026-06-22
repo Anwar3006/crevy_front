@@ -41,6 +41,35 @@ export type ProjectOwnerListResponse = {
   total: number;
 };
 
+export type ProjectOwnerOnboardPayload = {
+  firstName: string;
+  lastName: string;
+  email?: string | null;
+  contactNumber: string;
+  password: string;
+  countryOfOperation: string;
+  partnerId?: number | null;
+  assignedAdminId?: string | null;
+  assignmentType?: "primary" | "secondary";
+  isB2cAssignment?: boolean;
+  bankDetails?: {
+    bankName: string;
+    accountNumber: string;
+    accountName?: string | null;
+  } | null;
+  momoDetails?: {
+    network: string;
+    number: string;
+    accountName?: string | null;
+  } | null;
+  farmPlot?: {
+    region: string;
+    village?: string | null;
+    centroid: { lat: number; lng: number };
+    areaHectares: number;
+  } | null;
+};
+
 export const ProjectOwnerService = {
   /**
    * List project owners.
@@ -57,6 +86,18 @@ export const ProjectOwnerService = {
       Object.entries(filters).filter(([, v]) => v !== undefined && v !== ""),
     );
     const response = await axiosClient.get("/project-owners", { params });
+    return response.data;
+  },
+
+  /**
+   * Onboard a new project owner (admin / field-agent only).
+   * The backend creates the Better Auth user, project owner profile,
+   * farm plot, and assignment in a single atomic transaction.
+   */
+  onboardProjectOwner: async (
+    payload: ProjectOwnerOnboardPayload,
+  ): Promise<{ success: boolean; message: string; data: any }> => {
+    const response = await axiosClient.post("/project-owners/onboard", payload);
     return response.data;
   },
 
