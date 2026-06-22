@@ -79,7 +79,7 @@ export default function ProjectOwnerOnboardingForm() {
       latitude: "",
       longitude: "",
       areaHectares: "",
-      partnerId: 0,
+      partnerId: null as any,
     },
   });
 
