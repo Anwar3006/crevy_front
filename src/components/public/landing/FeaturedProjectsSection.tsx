@@ -67,7 +67,7 @@ export function FinalCTASection({
               Start Buying Credits
             </Link>
             <Link
-              href="/contact"
+              href="/register"
               className="w-full sm:w-auto bg-white text-slate-900 hover:bg-slate-200 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               Auditor Access Request

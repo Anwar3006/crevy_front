@@ -251,11 +251,11 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           url: "/user-management",
           icon: UserGroupIcon,
         },
-        {
-          title: "Compliance",
-          url: "/compliance",
-          icon: CheckmarkCircle03Icon,
-        },
+        // {
+        //   title: "Compliance",
+        //   url: "/compliance",
+        //   icon: CheckmarkCircle03Icon,
+        // },
         ...transparencyItems,
         ...commonAccountItems,
       ],
