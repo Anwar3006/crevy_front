@@ -73,7 +73,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
         <Link
           href="/"
           className={cn(
-            "font-serif font-bold text-3xl tracking-tight transition-colors",
+            "font-bold text-3xl tracking-tight transition-colors",
             isNavSolid ? "text-slate-900" : "text-white",
             "hover:text-emerald-700",
           )}
@@ -140,7 +140,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
               >
                 <div
                   className={cn(
-                    "w-6 h-6 flex items-center justify-center font-serif text-[11px] font-bold",
+                    "w-6 h-6 flex items-center justify-center text-[11px] font-bold",
                     isNavSolid
                       ? "bg-slate-900 text-white"
                       : "bg-white text-slate-900",
@@ -226,9 +226,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             className="fixed inset-0 top-0 left-0 h-screen w-full bg-slate-950 z-50 flex flex-col p-6 md:hidden overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-16 border-b border-slate-800 pb-6">
-              <span className="font-serif font-bold text-2xl text-white">
-                Crevy.
-              </span>
+              <span className="font-bold text-2xl text-white">Crevy.</span>
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -266,11 +264,11 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
               ) : user ? (
                 <div className="space-y-6">
                   <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4">
-                    <div className="w-10 h-10 bg-white text-slate-900 flex items-center justify-center font-serif text-lg font-bold shrink-0">
+                    <div className="w-10 h-10 bg-white text-slate-900 flex items-center justify-center text-lg font-bold shrink-0">
                       {getInitials(user.name)}
                     </div>
                     <div className="text-left overflow-hidden">
-                      <p className="text-white font-serif font-bold truncate">
+                      <p className="text-white font-bold truncate">
                         {user.name}
                       </p>
                       <p className="text-slate-500 font-mono text-[10px] uppercase tracking-widest truncate mt-1">

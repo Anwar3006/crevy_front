@@ -119,7 +119,7 @@ export function CinematicScrollPitch({
             {[...Array(2)].map((_, i) => (
               <span
                 key={i}
-                className="text-6xl md:text-8xl font-serif font-black uppercase tracking-tighter text-white px-8"
+                className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-white px-8"
               >
                 NO GREENWASHING ✦ VERIFIABLE IMPACT ✦ IMMUTABLE LEDGER ✦{" "}
               </span>
@@ -129,7 +129,7 @@ export function CinematicScrollPitch({
             {[...Array(2)].map((_, i) => (
               <span
                 key={i}
-                className="text-6xl md:text-8xl font-serif font-black uppercase tracking-tighter text-white px-8"
+                className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-white px-8"
               >
                 CORE CARBON PRINCIPLES ✦ ZERO DOUBLE COUNTING ✦{" "}
               </span>
@@ -187,7 +187,7 @@ export function CinematicScrollPitch({
               {/* Line 2 — Headline */}
               <motion.h2
                 style={{ opacity: line2.opacity, y: line2.y }}
-                className="font-serif font-extrabold text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight mb-6 pointer-events-auto opacity-0 will-change-transform"
+                className="font-extrabold text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight mb-6 pointer-events-auto opacity-0 will-change-transform"
               >
                 From Verification to{" "}
                 <span className="italic text-brand">Retirement.</span>
@@ -208,16 +208,14 @@ export function CinematicScrollPitch({
               >
                 We connect audited climate projects with committed corporations.
                 <br className="hidden md:block" />
-                <strong className="text-white font-serif">
-                  For originators:
-                </strong>{" "}
-                access premium demand.
+                <strong className="text-white">For originators:</strong> access
+                premium demand.
                 <br className="hidden md:block" />
-                <strong className="text-white font-serif">For buyers:</strong>{" "}
-                verifiable impact.
+                <strong className="text-white">For buyers:</strong> verifiable
+                impact.
                 <br className="hidden md:block" />
-                <strong className="text-white font-serif">For auditors:</strong>{" "}
-                full lifecycle transparency.
+                <strong className="text-white">For auditors:</strong> full
+                lifecycle transparency.
               </motion.p>
 
               {/* Line 5 — CTA Buttons */}
@@ -270,7 +268,7 @@ function StaticPitchFallback() {
           </span>
         </div>
 
-        <h2 className="font-serif font-extrabold text-4xl md:text-6xl text-white leading-tight mb-6">
+        <h2 className="font-extrabold text-4xl md:text-6xl text-white leading-tight mb-6">
           From Verification to{" "}
           <span className="italic text-slate-400">Retirement.</span>
         </h2>

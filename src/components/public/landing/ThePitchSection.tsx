@@ -111,7 +111,7 @@ function PitchBlock({ tag, headline, painPoint, bullets, cta, align }: any) {
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-4">
           {tag}
         </p>
-        <h2 className="font-serif text-4xl md:text-5xl text-slate-900 leading-tight tracking-tight mb-6">
+        <h2 className="text-4xl md:text-5xl text-slate-900 leading-tight tracking-tight mb-6">
           {headline}
         </h2>
         <div className="bg-brand/20 border-2 border-brand p-4 mb-8">

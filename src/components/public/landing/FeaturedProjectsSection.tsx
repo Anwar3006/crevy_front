@@ -45,7 +45,7 @@ export function FinalCTASection({
           <div className="inline-block border border-brand px-4 py-2 text-brand text-[10px] font-bold uppercase tracking-widest">
             The Infrastructure of Tomorrow
           </div>
-          <h2 className="font-serif font-bold text-5xl md:text-7xl text-white leading-tight tracking-tight">
+          <h2 className="font-bold text-5xl md:text-7xl text-white leading-tight tracking-tight">
             Join the future of carbon.
             <br />
             <span className="text-brand italic font-light">

@@ -57,7 +57,7 @@ export function CrevyLoader({ onComplete }: { onComplete?: () => void }) {
                 ? { duration: 0.3 }
                 : { type: "spring", damping: 25, stiffness: 80 }
             }
-            className="font-serif text-5xl md:text-7xl text-white tracking-tight relative z-10"
+            className="text-5xl md:text-7xl text-white tracking-tight relative z-10"
           >
             Crevy
           </motion.h1>

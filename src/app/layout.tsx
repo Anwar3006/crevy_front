@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Syne } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
 // import OfflineBanner from "@/components/offline/OfflineBanner";
@@ -7,15 +7,8 @@ import { Toaster } from "sonner";
 import QueryProvider from "@/components/providers/query-provider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-const syne = Syne({
-  variable: "--font-syne",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+const montserratFont = localFont({
+  src: "../../public/fonts/Montserrat-VariableFont_wght.ttf",
 });
 
 export const viewport: Viewport = {
@@ -38,9 +31,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${syne.variable} antialiased`}
-      >
+      <body className={`${montserratFont.className} antialiased`}>
         <QueryProvider>
           <SmoothScroll>{children}</SmoothScroll>
         </QueryProvider>

@@ -108,7 +108,7 @@ export function ProjectTypesSection({
         {/* ── FIXED OVERLAY HEADER (Optimized for Mobile) ── */}
         <div className="absolute top-0 left-0 w-full px-6 lg:px-10 pt-20 lg:pt-32 pb-4 z-50 pointer-events-none flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="max-w-xl">
-            <h2 className="font-serif font-bold text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-none mb-1 lg:mb-2">
+            <h2 className="font-bold text-3xl md:text-4xl lg:text-5xl text-white tracking-tight leading-none mb-1 lg:mb-2">
               Eligible Asset{" "}
               <motion.span
                 style={{ color: accentColor }}
@@ -145,7 +145,7 @@ export function ProjectTypesSection({
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 w-full max-w-[1400px] mx-auto h-full lg:h-auto items-center">
                 {/* 1. Huge Watermark Number (Desktop Only - Excised from mobile for clarity) */}
                 <div className="hidden lg:flex lg:col-span-3 items-start justify-center h-full select-none">
-                  <span className="font-serif text-[14rem] leading-none text-white/5 font-bold tracking-tighter">
+                  <span className="text-[14rem] leading-none text-white/5 font-bold tracking-tighter">
                     0{idx + 1}
                   </span>
                 </div>
@@ -157,7 +157,7 @@ export function ProjectTypesSection({
                     strokeWidth={1}
                   />
 
-                  <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white tracking-tight leading-[1.05] mb-4 md:mb-6">
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white tracking-tight leading-[1.05] mb-4 md:mb-6">
                     {type.title}
                   </h3>
 

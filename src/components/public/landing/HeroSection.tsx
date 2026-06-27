@@ -128,7 +128,7 @@ export function HeroSection({
                 </span>
               </div>
 
-              <h1 className="font-serif font-extrabold text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tight mb-8">
+              <h1 className="font-extrabold text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tight mb-8">
                 {activeContent.headlinePrefix} <br />
                 <span className="text-brand">
                   {activeContent.headlineItalic}
@@ -275,7 +275,7 @@ export function TrustLayerSection({
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 shrink-0">
             Frameworks & Compliance:
           </p>
-          <div className="flex flex-wrap gap-6 md:gap-12 font-serif text-xs md:text-xl font-bold text-slate-400">
+          <div className="flex flex-wrap gap-6 md:gap-12 text-xs md:text-xl font-bold text-slate-400">
             <span className="hover:text-white transition-colors cursor-default">
               [ ICVCM Aligned ]
             </span>
