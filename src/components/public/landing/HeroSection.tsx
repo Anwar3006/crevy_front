@@ -93,7 +93,7 @@ export function HeroSection({
   }, [shouldReduceMotion, activeContent.src]);
 
   return (
-    <section className="relative min-h-[95vh] w-full flex flex-col justify-center overflow-hidden bg-slate-950 pt-24 border-b border-slate-900">
+    <section className="relative min-h-[95vh] w-full flex flex-col justify-center overflow-hidden bg-slate-950 pt-24 pb-16 border-b border-slate-900">
       {/* ── 1. Stabilized Cinematic Background ── */}
       {/* The container below forces a stable aspect ratio and blocks layout shifts */}
       <div className="absolute inset-0 z-0 bg-slate-950">
@@ -122,7 +122,7 @@ export function HeroSection({
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-slate-900/50 backdrop-blur-md mb-8">
-                <span className="w-2 h-2 bg-emerald-500 rounded-none animate-pulse" />
+                <span className="w-2 h-2 bg-brand rounded-none animate-pulse" />
                 <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase">
                   Live Asset Class: {activeContent.tag}
                 </span>
@@ -130,7 +130,7 @@ export function HeroSection({
 
               <h1 className="font-serif font-extrabold text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tight mb-8">
                 {activeContent.headlinePrefix} <br />
-                <span className="italic text-slate-400">
+                <span className="text-brand">
                   {activeContent.headlineItalic}
                 </span>
               </h1>
@@ -149,9 +149,15 @@ export function HeroSection({
           >
             <Link
               href="/register"
-              className="w-full sm:w-auto bg-white text-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-emerald-500 hover:text-white transition-colors text-center"
+              className="w-full sm:w-auto bg-brand text-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-white transition-colors text-center"
             >
               Enter the Marketplace
+            </Link>
+            <Link
+              href="/register"
+              className="w-full sm:w-auto border-white border text-white px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-brand hover:border-brand transition-colors text-center"
+            >
+              Join Us
             </Link>
             {/* <button
               type="button"
@@ -180,7 +186,7 @@ export function HeroSection({
                 {activeIndex === index && (
                   <motion.div
                     layoutId="activeProgress"
-                    className="absolute inset-y-0 left-0 bg-emerald-500 w-full origin-left"
+                    className="absolute inset-y-0 left-0 bg-brand w-full origin-left"
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 8, ease: "linear" }}
@@ -206,26 +212,26 @@ export function TrustLayerSection({
   shouldReduceMotion?: boolean;
 }) {
   return (
-    <section className="bg-slate-950 border-t border-slate-900 relative z-20 pb-16 pt-4">
+    <section className="relative z-20 pb-16 pt-4">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         {/* ── Live Counter & Ledger Truth ── */}
-        <div className="grid lg:grid-cols-12 gap-px bg-slate-800 border border-slate-800 -mt-12 relative z-30 shadow-2xl shadow-slate-950/50">
+        <div className="grid lg:grid-cols-12 gap-px border-brand border -mt-12 relative z-30 p-3 shadow-2xl shadow-slate-950/50">
           {/* Live Data Block */}
-          <div className="lg:col-span-4 bg-slate-900 p-8 md:p-10 flex flex-col justify-center">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-4">
+          <div className="lg:col-span-4 bg-brand p-8 md:p-10 flex flex-col justify-center">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-4">
               Live Ledger Telemetry
             </p>
             <div className="font-mono text-4xl md:text-6xl text-white font-bold tracking-tight mb-2">
               <Counter value={1204500} />
             </div>
-            <p className="text-slate-400 text-xs font-mono uppercase tracking-widest">
+            <p className="text-slate-900 text-xs font-mono uppercase tracking-widest">
               Tonnes of CO₂e Projected to be Retired by 2030
             </p>
           </div>
 
           {/* Infographic Process Block */}
-          <div className="lg:col-span-8 bg-slate-950 p-8 md:p-10">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-8">
+          <div className="lg:col-span-8 p-8 md:p-10">
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-8">
               The Serial Number Promise
             </p>
 
@@ -248,25 +254,16 @@ export function TrustLayerSection({
                 },
               ].map((step, idx, arr) => (
                 <div key={idx} className="flex-1 w-full relative">
-                  <div className="border border-slate-800 bg-slate-900 p-6 flex flex-col items-center text-center group hover:border-emerald-500 transition-colors">
+                  <div className="border border-brand/20 p-6 flex flex-col items-center text-center group hover:border-slate-900 transition-colors">
                     <step.icon
                       size={24}
-                      className="text-slate-400 mb-4 group-hover:text-emerald-500 transition-colors"
+                      className="text-brand mb-4 group-hover:text-slate-900 transition-colors"
                     />
-                    <h4 className="text-white font-bold text-sm mb-1">
-                      {step.label}
-                    </h4>
+                    <h4 className="font-bold text-sm mb-1">{step.label}</h4>
                     <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500">
                       {step.desc}
                     </span>
                   </div>
-                  {/* Arrow Indicator (Hidden on small screens) */}
-                  {idx !== arr.length - 1 && (
-                    <ArrowRight
-                      className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 text-slate-700 z-10 bg-slate-950 rounded-full"
-                      size={16}
-                    />
-                  )}
                 </div>
               ))}
             </div>

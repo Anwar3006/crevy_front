@@ -42,13 +42,13 @@ export function FinalCTASection({
           viewport={{ once: true }}
           className="space-y-12"
         >
-          <div className="inline-block border border-slate-700 px-4 py-2 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+          <div className="inline-block border border-brand px-4 py-2 text-brand text-[10px] font-bold uppercase tracking-widest">
             The Infrastructure of Tomorrow
           </div>
           <h2 className="font-serif font-bold text-5xl md:text-7xl text-white leading-tight tracking-tight">
             Join the future of carbon.
             <br />
-            <span className="text-slate-500 italic font-light">
+            <span className="text-brand italic font-light">
               Generate, buy, or verify.
             </span>
           </h2>
@@ -56,19 +56,19 @@ export function FinalCTASection({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-px bg-slate-700 border border-slate-700 p-px mx-auto w-fit">
             <Link
               href="/register"
-              className="w-full sm:w-auto bg-slate-900 text-white hover:bg-emerald-700 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-brand text-white hover:bg-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               Become a Project Owner
             </Link>
             <Link
               href="/marketplace"
-              className="w-full sm:w-auto bg-slate-900 text-white hover:bg-emerald-700 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-brand text-white hover:bg-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               Start Buying Credits
             </Link>
             <Link
               href="/contact"
-              className="w-full sm:w-auto bg-white text-slate-900 hover:bg-slate-200 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-white text-brand hover:bg-brand hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               Auditor Access Request
             </Link>

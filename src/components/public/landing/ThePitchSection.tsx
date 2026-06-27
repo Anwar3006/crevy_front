@@ -114,15 +114,15 @@ function PitchBlock({ tag, headline, painPoint, bullets, cta, align }: any) {
         <h2 className="font-serif text-4xl md:text-5xl text-slate-900 leading-tight tracking-tight mb-6">
           {headline}
         </h2>
-        <div className="bg-rose-100 border-4 border-rose-400 p-4 mb-8">
-          <p className="text-xs font-mono text-rose-800 uppercase tracking-widest mb-1">
+        <div className="bg-brand/20 border-2 border-brand p-4 mb-8">
+          <p className="text-xs font-mono uppercase tracking-widest mb-1">
             Industry Pain Point:
           </p>
-          <p className="text-sm text-rose-900">{painPoint}</p>
+          <p className="text-sm">{painPoint}</p>
         </div>
         <Link
           href={cta.href}
-          className="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-colors"
+          className="inline-flex items-center gap-3 bg-brand text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-900 transition-colors"
         >
           {cta.label} <ArrowUpRight size={14} />
         </Link>
@@ -132,7 +132,7 @@ function PitchBlock({ tag, headline, painPoint, bullets, cta, align }: any) {
         <div className="space-y-8">
           {bullets.map((b: any, i: number) => (
             <div key={i} className="flex items-start gap-4">
-              <div className="mt-1 p-1 bg-emerald-50 text-emerald-700 shrink-0">
+              <div className="mt-1 p-1 bg-brand/10 text-brand shrink-0 rounded-full">
                 <Check size={14} strokeWidth={3} />
               </div>
               <div>

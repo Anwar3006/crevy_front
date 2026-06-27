@@ -190,13 +190,13 @@ export function CinematicScrollPitch({
                 className="font-serif font-extrabold text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1] tracking-tight mb-6 pointer-events-auto opacity-0 will-change-transform"
               >
                 From Verification to{" "}
-                <span className="italic text-slate-400">Retirement.</span>
+                <span className="italic text-brand">Retirement.</span>
               </motion.h2>
 
               {/* Line 3 — Sub-headline */}
               <motion.h3
                 style={{ opacity: line3.opacity, y: line3.y }}
-                className="font-mono text-emerald-400 text-sm md:text-base uppercase tracking-widest mb-8 pointer-events-auto opacity-0 will-change-transform"
+                className="font-mono text-brand text-sm md:text-base uppercase tracking-widest mb-8 pointer-events-auto opacity-0 will-change-transform"
               >
                 Infrastructure Built for Market Integrity.
               </motion.h3>
@@ -227,13 +227,13 @@ export function CinematicScrollPitch({
               >
                 <Link
                   href="/marketplace"
-                  className="bg-white text-slate-900 hover:bg-emerald-500 hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
+                  className="bg-white text-slate-900 hover:bg-brand hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
                 >
                   Access the Marketplace <ArrowRight size={14} />
                 </Link>
                 <Link
                   href="/methodology"
-                  className="bg-slate-900 text-white hover:bg-slate-800 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center"
+                  className="bg-brand text-white hover:bg-slate-800 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center"
                 >
                   Review Methodology
                 </Link>
