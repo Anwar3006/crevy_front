@@ -1,6 +1,7 @@
 import { Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import BackButton from "../_components/BackButton";
 import LoginForm from "../_components/LoginForm";
 
 const STATS = [
@@ -32,6 +33,12 @@ const LoginPage = () => {
             </span>
           </Link>
         </div>
+
+        <BackButton
+          href="/register"
+          label="Back to Register"
+          className="mb-8 -mt-4"
+        />
 
         {/* Form Container */}
         <div className="flex flex-1 flex-col justify-center max-w-sm mx-auto w-full">

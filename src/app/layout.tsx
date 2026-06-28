@@ -2,10 +2,9 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
-// import OfflineBanner from "@/components/offline/OfflineBanner";
-// import SyncListener from "@/components/offline/SyncListener";
 import QueryProvider from "@/components/providers/query-provider";
 import SmoothScroll from "@/components/providers/SmoothScroll";
+import { TransitionProvider } from "@/context/TransitionContext";
 
 const montserratFont = localFont({
   src: "../../public/fonts/Montserrat-VariableFont_wght.ttf",
@@ -33,7 +32,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserratFont.className} antialiased`}>
         <QueryProvider>
-          <SmoothScroll>{children}</SmoothScroll>
+          <TransitionProvider>
+            <SmoothScroll>{children}</SmoothScroll>
+          </TransitionProvider>
         </QueryProvider>
         <Toaster position="top-right" richColors />
       </body>

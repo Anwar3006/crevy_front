@@ -14,6 +14,7 @@ import { useMemo } from "react";
 const DISABLED_PATHS = [
   "/login",
   "/register",
+  "/register-interest",
   "/auth",
   "/forgot-password",
   "/reset-password",

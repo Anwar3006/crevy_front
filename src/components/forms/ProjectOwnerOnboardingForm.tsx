@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Building2,
@@ -22,6 +21,8 @@ import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { authClient } from "@/lib/auth";
+import { axiosClient } from "@/lib/axiosClient";
+import { ProjectOwnerService } from "@/lib/services/project-owner-service";
 import { cn } from "@/lib/utils";
 import {
   projectOwnerOnboardingSchema,
@@ -49,8 +50,8 @@ export default function ProjectOwnerOnboardingForm() {
 
   useEffect(() => {
     if (isAdmin) {
-      axios
-        .get("/api/v2/users/role?role=admin")
+      axiosClient
+        .get("/users/role?role=admin")
         .then((res) => setAdmins(res.data.data))
         .catch((err) => console.error("Failed to fetch admins", err));
     }
@@ -78,7 +79,7 @@ export default function ProjectOwnerOnboardingForm() {
       latitude: "",
       longitude: "",
       areaHectares: "",
-      partnerId: 0,
+      partnerId: null as any,
     },
   });
 
@@ -171,7 +172,7 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      await axios.post("/api/v2/project-owners/onboard", payload);
+      await ProjectOwnerService.onboardProjectOwner(payload);
       toast.success("Project Owner registered successfully!");
       router.push("/projects/new");
     } catch (error: any) {
@@ -416,7 +417,7 @@ export default function ProjectOwnerOnboardingForm() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200">
                       <CustomInput
                         name="bankName"
-                        label="Institution Name"
+                        label="Bank Name"
                         placeholder="e.g. Ecobank"
                         control={form.control}
                         type="text"
@@ -424,7 +425,7 @@ export default function ProjectOwnerOnboardingForm() {
                       />
                       <CustomInput
                         name="accountNumber"
-                        label="Routing Number"
+                        label="Account Number"
                         placeholder="0000 0000 0000"
                         control={form.control}
                         type="text"

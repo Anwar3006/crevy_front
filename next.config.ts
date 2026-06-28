@@ -1,8 +1,11 @@
+import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export", // Enable static exports
-
+  //Add optimizePackageImports to your next.config to force Next.js to tree-shake specific heavy UI or utility libraries
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@hugeicons/react"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
@@ -12,6 +15,11 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
 
+  // Proxy /api/auth/* and /api/v*/* through Next.js so that:
+  //  1. Auth cookies are set same-origin (netlify.app → netlify.app), not
+  //     cross-origin to Render. httpOnly cookies cannot be set cross-origin.
+  //  2. CORS preflight is avoided for all API calls.
+  //  3. BETTER_AUTH_URL on the backend can stay as the frontend URL.
   async rewrites() {
     return [
       {
@@ -30,4 +38,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})(nextConfig);

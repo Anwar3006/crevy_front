@@ -2,26 +2,21 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  Building2,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   Filter,
   Globe,
   MoreHorizontal,
   Plus,
   Search,
-  Users,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -33,44 +28,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { OrganizationService } from "@/lib/services/organization-service";
 import { cn } from "@/lib/utils";
-
-// Simulated Service
-const OrgService = {
-  listOrganizations: async () => {
-    return {
-      data: [
-        {
-          id: "org_01",
-          name: "EcoLogic Systems",
-          residency: "Ghana",
-          status: "active",
-          memberCount: 12,
-          totalAcquired: "4,200",
-          createdAt: "2024-01-12",
-        },
-        {
-          id: "org_02",
-          name: "GreenGrowth SA",
-          residency: "South Africa",
-          status: "active",
-          memberCount: 8,
-          totalAcquired: "12,500",
-          createdAt: "2024-02-05",
-        },
-        {
-          id: "org_03",
-          name: "BlueHorizon ESG",
-          residency: "Kenya",
-          status: "pending",
-          memberCount: 3,
-          totalAcquired: "0",
-          createdAt: "2024-05-20",
-        },
-      ],
-    };
-  },
-};
 
 export default function OrganizationsListPage() {
   const router = useRouter();
@@ -78,7 +37,7 @@ export default function OrganizationsListPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["all-organizations"],
-    queryFn: OrgService.listOrganizations,
+    queryFn: OrganizationService.listOrganizations,
   });
 
   const organizations = data?.data || [];

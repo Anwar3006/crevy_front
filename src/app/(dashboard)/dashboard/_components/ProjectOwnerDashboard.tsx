@@ -3,7 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
+  Activity,
+  ArrowRight,
   Banknote,
+  Database,
   Leaf,
   Loader2,
   Plus,
@@ -15,25 +18,22 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth";
 import { ProjectService } from "@/lib/services/project-service";
 import type { TRole } from "@/types/user.types";
-import { AreaChart } from "./AreaChart";
-import { GroupedBarChart } from "./BarChart";
-import HeroSection from "./HeroSection";
-import { StatCard } from "./StatCard";
+import { SectionLabel, StatCard } from "./Shared";
 
-// ─── Status badge helper ──────────────────────────────────────────────────────
+// ─── Status & Stage Dictionaries ──────────────────────────────────────────────
 
 const statusStyle: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-500",
-  active: "bg-[#2cc295]/10 text-[#178a74]",
-  suspended: "bg-red-50 text-red-600",
-  closed: "bg-slate-100 text-slate-500",
+  draft: "border-slate-200 bg-slate-50 text-slate-500",
+  active: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  suspended: "border-rose-200 bg-rose-50 text-rose-700",
+  closed: "border-slate-300 bg-slate-100 text-slate-600",
 };
 
 const stageStyle: Record<string, string> = {
-  registration: "bg-amber-50 text-amber-700",
-  active: "bg-blue-50 text-blue-700",
-  verification: "bg-purple-50 text-purple-700",
-  completed: "bg-[#2cc295]/10 text-[#178a74]",
+  registration: "border-amber-200 bg-amber-50 text-amber-700",
+  active: "border-blue-200 bg-blue-50 text-blue-700",
+  verification: "border-purple-200 bg-purple-50 text-purple-700",
+  completed: "border-emerald-200 bg-emerald-50 text-emerald-700",
 };
 
 const stagePct: Record<string, number> = {
@@ -42,32 +42,6 @@ const stagePct: Record<string, number> = {
   verification: 80,
   completed: 100,
 };
-
-// ─── Chart mock data (stays mock for pilot — connected when MRV data flows) ──
-
-const revenueData = [
-  { label: "Jan", value: 0 },
-  { label: "Feb", value: 0 },
-  { label: "Mar", value: 0 },
-  { label: "Apr", value: 0 },
-  { label: "May", value: 0 },
-  { label: "Jun", value: 0 },
-  { label: "Jul", value: 0 },
-  { label: "Aug", value: 0 },
-  { label: "Sep", value: 0 },
-  { label: "Oct", value: 0 },
-  { label: "Nov", value: 0 },
-  { label: "Dec", value: 0 },
-];
-
-const seqData = [
-  { label: "Q1", a: 0, b: 0 },
-  { label: "Q2", a: 0, b: 0 },
-  { label: "Q3", a: 0, b: 0 },
-  { label: "Q4", a: 0, b: 0 },
-];
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ProjectOwnerDashboard({
   userName,
@@ -80,7 +54,7 @@ export default function ProjectOwnerDashboard({
   const userId = (session?.user as any)?.id;
   const router = useRouter();
 
-  // Fetch real projects for this user
+  // ─── Data Fetching ───
   const { data: projectsRes, isLoading: loadingProjects } = useQuery({
     queryKey: ["my-projects", userId],
     queryFn: () => ProjectService.getProjects({ createdBy: userId, limit: 10 }),
@@ -88,216 +62,237 @@ export default function ProjectOwnerDashboard({
   });
 
   const projects: any[] = projectsRes?.data ?? [];
-
   const activeProjects = projects.filter(
     (p) => p.projectStatus === "active",
   ).length;
-  const draftProjects = projects.filter(
-    (p) => p.projectStatus === "draft",
+  const verificationProjects = projects.filter(
+    (p) => p.projectStage === "verification",
   ).length;
+  const totalArea = projects
+    .reduce((acc: number, p: any) => acc + Number(p.totalAreaHectares ?? 0), 0)
+    .toFixed(1);
 
   return (
-    <div className="space-y-8">
-      <HeroSection role={role} userName={userName} />
+    <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10 font-sans selection:bg-slate-900 selection:text-white bg-slate-50 min-h-screen">
+      {/* ── 1. Originator Dossier (Hero) ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="grid md:grid-cols-12 gap-px bg-slate-200 border border-slate-200 mb-12"
+      >
+        <div className="md:col-span-8 bg-white p-10 md:p-14">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700 mb-4">
+            Originator Terminal · Asset Portfolio
+          </p>
+          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-6">
+            Environmental Asset{" "}
+            <span className="italic text-slate-500">Command.</span>
+          </h1>
+          <p className="text-slate-500 font-light leading-relaxed max-w-xl mb-10">
+            Register new environmental assets, monitor real-time dMRV telemetry,
+            and track your cryptographic yield generation.
+          </p>
+          <Link
+            href="/new-project"
+            className="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
+          >
+            <Plus size={14} /> Originate New Asset
+          </Link>
+        </div>
 
-      {/* KPI Stats */}
-      <section className="mx-auto max-w-5xl">
-        <SectionLabel label="Key Metrics" delay={0.05} />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="md:col-span-4 bg-slate-950 p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
+          <div className="relative z-10">
+            <p className="font-serif text-2xl mb-8">
+              Originator: {userName.split(" ")[0]}
+            </p>
+            <ul className="space-y-4 font-mono text-xs text-slate-400">
+              <li className="flex items-center gap-3">
+                <span className="text-emerald-500">→</span> {activeProjects}{" "}
+                Assets active on ledger
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-emerald-500">→</span>{" "}
+                {verificationProjects} Assets awaiting audit
+              </li>
+              <li className="flex items-center gap-3 mt-6 pt-6 border-t border-slate-800 text-slate-500">
+                <span className="w-2 h-2 bg-emerald-500 rounded-none shrink-0 animate-pulse" />{" "}
+                Originator ID:{" "}
+                {userId?.substring(0, 8).toUpperCase() || "PENDING"}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── 2. KPI Metrics ── */}
+      <div className="mb-16">
+        <SectionLabel label="Portfolio Telemetry" delay={0.1} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-slate-200">
           <StatCard
-            label="My Projects"
-            value={loadingProjects ? "—" : String(projects.length)}
-            sub={`${activeProjects} active · ${draftProjects} draft`}
-            icon={<Leaf />}
-            accent="green"
-            delay={0.1}
-          />
-          <StatCard
-            label="Verified Credits"
-            value="—"
-            sub="Awaiting first MRV cycle"
-            icon={<Banknote />}
-            accent="green"
+            label="Registered Assets"
+            value={loadingProjects ? "—" : projects.length.toString()}
+            unit="Nodes"
+            icon={Leaf}
+            trend={
+              activeProjects > 0
+                ? `${activeProjects} Active / Generating`
+                : "Awaiting activation"
+            }
             delay={0.15}
           />
           <StatCard
-            label="Total Land Area"
-            value={
-              loadingProjects
-                ? "—"
-                : projects.length
-                  ? `${projects.reduce((a: number, p: any) => a + Number(p.totalAreaHectares ?? 0), 0).toFixed(1)} ha`
-                  : "0 ha"
-            }
-            sub={`across ${projects.length} project${projects.length !== 1 ? "s" : ""}`}
-            icon={<TreePine />}
-            accent="blue"
+            label="Spatial Scale"
+            value={loadingProjects ? "—" : totalArea}
+            unit="Hectares"
+            icon={TreePine}
+            trend="Under management"
             delay={0.2}
           />
           <StatCard
-            label="Pending Verifications"
-            value={
-              loadingProjects
-                ? "—"
-                : String(
-                    projects.filter(
-                      (p: any) => p.projectStage === "verification",
-                    ).length,
-                  )
-            }
-            sub="awaiting MRV review"
-            icon={<ScanSearch />}
-            accent="amber"
+            label="Verified Yield"
+            value="—"
+            unit="tCO₂e"
+            icon={Database}
+            trend="Awaiting initial MRV cycle"
             delay={0.25}
           />
-        </div>
-      </section>
-
-      {/* Charts */}
-      <section className="mx-auto max-w-5xl">
-        <SectionLabel label="Analytics" delay={0.3} />
-        <div className="grid gap-4 md:grid-cols-2">
-          <AreaChart
-            data={revenueData}
-            title="Revenue Growth"
-            subtitle="Will populate after first credit sale"
-            color="#2cc295"
-            unit="$"
-            delay={0.35}
-          />
-          <GroupedBarChart
-            data={seqData}
-            title="Sequestration Efficiency"
-            subtitle="Will populate after first MRV verification"
-            labelA="Actual"
-            labelB="Estimated"
-            colorA="#2cc295"
-            colorB="#131927"
-            unit=""
-            delay={0.4}
+          <StatCard
+            label="Pending Audits"
+            value={loadingProjects ? "—" : verificationProjects.toString()}
+            unit="Items"
+            icon={ScanSearch}
+            trend="Requires verifier action"
+            delay={0.3}
           />
         </div>
-      </section>
+      </div>
 
-      {/* Projects table */}
-      <section className="mx-auto max-w-5xl">
-        <div className="flex items-center justify-between mb-3">
-          <SectionLabel label="My Projects" delay={0.45} inline />
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Link
-              href="/new-project"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#2cc295] px-4 py-2 text-xs font-semibold text-white hover:bg-[#178a74] transition-colors"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Register New Project
-            </Link>
-          </motion.div>
+      {/* ── 3. Asset Analytics ── */}
+      <div className="mb-16">
+        <SectionLabel label="Financial & Yield Trajectory" delay={0.35} />
+        <div className="grid lg:grid-cols-2 gap-8">
+          <div className="bg-white border border-slate-200 p-8 h-[350px] flex flex-col">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 border-b border-slate-100 pb-2">
+              Settlement Revenue
+            </h3>
+            <div className="flex-1 flex items-center justify-center bg-slate-50 text-slate-400 font-mono text-xs border border-dashed border-slate-200">
+              [AreaChart: Revenue projections pending issuance]
+            </div>
+          </div>
+          <div className="bg-white border border-slate-200 p-8 h-[350px] flex flex-col">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 border-b border-slate-100 pb-2">
+              Sequestration Efficiency
+            </h3>
+            <div className="flex-1 flex items-center justify-center bg-slate-50 text-slate-400 font-mono text-xs border border-dashed border-slate-200">
+              [GroupedBarChart: Awaiting MRV baseline]
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* ── 4. Asset Ledger (Table) ── */}
+      <div className="mb-16">
+        <SectionLabel
+          label="Asset Ledger"
+          delay={0.4}
+          action={{ label: "Originate Asset", href: "/new-project" }}
+        />
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.45 }}
+          className="bg-white border border-slate-200 overflow-x-auto"
         >
           {loadingProjects ? (
-            <div className="flex items-center justify-center gap-3 py-16 text-slate-400">
-              <Loader2 className="h-5 w-5 animate-spin" />
-              <span className="text-sm">Loading your projects…</span>
+            <div className="flex flex-col items-center justify-center py-24 text-slate-400 font-mono text-xs uppercase tracking-widest">
+              <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 animate-spin mb-4" />
+              Syncing Ledger...
             </div>
           ) : projects.length === 0 ? (
-            /* ── Empty state ── */
-            <div className="flex flex-col items-center justify-center gap-4 py-16 text-center px-6">
-              <div className="h-16 w-16 rounded-2xl bg-emerald-50 flex items-center justify-center">
-                <Leaf className="h-8 w-8 text-[#2cc295]" />
+            <div className="flex flex-col items-center justify-center py-24 px-6 text-center bg-slate-50">
+              <div className="p-4 bg-white border border-slate-200 text-slate-400 mb-4">
+                <Database size={24} />
               </div>
-              <div>
-                <p className="font-semibold text-slate-800 text-base">
-                  No projects yet
-                </p>
-                <p className="text-slate-400 text-sm mt-1">
-                  Register your first green project to get started on the Crevy
-                  marketplace.
-                </p>
-              </div>
+              <p className="font-serif font-bold text-slate-900 text-xl mb-2">
+                Ledger Empty
+              </p>
+              <p className="text-slate-500 font-light text-sm max-w-sm mb-6">
+                You have not originated any assets on the Crevy network.
+                Register your first asset to begin tracking yield.
+              </p>
               <Link
                 href="/new-project"
-                className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[#2cc295] px-6 py-3 text-sm font-bold text-white hover:bg-[#178a74] transition-colors"
+                className="bg-slate-900 text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-colors"
               >
-                <Plus className="h-4 w-4" />
-                Register Your First Project
+                Originate Protocol
               </Link>
             </div>
           ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-50 bg-gray-50/60">
-                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                    Project
+            <table className="w-full text-left min-w-[900px]">
+              <thead className="bg-slate-50 border-b-2 border-slate-900">
+                <tr>
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                    Asset Designation
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                    Type
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                    Methodology
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
                     Status
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                    Stage
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                    MRV Stage
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
-                    Progress
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                    Telemetry Progress
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {projects.map((p: any) => (
                   <tr
                     key={p.id}
-                    className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors cursor-pointer"
+                    className="hover:bg-slate-50 transition-colors cursor-pointer group"
                     onClick={() => router.push(`/projects/${p.id}`)}
                   >
-                    <td className="px-5 py-4">
-                      <span className="font-medium text-[#131927]">
+                    <td className="px-6 py-4">
+                      <span className="font-serif font-bold text-slate-900 group-hover:text-emerald-700 transition-colors block">
                         {p.name ?? p.code}
                       </span>
-                      <span className="block text-xs text-slate-400 mt-0.5">
+                      <span className="font-mono text-[10px] text-slate-400 uppercase tracking-widest mt-1 block">
                         {p.region}, {p.country}
                       </span>
                     </td>
-                    <td className="px-5 py-4 text-gray-500 text-xs">
-                      {(p.projectType as string)
-                        .replace(/_/g, " ")
-                        .replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                    <td className="px-6 py-4 font-mono text-[10px] text-slate-500 uppercase tracking-widest">
+                      {(p.projectType as string).replace(/_/g, " ")}
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
                       <span
-                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyle[p.projectStatus] ?? ""}`}
+                        className={`px-2 py-1 text-[9px] font-bold uppercase tracking-widest border ${statusStyle[p.projectStatus] || statusStyle.draft}`}
                       >
                         {p.projectStatus}
                       </span>
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
                       <span
-                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${stageStyle[p.projectStage] ?? ""}`}
+                        className={`px-2 py-1 text-[9px] font-bold uppercase tracking-widest border ${stageStyle[p.projectStage] || stageStyle.registration}`}
                       >
                         {p.projectStage}
                       </span>
                     </td>
-                    <td className="px-5 py-4 w-40">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1.5 rounded-full bg-gray-100">
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <div className="w-24 h-1 bg-slate-200">
                           <div
-                            className="h-1.5 rounded-full bg-[#2cc295] transition-all"
+                            className="h-full bg-slate-900 transition-all"
                             style={{
                               width: `${stagePct[p.projectStage] ?? 0}%`,
                             }}
                           />
                         </div>
-                        <span className="text-xs text-gray-400 w-8 text-right">
+                        <span className="font-mono text-[10px] text-slate-500">
                           {stagePct[p.projectStage] ?? 0}%
                         </span>
                       </div>
@@ -308,92 +303,34 @@ export default function ProjectOwnerDashboard({
             </table>
           )}
         </motion.div>
+      </div>
 
-        {projects.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="mt-3 text-center"
-          >
-            <Link
-              href="/projects"
-              className="text-xs font-semibold text-[#2cc295] hover:text-[#178a74] transition-colors"
-            >
-              View all projects →
-            </Link>
-          </motion.div>
-        )}
-      </section>
-
-      {/* Recent Activity */}
-      <section className="mx-auto max-w-5xl pb-4">
-        <SectionLabel label="Recent Activity" delay={0.65} />
-        <RecentActivity />
-      </section>
-    </div>
-  );
-}
-
-// ─── Shared sub-components ────────────────────────────────────────────────────
-
-export function SectionLabel({
-  label,
-  delay = 0,
-  inline = false,
-}: {
-  label: string;
-  delay?: number;
-  inline?: boolean;
-}) {
-  return (
-    <motion.h3
-      initial={{ opacity: 0, x: -8 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay, duration: 0.35 }}
-      className={`text-base font-semibold text-[#131927] ${inline ? "" : "mb-3"}`}
-      style={{ fontFamily: "var(--font-syne)" }}
-    >
-      {label}
-    </motion.h3>
-  );
-}
-
-const activityItems = [
-  {
-    icon: "🌱",
-    title: "Account created — welcome to Crevy!",
-    sub: "Get started by registering your first project.",
-    color: "bg-emerald-50",
-  },
-];
-
-export function RecentActivity() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.7 }}
-      className="space-y-2.5"
-    >
-      {activityItems.map((item, i) => (
-        <div
-          key={i}
-          className="flex items-center justify-between rounded-xl border border-gray-100 bg-white px-4 py-3.5 shadow-sm"
+      {/* ── 5. Activity Feed ── */}
+      <div className="pb-12">
+        <SectionLabel label="System Ledger Feed" delay={0.5} />
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="bg-white border border-slate-200 p-6"
         >
-          <div className="flex items-center gap-3">
-            <div
-              className={`flex h-9 w-9 items-center justify-center rounded-xl text-base ${item.color}`}
-            >
-              {item.icon}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-[#131927]">{item.title}</p>
-              <p className="text-xs text-gray-400">{item.sub}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </motion.div>
+          <ul className="space-y-4">
+            <li className="flex items-start gap-4 pb-4 border-b border-slate-100 last:border-0 last:pb-0">
+              <div className="p-2 bg-slate-100 text-slate-700 shrink-0">
+                <Activity size={16} />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-slate-900">
+                  Originator profile activated successfully.
+                </p>
+                <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1">
+                  System ✦ Awaiting first asset
+                </p>
+              </div>
+            </li>
+          </ul>
+        </motion.div>
+      </div>
+    </div>
   );
 }

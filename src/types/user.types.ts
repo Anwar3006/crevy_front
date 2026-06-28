@@ -93,9 +93,20 @@ export type TBetterAuthUser = {
   id: string;
   email: string;
   name: string;
-  role?: TRole;
+  // Injected by customSession plugin on the backend via a DB join on roleId.
+  // Will be null if the user has no role assigned yet.
+  role?: TRole | null;
+  // Injected by customSession — the org this user belongs to (if any).
+  activeOrganizationId?: string | null;
   image?: string | null;
   createdAt: Date;
   updatedAt: Date;
   emailVerified: boolean;
+  // additionalFields
+  firstName?: string;
+  lastName?: string;
+  contactNumber?: string | null;
+  countryOfOperation?: string | null;
+  roleId?: number | null;
+  profileCompleted?: boolean | null;
 };

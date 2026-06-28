@@ -1,10 +1,14 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { LayoutDashboard, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  AccessDashboardButton,
+  AccessDashboardMobileButton,
+} from "@/components/DashboardTransitionLink";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -158,20 +162,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 </span> */}
               </div>
 
-              <Button
-                asChild
-                className={cn(
-                  "rounded-none font-bold uppercase tracking-widest text-[10px] px-6 h-10 transition-colors",
-                  isNavSolid
-                    ? "bg-slate-900 hover:bg-emerald-900 text-white"
-                    : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
-                )}
-              >
-                <Link href="/dashboard">
-                  Access Dashboard{" "}
-                  <LayoutDashboard className="w-3.5 h-3.5 ml-2" />
-                </Link>
-              </Button>
+              <AccessDashboardButton isNavSolid={isNavSolid} />
             </div>
           ) : (
             <>
@@ -276,18 +267,9 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                       </p>
                     </div>
                   </div>
-                  <Button
-                    asChild
-                    className="w-full rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
-                  >
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Access Dashboard{" "}
-                      <LayoutDashboard className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
+                  <AccessDashboardMobileButton
+                    onMenuClose={() => setIsMobileMenuOpen(false)}
+                  />
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4">
@@ -300,7 +282,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                       href="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Authenticate
+                      Login
                     </Link>
                   </Button>
                   <Button
@@ -311,7 +293,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                       href="/register"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Initialize
+                      Sign Up
                     </Link>
                   </Button>
                 </div>
