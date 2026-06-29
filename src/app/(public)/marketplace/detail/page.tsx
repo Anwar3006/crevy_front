@@ -52,8 +52,6 @@ function MarketplaceProjectDetailContent() {
     enabled: !!projectId,
   });
 
-  // ... (rest of the component logic)
-  // ...
   const project = projectRes?.data;
   const visual = useMemo(() => {
     return PROJECT_VISUAL[project?.projectType] || PROJECT_VISUAL.default;
@@ -83,7 +81,7 @@ function MarketplaceProjectDetailContent() {
   if (isError || !project) return <ProjectNotFoundState />;
 
   return (
-    <div className="bg-white min-h-screen selection:bg-emerald-500 selection:text-white">
+    <div className="bg-white min-h-screen selection:bg-slate-900 selection:text-white">
       {/* ── SEO & Meta ── */}
       <MarketplaceSEO
         title={project.name}
@@ -96,9 +94,9 @@ function MarketplaceProjectDetailContent() {
       {/* ── Institutional Hero ── */}
       <ProjectHero project={project} visual={visual} />
 
-      <main className="relative z-20 -mt-10 bg-white rounded-t-[4rem]">
+      <main className="relative z-20 bg-white border-t border-slate-200">
         {/* ── Price Insight Section ── */}
-        <div className="max-w-7xl mx-auto px-8 lg:px-20 pt-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-20 pt-16">
           <ProjectPriceChart data={priceData} />
         </div>
 
@@ -109,9 +107,9 @@ function MarketplaceProjectDetailContent() {
           <Button
             onClick={() => router.push("/marketplace")}
             variant="ghost"
-            className="text-slate-400 font-black uppercase tracking-widest text-[10px] hover:text-slate-900"
+            className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] hover:text-slate-900 rounded-none"
           >
-            <ArrowLeft className="mr-2 w-4 h-4" /> Back to Project Discovery
+            <ArrowLeft className="mr-2 w-4 h-4" /> Back to Marketplace Discovery
           </Button>
         </div>
       </main>
@@ -123,8 +121,8 @@ export default function ProjectMarketplacePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-white">
-          <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+        <div className="min-h-screen flex items-center justify-center bg-slate-950">
+          <Loader2 className="w-10 h-10 text-brand animate-spin" />
         </div>
       }
     >
@@ -135,13 +133,13 @@ export default function ProjectMarketplacePage() {
 
 function ProjectLoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-950">
       <div className="h-[90vh] bg-slate-900 animate-pulse" />
       <div className="max-w-7xl mx-auto px-20 py-20 space-y-12">
-        <Skeleton className="h-[400px] rounded-[3rem]" />
+        <Skeleton className="h-[400px] rounded-none bg-slate-900" />
         <div className="grid grid-cols-3 gap-10">
-          <Skeleton className="h-64 col-span-2 rounded-[2rem]" />
-          <Skeleton className="h-64 rounded-[2rem]" />
+          <Skeleton className="h-64 col-span-2 rounded-none bg-slate-900" />
+          <Skeleton className="h-64 rounded-none bg-slate-900" />
         </div>
       </div>
     </div>
@@ -151,21 +149,20 @@ function ProjectLoadingSkeleton() {
 function ProjectNotFoundState() {
   const router = useRouter();
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-white">
-      <h1 className="text-4xl font-black text-slate-900 mb-4 uppercase italic">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-slate-950 text-white">
+      <h1 className="text-4xl font-extrabold text-white mb-4 uppercase tracking-tight">
         Project Not Found
       </h1>
-      <p className="text-slate-500 mb-8 max-w-md font-medium">
+      <p className="text-slate-400 mb-8 max-w-md font-light">
         The asset registry record could not be located. It may have been
         archived or is restricted.
       </p>
       <Button
         onClick={() => router.back()}
-        className="rounded-xl h-14 px-10 bg-slate-900 text-white font-black uppercase tracking-widest text-xs"
+        className="rounded-none h-14 px-10 bg-brand text-slate-900 hover:bg-white font-bold uppercase tracking-[0.2em] text-xs"
       >
         Return to Ledger
       </Button>
     </div>
   );
 }
-// ...

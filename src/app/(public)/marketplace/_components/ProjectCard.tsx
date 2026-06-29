@@ -40,23 +40,23 @@ const STATUS_CONFIG: Record<
 > = {
   approved: {
     label: "Verified",
-    style: "border-emerald-200 bg-emerald-50 text-emerald-800",
-    dot: "bg-emerald-500",
+    style: "border-brand bg-brand/10 text-slate-900 font-bold",
+    dot: "bg-brand animate-pulse",
   },
   submitted: {
-    label: "Pending",
-    style: "border-slate-200 bg-white text-slate-600",
+    label: "Pending Review",
+    style: "border-slate-300 bg-slate-100 text-slate-600",
     dot: "bg-slate-400",
   },
   active: {
-    label: "Observation",
-    style: "border-blue-200 bg-blue-50 text-blue-800",
-    dot: "bg-blue-500 animate-pulse",
+    label: "Pre-Verified",
+    style: "border-slate-800 bg-slate-900 text-white",
+    dot: "bg-brand animate-pulse",
   },
   verified: {
     label: "Verified",
-    style: "border-emerald-200 bg-emerald-50 text-emerald-800",
-    dot: "bg-emerald-500",
+    style: "border-brand bg-brand/10 text-slate-900 font-bold",
+    dot: "bg-brand animate-pulse",
   },
 };
 
@@ -98,32 +98,32 @@ export const ProjectCard = memo(function ProjectCard({
 
   return (
     <Link
-      href={`/marketplace/project/${project.slug}`}
+      href={`/marketplace/project/${project.slug || project.id}`}
       className="block group outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
     >
-      <article className="bg-white border border-slate-200 hover:border-slate-900 transition-colors duration-500 h-full flex flex-col relative">
+      <article className="bg-white border border-slate-200 hover:border-slate-900 transition-colors duration-300 h-full flex flex-col relative rounded-none shadow-sm hover:shadow-md">
         {/* ── Editorial Image Header ─────────────────────────────────────── */}
-        <div className="relative h-64 overflow-hidden bg-slate-100">
+        <div className="relative h-64 overflow-hidden bg-slate-950">
           <Image
             src={imageUrl}
             alt={project.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover transition-transform duration-[1.5s] group-hover:scale-105"
+            className="object-cover mix-blend-luminosity opacity-80 transition-transform duration-1000 group-hover:scale-105 group-hover:mix-blend-normal group-hover:opacity-100"
           />
 
           <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-            <span className="bg-slate-900/80 backdrop-blur-sm text-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest border border-slate-700">
+            <span className="bg-slate-950/90 text-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] border border-slate-800 rounded-none">
               {typeConfig.label}
             </span>
             <span
               className={cn(
-                "px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest border flex items-center gap-1.5 shadow-sm",
+                "px-2.5 py-1 text-[9px] uppercase tracking-[0.2em] border flex items-center gap-1.5 rounded-none font-mono",
                 statusConfig.style,
               )}
             >
               <span
-                className={cn("w-1.5 h-1.5 rounded-full", statusConfig.dot)}
+                className={cn("w-1.5 h-1.5 rounded-none", statusConfig.dot)}
               ></span>
               {statusConfig.label}
             </span>
@@ -133,14 +133,14 @@ export const ProjectCard = memo(function ProjectCard({
         {/* ── Data Dossier ──────────────────────────────────────────────── */}
         <div className="p-6 flex-1 flex flex-col">
           <div className="mb-6 flex-1">
-            <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-700 uppercase tracking-widest mb-3">
-              <MapPin className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-3">
+              <MapPin className="w-3.5 h-3.5 text-brand" />
               {project.region || project.location || "Africa Region"}
             </div>
-            <h3 className="font-serif text-2xl text-slate-900 leading-tight mb-3 line-clamp-2 group-hover:text-emerald-800 transition-colors">
+            <h3 className="font-extrabold text-2xl text-slate-900 leading-tight tracking-tight mb-3 line-clamp-2 group-hover:text-brand transition-colors">
               {project.name}
             </h3>
-            <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 font-sans">
+            <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 font-light">
               {project.description ||
                 "High-integrity carbon sequestration executing verified nature-based methodology."}
             </p>
@@ -148,24 +148,26 @@ export const ProjectCard = memo(function ProjectCard({
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 gap-px bg-slate-200 border border-slate-200 mb-6">
-            <div className="bg-white p-3">
-              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+            <div className="bg-slate-50 p-3">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">
                 Available Vol.
               </p>
-              <p className="font-mono text-slate-900 font-bold">
+              <p className="font-mono text-slate-900 font-bold tabular-nums">
                 {volume}{" "}
-                <span className="text-xs text-slate-500 font-normal">
+                <span className="text-[10px] text-slate-500 font-normal">
                   tCO₂e
                 </span>
               </p>
             </div>
-            <div className="bg-white p-3">
-              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
-                Hectares
+            <div className="bg-slate-50 p-3">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">
+                Area Coverage
               </p>
-              <p className="font-mono text-slate-900 font-bold">
+              <p className="font-mono text-slate-900 font-bold tabular-nums">
                 {Number(project.totalAreaHectares || 0).toLocaleString()}{" "}
-                <span className="text-xs text-slate-500 font-normal">ha</span>
+                <span className="text-[10px] text-slate-500 font-normal">
+                  ha
+                </span>
               </p>
             </div>
           </div>
@@ -173,14 +175,14 @@ export const ProjectCard = memo(function ProjectCard({
           {/* Acquisition Footer */}
           <div className="flex items-end justify-between pt-4 border-t border-slate-200 mt-auto">
             <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">
                 Asset Price
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-mono text-slate-900 font-bold">
+                <span className="text-2xl font-mono text-slate-900 font-bold tabular-nums">
                   ${price}
                 </span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   / Tonne
                 </span>
               </div>
@@ -190,10 +192,10 @@ export const ProjectCard = memo(function ProjectCard({
               type="button"
               tabIndex={-1}
               className={cn(
-                "px-5 py-3 text-[10px] font-bold uppercase tracking-widest transition-all",
+                "px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all rounded-none",
                 project.status === "approved" || project.status === "verified"
-                  ? "bg-slate-900 text-white hover:bg-emerald-900"
-                  : "bg-white border border-slate-200 text-slate-900 hover:border-slate-900",
+                  ? "bg-brand text-slate-900 hover:bg-slate-900 hover:text-white"
+                  : "bg-slate-900 text-white hover:bg-brand hover:text-slate-900",
               )}
             >
               {project.status === "approved" || project.status === "verified"
