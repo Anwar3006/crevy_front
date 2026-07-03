@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { BarChart2, DollarSign, Globe, Target } from "lucide-react";
 import Link from "next/link";
-import { SectionLabel, StatCard } from "./Shared";
+import { useOrganizationDashboard } from "@/hooks/use-dashboard";
+import { DashboardState, formatNumber, SectionLabel, StatCard } from "./Shared";
 
 // ─── REUSABLE GAUGE (Institutional) ───
 function NetZeroGauge({
@@ -52,7 +53,53 @@ export default function OrgAdminDashboard({
   userName: string;
   role: string;
 }) {
+  const { data, isLoading, isError, error, refetch } =
+    useOrganizationDashboard();
+
   const isAuditor = role === "org_auditor";
+
+  if (isLoading || isError) {
+    return (
+      <DashboardState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        onRetry={() => refetch()}
+      />
+    );
+  }
+  if (!data) return null;
+
+  // No organization membership yet — mid-onboarding shell
+  if (!data.organization) {
+    return (
+      <div className="max-w-[1400px] mx-auto py-24 px-6 flex flex-col items-center justify-center text-center min-h-screen bg-muted">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
+          No Organization Linked
+        </p>
+        <h1 className="text-3xl font-sans text-foreground mb-4">
+          Welcome, {userName}
+        </h1>
+        <p className="text-muted-foreground font-light max-w-md mb-8">
+          You aren't yet a member of an organization. Complete onboarding to
+          unlock your ESG portfolio.
+        </p>
+        <Link
+          href="/onboarding"
+          className="bg-secondary text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
+        >
+          Complete Onboarding
+        </Link>
+      </div>
+    );
+  }
+
+  const { organization, creditHoldings, netZero, scope3Liability, portfolio } =
+    data;
+  const holdings = creditHoldings?.[0] ?? {
+    totalPurchased: 0,
+    totalRetired: 0,
+  };
 
   return (
     <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10 font-sans selection:bg-secondary selection:text-white bg-muted min-h-screen">
@@ -67,7 +114,7 @@ export default function OrgAdminDashboard({
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
             {isAuditor
               ? "Compliance Auditor · Read Only"
-              : "Institutional ESG Centre"}
+              : `${organization.name ?? "Institutional"} · ESG Centre`}
           </p>
           <h1 className="text-4xl md:text-5xl font-sans text-foreground tracking-tight leading-none mb-4">
             Corporate Carbon{" "}
@@ -94,35 +141,35 @@ export default function OrgAdminDashboard({
         <SectionLabel label="Exposure & Compliance Metrics" delay={0.1} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-border">
           <StatCard
-            label="Total CO₂e Offset"
-            value="12,450"
+            label="Total CO₂e Retired"
+            value={formatNumber(holdings.totalRetired)}
             unit="t"
             icon={Globe}
-            trend="+18% vs Q1"
+            trend={`${organization.memberCount} team members`}
             delay={0.15}
           />
           <StatCard
-            label="Portfolio Value"
-            value="$84,000"
-            unit="USD"
+            label="Total CO₂e Purchased"
+            value={formatNumber(holdings.totalPurchased)}
+            unit="t"
             icon={DollarSign}
-            trend="+11% vs Q1"
+            trend="Lifetime acquisitions"
             delay={0.2}
           />
           <StatCard
-            label="ESG Trust Score"
-            value="9.1"
-            unit="/ 10"
+            label="Portfolio Projects"
+            value={formatNumber(portfolio?.length ?? 0)}
+            unit="Projects"
             icon={BarChart2}
-            trend="+0.4 pts"
+            trend="Active in portfolio"
             delay={0.25}
           />
           <StatCard
             label="Net-Zero Trajectory"
-            value="80"
+            value={netZero.percentage}
             unit="%"
             icon={Target}
-            trend="+12% YTD"
+            trend={`Goal: ${formatNumber(netZero.goal)} ${netZero.unit}`}
             delay={0.3}
           />
         </div>
@@ -137,8 +184,27 @@ export default function OrgAdminDashboard({
             <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-6 border-b border-border pb-2">
               Asset Distribution
             </h3>
-            <div className="h-full flex items-center justify-center font-mono text-xs text-muted-foreground border border-dashed border-border bg-muted">
-              [DonutChart Component]
+            <div className="h-full overflow-y-auto">
+              {(!portfolio || portfolio.length === 0) && (
+                <div className="h-full flex items-center justify-center font-mono text-xs text-muted-foreground border border-dashed border-border bg-muted">
+                  No portfolio assets yet
+                </div>
+              )}
+              <ul className="space-y-3">
+                {portfolio?.slice(0, 6).map((p: any) => (
+                  <li
+                    key={p.id}
+                    className="flex justify-between items-center text-xs font-mono border-b border-border pb-2"
+                  >
+                    <span className="text-foreground font-bold truncate max-w-[140px]">
+                      {p.name}
+                    </span>
+                    <span className="text-muted-foreground uppercase">
+                      {p.sector}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="lg:col-span-2 bg-white border border-border p-8 h-[300px]">
@@ -153,14 +219,22 @@ export default function OrgAdminDashboard({
 
         {/* Gauge & Actions Row */}
         <div className="grid md:grid-cols-3 gap-8">
-          <NetZeroGauge pct={80} current={12450} goal={15500} unit="tCO₂e" />
+          <NetZeroGauge
+            pct={netZero.percentage}
+            current={netZero.current}
+            goal={netZero.goal}
+            unit={netZero.unit}
+          />
 
           <div className="bg-white border border-border p-8 flex flex-col justify-center text-center">
             <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Scope 3 Liability
             </h3>
             <p className="font-sans text-4xl text-foreground mb-2">
-              1,200 <span className="text-xl text-muted-foreground">tCO₂e</span>
+              {formatNumber(scope3Liability.remaining)}{" "}
+              <span className="text-xl text-muted-foreground">
+                {scope3Liability.unit}
+              </span>
             </p>
             <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
               Remaining gap to target

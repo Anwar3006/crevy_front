@@ -1,17 +1,12 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import {
-  Activity,
-  ArrowRight,
-  ArrowUpRight,
-  Globe2,
-  History,
-  LucideLayoutDashboard,
-} from "lucide-react";
+import { Activity, Globe2, History, LucideLayoutDashboard } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import LiquidEther from "@/components/LiquidEther";
+import { getOptimizedVideoUrl } from "@/lib/utils/cloudinary";
 
 const HERO_STATS = [
   {
@@ -28,6 +23,21 @@ const HERO_STATS = [
     value: "100Y",
     label: "Target Durability Epoch",
     icon: <History size={16} />,
+  },
+];
+
+const HERO_MEDIA = [
+  {
+    id: "v1",
+    src: getOptimizedVideoUrl("marketHero_vid_hdmjur.mp4"),
+  },
+  {
+    id: "p1",
+    src: "https://res.cloudinary.com/daffqurhi/image/upload/e_improve,w_300,h_600,c_thumb,g_auto/v1783121422/crevy_frontend/marketHero_1_hfblsb.jpg",
+  },
+  {
+    id: "p2",
+    src: "https://res.cloudinary.com/daffqurhi/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1783121424/crevy_frontend/marketHero_2_uqlrsf.jpg",
   },
 ];
 
@@ -50,13 +60,25 @@ export default function PrimaryMarketplaceHero() {
       ref={containerRef}
       className="bg-foreground min-h-[90vh] border-b border-slate-900 relative overflow-hidden flex items-center"
     >
-      {/* Background Ambient Glow */}
-      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-brand/5 blur-[120px] pointer-events-none rounded-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/40 blur-[100px] pointer-events-none rounded-none" />
+      {/* Liquid Ether Background */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden opacity-80">
+        <LiquidEther
+          mouseForce={20}
+          cursorSize={100}
+          isViscous={false}
+          viscous={30}
+          colors={["#10B981", "#ffffff", "#e69e6e"]}
+          autoDemo
+          autoSpeed={0.5}
+          autoIntensity={2.2}
+          isBounce={false}
+          resolution={0.5}
+        />
+      </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10 w-full pt-32 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 relative">
-          {/* Left Column: Typography, CTAs, and Stats (Matches reference layout structure) */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10 w-full pt-32 pb-24 pointer-events-none">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 relative pointer-events-auto">
+          {/* Left Column: Typography, CTAs, and Stats */}
           <div className="lg:col-span-6 flex flex-col justify-center relative z-20">
             <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-foreground/80 mb-8 max-w-max rounded-none backdrop-blur-md">
               <span className="w-2 h-2 bg-brand animate-pulse rounded-none" />
@@ -65,12 +87,12 @@ export default function PrimaryMarketplaceHero() {
               </span>
             </div>
 
-            <h1 className="font-extrabold text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6">
+            <h1 className="font-extrabold text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6 drop-shadow-lg">
               Curated Environmental <br />
               <span className="text-brand italic font-light pr-4">Assets.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-300 font-light leading-relaxed max-w-xl mb-10">
+            <p className="text-lg md:text-xl text-slate-300 font-light leading-relaxed max-w-xl mb-10 drop-shadow-md">
               Acquire verified carbon credits directly from high-integrity
               projects. Every asset is planned to be strictly audited,
               satellite-verified, and structured for immutable retirement.
@@ -79,14 +101,14 @@ export default function PrimaryMarketplaceHero() {
             <div className="flex flex-wrap items-center gap-4 mb-16">
               <Link
                 href="/dashboard"
-                className="border border-slate-700 bg-background/50 text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] hover:border-slate-500 transition-colors rounded-none flex items-center gap-2 group"
+                className="border border-slate-700 bg-background/80 backdrop-blur-sm text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] hover:bg-brand transition-colors rounded-none flex items-center gap-2 group"
               >
                 <LucideLayoutDashboard className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
                 Dashboard
               </Link>
             </div>
 
-            {/* Stats Block - Shifted to left column to emulate reference image structure */}
+            {/* Stats Block */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-slate-800/80">
               {HERO_STATS.map((s, idx) => (
                 <div key={idx} className="flex flex-col gap-2">
@@ -106,7 +128,7 @@ export default function PrimaryMarketplaceHero() {
 
           {/* Right Column: Parallax Floating Bento Media */}
           <div className="lg:col-span-6 relative h-[600px] hidden lg:block">
-            {/* Angular Telemetry Path (Replaces the curved line from the reference) */}
+            {/* Angular Telemetry Path */}
             <svg
               className="absolute inset-0 w-full h-full z-0 opacity-30"
               viewBox="0 0 600 600"
@@ -134,12 +156,12 @@ export default function PrimaryMarketplaceHero() {
               style={{ y: y1 }}
               className="absolute top-[5%] right-[5%] w-[280px] h-[340px] border border-slate-800 bg-foreground p-2 z-10 group rounded-none"
             >
-              <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none">
+              <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none bg-black">
                 <Image
-                  src="https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  src={HERO_MEDIA[1].src}
                   alt="Canopy"
                   fill
-                  className="object-cover mix-blend-luminosity opacity-50 group-hover:mix-blend-normal group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                  className="object-cover opacity-50 group-hover:mix-blend-normal group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 <div className="absolute top-3 left-3 bg-background/90 border border-slate-800 px-2 py-1 z-10">
                   <span className="text-[9px] font-mono uppercase tracking-widest text-foreground font-bold">
@@ -152,16 +174,16 @@ export default function PrimaryMarketplaceHero() {
             {/* Visual 2: Parallax Video (Center Left) */}
             <motion.div
               style={{ y: y2 }}
-              className="absolute top-[35%] left-[5%] w-[260px] h-[220px] border border-brand bg-foreground/80 p-2 z-20 group shadow-2xl shadow-brand/10 rounded-none"
+              className="absolute top-[35%] left-[5%] w-[260px] h-[220px] border border-brand bg-foreground/80 p-2 z-20 group shadow-2xl shadow-brand/10 rounded-none backdrop-blur-sm"
             >
-              <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none">
+              <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none bg-black">
                 <video
-                  src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4"
+                  src={HERO_MEDIA[0].src}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="w-full h-full object-cover mix-blend-luminosity opacity-60 group-hover:mix-blend-normal group-hover:opacity-90 transition-all duration-700"
+                  className="w-full h-full object-cover opacity-60 group-hover:mix-blend-normal group-hover:opacity-90 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent pointer-events-none" />
                 <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center z-10">
@@ -178,14 +200,14 @@ export default function PrimaryMarketplaceHero() {
               style={{ y: y3 }}
               className="absolute top-[65%] right-[15%] w-[220px] h-[220px] border border-slate-800 bg-foreground p-2 z-10 group rounded-none"
             >
-              <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none">
+              <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none bg-black">
                 <Image
-                  src="https://images.pexels.com/photos/259280/pexels-photo-259280.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  src={HERO_MEDIA[2].src}
                   alt="Soil"
                   fill
-                  className="object-cover mix-blend-luminosity opacity-60 group-hover:mix-blend-normal group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
+                  className="object-cover opacity-60 group-hover:mix-blend-normal group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
                 />
-                <div className="absolute bottom-3 right-3 bg-brand/50 border border-slate-800 px-2 py-1 z-10">
+                <div className="absolute bottom-3 right-3 bg-brand/50 backdrop-blur-sm border border-slate-800 px-2 py-1 z-10">
                   <span className="text-[9px] font-mono uppercase tracking-widest text-foreground font-bold">
                     SOIL DATA
                   </span>

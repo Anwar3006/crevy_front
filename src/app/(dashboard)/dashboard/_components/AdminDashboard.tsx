@@ -10,10 +10,16 @@ import {
   ShieldCheck,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+import { useAdminDashboard } from "@/hooks/use-dashboard";
 import { cn } from "@/lib/utils";
-import { SectionLabel, StatCard } from "./Shared";
+import {
+  DashboardState,
+  formatCurrency,
+  formatNumber,
+  SectionLabel,
+  StatCard,
+} from "./Shared";
 
 export default function AdminDashboard({
   userName,
@@ -22,9 +28,14 @@ export default function AdminDashboard({
   userName: string;
   role: string;
 }) {
-  const isProjectManager = role === "project_manager" || role === "super_admin";
-  const isMrvAdmin = role === "mrv_admin" || role === "super_admin";
-  const isFinancialAdmin = role === "financial_admin" || role === "super_admin";
+  const { data, isLoading, isError, error, refetch } = useAdminDashboard();
+
+  const isProjectManager =
+    role === "project_manager" || role === "super_admin" || role === "admin";
+  const isMrvAdmin =
+    role === "mrv_admin" || role === "super_admin" || role === "admin";
+  const isFinancialAdmin =
+    role === "financial_admin" || role === "super_admin" || role === "admin";
 
   const tabs = [
     isProjectManager && {
@@ -41,6 +52,20 @@ export default function AdminDashboard({
   ].filter(Boolean) as { key: string; label: string; icon: any }[];
 
   const [activeTab, setActiveTab] = useState(tabs[0]?.key ?? "projects");
+
+  if (isLoading || isError) {
+    return (
+      <DashboardState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        onRetry={() => refetch()}
+      />
+    );
+  }
+  if (!data) return null;
+
+  const { projectOperations, mrv, financials } = data;
 
   return (
     <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10 font-sans selection:bg-secondary selection:text-white bg-muted min-h-screen">
@@ -106,32 +131,34 @@ export default function AdminDashboard({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-border">
                 <StatCard
                   label="Assigned Originators"
-                  value="14"
+                  value={formatNumber(
+                    projectOperations.kpi.assignedOriginators,
+                  )}
                   icon={Users}
                   trend="Active Entities"
                 />
                 <StatCard
                   label="Under Review"
-                  value="8"
+                  value={formatNumber(projectOperations.kpi.underReview)}
                   icon={Layers}
                   trend="Requires Action"
                 />
                 <StatCard
                   label="Site Visits"
-                  value="3"
+                  value={formatNumber(projectOperations.kpi.siteVisits)}
                   icon={ShieldCheck}
                   trend="Scheduled this week"
                 />
                 <StatCard
                   label="Pending KYC"
-                  value="5"
+                  value={formatNumber(projectOperations.kpi.pendingKyc)}
                   icon={AlertTriangle}
                   trend="Identities unchecked"
                 />
               </div>
             </div>
 
-            {/* Table Mockup */}
+            {/* Originators Table */}
             <div className="bg-white border border-border overflow-x-auto">
               <div className="p-6 border-b border-border bg-muted flex justify-between items-center">
                 <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
@@ -156,27 +183,39 @@ export default function AdminDashboard({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  <tr className="hover:bg-muted">
-                    <td className="px-6 py-4 font-sans text-sm font-bold text-foreground">
-                      Kwame Mensah
-                    </td>
-                    <td className="px-6 py-4 font-mono text-[10px] text-muted-foreground uppercase">
-                      GHANA
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="px-2 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-[9px] font-bold uppercase tracking-widest">
-                        Pending
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        type="button"
-                        className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-foreground border-b border-transparent hover:border-slate-900 transition-all"
+                  {projectOperations.originators.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className="px-6 py-8 text-center text-[10px] font-mono uppercase tracking-widest text-muted-foreground"
                       >
-                        Audit Details
-                      </button>
-                    </td>
-                  </tr>
+                        No originators assigned
+                      </td>
+                    </tr>
+                  )}
+                  {projectOperations.originators.map((o: any) => (
+                    <tr key={o.id} className="hover:bg-muted">
+                      <td className="px-6 py-4 font-sans text-sm font-bold text-foreground">
+                        {o.entityName}
+                      </td>
+                      <td className="px-6 py-4 font-mono text-[10px] text-muted-foreground uppercase">
+                        {o.jurisdiction}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-2 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-[9px] font-bold uppercase tracking-widest">
+                          {o.kycStatus}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          type="button"
+                          className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-foreground border-b border-transparent hover:border-slate-900 transition-all"
+                        >
+                          Audit Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -194,27 +233,27 @@ export default function AdminDashboard({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-border">
                 <StatCard
                   label="Pending Audits"
-                  value="12"
+                  value={formatNumber(mrv.kpi.pendingAudits)}
                   icon={Radio}
                   trend="Requires validation"
                 />
                 <StatCard
                   label="Yield to Issue"
-                  value="14"
+                  value={formatNumber(mrv.kpi.yieldToIssue)}
                   unit="Batches"
                   icon={Leaf}
                   trend="Awaiting anchor"
                 />
                 <StatCard
                   label="AI Confidence (Avg)"
-                  value="98.2"
+                  value={mrv.kpi.aiConfidenceAvg}
                   unit="%"
                   icon={ShieldCheck}
-                  trend="Highly secure"
+                  trend="Model reliability"
                 />
                 <StatCard
                   label="Anomalous Flags"
-                  value="2"
+                  value={formatNumber(mrv.kpi.anomalousFlags)}
                   icon={AlertTriangle}
                   trend="Hardware alerts"
                 />
@@ -233,25 +272,25 @@ export default function AdminDashboard({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-border">
               <StatCard
                 label="Pending Payouts"
-                value="8"
+                value={formatNumber(financials.kpi.pendingPayouts)}
                 icon={Banknote}
                 trend="Awaiting release"
               />
               <StatCard
                 label="Total Outstanding"
-                value="$42,800"
+                value={formatCurrency(financials.kpi.totalOutstanding)}
                 icon={Banknote}
                 trend="USD Equivalent"
               />
               <StatCard
                 label="Platform Revenue"
-                value="$18,400"
+                value={formatCurrency(financials.kpi.platformRevenue)}
                 icon={Banknote}
                 trend="Month-to-date"
               />
               <StatCard
                 label="Active Frameworks"
-                value="14"
+                value={formatNumber(financials.kpi.activeFrameworks)}
                 icon={Layers}
                 trend="Contracts"
               />

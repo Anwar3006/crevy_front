@@ -10,31 +10,44 @@ import { cn } from "@/lib/utils";
 /**
  * FastTransitionLoader
  * Speed-optimized fullscreen overlay for route transitions.
- * Completes in ~350ms instead of 1.1s for snappier navigation.
+ * Completes in ~250ms instead of 1.1s for snappier navigation.
  */
 function FastTransitionLoader() {
   const [progress, setProgress] = useState(0);
   const shouldReduceMotion = useReducedMotion();
-  const { isTransitioning } = useTransition();
+  const { isTransitioning, finishTransition } = useTransition();
 
   useEffect(() => {
     if (!isTransitioning) return;
 
     const timer = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) return 100;
-        // Faster increment: 8% per tick at 16ms → ~200ms to 100%
-        return prev + 8;
+        if (prev >= 100) {
+          clearInterval(timer);
+          return 100;
+        }
+        return prev + 12;
       });
     }, 16);
+
     return () => clearInterval(timer);
   }, [isTransitioning]);
+
+  // Auto-finish transition once progress is complete
+  useEffect(() => {
+    if (progress >= 100 && isTransitioning) {
+      const timeout = setTimeout(() => {
+        finishTransition();
+      }, 150); // Brief hold at 100% before exit
+      return () => clearTimeout(timeout);
+    }
+  }, [progress, isTransitioning, finishTransition]);
 
   return (
     <motion.div
       className="fixed inset-0 z-[9999] bg-foreground flex flex-col items-center justify-center overflow-hidden"
       exit={shouldReduceMotion ? { opacity: 0 } : { y: "-100%" }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
     >
       {/* Architectural guide lines */}
       <div className="absolute inset-0 flex justify-center pointer-events-none">
@@ -45,12 +58,12 @@ function FastTransitionLoader() {
 
       {/* Wordmark */}
       <motion.h1
-        initial={shouldReduceMotion ? { opacity: 0 } : { y: -40, opacity: 0 }}
+        initial={shouldReduceMotion ? { opacity: 0 } : { y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={
           shouldReduceMotion
-            ? { duration: 0.15 }
-            : { type: "spring", damping: 28, stiffness: 120 }
+            ? { duration: 0.1 }
+            : { type: "spring", damping: 28, stiffness: 150 }
         }
         className="font-sans text-5xl md:text-7xl text-white tracking-tight relative z-10"
       >
@@ -61,7 +74,7 @@ function FastTransitionLoader() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.05 }}
+        transition={{ delay: 0.03 }}
         className="absolute bottom-16 w-48 flex flex-col items-center gap-3"
       >
         <div className="w-full h-px bg-white/20 relative overflow-hidden">
@@ -125,7 +138,7 @@ export function NavLink({
 /**
  * DashboardTransitionLink
  * Speed-optimized "Access Dashboard" button.
- * Preloads /dashboard on mount and uses a faster transition animation.
+ * Preloads /dashboard on mount for instant navigation.
  */
 export function DashboardTransitionLink({
   className,
@@ -139,7 +152,6 @@ export function DashboardTransitionLink({
   const router = useRouter();
   const { isTransitioning, startTransition } = useTransition();
 
-  // Preload the dashboard route on mount for instant navigation
   useEffect(() => {
     router.prefetch("/dashboard");
   }, [router]);

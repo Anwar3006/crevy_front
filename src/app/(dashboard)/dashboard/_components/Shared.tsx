@@ -5,6 +5,86 @@ import { AlertCircle, ArrowRight, CheckCircle2, Info } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+// ─── FORMAT HELPERS ───
+export function formatNumber(value: number | string | null | undefined) {
+  const n = Number(value ?? 0);
+  if (Number.isNaN(n)) return "0";
+  return new Intl.NumberFormat("en-US").format(n);
+}
+
+export function formatCurrency(value: number | string | null | undefined) {
+  const n = Number(value ?? 0);
+  if (Number.isNaN(n)) return "$0";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(n);
+}
+
+export function timeAgo(date: string | Date | null | undefined) {
+  if (!date) return "—";
+  const d = new Date(date);
+  const diffMs = Date.now() - d.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+// ─── DASHBOARD STATE (loading / error) ───
+export function DashboardState({
+  isLoading,
+  isError,
+  error,
+  onRetry,
+}: {
+  isLoading: boolean;
+  isError: boolean;
+  error?: unknown;
+  onRetry?: () => void;
+}) {
+  if (isLoading) {
+    return (
+      <div className="max-w-[1400px] mx-auto py-24 px-6 flex flex-col items-center justify-center text-center">
+        <div className="w-8 h-8 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin mb-6" />
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+          Loading dashboard data…
+        </p>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="max-w-[1400px] mx-auto py-24 px-6 flex flex-col items-center justify-center text-center">
+        <AlertCircle className="w-8 h-8 text-rose-600 mb-6" />
+        <p className="text-sm font-bold text-foreground mb-2">
+          Couldn't load dashboard data
+        </p>
+        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-6 max-w-md">
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."}
+        </p>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="text-[10px] font-bold uppercase tracking-widest px-6 py-3 bg-foreground text-white hover:bg-brand transition-colors"
+          >
+            Retry
+          </button>
+        )}
+      </div>
+    );
+  }
+  return null;
+}
+
 // ─── SECTION LABEL ───
 export function SectionLabel({
   label,

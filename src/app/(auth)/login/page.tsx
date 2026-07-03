@@ -93,7 +93,7 @@ const LoginPage = () => {
       </div>
 
       {/* ── Right: Institutional Imagery ─────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[55%] xl:w-[60%] relative bg-foreground p-6 lg:p-10">
+      <div className="hidden lg:flex lg:w-[55%] xl:w-[60%] relative bg-foreground">
         {/* Strict Image Frame */}
         <div className="relative w-full h-full border border-slate-800 overflow-hidden group">
           <Image

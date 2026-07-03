@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-// import GalleryBackground from "@/components/GalleryBackground";
+import GalleryBackground from "@/components/GalleryBackground";
 import RegisterInterestForm from "../_components/RegisterInterestForm";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export default function RegisterInterestPage() {
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       {/* Fixed masonry background */}
-      {/* <GalleryBackground parallax={false} dim={true} /> */}
+      <GalleryBackground parallax={false} dim={true} />
 
       {/* Cinematic dark overlay to elevate content isolation */}
       <div className="fixed inset-0 bg-foreground/40 backdrop-blur-xs pointer-events-none z-0" />

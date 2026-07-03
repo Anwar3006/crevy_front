@@ -62,7 +62,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
         <div className="flex items-center gap-2 border-l border-border pl-4">
           <Link
-            href="/dashboard/notifications"
+            href="/notifications"
             className="relative rounded-none text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             <Bell className="h-4 w-4" />

@@ -8,9 +8,9 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
-
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -88,9 +88,21 @@ const STATUSES = [
   { value: "active", label: "Pre-Verified" },
 ];
 
-// ─── Page Component ───────────────────────────────────────────────────────────
+// ─── Page Export ──────────────────────────────────────────────────────────────
+// Next.js 15+ requires useSearchParams() to be inside a Suspense boundary.
+// This outer component is prerendered; the inner component is client-only.
 
 export default function MarketplacePage() {
+  return (
+    <Suspense fallback={<SkeletonGrid />}>
+      <MarketplacePageInner />
+    </Suspense>
+  );
+}
+
+// ─── Page Component ───────────────────────────────────────────────────────────
+
+function MarketplacePageInner() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -269,7 +281,6 @@ export default function MarketplacePage() {
 
         <div className="flex gap-12 items-start">
           {/* ── Institutional Sidebar ───────────────────────────────────── */}
-          {/* Note: Added h-fit to prevent layout box structural collapses or height stretches from content skeleton mutations */}
           <aside className="hidden xl:block w-[290px] shrink-0 sticky top-8 h-fit bg-foreground border border-slate-800 p-6">
             <FilterPanel
               filters={filters}
@@ -481,7 +492,7 @@ function FilterPanel({
                   : "text-white hover:bg-slate-800 hover:text-white",
               )}
             >
-              {t.title}[cite: 26]
+              {t.title}
             </button>
           ))}
         </div>
