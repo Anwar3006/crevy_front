@@ -1,6 +1,7 @@
 "use client";
 
 import { Bell, Command, Search, Settings } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -60,14 +61,13 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
         </button>
 
         <div className="flex items-center gap-2 border-l border-border pl-4">
-          <Button
-            variant="ghost"
-            size="icon"
+          <Link
+            href="/dashboard/notifications"
             className="relative rounded-none text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             <Bell className="h-4 w-4" />
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          </Button>
+          </Link>
 
           <Button
             variant="ghost"
@@ -83,7 +83,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
               alt={user?.name}
               className="object-cover"
             />
-            <AvatarFallback className="rounded-none bg-secondary text-white font-mono text-[10px]">
+            <AvatarFallback className="rounded-none bg-foreground text-white font-mono text-[10px]">
               {getInitials(user?.name)}
             </AvatarFallback>
           </Avatar>
