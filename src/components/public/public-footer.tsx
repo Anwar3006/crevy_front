@@ -73,7 +73,7 @@ export function PublicFooter() {
           </div>
           <Link
             href="/support"
-            className="group flex items-center gap-4 bg-[#F38221] hover:bg-[#FF751F] text-[#F8F8F9] px-8 py-4 font-semibold text-[11px] uppercase tracking-[0.25em] transition-all shrink-0 rounded-sm shadow-lg shadow-[#F38221]/20"
+            className="group flex items-center gap-4 bg-[#F38221] hover:bg-[#FF751F] text-[#F8F8F9] px-8 py-4 font-semibold text-[11px] uppercase tracking-[0.25em] transition-all shrink-0 rounded-none shadow-lg shadow-[#F38221]/20"
           >
             Initiate Contact{" "}
             <ArrowRight

@@ -35,7 +35,7 @@ function NotebookHero() {
   return (
     <section className="bg-white pt-32 pb-24 border-b border-border">
       <div className="container mx-auto px-6 max-w-[1400px]">
-        <div className="max-w-4xl">
+        <div className="flex flex-col items-center w-full">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -179,7 +179,11 @@ function MathematicalSpecifications() {
         <div className="mb-16 border-b border-slate-900 pb-6 flex items-end justify-between">
           <div>
             <h2 className="text-3xl font-sans text-foreground flex items-center gap-3">
-              <Code2 className="text-muted-foreground" size={28} strokeWidth={1.5} />
+              <Code2
+                className="text-muted-foreground"
+                size={28}
+                strokeWidth={1.5}
+              />
               Rigorous Mathematical Proofs
             </h2>
           </div>
@@ -328,7 +332,9 @@ function TreeToTokenPipeline() {
         <div className="mb-16">
           <h2 className="text-4xl font-sans text-foreground mb-4 leading-tight">
             Tree to Token: <br />
-            <span className="italic text-muted-foreground">Chain of Custody.</span>
+            <span className="italic text-muted-foreground">
+              Chain of Custody.
+            </span>
           </h2>
           <p className="text-muted-foreground text-base max-w-xl font-sans">
             Explore the exact path data takes from a remote forest to an

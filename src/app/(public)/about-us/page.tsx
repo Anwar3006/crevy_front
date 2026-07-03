@@ -132,8 +132,8 @@ export default function AboutPage() {
 function AboutHero() {
   return (
     <section className="bg-white border-b border-border pt-32 pb-24 relative overflow-hidden">
-      <div className="absolute top-0 right-0 p-12 opacity-[0.03] pointer-events-none">
-        <Globe size={400} />
+      <div className="absolute top-0 right-0 p-12 opacity-[.70] pointer-events-none">
+        <Globe size={400} className="stroke-amber-600 animate-bounce" />
       </div>
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 relative z-10">
         <motion.div
@@ -155,9 +155,7 @@ function AboutHero() {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           Engineering the{" "}
-          <span className="italic text-muted-foreground">
-            financial infrastructure
-          </span>{" "}
+          <span className="italic text-brand/85">financial infrastructure</span>{" "}
           for Africa's climate assets.
         </motion.h1>
       </div>
@@ -181,9 +179,9 @@ function StorySection() {
               potential, yet receives less than 2% of market revenue.
             </p>
           </div>
-          <div className="md:col-span-8 space-y-8 text-slate-600 text-lg font-light leading-relaxed">
+          <div className="md:col-span-8 space-y-8 text-foreground text-lg font-light leading-relaxed">
             <p>
-              <span className="float-left text-7xl font-sans text-foreground leading-none pr-4 pt-2">
+              <span className="float-left text-7xl font-sans text-foreground font-bold leading-none pr-4 pt-2">
                 C
               </span>
               revy was engineered as the antidote for African climate projects
@@ -232,7 +230,7 @@ function MissionVisionSection() {
               To engineer radical transparency and liquidity into African
               environmental assets.
             </h3>
-            <p className="text-muted-foreground leading-relaxed font-light">
+            <p className="text-foreground leading-relaxed font-light">
               We exist to ensure that voluntary carbon markets function as an
               equitable financial mechanism for African communities, delivering
               rigorous, auditable climate impact to global enterprises.
@@ -240,11 +238,11 @@ function MissionVisionSection() {
           </div>
 
           <div className="bg-secondary border border-slate-900 p-12">
-            <Zap size={24} className="text-emerald-500 mb-8" />
-            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-4">
+            <Zap size={24} className="text-brand mb-8" />
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand mb-4">
               Long-Term Vision
             </h2>
-            <h3 className="text-3xl font-sans text-white mb-6 leading-tight">
+            <h3 className="text-3xl font-sans text-foreground mb-6 leading-tight">
               A continent where localized ecological stewardship is recognized
               as a premium, highly-valued global asset class.
             </h3>
@@ -424,7 +422,7 @@ function AboutCTA() {
         <Link href="/register">
           <button
             type="button"
-            className="bg-secondary text-white hover:bg-emerald-900 px-8 py-4 text-[10px] font-bold uppercase tracking-widest transition-colors inline-flex items-center gap-3"
+            className="bg-foreground text-white hover:bg-brand px-8 py-4 text-[10px] font-bold uppercase tracking-widest transition-colors inline-flex items-center gap-3"
           >
             Access Platform <ArrowRight size={14} />
           </button>

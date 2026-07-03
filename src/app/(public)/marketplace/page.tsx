@@ -2,30 +2,34 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowRight,
   ChevronDown,
-  Globe2,
   RotateCcw,
   Search,
-  ShieldCheck,
   SlidersHorizontal,
-  TrendingUp,
   X,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   useCallback,
-  useDeferredValue,
+  useEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
 } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PROJECT_TYPES, SDGS } from "@/constants/new-project";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useMarketplace } from "@/hooks/use-marketplace";
 import { cn } from "@/lib/utils";
 import PrimaryMarketplaceHero from "./_components/PrimaryMarketplaceHero";
@@ -44,6 +48,7 @@ interface FilterState {
 type FilterAction =
   | { type: "SET"; key: keyof FilterState; value: string | string[] }
   | { type: "TOGGLE_SDG"; id: string }
+  | { type: "SET_ALL"; payload: FilterState }
   | { type: "RESET" };
 
 const INITIAL_FILTERS: FilterState = {
@@ -65,6 +70,8 @@ function filterReducer(state: FilterState, action: FilterAction): FilterState {
           ? state.sdgs.filter((s) => s !== action.id)
           : [...state.sdgs, action.id],
       };
+    case "SET_ALL":
+      return action.payload;
     case "RESET":
       return INITIAL_FILTERS;
     default:
@@ -84,26 +91,96 @@ const STATUSES = [
 // ─── Page Component ───────────────────────────────────────────────────────────
 
 export default function MarketplacePage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [filters, dispatch] = useReducer(filterReducer, INITIAL_FILTERS);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState<"newest" | "impact" | "price">("newest");
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const deferredSearch = useDeferredValue(filters.search);
+  // Debounce the free-text search so it doesn't trigger a fetch (or a URL
+  // update) on every keystroke.
+  const debouncedSearch = useDebouncedValue(filters.search, 400);
+
+  // Prevents the "state -> URL" effect from firing as a reaction to the
+  // "URL -> state" effect below, which otherwise causes the two effects to
+  // ping-pong off each other (each triggering re-renders / refetches).
+  const isSyncingFromUrl = useRef(false);
+
+  // Sync state from URL query parameters on mount / external navigation
+  useEffect(() => {
+    const urlFilters = {
+      region: searchParams.get("region") || "",
+      projectType: searchParams.get("projectType") || "",
+      status: searchParams.get("status") || "",
+      search: searchParams.get("search") || "",
+      sdgs: searchParams.get("sdgs")
+        ? searchParams.get("sdgs")!.split(",")
+        : [],
+    };
+    const urlSortBy = searchParams.get("sortBy") as any;
+
+    isSyncingFromUrl.current = true;
+
+    if (
+      urlSortBy === "newest" ||
+      urlSortBy === "impact" ||
+      urlSortBy === "price"
+    ) {
+      setSortBy(urlSortBy);
+    }
+    dispatch({ type: "SET_ALL", payload: urlFilters });
+  }, [searchParams]);
+
+  // Sync state transformations to the URL parameter index for direct sharing.
+  // Skips the write when it was the URL that produced this state change, and
+  // skips it again when the resulting query string wouldn't actually change,
+  // to avoid an infinite replace <-> parse loop.
+  useEffect(() => {
+    if (isSyncingFromUrl.current) {
+      isSyncingFromUrl.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams();
+    if (filters.region) params.set("region", filters.region);
+    if (filters.projectType) params.set("projectType", filters.projectType);
+    if (filters.status) params.set("status", filters.status);
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    if (filters.sdgs.length > 0) params.set("sdgs", filters.sdgs.join(","));
+    if (sortBy !== "newest") params.set("sortBy", sortBy);
+
+    const nextQuery = params.toString();
+    if (nextQuery === searchParams.toString()) return;
+
+    router.replace(`${pathname}?${nextQuery}`, { scroll: false });
+  }, [
+    filters.region,
+    filters.projectType,
+    filters.status,
+    filters.sdgs,
+    debouncedSearch,
+    sortBy,
+    pathname,
+    router,
+    searchParams,
+  ]);
 
   const queryFilters = useMemo(
     () => ({
       region: filters.region || undefined,
       projectType: filters.projectType || undefined,
       status: filters.status || undefined,
-      search: deferredSearch.trim() || undefined,
+      search: debouncedSearch.trim() || undefined,
       sdgs: filters.sdgs.length > 0 ? filters.sdgs.join(",") : undefined,
     }),
     [
       filters.region,
       filters.projectType,
       filters.status,
-      deferredSearch,
+      debouncedSearch,
       filters.sdgs,
     ],
   );
@@ -161,9 +238,8 @@ export default function MarketplacePage() {
   );
   const resetFilters = useCallback(() => dispatch({ type: "RESET" }), []);
 
-  // bg-[#FDFDFD]
   return (
-    <div className="min-h-screen bg-background  font-sans text-white selection:bg-secondary selection:text-white">
+    <div className="min-h-screen bg-background font-sans text-white selection:bg-secondary selection:text-white">
       {/* ── Institutional Hero ───────────────────────────────────────────── */}
       <PrimaryMarketplaceHero />
 
@@ -193,7 +269,8 @@ export default function MarketplacePage() {
 
         <div className="flex gap-12 items-start">
           {/* ── Institutional Sidebar ───────────────────────────────────── */}
-          <aside className="hidden xl:block w-[290px] shrink-0 sticky top-8 bg-secondary border border-slate-800 p-6">
+          {/* Note: Added h-fit to prevent layout box structural collapses or height stretches from content skeleton mutations */}
+          <aside className="hidden xl:block w-[290px] shrink-0 sticky top-8 h-fit bg-foreground border border-slate-800 p-6">
             <FilterPanel
               filters={filters}
               activeFilterCount={activeFilterCount}
@@ -221,7 +298,7 @@ export default function MarketplacePage() {
 
             {/* Result count */}
             {!isLoading && (
-              <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-6">
+              <p className="text-[10px] font-mono text-foreground uppercase tracking-[0.2em] mb-6">
                 Query Returned:{" "}
                 <span className="text-brand font-bold">
                   {sortedProjects.length}
@@ -339,7 +416,7 @@ function FilterPanel({
           <button
             type="button"
             onClick={onReset}
-            className="text-[10px] text-muted-foreground hover:text-white uppercase tracking-[0.2em] font-bold flex items-center gap-1 transition-colors"
+            className="text-[10px] text-foreground hover:text-white uppercase tracking-[0.2em] font-bold flex items-center gap-1 transition-colors"
           >
             <RotateCcw className="w-3 h-3" /> Reset
           </button>
@@ -355,7 +432,7 @@ function FilterPanel({
               "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
               !filters.region
                 ? "bg-brand text-foreground font-bold"
-                : "text-muted-foreground hover:bg-slate-800 hover:text-white",
+                : "text-white hover:bg-slate-800 hover:text-white",
             )}
           >
             Global Index
@@ -369,7 +446,7 @@ function FilterPanel({
                 "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
                 filters.region === r
                   ? "bg-brand text-foreground font-bold"
-                  : "text-muted-foreground hover:bg-slate-800 hover:text-white",
+                  : "text-white hover:bg-slate-800 hover:text-white",
               )}
             >
               {r}
@@ -387,7 +464,7 @@ function FilterPanel({
               "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
               !filters.projectType
                 ? "bg-brand text-foreground font-bold"
-                : "text-muted-foreground hover:bg-slate-800 hover:text-white",
+                : "text-white hover:bg-slate-800 hover:text-white",
             )}
           >
             All Methodologies
@@ -401,10 +478,10 @@ function FilterPanel({
                 "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
                 filters.projectType === t.id
                   ? "bg-brand text-foreground font-bold"
-                  : "text-muted-foreground hover:bg-slate-800 hover:text-white",
+                  : "text-white hover:bg-slate-800 hover:text-white",
               )}
             >
-              {t.title}
+              {t.title}[cite: 26]
             </button>
           ))}
         </div>
@@ -438,7 +515,7 @@ function FilterPanel({
               />
               <Label
                 htmlFor={`status-${s.value}`}
-                className="text-xs font-bold uppercase tracking-[0.2em] text-slate-300 cursor-pointer"
+                className="text-xs uppercase tracking-[0.2em] text-slate-300 cursor-pointer"
               >
                 {s.label}
               </Label>
@@ -534,7 +611,7 @@ const SearchBar = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Query by asset, region, or serial..."
-      className="w-full bg-transparent border-none border-b-2 border-slate-800 pl-8 pr-8 py-2 text-base md:text-lg font-sans text-white placeholder:text-muted-foreground placeholder:font-sans placeholder:text-base focus:outline-none focus:border-brand transition-colors rounded-none"
+      className="w-full bg-transparent border-none border-b-2 border-slate-800 pl-8 pr-8 py-2 text-base md:text-lg font-sans text-foreground placeholder:text-muted-foreground placeholder:font-sans placeholder:text-base focus:outline-none focus:border-brand transition-colors rounded-none"
     />
     {value && (
       <button
@@ -554,22 +631,52 @@ function SortSelector({
   value,
   onChange,
 }: {
-  value: string;
+  value: "newest" | "impact" | "price";
   onChange: (v: "newest" | "impact" | "price") => void;
 }) {
+  const labelMap = {
+    newest: "Sort: Newly Listed",
+    impact: "Sort: Max Impact",
+    price: "Sort: Lowest Price",
+  };
+
   return (
-    <div className="relative shrink-0">
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value as any)}
-        className="appearance-none bg-secondary border border-slate-800 rounded-none pl-4 pr-10 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white focus:outline-none focus:border-brand cursor-pointer hover:border-slate-700 transition-colors"
-      >
-        <option value="newest">Sort: Newly Listed</option>
-        <option value="impact">Sort: Max Impact</option>
-        <option value="price">Sort: Lowest Price</option>
-      </select>
-      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="flex items-center justify-between gap-4 bg-foreground border border-slate-800 rounded-none pl-4 pr-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white focus:outline-none focus:border-brand hover:border-slate-700 transition-colors cursor-pointer min-w-[210px]"
+        >
+          <span>{labelMap[value]}</span>
+          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-foreground border border-slate-800 rounded-none p-1 text-white min-w-[210px] z-50">
+        <DropdownMenuRadioGroup
+          value={value}
+          onValueChange={(v) => onChange(v as any)}
+        >
+          <DropdownMenuRadioItem
+            value="newest"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] rounded-none focus:bg-brand focus:text-foreground cursor-pointer py-2 px-3"
+          >
+            Sort: Newly Listed
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="impact"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] rounded-none focus:bg-brand focus:text-foreground cursor-pointer py-2 px-3"
+          >
+            Sort: Max Impact
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="price"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] rounded-none focus:bg-brand focus:text-foreground cursor-pointer py-2 px-3"
+          >
+            Sort: Lowest Price
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

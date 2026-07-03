@@ -79,7 +79,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
           className={cn(
             "font-bold text-3xl tracking-tight transition-colors",
             isNavSolid ? "text-foreground" : "text-white",
-            "hover:text-emerald-700",
+            "hover:text-brand",
           )}
         >
           Crevy.
@@ -121,7 +121,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                   : "bg-white/5 border-white/20 backdrop-blur-md",
               )}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
+              <div className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce" />
               <span
                 className={cn(
                   "text-[10px] font-mono font-bold uppercase tracking-widest",
@@ -138,7 +138,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 border transition-colors",
                   isNavSolid
-                    ? "bg-muted border-border"
+                    ? "bg-foreground/15 border-border"
                     : "bg-white/5 border-white/20 backdrop-blur-md",
                 )}
               >
@@ -146,7 +146,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                   className={cn(
                     "w-6 h-6 flex items-center justify-center text-[11px] font-bold",
                     isNavSolid
-                      ? "bg-secondary text-white"
+                      ? "bg-foreground text-white"
                       : "bg-white text-foreground",
                   )}
                 >
@@ -170,9 +170,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 href="/login"
                 className={cn(
                   "text-[10px] font-bold uppercase tracking-widest transition-colors px-4 py-2",
-                  isNavSolid
-                    ? "text-slate-600 hover:text-foreground"
-                    : "text-white/80 hover:text-white",
+                  isNavSolid && "text-slate-600 hover:text-foreground",
                 )}
               >
                 Login
@@ -182,8 +180,8 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 className={cn(
                   "rounded-none font-bold uppercase tracking-widest text-[10px] px-8 h-10 transition-colors",
                   isNavSolid
-                    ? "bg-secondary hover:bg-emerald-900 text-white"
-                    : "bg-white hover:bg-emerald-500 text-foreground hover:text-white",
+                    ? "bg-secondary hover:bg-brand text-white"
+                    : "bg-white hover:bg-brand text-foreground hover:text-white",
                 )}
               >
                 <Link href="/register">Sign Up</Link>
@@ -214,7 +212,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 top-0 left-0 h-screen w-full bg-background z-50 flex flex-col p-6 md:hidden overflow-y-auto"
+            className="fixed inset-0 top-0 left-0 h-screen w-full bg-foreground z-50 flex flex-col p-6 md:hidden overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-16 border-b border-slate-800 pb-6">
               <span className="font-bold text-2xl text-white">Crevy.</span>
@@ -234,10 +232,10 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="py-6 border-b border-slate-800 text-sm font-bold uppercase tracking-[0.2em] text-slate-300 hover:text-emerald-500 transition-colors flex justify-between items-center"
+                  className="py-6 border-b border-slate-800 text-sm font-bold uppercase tracking-[0.2em] text-slate-300 hover:text-brand transition-colors flex justify-between items-center"
                 >
                   {link.name}
-                  <span className="text-slate-700 font-mono text-[10px]">
+                  <span className="text-slate-500 font-mono text-[10px]">
                     +
                   </span>
                 </Link>
@@ -247,14 +245,14 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             <div className="mt-auto pt-12 flex flex-col space-y-4">
               {isPending ? (
                 <div className="bg-secondary border border-slate-800 p-6 flex flex-col items-center gap-4 animate-pulse">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand animate-bounce" />
                   <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-white/40">
                     Verifying Identity...
                   </span>
                 </div>
               ) : user ? (
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 bg-secondary border border-slate-800 p-4">
+                  <div className="flex items-center gap-4 bg-foreground/30 border border-slate-800 p-4">
                     <div className="w-10 h-10 bg-white text-foreground flex items-center justify-center text-lg font-bold shrink-0">
                       {getInitials(user.name)}
                     </div>
@@ -287,7 +285,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                   </Button>
                   <Button
                     asChild
-                    className="rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12"
+                    className="rounded-none bg-brand hover:bg-brand/80 text-white font-bold uppercase tracking-widest text-[10px] h-12"
                   >
                     <Link
                       href="/register"

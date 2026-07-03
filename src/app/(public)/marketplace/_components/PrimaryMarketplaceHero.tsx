@@ -58,7 +58,7 @@ export default function PrimaryMarketplaceHero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 relative">
           {/* Left Column: Typography, CTAs, and Stats (Matches reference layout structure) */}
           <div className="lg:col-span-6 flex flex-col justify-center relative z-20">
-            <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-secondary/80 mb-8 max-w-max rounded-none backdrop-blur-md">
+            <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-foreground/80 mb-8 max-w-max rounded-none backdrop-blur-md">
               <span className="w-2 h-2 bg-brand animate-pulse rounded-none" />
               <span className="text-white text-[10px] font-mono font-bold tracking-[0.2em] uppercase">
                 Pre-Pilot Telemetry: Primary Marketplace Intent
@@ -79,7 +79,7 @@ export default function PrimaryMarketplaceHero() {
             <div className="flex flex-wrap items-center gap-4 mb-16">
               <Link
                 href="/dashboard"
-                className="border border-slate-700 bg-background/50 text-white px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] hover:border-slate-500 transition-colors rounded-none flex items-center gap-2 group"
+                className="border border-slate-700 bg-background/50 text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] hover:border-slate-500 transition-colors rounded-none flex items-center gap-2 group"
               >
                 <LucideLayoutDashboard className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
                 Dashboard
@@ -132,7 +132,7 @@ export default function PrimaryMarketplaceHero() {
             {/* Visual 1: Parallax Image (Top Right) */}
             <motion.div
               style={{ y: y1 }}
-              className="absolute top-[5%] right-[5%] w-[280px] h-[340px] border border-slate-800 bg-secondary p-2 z-10 group rounded-none"
+              className="absolute top-[5%] right-[5%] w-[280px] h-[340px] border border-slate-800 bg-foreground p-2 z-10 group rounded-none"
             >
               <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none">
                 <Image
@@ -142,7 +142,7 @@ export default function PrimaryMarketplaceHero() {
                   className="object-cover mix-blend-luminosity opacity-50 group-hover:mix-blend-normal group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 <div className="absolute top-3 left-3 bg-background/90 border border-slate-800 px-2 py-1 z-10">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">
+                  <span className="text-[9px] font-mono uppercase tracking-widest text-foreground font-bold">
                     REF-CANOPY
                   </span>
                 </div>
@@ -176,7 +176,7 @@ export default function PrimaryMarketplaceHero() {
             {/* Visual 3: Parallax Image (Bottom Right) */}
             <motion.div
               style={{ y: y3 }}
-              className="absolute top-[65%] right-[15%] w-[220px] h-[220px] border border-slate-800 bg-secondary p-2 z-10 group rounded-none"
+              className="absolute top-[65%] right-[15%] w-[220px] h-[220px] border border-slate-800 bg-foreground p-2 z-10 group rounded-none"
             >
               <div className="relative w-full h-full overflow-hidden border border-slate-800 rounded-none">
                 <Image
@@ -185,8 +185,8 @@ export default function PrimaryMarketplaceHero() {
                   fill
                   className="object-cover mix-blend-luminosity opacity-60 group-hover:mix-blend-normal group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
                 />
-                <div className="absolute bottom-3 right-3 bg-background/90 border border-slate-800 px-2 py-1 z-10">
-                  <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">
+                <div className="absolute bottom-3 right-3 bg-brand/50 border border-slate-800 px-2 py-1 z-10">
+                  <span className="text-[9px] font-mono uppercase tracking-widest text-foreground font-bold">
                     SOIL DATA
                   </span>
                 </div>

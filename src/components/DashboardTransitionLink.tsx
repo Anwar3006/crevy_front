@@ -28,7 +28,7 @@ function CrevyTransitionLoader() {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9999] bg-secondary flex flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[9999] bg-foreground flex flex-col items-center justify-center overflow-hidden"
       exit={shouldReduceMotion ? { opacity: 0 } : { y: "-100%" }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -71,14 +71,14 @@ function CrevyTransitionLoader() {
         animate={{ opacity: 1 }}
         className="absolute bottom-16 w-48 flex flex-col items-center gap-3"
       >
-        <div className="w-full h-px bg-slate-800 relative overflow-hidden">
+        <div className="w-full h-px bg-white relative overflow-hidden">
           <motion.div
-            className="absolute inset-y-0 left-0 bg-emerald-500"
+            className="absolute inset-y-0 left-0 bg-brand"
             style={{ width: `${progress}%` }}
           />
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 bg-emerald-500" />
+          <div className="w-1.5 h-1.5 bg-brand" />
           <span className="font-mono text-[10px] text-muted-foreground tracking-[0.3em] uppercase tabular-nums">
             {progress}%
           </span>
@@ -135,8 +135,8 @@ export function AccessDashboardButton({ isNavSolid }: { isNavSolid: boolean }) {
       className={cn(
         "inline-flex items-center rounded-none font-bold uppercase tracking-widest text-[10px] px-6 h-10 transition-colors",
         isNavSolid
-          ? "bg-secondary hover:bg-emerald-900 text-white"
-          : "bg-white hover:bg-emerald-500 text-foreground hover:text-white",
+          ? "bg-foreground hover:bg-brand text-white"
+          : "bg-white hover:bg-brand text-foreground hover:text-white",
       )}
     >
       Access Dashboard <LayoutDashboard className="w-3.5 h-3.5 ml-2" />
@@ -154,7 +154,7 @@ export function AccessDashboardMobileButton({
 }) {
   return (
     <DashboardTransitionLink
-      className="w-full inline-flex items-center justify-center rounded-none bg-emerald-700 hover:bg-emerald-600 text-white font-bold uppercase tracking-widest text-[10px] h-12 transition-colors"
+      className="w-full inline-flex items-center justify-center rounded-none bg-brand hover:bg-brand/80 text-white font-bold uppercase tracking-widest text-[10px] h-12 transition-colors"
       onClick={onMenuClose}
     >
       Access Dashboard <LayoutDashboard className="w-4 h-4 ml-2" />

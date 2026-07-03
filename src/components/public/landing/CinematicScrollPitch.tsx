@@ -92,7 +92,7 @@ export function CinematicScrollPitch({
   return (
     <section
       ref={containerRef}
-      className="relative h-[350vh] bg-background border-t border-slate-900"
+      className="relative h-[350vh] bg-foreground border-t border-slate-900"
     >
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {/* ═══════════════════════════════════════════
@@ -104,15 +104,31 @@ export function CinematicScrollPitch({
         >
           <style jsx>{`
             @keyframes slide-left {
-              from { transform: translateX(0); }
-              to   { transform: translateX(-50%); }
+              from {
+                transform: translateX(0);
+              }
+              to {
+                transform: translateX(-50%);
+              }
             }
             @keyframes slide-right {
-              from { transform: translateX(-50%); }
-              to   { transform: translateX(0); }
+              from {
+                transform: translateX(-50%);
+              }
+              to {
+                transform: translateX(0);
+              }
             }
-            .track-left  { display: flex; white-space: nowrap; animation: slide-left  40s linear infinite; }
-            .track-right { display: flex; white-space: nowrap; animation: slide-right 40s linear infinite; }
+            .track-left {
+              display: flex;
+              white-space: nowrap;
+              animation: slide-left 40s linear infinite;
+            }
+            .track-right {
+              display: flex;
+              white-space: nowrap;
+              animation: slide-right 40s linear infinite;
+            }
           `}</style>
 
           <div className="track-left opacity-10">
@@ -151,7 +167,7 @@ export function CinematicScrollPitch({
         >
           <video
             key={getOptimizedVideoUrl("vid1.1_vn20nv.mp4")}
-            className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-60"
+            className="absolute inset-0 w-full h-full object-cover opacity-80"
             src={getOptimizedVideoUrl("vid1.1_vn20nv.mp4")}
             autoPlay
             muted
@@ -162,7 +178,7 @@ export function CinematicScrollPitch({
           {/* Darkening overlay */}
           <motion.div
             style={{ opacity: overlayOpacity }}
-            className="absolute inset-0 bg-background will-change-opacity"
+            className="absolute inset-0 bg-foreground will-change-opacity"
           />
 
           {/* ═══════════════════════════════════════════
@@ -249,7 +265,7 @@ export function CinematicScrollPitch({
    ═════════════════════════════════════════════════════════════════ */
 function StaticPitchFallback() {
   return (
-    <section className="relative min-h-screen bg-background flex flex-col justify-center items-center py-24 overflow-hidden border-t border-slate-900">
+    <section className="relative min-h-screen bg-foreground flex flex-col justify-center items-center py-24 overflow-hidden border-t border-slate-900">
       <video
         className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-40"
         src={getOptimizedVideoUrl("vid1.1_vn20nv.mp4")}
@@ -258,7 +274,7 @@ function StaticPitchFallback() {
         loop
         playsInline
       />
-      <div className="absolute inset-0 bg-background/70" />
+      <div className="absolute inset-0 bg-foreground/70" />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center px-6">
         <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-secondary/50 backdrop-blur-md mb-8">

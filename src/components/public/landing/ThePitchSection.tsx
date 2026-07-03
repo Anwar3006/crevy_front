@@ -11,7 +11,7 @@ export function ThePitchSection({
   shouldReduceMotion?: boolean;
 }) {
   return (
-    <section className="py-24 bg-muted">
+    <section className="py-12 md:py-24 bg-muted">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 space-y-24">
         {/* ── 1. PROJECT OWNERS (Supply) ── */}
         <PitchBlock

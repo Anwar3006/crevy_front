@@ -49,7 +49,7 @@ export default function SupportPage() {
           <div className="inline-flex items-center gap-3 mb-6">
             <div className="w-8 h-[1px] bg-secondary"></div>
             <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
-              <ShieldCheck size={14} className="text-emerald-700" />
+              <ShieldCheck size={14} className="text-brand" />
               Help & Operations Center
             </span>
           </div>
@@ -93,12 +93,12 @@ export default function SupportPage() {
               </p>
             </div>
             <div className="mt-8 pt-6 border-t border-border flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand">
                 2 Min ETA
               </span>
               <button
                 type="button"
-                className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:text-emerald-700 transition-colors flex items-center gap-1"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:text-brand transition-colors flex items-center gap-1"
               >
                 Initiate <ArrowUpRight size={14} />
               </button>
@@ -123,14 +123,14 @@ export default function SupportPage() {
               </span>
               <button
                 type="button"
-                className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:text-emerald-700 transition-colors flex items-center gap-1"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:text-brand transition-colors flex items-center gap-1"
               >
                 Draft <ArrowUpRight size={14} />
               </button>
             </div>
           </div>
 
-          <div className="bg-secondary text-white p-10 flex flex-col justify-between min-h-[280px] relative overflow-hidden">
+          <div className="bg-foreground text-white p-10 flex flex-col justify-between min-h-[280px] relative overflow-hidden">
             <div className="relative z-10">
               <div className="w-12 h-12 bg-white/10 border border-white/20 flex items-center justify-center text-white mb-8">
                 <Phone size={20} strokeWidth={1.5} />
@@ -143,12 +143,12 @@ export default function SupportPage() {
               </p>
             </div>
             <div className="mt-8 pt-6 border-t border-white/20 flex items-center justify-between relative z-10">
-              <span className="text-sm font-mono font-bold text-emerald-400">
+              <span className="text-sm font-mono font-bold text-brand">
                 +233 504 609 989
               </span>
             </div>
             <div className="absolute -bottom-4 -right-4 opacity-10">
-              <LifeBuoy size={160} />
+              <LifeBuoy size={160} className="animate-spin" />
             </div>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function SupportPage() {
                 >
                   <div className="flex justify-between items-start gap-8">
                     <div>
-                      <h4 className="font-sans text-lg text-foreground mb-3 group-hover:text-emerald-800 transition-colors leading-snug">
+                      <h4 className="font-sans text-lg text-foreground mb-3 group-hover:text-brand transition-colors leading-snug">
                         {f.q}
                       </h4>
                       <p className="text-sm text-muted-foreground leading-relaxed font-light">
@@ -204,7 +204,7 @@ export default function SupportPage() {
                       {doc.category}
                     </span>
                   </div>
-                  <h4 className="font-sans text-foreground group-hover:text-emerald-800 transition-colors">
+                  <h4 className="font-sans text-foreground group-hover:text-brand transition-colors">
                     {doc.title}
                   </h4>
                   <div className="mt-4 flex items-center gap-2 text-[10px] font-mono text-muted-foreground group-hover:text-foreground transition-colors">
@@ -216,7 +216,7 @@ export default function SupportPage() {
 
             <div className="mt-8 p-6 bg-muted border border-border">
               <div className="flex items-center gap-3 mb-3">
-                <BookOpen className="w-4 h-4 text-emerald-700" />
+                <BookOpen className="w-4 h-4 text-brand" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                   Developer Portal
                 </span>
