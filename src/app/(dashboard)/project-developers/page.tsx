@@ -27,10 +27,10 @@ import {
 } from "@/components/ui/table";
 import { useUser } from "@/hooks/use-user";
 import {
-  type ProjectOwnerFilters,
-  type ProjectOwnerRecord,
-  ProjectOwnerService,
-} from "@/lib/services/project-owner-service";
+  type ProjectDeveloperFilters,
+  type ProjectDeveloperRecord,
+  ProjectDeveloperService,
+} from "@/lib/services/project-developer-service";
 import { cn } from "@/lib/utils";
 
 // ─── Editorial Configs ────────────────────────────────────────────────────────
@@ -64,9 +64,9 @@ const getInitials = (firstName: string, lastName: string) =>
 
 const getAvatarStyle = (code: string) => {
   const styles = [
-    "bg-slate-900 text-white",
+    "bg-secondary text-white",
     "bg-emerald-900 text-white",
-    "bg-slate-100 text-slate-900 border border-slate-300",
+    "bg-slate-100 text-foreground border border-slate-300",
   ];
   return styles[code.charCodeAt(code.length - 1) % styles.length];
 };
@@ -102,7 +102,7 @@ function useCursorPagination() {
 
 // ─── Page Component ───────────────────────────────────────────────────────────
 
-export default function ProjectOwnersPage() {
+export default function ProjectDevelopersPage() {
   const { user } = useUser();
   const isSuperAdmin = user?.role === "super_admin";
 
@@ -138,7 +138,7 @@ export default function ProjectOwnersPage() {
   const hasActiveFilters = search || statusFilter !== "all" || countryFilter;
 
   // ── Query ──
-  const filters: ProjectOwnerFilters = useMemo(
+  const filters: ProjectDeveloperFilters = useMemo(
     () => ({
       cursor: currentCursor,
       limit: viewType === "grid" ? 12 : 10,
@@ -151,32 +151,32 @@ export default function ProjectOwnersPage() {
   );
 
   const { data, isLoading, isFetching, isError, refetch } = useQuery({
-    queryKey: ["project-owners", filters],
-    queryFn: () => ProjectOwnerService.listProjectOwners(filters),
+    queryKey: ["project-developers", filters],
+    queryFn: () => ProjectDeveloperService.listProjectDevelopers(filters),
     staleTime: 30_000,
   });
 
-  const owners: ProjectOwnerRecord[] = data?.data ?? [];
+  const owners: ProjectDeveloperRecord[] = data?.data ?? [];
   const nextCursor: string | null = data?.nextCursor ?? null;
   const total: number = data?.total ?? 0;
 
   return (
     <div className="animate-in fade-in duration-700 pb-24">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 pt-12 pb-8">
+      <div className="bg-white border-b border-border pt-12 pb-8">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div>
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-6 h-[1px] bg-slate-900"></div>
-                <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em]">
+                <div className="w-6 h-[1px] bg-secondary"></div>
+                <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em]">
                   {isSuperAdmin ? "Global Network" : "Managed Roster"}
                 </span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-4">
-                Project <span className="italic text-slate-500">Owners.</span>
+              <h1 className="text-4xl md:text-5xl font-sans text-foreground tracking-tight leading-none mb-4">
+                Project <span className="italic text-muted-foreground">Owners.</span>
               </h1>
-              <p className="text-slate-500 text-sm max-w-xl leading-relaxed">
+              <p className="text-muted-foreground text-sm max-w-xl leading-relaxed">
                 Institutional directory of verified originators and land
                 stewards. Manage KYC documentation, review payment pipelines,
                 and oversee active operations.
@@ -184,8 +184,8 @@ export default function ProjectOwnersPage() {
             </div>
 
             {(isSuperAdmin || user?.role === "project_manager") && (
-              <Link href="/project-owners/register">
-                <Button className="rounded-none bg-slate-900 hover:bg-emerald-900 text-[10px] font-bold uppercase tracking-widest transition-colors h-12 px-6">
+              <Link href="/project-developers/register">
+                <Button className="rounded-none bg-secondary hover:bg-emerald-900 text-[10px] font-bold uppercase tracking-widest transition-colors h-12 px-6">
                   <Plus className="h-4 w-4 mr-2" /> Onboard Entity
                 </Button>
               </Link>
@@ -200,13 +200,13 @@ export default function ProjectOwnersPage() {
           <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
             {/* Search */}
             <div className="relative group w-full md:w-64">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-slate-900 transition-colors pointer-events-none" />
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors pointer-events-none" />
               <input
                 placeholder="Query by name or ID..."
                 value={searchDraft}
                 onChange={(e) => setSearchDraft(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && applySearch()}
-                className="w-full bg-transparent border-none border-b-2 border-slate-200 pl-7 pr-4 py-2 text-sm font-serif text-slate-900 placeholder:text-slate-400 placeholder:font-sans focus:outline-none focus:border-slate-900 transition-colors rounded-none"
+                className="w-full bg-transparent border-none border-b-2 border-border pl-7 pr-4 py-2 text-sm font-sans text-foreground placeholder:text-muted-foreground placeholder:font-sans focus:outline-none focus:border-slate-900 transition-colors rounded-none"
               />
             </div>
 
@@ -216,7 +216,7 @@ export default function ProjectOwnersPage() {
                 setStatusFilter(e.target.value);
                 resetToFirst();
               }}
-              className="appearance-none bg-transparent border-none border-b-2 border-slate-200 py-2 pl-2 pr-8 text-[10px] font-bold uppercase tracking-widest text-slate-500 focus:outline-none focus:border-slate-900 focus:text-slate-900 cursor-pointer transition-colors"
+              className="appearance-none bg-transparent border-none border-b-2 border-border py-2 pl-2 pr-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground focus:outline-none focus:border-slate-900 focus:text-foreground cursor-pointer transition-colors"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending KYC</option>
@@ -231,7 +231,7 @@ export default function ProjectOwnersPage() {
                 setCountryFilter(e.target.value);
                 resetToFirst();
               }}
-              className="w-32 bg-transparent border-none border-b-2 border-slate-200 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-colors rounded-none"
+              className="w-32 bg-transparent border-none border-b-2 border-border py-2 text-[10px] font-bold uppercase tracking-widest text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-slate-900 transition-colors rounded-none"
             />
 
             <div className="flex items-center gap-2">
@@ -246,7 +246,7 @@ export default function ProjectOwnersPage() {
                 <Button
                   onClick={clearFilters}
                   variant="ghost"
-                  className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900"
+                  className="rounded-none text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
                 >
                   Clear
                 </Button>
@@ -254,15 +254,15 @@ export default function ProjectOwnersPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1 border border-slate-200 bg-slate-50 p-1 shrink-0">
+          <div className="flex items-center gap-1 border border-border bg-muted p-1 shrink-0">
             <button
               type="button"
               onClick={() => setViewType("list")}
               className={cn(
                 "p-1.5 transition-colors",
                 viewType === "list"
-                  ? "bg-white text-slate-900 shadow-sm border border-slate-200"
-                  : "text-slate-400 hover:text-slate-900",
+                  ? "bg-white text-foreground shadow-sm border border-border"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               <ListIcon className="w-4 h-4" />
@@ -273,8 +273,8 @@ export default function ProjectOwnersPage() {
               className={cn(
                 "p-1.5 transition-colors",
                 viewType === "grid"
-                  ? "bg-white text-slate-900 shadow-sm border border-slate-200"
-                  : "text-slate-400 hover:text-slate-900",
+                  ? "bg-white text-foreground shadow-sm border border-border"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               <LayoutGrid className="w-4 h-4" />
@@ -284,7 +284,7 @@ export default function ProjectOwnersPage() {
 
         {/* ── Institutional Stats ── */}
         {!isLoading && data && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border border-slate-200 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200 border border-border mb-8">
             {[
               { label: "Total Network", value: total },
               {
@@ -304,10 +304,10 @@ export default function ProjectOwnersPage() {
               },
             ].map((stat) => (
               <div key={stat.label} className="bg-white p-6">
-                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
                   {stat.label}
                 </p>
-                <p className="text-3xl font-mono font-bold text-slate-900">
+                <p className="text-3xl font-mono font-bold text-foreground">
                   {stat.value}
                 </p>
               </div>
@@ -317,55 +317,55 @@ export default function ProjectOwnersPage() {
 
         {/* ── Content Area ── */}
         {isLoading ? (
-          <div className="py-32 flex flex-col items-center justify-center border border-slate-200 bg-white">
-            <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin mb-4" />
-            <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
+          <div className="py-32 flex flex-col items-center justify-center border border-border bg-white">
+            <div className="w-6 h-6 border-2 border-border border-t-slate-900 rounded-full animate-spin mb-4" />
+            <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
               Syncing personnel directory...
             </p>
           </div>
         ) : isError ? (
-          <div className="py-24 border border-slate-200 bg-red-50 flex flex-col items-center justify-center text-center">
+          <div className="py-24 border border-border bg-red-50 flex flex-col items-center justify-center text-center">
             <XCircle className="h-8 w-8 text-red-500 mb-4" />
-            <p className="font-serif text-xl text-red-900 mb-4">
+            <p className="font-sans text-xl text-red-900 mb-4">
               Directory Synchronization Failed
             </p>
             <Button
               onClick={() => refetch()}
-              className="rounded-none bg-slate-900 text-white font-bold text-[10px] uppercase tracking-widest px-6"
+              className="rounded-none bg-secondary text-white font-bold text-[10px] uppercase tracking-widest px-6"
             >
               Retry Connection
             </Button>
           </div>
         ) : owners.length === 0 ? (
-          <div className="py-32 flex flex-col items-center justify-center border border-slate-200 bg-slate-50">
+          <div className="py-32 flex flex-col items-center justify-center border border-border bg-muted">
             <Users className="h-10 w-10 text-slate-300 mb-4" strokeWidth={1} />
-            <p className="text-xl font-serif text-slate-900 mb-1">
+            <p className="text-xl font-sans text-foreground mb-1">
               No Entities Located
             </p>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               Adjust screening parameters or onboard a new entity.
             </p>
           </div>
         ) : viewType === "list" ? (
           /* ── LIST VIEW ── */
-          <div className="border border-slate-200 bg-white overflow-x-auto">
+          <div className="border border-border bg-white overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50">
-                <TableRow className="border-b-2 border-slate-900 hover:bg-slate-50">
-                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14">
+              <TableHeader className="bg-muted">
+                <TableRow className="border-b-2 border-slate-900 hover:bg-muted">
+                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground h-14">
                     Entity Name
                   </TableHead>
-                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14">
+                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground h-14">
                     Registry Code
                   </TableHead>
-                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14">
+                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground h-14">
                     Location
                   </TableHead>
-                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14">
+                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground h-14">
                     KYC Status
                   </TableHead>
-                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14 text-right">
-                    Dossier
+                  <TableHead className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground h-14 text-right">
+                    Details
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -377,7 +377,7 @@ export default function ProjectOwnersPage() {
                   return (
                     <TableRow
                       key={owner.id}
-                      className="hover:bg-slate-50 transition-colors border-b border-slate-100"
+                      className="hover:bg-muted transition-colors border-b border-border"
                     >
                       <TableCell className="py-4">
                         <div className="flex items-center gap-4">
@@ -389,17 +389,17 @@ export default function ProjectOwnersPage() {
                           >
                             {getInitials(owner.firstName, owner.lastName)}
                           </div>
-                          <div className="font-serif text-base text-slate-900 font-bold">
+                          <div className="font-sans text-base text-foreground font-bold">
                             {owner.firstName} {owner.lastName}
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="font-mono text-[11px] text-slate-500 uppercase tracking-widest py-4">
+                      <TableCell className="font-mono text-[11px] text-muted-foreground uppercase tracking-widest py-4">
                         {owner.code}
                       </TableCell>
                       <TableCell className="py-4">
                         <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-widest text-slate-600">
-                          <MapPin className="h-3 w-3 text-slate-400" />{" "}
+                          <MapPin className="h-3 w-3 text-muted-foreground" />{" "}
                           {owner.countryOfOperation || "N/A"}
                         </div>
                       </TableCell>
@@ -418,11 +418,11 @@ export default function ProjectOwnersPage() {
                         </span>
                       </TableCell>
                       <TableCell className="py-4 text-right">
-                        <Link href={`/project-owners/${owner.userId}`}>
+                        <Link href={`/project-developers/${owner.userId}`}>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="rounded-none text-slate-400 hover:text-slate-900 hover:bg-slate-100"
+                            className="rounded-none text-muted-foreground hover:text-foreground hover:bg-slate-100"
                           >
                             <ExternalLink className="h-4 w-4" />
                           </Button>
@@ -444,10 +444,10 @@ export default function ProjectOwnersPage() {
               return (
                 <Link
                   key={owner.id}
-                  href={`/project-owners/${owner.userId}`}
+                  href={`/project-developers/${owner.userId}`}
                   className="block group"
                 >
-                  <div className="border border-slate-200 bg-white hover:border-slate-900 transition-colors h-full flex flex-col">
+                  <div className="border border-border bg-white hover:border-slate-900 transition-colors h-full flex flex-col">
                     <div className="p-6 flex-1">
                       <div className="flex justify-between items-start mb-6">
                         <div
@@ -472,26 +472,26 @@ export default function ProjectOwnersPage() {
                         </span>
                       </div>
 
-                      <h3 className="font-serif text-xl text-slate-900 leading-tight mb-1 group-hover:text-emerald-800 transition-colors">
+                      <h3 className="font-sans text-xl text-foreground leading-tight mb-1 group-hover:text-emerald-800 transition-colors">
                         {owner.firstName} {owner.lastName}
                       </h3>
-                      <p className="text-[10px] font-mono uppercase tracking-widest text-slate-400 mb-6">
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-6">
                         {owner.code}
                       </p>
 
-                      <div className="space-y-3 pt-4 border-t border-slate-100">
+                      <div className="space-y-3 pt-4 border-t border-border">
                         {owner.email && (
-                          <p className="text-[11px] font-mono text-slate-500 truncate">
+                          <p className="text-[11px] font-mono text-muted-foreground truncate">
                             {owner.email}
                           </p>
                         )}
                         {owner.contactNumber && (
-                          <p className="text-[11px] font-mono text-slate-500">
+                          <p className="text-[11px] font-mono text-muted-foreground">
                             {owner.contactNumber}
                           </p>
                         )}
                         {owner.countryOfOperation && (
-                          <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500">
+                          <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground">
                             <MapPin className="h-3 w-3" />{" "}
                             {owner.countryOfOperation}
                           </div>
@@ -499,22 +499,22 @@ export default function ProjectOwnersPage() {
                       </div>
                     </div>
 
-                    <div className="bg-slate-50 border-t border-slate-200 px-6 py-4 flex items-center gap-2">
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
+                    <div className="bg-muted border-t border-border px-6 py-4 flex items-center gap-2">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">
                         Payment Routing:
                       </span>
                       {owner.momoDetails && (
-                        <span className="font-mono text-[10px] text-slate-900 font-bold">
+                        <span className="font-mono text-[10px] text-foreground font-bold">
                           MOMO
                         </span>
                       )}
                       {owner.bankDetails && (
-                        <span className="font-mono text-[10px] text-slate-900 font-bold">
+                        <span className="font-mono text-[10px] text-foreground font-bold">
                           BANK
                         </span>
                       )}
                       {!owner.momoDetails && !owner.bankDetails && (
-                        <span className="font-mono text-[10px] text-slate-400">
+                        <span className="font-mono text-[10px] text-muted-foreground">
                           UNSET
                         </span>
                       )}
@@ -528,10 +528,10 @@ export default function ProjectOwnersPage() {
 
         {/* ── Pagination Footer ── */}
         {owners.length > 0 && (
-          <div className="flex items-center justify-between pt-6 mt-8 border-t border-slate-200">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <div className="flex items-center justify-between pt-6 mt-8 border-t border-border">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Page {currentPage + 1}:{" "}
-              <span className="text-slate-900">{owners.length}</span>
+              <span className="text-foreground">{owners.length}</span>
             </p>
             <div className="flex items-center gap-2">
               <Button
@@ -539,7 +539,7 @@ export default function ProjectOwnersPage() {
                 size="sm"
                 onClick={resetToFirst}
                 disabled={!canGoPrev || isFetching}
-                className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
+                className="rounded-none border-border text-muted-foreground hover:text-foreground"
               >
                 <ChevronsLeft className="h-4 w-4" />
               </Button>
@@ -548,7 +548,7 @@ export default function ProjectOwnersPage() {
                 size="sm"
                 onClick={goPrev}
                 disabled={!canGoPrev || isFetching}
-                className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
+                className="rounded-none border-border text-muted-foreground hover:text-foreground"
               >
                 <ChevronLeft className="h-4 w-4 mr-1" /> Prev
               </Button>
@@ -557,7 +557,7 @@ export default function ProjectOwnersPage() {
                 size="sm"
                 onClick={() => nextCursor && goNext(nextCursor)}
                 disabled={!nextCursor || isFetching}
-                className="rounded-none border-slate-200 text-slate-500 hover:text-slate-900"
+                className="rounded-none border-border text-muted-foreground hover:text-foreground"
               >
                 Next <ChevronRight className="h-4 w-4 ml-1" />
               </Button>

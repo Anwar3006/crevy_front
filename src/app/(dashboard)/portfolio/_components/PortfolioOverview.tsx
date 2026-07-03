@@ -57,7 +57,7 @@ export default function PortfolioOverview() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-40 pb-20 flex flex-col items-center justify-center text-slate-400">
+      <div className="min-h-screen pt-40 pb-20 flex flex-col items-center justify-center text-muted-foreground">
         <Globe2
           size={32}
           className="mb-4 animate-pulse text-slate-300"
@@ -73,25 +73,25 @@ export default function PortfolioOverview() {
   return (
     <div className="animate-in fade-in duration-700">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 py-12">
+      <div className="bg-white border-b border-border py-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row justify-between items-end gap-12">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-3 mb-6">
-                <div className="w-8 h-[1px] bg-slate-900"></div>
-                <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                <div className="w-8 h-[1px] bg-secondary"></div>
+                <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
                   <ShieldCheck size={14} className="text-emerald-700" />
                   Private Institutional Assets
                 </span>
-                <div className="w-8 h-[1px] bg-slate-900"></div>
+                <div className="w-8 h-[1px] bg-secondary"></div>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-serif text-slate-900 tracking-tight leading-[1.05] mb-6">
+              <h1 className="text-5xl md:text-7xl font-sans text-foreground tracking-tight leading-[1.05] mb-6">
                 Institutional{" "}
-                <span className="italic text-slate-500">Registry.</span>
+                <span className="italic text-muted-foreground">Registry.</span>
               </h1>
 
-              <p className="text-slate-500 text-lg font-light leading-relaxed italic">
+              <p className="text-muted-foreground text-lg font-light leading-relaxed italic">
                 The secure vault for your organization&apos;s carbon credit
                 holdings. Manage your proprietary asset inventory, track
                 valuation trends, and execute strategic retirements to fulfill
@@ -100,7 +100,7 @@ export default function PortfolioOverview() {
             </div>
 
             {/* Financial Value Metric Box */}
-            <div className="w-full md:w-auto bg-slate-900 p-8 min-w-[320px] shadow-2xl shrink-0">
+            <div className="w-full md:w-auto bg-secondary p-8 min-w-[320px] shadow-2xl shrink-0">
               <div className="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
                 <p className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest">
                   Net Portfolio Value
@@ -116,7 +116,7 @@ export default function PortfolioOverview() {
                     maximumFractionDigits: 2,
                   })}
                 </h2>
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-widest">
+                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest">
                   USD
                 </span>
               </div>
@@ -134,29 +134,29 @@ export default function PortfolioOverview() {
           {/* ── Liquid Asset Ledger (Left Column) ── */}
           <div className="lg:col-span-8 space-y-6">
             <div className="flex justify-between items-end border-b-2 border-slate-900 pb-4">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                 Liquid Asset Ledger
               </h3>
               <Link
                 href="/portfolio/ledger"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
               >
                 View Full Index <ArrowUpRight size={12} />
               </Link>
             </div>
 
-            <div className="bg-white border border-slate-200">
+            <div className="bg-white border border-border">
               {credits.length === 0 ? (
-                <div className="p-20 text-center flex flex-col items-center justify-center bg-slate-50">
+                <div className="p-20 text-center flex flex-col items-center justify-center bg-muted">
                   <ShieldCheck
                     size={32}
                     className="text-slate-300 mb-4"
                     strokeWidth={1}
                   />
-                  <p className="text-slate-500 font-serif text-lg">
+                  <p className="text-muted-foreground font-sans text-lg">
                     No active assets in registry.
                   </p>
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-slate-400 mt-2">
+                  <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
                     Acquire credits from the primary marketplace.
                   </p>
                 </div>
@@ -168,7 +168,7 @@ export default function PortfolioOverview() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-slate-50 transition-colors group"
+                      className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-muted transition-colors group"
                     >
                       {/* Asset Info */}
                       <div className="flex items-start gap-4 flex-1">
@@ -177,11 +177,11 @@ export default function PortfolioOverview() {
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-serif text-xl text-slate-900 leading-none">
+                            <h4 className="font-sans text-xl text-foreground leading-none">
                               Verified Carbon Unit
                             </h4>
                           </div>
-                          <div className="flex items-center gap-3 text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-2">
+                          <div className="flex items-center gap-3 text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-2">
                             <span>
                               Batch: {credit.mrv_batch_id.slice(0, 12)}...
                             </span>
@@ -194,14 +194,14 @@ export default function PortfolioOverview() {
                       {/* Volume & Actions */}
                       <div className="flex items-center gap-8 md:gap-12">
                         <div className="text-right">
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
                             Liquid Volume
                           </p>
                           <p className="text-xl font-mono font-bold text-emerald-800">
                             {parseFloat(
                               credit.availableAmount,
                             ).toLocaleString()}{" "}
-                            <span className="text-xs text-slate-500 font-normal">
+                            <span className="text-xs text-muted-foreground font-normal">
                               t
                             </span>
                           </p>
@@ -211,7 +211,7 @@ export default function PortfolioOverview() {
                           <Button
                             asChild
                             variant="outline"
-                            className="rounded-none border-slate-300 text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:border-slate-900 hover:bg-slate-900 hover:text-white transition-colors h-10 px-6"
+                            className="rounded-none border-slate-300 text-[10px] font-bold uppercase tracking-widest text-foreground hover:border-slate-900 hover:bg-secondary hover:text-white transition-colors h-10 px-6"
                           >
                             <Link href={`/portfolio/retire/${credit.id}`}>
                               <Flame size={14} className="mr-2 text-red-500" />{" "}
@@ -223,7 +223,7 @@ export default function PortfolioOverview() {
                             target="_blank"
                             rel="noopener noreferrer"
                             title="View On-Chain Proof"
-                            className="w-10 h-10 flex items-center justify-center border border-slate-200 text-slate-400 hover:text-slate-900 hover:border-slate-900 transition-colors"
+                            className="w-10 h-10 flex items-center justify-center border border-border text-muted-foreground hover:text-foreground hover:border-slate-900 transition-colors"
                           >
                             <ExternalLink size={16} />
                           </a>
@@ -239,8 +239,8 @@ export default function PortfolioOverview() {
           {/* ── Impact Insights & Exports (Right Column) ── */}
           <div className="lg:col-span-4 space-y-8">
             {/* Market Chart */}
-            <div className="bg-white border border-slate-200 p-8">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-6 flex items-center justify-between">
+            <div className="bg-white border border-border p-8">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-6 flex items-center justify-between">
                 Performance Index
                 <span className="text-emerald-600 flex items-center gap-1">
                   <TrendingUp size={12} /> Live
@@ -249,7 +249,7 @@ export default function PortfolioOverview() {
 
               <div className="w-full mb-6 min-h-[180px]">
                 {!isMounted ? (
-                  <div className="h-[180px] w-full bg-slate-50 animate-pulse flex items-center justify-center">
+                  <div className="h-[180px] w-full bg-muted animate-pulse flex items-center justify-center">
                     <span className="text-[10px] font-black uppercase text-slate-300 tracking-widest">
                       Waking Chart...
                     </span>
@@ -303,12 +303,12 @@ export default function PortfolioOverview() {
                 )}
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex justify-between items-end">
+              <div className="pt-4 border-t border-border flex justify-between items-end">
                 <div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                  <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
                     Index Alpha
                   </p>
-                  <p className="text-xl font-serif text-slate-900 leading-none">
+                  <p className="text-xl font-sans text-foreground leading-none">
                     1.24×
                   </p>
                 </div>
@@ -319,45 +319,45 @@ export default function PortfolioOverview() {
             </div>
 
             {/* Compliance Exports */}
-            <div className="bg-slate-50 border border-slate-200 p-8">
-              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-6">
+            <div className="bg-muted border border-border p-8">
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-6">
                 Compliance Documents
               </h3>
               <div className="space-y-3">
                 <button
                   type="button"
-                  className="w-full flex items-center justify-between p-4 bg-white border border-slate-200 hover:border-slate-900 transition-colors group"
+                  className="w-full flex items-center justify-between p-4 bg-white border border-border hover:border-slate-900 transition-colors group"
                 >
                   <div className="flex items-center gap-3">
                     <FileText
-                      className="text-slate-400 group-hover:text-slate-900 transition-colors"
+                      className="text-muted-foreground group-hover:text-foreground transition-colors"
                       size={18}
                     />
-                    <span className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">
+                    <span className="text-[11px] font-bold text-foreground uppercase tracking-widest">
                       Q2 ESG Summary
                     </span>
                   </div>
                   <Download
                     size={14}
-                    className="text-slate-300 group-hover:text-slate-900 transition-colors"
+                    className="text-slate-300 group-hover:text-foreground transition-colors"
                   />
                 </button>
                 <button
                   type="button"
-                  className="w-full flex items-center justify-between p-4 bg-white border border-slate-200 hover:border-slate-900 transition-colors group"
+                  className="w-full flex items-center justify-between p-4 bg-white border border-border hover:border-slate-900 transition-colors group"
                 >
                   <div className="flex items-center gap-3">
                     <ShieldCheck
-                      className="text-slate-400 group-hover:text-slate-900 transition-colors"
+                      className="text-muted-foreground group-hover:text-foreground transition-colors"
                       size={18}
                     />
-                    <span className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">
+                    <span className="text-[11px] font-bold text-foreground uppercase tracking-widest">
                       Audit Proofs (ZIP)
                     </span>
                   </div>
                   <Download
                     size={14}
-                    className="text-slate-300 group-hover:text-slate-900 transition-colors"
+                    className="text-slate-300 group-hover:text-foreground transition-colors"
                   />
                 </button>
               </div>

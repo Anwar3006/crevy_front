@@ -31,7 +31,7 @@ export default function ProfilePage() {
   if (isSessionPending || isUserLoading) {
     return (
       <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10 space-y-12">
-        <div className="border border-slate-200 p-12 bg-white flex items-center gap-8 animate-pulse">
+        <div className="border border-border p-12 bg-white flex items-center gap-8 animate-pulse">
           <div className="h-24 w-24 bg-slate-100" />
           <div className="space-y-4 flex-1">
             <div className="h-8 w-64 bg-slate-100" />
@@ -39,8 +39,8 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="grid md:grid-cols-2 gap-12">
-          <div className="h-96 bg-slate-50 border border-slate-200 animate-pulse" />
-          <div className="h-96 bg-slate-50 border border-slate-200 animate-pulse" />
+          <div className="h-96 bg-muted border border-border animate-pulse" />
+          <div className="h-96 bg-muted border border-border animate-pulse" />
         </div>
       </div>
     );

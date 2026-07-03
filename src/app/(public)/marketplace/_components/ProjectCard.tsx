@@ -40,7 +40,7 @@ const STATUS_CONFIG: Record<
 > = {
   approved: {
     label: "Verified",
-    style: "border-brand bg-brand/10 text-slate-900 font-bold",
+    style: "border-brand bg-brand/10 text-foreground font-bold",
     dot: "bg-brand animate-pulse",
   },
   submitted: {
@@ -50,12 +50,12 @@ const STATUS_CONFIG: Record<
   },
   active: {
     label: "Pre-Verified",
-    style: "border-slate-800 bg-slate-900 text-white",
+    style: "border-slate-800 bg-secondary text-white",
     dot: "bg-brand animate-pulse",
   },
   verified: {
     label: "Verified",
-    style: "border-brand bg-brand/10 text-slate-900 font-bold",
+    style: "border-brand bg-brand/10 text-foreground font-bold",
     dot: "bg-brand animate-pulse",
   },
 };
@@ -101,9 +101,9 @@ export const ProjectCard = memo(function ProjectCard({
       href={`/marketplace/project/${project.slug || project.id}`}
       className="block group outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
     >
-      <article className="bg-white border border-slate-200 hover:border-slate-900 transition-colors duration-300 h-full flex flex-col relative rounded-none shadow-sm hover:shadow-md">
+      <article className="bg-white border border-border hover:border-slate-900 transition-colors duration-300 h-full flex flex-col relative rounded-none shadow-sm hover:shadow-md">
         {/* ── Editorial Image Header ─────────────────────────────────────── */}
-        <div className="relative h-64 overflow-hidden bg-slate-950">
+        <div className="relative h-64 overflow-hidden bg-background">
           <Image
             src={imageUrl}
             alt={project.name}
@@ -113,7 +113,7 @@ export const ProjectCard = memo(function ProjectCard({
           />
 
           <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-            <span className="bg-slate-950/90 text-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] border border-slate-800 rounded-none">
+            <span className="bg-background/90 text-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] border border-slate-800 rounded-none">
               {typeConfig.label}
             </span>
             <span
@@ -130,14 +130,14 @@ export const ProjectCard = memo(function ProjectCard({
           </div>
         </div>
 
-        {/* ── Data Dossier ──────────────────────────────────────────────── */}
+        {/* ── Data Details ──────────────────────────────────────────────── */}
         <div className="p-6 flex-1 flex flex-col">
           <div className="mb-6 flex-1">
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-3">
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-3">
               <MapPin className="w-3.5 h-3.5 text-brand" />
               {project.region || project.location || "Africa Region"}
             </div>
-            <h3 className="font-extrabold text-2xl text-slate-900 leading-tight tracking-tight mb-3 line-clamp-2 group-hover:text-brand transition-colors">
+            <h3 className="font-extrabold text-2xl text-foreground leading-tight tracking-tight mb-3 line-clamp-2 group-hover:text-brand transition-colors">
               {project.name}
             </h3>
             <p className="text-slate-600 text-sm leading-relaxed line-clamp-2 font-light">
@@ -147,25 +147,25 @@ export const ProjectCard = memo(function ProjectCard({
           </div>
 
           {/* Metrics Grid */}
-          <div className="grid grid-cols-2 gap-px bg-slate-200 border border-slate-200 mb-6">
-            <div className="bg-slate-50 p-3">
-              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">
+          <div className="grid grid-cols-2 gap-px bg-slate-200 border border-border mb-6">
+            <div className="bg-muted p-3">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1">
                 Available Vol.
               </p>
-              <p className="font-mono text-slate-900 font-bold tabular-nums">
+              <p className="font-mono text-foreground font-bold tabular-nums">
                 {volume}{" "}
-                <span className="text-[10px] text-slate-500 font-normal">
+                <span className="text-[10px] text-muted-foreground font-normal">
                   tCO₂e
                 </span>
               </p>
             </div>
-            <div className="bg-slate-50 p-3">
-              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">
+            <div className="bg-muted p-3">
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1">
                 Area Coverage
               </p>
-              <p className="font-mono text-slate-900 font-bold tabular-nums">
+              <p className="font-mono text-foreground font-bold tabular-nums">
                 {Number(project.totalAreaHectares || 0).toLocaleString()}{" "}
-                <span className="text-[10px] text-slate-500 font-normal">
+                <span className="text-[10px] text-muted-foreground font-normal">
                   ha
                 </span>
               </p>
@@ -173,16 +173,16 @@ export const ProjectCard = memo(function ProjectCard({
           </div>
 
           {/* Acquisition Footer */}
-          <div className="flex items-end justify-between pt-4 border-t border-slate-200 mt-auto">
+          <div className="flex items-end justify-between pt-4 border-t border-border mt-auto">
             <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-1">
                 Asset Price
               </p>
               <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-mono text-slate-900 font-bold tabular-nums">
+                <span className="text-2xl font-mono text-foreground font-bold tabular-nums">
                   ${price}
                 </span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                   / Tonne
                 </span>
               </div>
@@ -194,8 +194,8 @@ export const ProjectCard = memo(function ProjectCard({
               className={cn(
                 "px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-all rounded-none",
                 project.status === "approved" || project.status === "verified"
-                  ? "bg-brand text-slate-900 hover:bg-slate-900 hover:text-white"
-                  : "bg-slate-900 text-white hover:bg-brand hover:text-slate-900",
+                  ? "bg-brand text-foreground hover:bg-secondary hover:text-white"
+                  : "bg-secondary text-white hover:bg-brand hover:text-foreground",
               )}
             >
               {project.status === "approved" || project.status === "verified"

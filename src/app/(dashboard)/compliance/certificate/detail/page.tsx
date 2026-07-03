@@ -27,18 +27,18 @@ function ComplianceCertificateContent() {
           <button
             type="button"
             onClick={() => router.push("/compliance")}
-            className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 hover:text-slate-900 transition-colors"
+            className="text-muted-foreground font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 hover:text-foreground transition-colors"
           >
             &larr; Back to Registry
           </button>
           <div className="flex gap-4">
             <Button
               variant="outline"
-              className="rounded-xl border-slate-200 text-xs font-black uppercase tracking-widest shadow-sm"
+              className="rounded-xl border-border text-xs font-black uppercase tracking-widest shadow-sm"
             >
               <Download size={16} className="mr-2" /> Download PDF
             </Button>
-            <Button className="bg-slate-900 hover:bg-black text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl">
+            <Button className="bg-secondary hover:bg-black text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-xl">
               <ExternalLink size={16} className="mr-2" /> Share Link
             </Button>
           </div>
@@ -56,7 +56,7 @@ function ComplianceCertificateContent() {
               <p className="text-[#2cc295] font-black text-xs uppercase tracking-[0.4em]">
                 Official Impact Verification
               </p>
-              <h1 className="text-5xl md:text-7xl font-black text-slate-900 uppercase italic leading-none tracking-tighter">
+              <h1 className="text-5xl md:text-7xl font-black text-foreground uppercase italic leading-none tracking-tighter">
                 Certificate <br /> of Retirement
               </h1>
             </div>
@@ -64,7 +64,7 @@ function ComplianceCertificateContent() {
             <div className="w-24 h-[2px] bg-slate-200" />
 
             <div className="space-y-4 max-w-2xl">
-              <p className="text-slate-500 font-medium text-lg italic">
+              <p className="text-muted-foreground font-medium text-lg italic">
                 This document certifies that the following carbon reduction
                 units have been permanently retired from the Crevy Registry and
                 are no longer available for trade.
@@ -73,35 +73,35 @@ function ComplianceCertificateContent() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 w-full pt-8">
               <div className="space-y-2">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                   Retirement Volume
                 </p>
-                <p className="text-4xl font-black text-slate-900">
-                  420 <span className="text-lg text-slate-400">tCO2e</span>
+                <p className="text-4xl font-black text-foreground">
+                  420 <span className="text-lg text-muted-foreground">tCO2e</span>
                 </p>
               </div>
-              <div className="space-y-2 border-x border-slate-100 px-8">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+              <div className="space-y-2 border-x border-border px-8">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                   Registry Reference
                 </p>
-                <p className="text-lg font-black text-slate-900 uppercase tracking-tight">
+                <p className="text-lg font-black text-foreground uppercase tracking-tight">
                   {id}
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                   Vintage Year
                 </p>
-                <p className="text-4xl font-black text-slate-900">2024</p>
+                <p className="text-4xl font-black text-foreground">2024</p>
               </div>
             </div>
 
-            <div className="w-full bg-slate-50 rounded-[2rem] p-10 mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 text-left">
+            <div className="w-full bg-muted rounded-[2rem] p-10 mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 text-left">
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <MapPin className="text-emerald-500 shrink-0" size={20} />
                   <div>
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">
                       Project Origin
                     </p>
                     <p className="font-bold text-slate-800 text-sm">
@@ -112,7 +112,7 @@ function ComplianceCertificateContent() {
                 <div className="flex gap-4">
                   <Calendar className="text-emerald-500 shrink-0" size={20} />
                   <div>
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">
                       Retirement Date
                     </p>
                     <p className="font-bold text-slate-800 text-sm">
@@ -122,8 +122,8 @@ function ComplianceCertificateContent() {
                 </div>
               </div>
               <div className="flex flex-col items-center md:items-end justify-center">
-                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                  <QrCode size={80} className="text-slate-900" />
+                <div className="bg-white p-4 rounded-2xl border border-border shadow-sm">
+                  <QrCode size={80} className="text-foreground" />
                 </div>
                 <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mt-4">
                   Verification Scan
@@ -131,7 +131,7 @@ function ComplianceCertificateContent() {
               </div>
             </div>
 
-            <div className="pt-12 text-slate-400 font-bold text-[9px] uppercase tracking-[0.2em] flex items-center gap-4">
+            <div className="pt-12 text-muted-foreground font-bold text-[9px] uppercase tracking-[0.2em] flex items-center gap-4">
               <Globe size={14} /> Cryptographically Anchored to Polygon Mainnet
               <span className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -150,7 +150,7 @@ export default function ComplianceCertificatePage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-white">
-          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+          <Loader2 className="w-10 h-10 text-foreground animate-spin" />
         </div>
       }
     >

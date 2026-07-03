@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 
 // ─── Design Philosophy: Institutional Accountability ───────────────────────
 // We use a stark, high-contrast palette. Spacing is architectural.
-// Typography relies on font-serif for narrative and font-mono for data.
+// Typography relies on font-sans for narrative and font-mono for data.
 
 const ALLOCATION_COLORS = ["#0f172a", "#059669", "#64748b", "#cbd5e1"];
 
@@ -65,25 +65,25 @@ export default function ESGPortfolioView() {
   return (
     <div className="animate-in fade-in duration-700">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 py-12">
+      <div className="bg-white border-b border-border py-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-3 mb-6">
-                <div className="w-8 h-[1px] bg-slate-900"></div>
-                <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                <div className="w-8 h-[1px] bg-secondary"></div>
+                <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
                   <ShieldCheck size={14} className="text-emerald-700" />
                   Corporate Compliance Protocol
                 </span>
-                <div className="w-8 h-[1px] bg-slate-900"></div>
+                <div className="w-8 h-[1px] bg-secondary"></div>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-serif text-slate-900 tracking-tight leading-[1.05] mb-6">
+              <h1 className="text-5xl md:text-7xl font-sans text-foreground tracking-tight leading-[1.05] mb-6">
                 ESG Impact{" "}
-                <span className="italic text-slate-500">Registry.</span>
+                <span className="italic text-muted-foreground">Registry.</span>
               </h1>
 
-              <p className="text-slate-500 text-lg font-light leading-relaxed max-w-2xl">
+              <p className="text-muted-foreground text-lg font-light leading-relaxed max-w-2xl">
                 The definitive, immutable record of your organization's
                 environmental liabilities, verified carbon removals, and
                 cryptographic audit artifacts.
@@ -94,7 +94,7 @@ export default function ESGPortfolioView() {
               type="button"
               onClick={handleGenerate}
               disabled={isGenerating}
-              className="bg-slate-900 hover:bg-emerald-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center gap-3 disabled:opacity-50 shrink-0"
+              className="bg-secondary hover:bg-emerald-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center gap-3 disabled:opacity-50 shrink-0"
             >
               {isGenerating ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -110,7 +110,7 @@ export default function ESGPortfolioView() {
       </div>
 
       {/* ── Architectural Navigation ── */}
-      <div className="border-b border-slate-200 bg-slate-50 sticky top-0 z-10">
+      <div className="border-b border-border bg-muted sticky top-0 z-10">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex overflow-x-auto custom-scrollbar">
           {[
             { id: "overview", label: "Net Zero Dashboard" },
@@ -124,8 +124,8 @@ export default function ESGPortfolioView() {
               className={cn(
                 "px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors whitespace-nowrap border-b-2",
                 activeTab === tab.id
-                  ? "border-slate-900 text-slate-900 bg-white"
-                  : "border-transparent text-slate-400 hover:text-slate-900 hover:bg-white/50",
+                  ? "border-slate-900 text-foreground bg-white"
+                  : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/50",
               )}
             >
               {tab.label}
@@ -148,15 +148,15 @@ export default function ESGPortfolioView() {
               {/* Left Column: Trajectory & Stats */}
               <div className="lg:col-span-8 space-y-8">
                 {/* Metric Blocks */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 border border-border">
                   <div className="bg-white p-8 md:p-10 flex flex-col justify-between">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
                         Total Verified Retirements
                       </p>
-                      <h2 className="text-5xl font-mono text-slate-900 font-bold tracking-tight">
+                      <h2 className="text-5xl font-mono text-foreground font-bold tracking-tight">
                         2,840
-                        <span className="text-xl text-slate-400 ml-2 font-sans font-normal">
+                        <span className="text-xl text-muted-foreground ml-2 font-sans font-normal">
                           tCO₂e
                         </span>
                       </h2>
@@ -170,12 +170,12 @@ export default function ESGPortfolioView() {
 
                   <div className="bg-white p-8 md:p-10 flex flex-col justify-between">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
                         Net Zero Gap
                       </p>
-                      <h2 className="text-5xl font-mono text-slate-900 font-bold tracking-tight">
+                      <h2 className="text-5xl font-mono text-foreground font-bold tracking-tight">
                         -70
-                        <span className="text-xl text-slate-400 ml-2 font-sans font-normal">
+                        <span className="text-xl text-muted-foreground ml-2 font-sans font-normal">
                           tCO₂e
                         </span>
                       </h2>
@@ -187,18 +187,18 @@ export default function ESGPortfolioView() {
                 </div>
 
                 {/* Net Zero Trajectory Chart */}
-                <div className="bg-white border border-slate-200 p-8 md:p-10">
-                  <div className="flex justify-between items-end mb-10 border-b border-slate-100 pb-6">
+                <div className="bg-white border border-border p-8 md:p-10">
+                  <div className="flex justify-between items-end mb-10 border-b border-border pb-6">
                     <div>
-                      <h3 className="text-2xl font-serif text-slate-900">
+                      <h3 className="text-2xl font-sans text-foreground">
                         Emissions vs. Offsets
                       </h3>
-                      <p className="text-slate-500 text-sm mt-1">
+                      <p className="text-muted-foreground text-sm mt-1">
                         Corporate trajectory toward Net Zero parity.
                       </p>
                     </div>
                     <div className="hidden md:flex gap-4 text-[10px] font-bold uppercase tracking-widest">
-                      <span className="flex items-center gap-1.5 text-slate-400">
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
                         <div className="w-3 h-3 bg-slate-200"></div> Gross
                         Emissions
                       </span>
@@ -272,8 +272,8 @@ export default function ESGPortfolioView() {
 
               {/* Right Column: Allocation & Demographics */}
               <div className="lg:col-span-4 space-y-8">
-                <div className="bg-slate-50 border border-slate-200 p-8 md:p-10 h-full flex flex-col">
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 border-b border-slate-200 pb-4 mb-8">
+                <div className="bg-muted border border-border p-8 md:p-10 h-full flex flex-col">
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground border-b border-border pb-4 mb-8">
                     Asset Diversification
                   </h3>
 
@@ -315,7 +315,7 @@ export default function ESGPortfolioView() {
                       </ResponsiveContainer>
                     </div>
 
-                    <div className="w-full mt-8 border-t border-slate-200 pt-6">
+                    <div className="w-full mt-8 border-t border-border pt-6">
                       {allocationData.map((item, i) => (
                         <div
                           key={item.name}
@@ -335,7 +335,7 @@ export default function ESGPortfolioView() {
                               {item.name}
                             </span>
                           </div>
-                          <span className="text-[11px] font-mono font-bold text-slate-900">
+                          <span className="text-[11px] font-mono font-bold text-foreground">
                             {item.value}%
                           </span>
                         </div>
@@ -355,20 +355,20 @@ export default function ESGPortfolioView() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <div className="border border-slate-200 bg-white overflow-x-auto">
+              <div className="border border-border bg-white overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[800px]">
                   <thead>
-                    <tr className="border-b-2 border-slate-900 bg-slate-50">
-                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                    <tr className="border-b-2 border-slate-900 bg-muted">
+                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                         Protocol Reference
                       </th>
-                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                         Reporting Window
                       </th>
-                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                         Impact Claim
                       </th>
-                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                      <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground text-right">
                         Artifact
                       </th>
                     </tr>
@@ -396,13 +396,13 @@ export default function ESGPortfolioView() {
                     ].map((row, i) => (
                       <tr
                         key={i}
-                        className="hover:bg-slate-50 transition-colors group"
+                        className="hover:bg-muted transition-colors group"
                       >
                         <td className="px-8 py-6">
-                          <div className="font-mono text-sm font-bold text-slate-900">
+                          <div className="font-mono text-sm font-bold text-foreground">
                             {row.ref}
                           </div>
-                          <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                          <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">
                             Published: {row.date}
                           </div>
                         </td>
@@ -414,7 +414,7 @@ export default function ESGPortfolioView() {
                         <td className="px-8 py-6">
                           <span className="font-mono text-lg font-bold text-emerald-800">
                             {row.amount}{" "}
-                            <span className="text-xs text-slate-500 font-normal">
+                            <span className="text-xs text-muted-foreground font-normal">
                               tCO₂e
                             </span>
                           </span>
@@ -422,7 +422,7 @@ export default function ESGPortfolioView() {
                         <td className="px-8 py-6 text-right">
                           <button
                             type="button"
-                            className="inline-flex items-center gap-2 border border-slate-200 text-slate-900 hover:border-slate-900 hover:bg-slate-900 hover:text-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors"
+                            className="inline-flex items-center gap-2 border border-border text-foreground hover:border-slate-900 hover:bg-secondary hover:text-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors"
                           >
                             <Download size={14} /> PDF
                           </button>
@@ -432,8 +432,8 @@ export default function ESGPortfolioView() {
                   </tbody>
                 </table>
               </div>
-              <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-6">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-slate-400 flex items-center gap-2">
+              <div className="mt-6 flex items-center justify-between border-t border-border pt-6">
+                <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <ShieldCheck size={14} className="text-emerald-600" />{" "}
                   Cryptographically anchored
                 </p>
@@ -448,20 +448,20 @@ export default function ESGPortfolioView() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="border border-slate-200 bg-white"
+              className="border border-border bg-white"
             >
-              <div className="p-8 border-b-2 border-slate-900 flex justify-between items-center bg-slate-50">
+              <div className="p-8 border-b-2 border-slate-900 flex justify-between items-center bg-muted">
                 <div>
-                  <h3 className="text-xl font-serif text-slate-900">
+                  <h3 className="text-xl font-sans text-foreground">
                     Immutable Event Ledger
                   </h3>
-                  <p className="text-[10px] font-mono text-slate-500 uppercase mt-1 tracking-widest">
+                  <p className="text-[10px] font-mono text-muted-foreground uppercase mt-1 tracking-widest">
                     SYSTEM ROOT / PROTOCOL_LOGS
                   </p>
                 </div>
                 <button
                   type="button"
-                  className="text-slate-400 hover:text-slate-900 transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Filter size={18} />
                 </button>
@@ -500,25 +500,25 @@ export default function ESGPortfolioView() {
                 ].map((log, i) => (
                   <div
                     key={i}
-                    className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-50 transition-colors"
+                    className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-muted transition-colors"
                   >
                     <div className="flex items-start md:items-center gap-6">
-                      <div className="text-slate-400 text-xs">[{log.time}]</div>
+                      <div className="text-muted-foreground text-xs">[{log.time}]</div>
                       <div>
                         <span className="text-emerald-700 font-bold">
                           {log.actor}
                         </span>
-                        <span className="text-slate-400 mx-2">executed</span>
-                        <span className="text-slate-900 font-bold">
+                        <span className="text-muted-foreground mx-2">executed</span>
+                        <span className="text-foreground font-bold">
                           {log.action}
                         </span>
-                        <span className="text-slate-400 mx-2">on</span>
-                        <span className="bg-slate-100 border border-slate-200 px-2 py-0.5 text-xs text-slate-600">
+                        <span className="text-muted-foreground mx-2">on</span>
+                        <span className="bg-slate-100 border border-border px-2 py-0.5 text-xs text-slate-600">
                           {log.resource}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       Tx:{" "}
                       <span className="text-blue-600 font-mono">
                         {log.hash}
@@ -528,7 +528,7 @@ export default function ESGPortfolioView() {
                 ))}
               </div>
 
-              <div className="p-6 bg-slate-900 flex justify-center text-emerald-400 font-mono text-[10px] tracking-widest uppercase">
+              <div className="p-6 bg-secondary flex justify-center text-emerald-400 font-mono text-[10px] tracking-widest uppercase">
                 <span className="animate-pulse mr-2">█</span> End of active
                 protocol ledger.
               </div>

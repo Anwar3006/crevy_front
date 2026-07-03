@@ -16,7 +16,7 @@ export function ScrollingMarquee() {
       <div className="marquee-container">
         {[...Array(4)].map((_, i) => (
           <div key={i} className="flex items-center space-x-8 px-4">
-            <span className="text-slate-500 font-mono font-bold text-[10px] uppercase tracking-[0.2em] whitespace-nowrap">
+            <span className="text-muted-foreground font-mono font-bold text-[10px] uppercase tracking-[0.2em] whitespace-nowrap">
               LIVE REGISTRY ✦ VERIFIED ASSETS ✦ NO DOUBLE COUNTING ✦ IMMUTABLE
               LEDGER ✦ INSTITUTIONAL GRADE ✦ CORE CARBON PRINCIPLES ✦
             </span>
@@ -34,7 +34,7 @@ export function FinalCTASection({
   shouldReduceMotion?: boolean;
 }) {
   return (
-    <section className="bg-slate-900 py-32 border-t border-slate-800">
+    <section className="bg-secondary py-32 border-t border-slate-800">
       <div className="max-w-[1000px] mx-auto px-6 text-center">
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -56,13 +56,13 @@ export function FinalCTASection({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-px bg-slate-700 border border-slate-700 p-px mx-auto w-fit">
             <Link
               href="/register"
-              className="w-full sm:w-auto bg-brand text-white hover:bg-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-brand text-white hover:bg-secondary px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
-              Become a Project Owner
+              Become a Project Developer
             </Link>
             <Link
               href="/marketplace"
-              className="w-full sm:w-auto bg-brand text-white hover:bg-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-brand text-white hover:bg-secondary px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               Start Buying Credits
             </Link>

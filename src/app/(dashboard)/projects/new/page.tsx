@@ -55,10 +55,10 @@ const NewProject = () => {
 
   if (isPending) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin" />
-          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
+          <div className="w-8 h-8 border-2 border-border border-t-slate-900 rounded-none animate-spin" />
+          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
             Initializing Secure Terminal...
           </p>
         </div>
@@ -147,14 +147,14 @@ const NewProject = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-slate-900 selection:text-white font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-muted selection:bg-secondary selection:text-white font-sans overflow-x-hidden">
       {isSubmitting && <ProcessingStep />}
 
       <AssignmentCheckModal
         isOpen={isModalOpen}
         role={role}
-        onProceed={(projectOwnerId, assignedAdminId) => {
-          methods.setValue("projectOwnerId", projectOwnerId);
+        onProceed={(projectDeveloperId, assignedAdminId) => {
+          methods.setValue("projectDeveloperId", projectDeveloperId);
           if (assignedAdminId) {
             methods.setValue("assignedAdminId", assignedAdminId);
           }
@@ -168,14 +168,14 @@ const NewProject = () => {
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 flex items-center gap-2 mb-8 md:mb-12 transition-colors"
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground flex items-center gap-2 mb-8 md:mb-12 transition-colors"
           >
             <ChevronLeft size={14} /> Abort Registration
           </button>
 
-          <h1 className="font-serif text-3xl md:text-4xl text-slate-900 leading-tight mb-8">
+          <h1 className="font-sans text-3xl md:text-4xl text-foreground leading-tight mb-8">
             Asset <br className="hidden lg:block" />
-            <span className="italic text-slate-500">Ingestion.</span>
+            <span className="italic text-muted-foreground">Ingestion.</span>
           </h1>
 
           {/* Hidden on mobile, shown on desktop for cleaner UX */}
@@ -183,16 +183,16 @@ const NewProject = () => {
             <SidebarProgress currentStep={currentStep} steps={STEPS} />
           </div>
 
-          <div className="mt-8 md:mt-16 p-5 md:p-6 bg-white border border-slate-200 rounded-none">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-2">
+          <div className="mt-8 md:mt-16 p-5 md:p-6 bg-white border border-border rounded-none">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-2">
               Project Support
             </p>
-            <p className="text-xs text-slate-500 leading-relaxed mb-4">
+            <p className="text-xs text-muted-foreground leading-relaxed mb-4">
               Require assistance with methodology alignment or document mapping?
             </p>
             <button
               type="button"
-              className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 border-b border-emerald-700 hover:text-slate-900 hover:border-slate-900 transition-all"
+              className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 border-b border-emerald-700 hover:text-foreground hover:border-slate-900 transition-all"
               onClick={() => router.push("/support")}
             >
               Contact Directory
@@ -201,13 +201,13 @@ const NewProject = () => {
         </aside>
 
         {/* ── Form Payload ── */}
-        <main className="flex-1 min-w-0 bg-white border border-slate-200 p-5 sm:p-8 md:p-14">
+        <main className="flex-1 min-w-0 bg-white border border-border p-5 sm:p-8 md:p-14">
           {/* Mobile Progress Indicator */}
           <div className="md:hidden mb-8 border-b-2 border-slate-900 pb-4">
-            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em]">
+            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em]">
               Phase 0{currentStep + 1} / 03
             </p>
-            <h2 className="text-xl font-serif text-slate-900 tracking-tight mt-1">
+            <h2 className="text-xl font-sans text-foreground tracking-tight mt-1">
               {STEPS[currentStep]}
             </h2>
           </div>

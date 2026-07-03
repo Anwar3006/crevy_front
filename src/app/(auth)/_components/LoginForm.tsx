@@ -59,15 +59,15 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
   return (
     <div className={cn("flex flex-col gap-8", className)}>
       {/* ── Institutional Toggle ── */}
-      <div className="flex border-b border-slate-200">
+      <div className="flex border-b border-border">
         <button
           type="button"
           onClick={() => setLoginType("email")}
           className={cn(
             "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2",
             loginType === "email"
-              ? "border-b-2 border-slate-900 text-slate-900"
-              : "border-b-2 border-transparent text-slate-400 hover:text-slate-700",
+              ? "border-b-2 border-slate-900 text-foreground"
+              : "border-b-2 border-transparent text-muted-foreground hover:text-slate-700",
           )}
         >
           <Mail size={14} /> Email Identity
@@ -78,8 +78,8 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
           className={cn(
             "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2",
             loginType === "phone"
-              ? "border-b-2 border-slate-900 text-slate-900"
-              : "border-b-2 border-transparent text-slate-400 hover:text-slate-700",
+              ? "border-b-2 border-slate-900 text-foreground"
+              : "border-b-2 border-transparent text-muted-foreground hover:text-slate-700",
           )}
         >
           <Phone size={14} /> Mobile Vector
@@ -94,7 +94,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
       >
         {/* Identifier Input */}
         <div className="space-y-3">
-          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex justify-between">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex justify-between">
             {loginType === "email" ? "Email Address" : "Phone Number"}
             {form.formState.errors.identifier && (
               <span className="text-red-500">
@@ -109,7 +109,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
               loginType === "email" ? "operative@institution.com" : "+233 50..."
             }
             disabled={loading}
-            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:border-slate-900 transition-colors disabled:opacity-50"
+            className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-sm text-foreground placeholder:text-muted-foreground focus:ring-0 focus:border-slate-900 transition-colors disabled:opacity-50"
           />
         </div>
 
@@ -118,13 +118,13 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
           <div className="flex justify-between items-baseline">
             <label
               htmlFor="password"
-              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
             >
               Password
             </label>
             <Link
               href="/forgot-password"
-              className="text-[9px] font-mono text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest"
+              className="text-[9px] font-mono text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest"
             >
               Reset Password?
             </Link>
@@ -134,7 +134,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"form">) => {
             type="password"
             placeholder="••••••••••••"
             disabled={loading}
-            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 placeholder:text-slate-400 focus:ring-0 focus:border-slate-900 transition-colors disabled:opacity-50"
+            className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-sm text-foreground placeholder:text-muted-foreground focus:ring-0 focus:border-slate-900 transition-colors disabled:opacity-50"
           />
           {form.formState.errors.password && (
             <p className="text-[10px] font-bold uppercase tracking-widest text-red-500 mt-2">

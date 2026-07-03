@@ -28,7 +28,7 @@ function CrevyTransitionLoader() {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9999] bg-slate-900 flex flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[9999] bg-secondary flex flex-col items-center justify-center overflow-hidden"
       exit={shouldReduceMotion ? { opacity: 0 } : { y: "-100%" }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -48,7 +48,7 @@ function CrevyTransitionLoader() {
             ? { duration: 0.2 }
             : { type: "spring", damping: 28, stiffness: 90 }
         }
-        className="font-serif text-5xl md:text-7xl text-white tracking-tight relative z-10"
+        className="font-sans text-5xl md:text-7xl text-white tracking-tight relative z-10"
       >
         Crevy
       </motion.h1>
@@ -58,7 +58,7 @@ function CrevyTransitionLoader() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15 }}
-        className="absolute top-1/2 mt-16 font-mono text-[10px] text-slate-500 uppercase tracking-[0.3em]"
+        className="absolute top-1/2 mt-16 font-mono text-[10px] text-muted-foreground uppercase tracking-[0.3em]"
       >
         {progress < 100
           ? "Initializing Secure Terminal..."
@@ -79,7 +79,7 @@ function CrevyTransitionLoader() {
         </div>
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 bg-emerald-500" />
-          <span className="font-mono text-[10px] text-slate-400 tracking-[0.3em] uppercase tabular-nums">
+          <span className="font-mono text-[10px] text-muted-foreground tracking-[0.3em] uppercase tabular-nums">
             {progress}%
           </span>
         </div>
@@ -135,8 +135,8 @@ export function AccessDashboardButton({ isNavSolid }: { isNavSolid: boolean }) {
       className={cn(
         "inline-flex items-center rounded-none font-bold uppercase tracking-widest text-[10px] px-6 h-10 transition-colors",
         isNavSolid
-          ? "bg-slate-900 hover:bg-emerald-900 text-white"
-          : "bg-white hover:bg-emerald-500 text-slate-900 hover:text-white",
+          ? "bg-secondary hover:bg-emerald-900 text-white"
+          : "bg-white hover:bg-emerald-500 text-foreground hover:text-white",
       )}
     >
       Access Dashboard <LayoutDashboard className="w-3.5 h-3.5 ml-2" />

@@ -56,37 +56,37 @@ export default function RolesManagementPage() {
   const queryClient = useQueryClient();
 
   return (
-    <div className="animate-in fade-in duration-700 pb-24 bg-slate-50 min-h-screen">
+    <div className="animate-in fade-in duration-700 pb-24 bg-muted min-h-screen">
       {/* ── Editorial Header ── */}
-      <div className="border-b border-slate-200 bg-white pt-12">
+      <div className="border-b border-border bg-white pt-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <Link
             href="/user-management"
-            className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 mb-8 hover:text-slate-900 transition-colors"
+            className="text-muted-foreground font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 mb-8 hover:text-foreground transition-colors"
           >
             <ArrowLeft size={14} /> Back to Identity Ledger
           </Link>
           <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-8 h-[1px] bg-slate-900"></div>
-            <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+            <div className="w-8 h-[1px] bg-secondary"></div>
+            <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
               <Key size={14} className="text-emerald-700" /> IAM & Security
               Protocol
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-12">
-            System <span className="italic text-slate-500">Governance.</span>
+          <h1 className="text-4xl md:text-5xl font-sans text-foreground tracking-tight leading-none mb-12">
+            System <span className="italic text-muted-foreground">Governance.</span>
           </h1>
 
           {/* ── Tabs ── */}
-          <div className="flex gap-8 border-b border-slate-200 mt-8">
+          <div className="flex gap-8 border-b border-border mt-8">
             <button
               type="button"
               onClick={() => setActiveTab("permissions")}
               className={cn(
                 "pb-4 text-[10px] font-bold uppercase tracking-widest transition-colors",
                 activeTab === "permissions"
-                  ? "border-b-2 border-slate-900 text-slate-900"
-                  : "text-slate-400 hover:text-slate-700",
+                  ? "border-b-2 border-slate-900 text-foreground"
+                  : "text-muted-foreground hover:text-slate-700",
               )}
             >
               Resource Permissions
@@ -97,8 +97,8 @@ export default function RolesManagementPage() {
               className={cn(
                 "pb-4 text-[10px] font-bold uppercase tracking-widest transition-colors",
                 activeTab === "roles"
-                  ? "border-b-2 border-slate-900 text-slate-900"
-                  : "text-slate-400 hover:text-slate-700",
+                  ? "border-b-2 border-slate-900 text-foreground"
+                  : "text-muted-foreground hover:text-slate-700",
               )}
             >
               Identity Roles
@@ -147,16 +147,16 @@ function PermissionsGrid({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           Resource Matrix
         </h2>
         <AddPermissionModal onSuccess={onSuccess} />
       </div>
 
       {isLoading ? (
-        <div className="py-24 flex flex-col items-center justify-center border border-slate-200 bg-white">
-          <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin mb-4" />
-          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
+        <div className="py-24 flex flex-col items-center justify-center border border-border bg-white">
+          <div className="w-6 h-6 border-2 border-border border-t-slate-900 rounded-full animate-spin mb-4" />
+          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
             Compiling Security Matrix...
           </p>
         </div>
@@ -165,12 +165,12 @@ function PermissionsGrid({ onSuccess }: { onSuccess: () => void }) {
           {groupedPermissions.map(([resource, perms]) => (
             <div
               key={resource}
-              className="bg-white border border-slate-200 flex flex-col hover:border-slate-900 transition-colors"
+              className="bg-white border border-border flex flex-col hover:border-slate-900 transition-colors"
             >
-              <div className="p-6 border-b border-slate-100 flex-1">
+              <div className="p-6 border-b border-border flex-1">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-2 h-2 bg-emerald-500 rounded-none shrink-0" />
-                  <h3 className="font-serif text-2xl text-slate-900 capitalize tracking-tight">
+                  <h3 className="font-sans text-2xl text-foreground capitalize tracking-tight">
                     {resource}
                   </h3>
                 </div>
@@ -179,14 +179,14 @@ function PermissionsGrid({ onSuccess }: { onSuccess: () => void }) {
                   {perms.map((p) => (
                     <span
                       key={p.id}
-                      className="px-2 py-1 bg-slate-50 border border-slate-200 text-[10px] font-mono font-bold uppercase tracking-widest text-slate-700"
+                      className="px-2 py-1 bg-muted border border-border text-[10px] font-mono font-bold uppercase tracking-widest text-slate-700"
                     >
                       {p.action}
                     </span>
                   ))}
                 </div>
               </div>
-              <div className="bg-slate-50 p-4 border-t border-slate-200">
+              <div className="bg-muted p-4 border-t border-border">
                 <AddPermissionModal
                   defaultResource={resource}
                   onSuccess={onSuccess}
@@ -216,7 +216,7 @@ function RolesTable({ onSuccess }: { onSuccess: () => void }) {
         accessorKey: "name",
         header: "Identity Key",
         cell: ({ row }) => (
-          <span className="font-mono text-xs font-bold text-slate-900 uppercase tracking-widest">
+          <span className="font-mono text-xs font-bold text-foreground uppercase tracking-widest">
             {(row.getValue("name") as string).replace(/_/g, " ")}
           </span>
         ),
@@ -225,7 +225,7 @@ function RolesTable({ onSuccess }: { onSuccess: () => void }) {
         accessorKey: "description",
         header: "Purpose / Description",
         cell: ({ row }) => (
-          <span className="text-sm text-slate-500 font-light">
+          <span className="text-sm text-muted-foreground font-light">
             {row.getValue("description")}
           </span>
         ),
@@ -243,24 +243,24 @@ function RolesTable({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           Clearance Levels
         </h2>
         <AddRoleModal onSuccess={onSuccess} />
       </div>
 
-      <div className="border border-slate-200 bg-white overflow-hidden">
+      <div className="border border-border bg-white overflow-hidden">
         <Table>
-          <TableHeader className="bg-slate-50">
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((hg) => (
               <TableRow
                 key={hg.id}
-                className="border-b-2 border-slate-900 hover:bg-slate-50"
+                className="border-b-2 border-slate-900 hover:bg-muted"
               >
                 {hg.headers.map((h) => (
                   <TableHead
                     key={h.id}
-                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 h-14 px-6"
+                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground h-14 px-6"
                   >
                     {flexRender(h.column.columnDef.header, h.getContext())}
                   </TableHead>
@@ -272,8 +272,8 @@ function RolesTable({ onSuccess }: { onSuccess: () => void }) {
             {isLoading ? (
               <TableRow>
                 <TableCell colSpan={2} className="h-64 text-center">
-                  <div className="w-6 h-6 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin mx-auto mb-4" />
-                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400">
+                  <div className="w-6 h-6 border-2 border-border border-t-slate-900 rounded-full animate-spin mx-auto mb-4" />
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
                     Mapping Identities...
                   </span>
                 </TableCell>
@@ -282,7 +282,7 @@ function RolesTable({ onSuccess }: { onSuccess: () => void }) {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className="hover:bg-slate-50 transition-colors border-b border-slate-100"
+                  className="hover:bg-muted transition-colors border-b border-border"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="px-6 py-5">
@@ -342,28 +342,28 @@ function AddPermissionModal({
         {variant === "inline" ? (
           <button
             type="button"
-            className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-2 w-full justify-center py-2"
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 w-full justify-center py-2"
           >
             <Plus size={12} /> Bind New Action
           </button>
         ) : (
-          <Button className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-10 px-6 transition-colors">
+          <Button className="rounded-none bg-secondary hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-10 px-6 transition-colors">
             <Plus size={14} className="mr-2" /> Define Global Permission
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md p-0 rounded-none border border-slate-900 shadow-2xl gap-0 bg-white">
-        <DialogHeader className="p-8 border-b border-slate-200 bg-slate-50">
+        <DialogHeader className="p-8 border-b border-border bg-muted">
           <div className="flex items-center gap-3 mb-4">
-            <ShieldCheck size={20} className="text-slate-900" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            <ShieldCheck size={20} className="text-foreground" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Security Configuration
             </span>
           </div>
-          <DialogTitle className="text-3xl font-serif text-slate-900 tracking-tight leading-none mb-2">
+          <DialogTitle className="text-3xl font-sans text-foreground tracking-tight leading-none mb-2">
             Bind Permission.
           </DialogTitle>
-          <DialogDescription className="text-slate-500 font-light text-sm">
+          <DialogDescription className="text-muted-foreground font-light text-sm">
             Define a specific operational action for a target system resource.
           </DialogDescription>
         </DialogHeader>
@@ -371,7 +371,7 @@ function AddPermissionModal({
         <form onSubmit={handleSubmit} className="flex flex-col">
           <div className="p-8 space-y-6">
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Target Resource
               </Label>
               <Input
@@ -381,46 +381,46 @@ function AddPermissionModal({
                 required
                 readOnly={!!defaultResource}
                 className={cn(
-                  "rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900 transition-colors",
-                  defaultResource ? "text-slate-500" : "text-slate-900",
+                  "rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900 transition-colors",
+                  defaultResource ? "text-muted-foreground" : "text-foreground",
                 )}
               />
             </div>
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Allowable Action
               </Label>
               <Input
                 name="action"
                 placeholder="e.g. read, approve, delete"
                 required
-                className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm text-slate-900 focus-visible:ring-0 focus-visible:border-slate-900 transition-colors"
+                className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm text-foreground focus-visible:ring-0 focus-visible:border-slate-900 transition-colors"
               />
             </div>
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Description (Optional)
               </Label>
               <Textarea
                 name="description"
                 placeholder="Documentation for this instruction..."
-                className="rounded-none border-2 border-slate-200 bg-slate-50 px-4 py-4 font-mono text-sm text-slate-900 focus-visible:ring-0 focus-visible:border-slate-900 transition-colors resize-none h-24"
+                className="rounded-none border-2 border-border bg-muted px-4 py-4 font-mono text-sm text-foreground focus-visible:ring-0 focus-visible:border-slate-900 transition-colors resize-none h-24"
               />
             </div>
           </div>
-          <div className="p-6 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
+          <div className="p-6 bg-muted border-t border-border flex justify-between items-center">
             <Button
               variant="ghost"
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900"
+              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
             >
               Abort
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="rounded-none bg-secondary hover:bg-emerald-900 text-white px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               {loading ? "Anchoring..." : "Save Instruction"}
             </Button>
@@ -457,22 +457,22 @@ function AddRoleModal({ onSuccess }: { onSuccess: () => void }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-10 px-6 transition-colors">
+        <Button className="rounded-none bg-secondary hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-10 px-6 transition-colors">
           <Plus size={14} className="mr-2" /> Formulate New Role
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md p-0 rounded-none border border-slate-900 shadow-2xl gap-0 bg-white">
-        <DialogHeader className="p-8 border-b border-slate-200 bg-slate-50">
+        <DialogHeader className="p-8 border-b border-border bg-muted">
           <div className="flex items-center gap-3 mb-4">
-            <ShieldCheck size={20} className="text-slate-900" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            <ShieldCheck size={20} className="text-foreground" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Security Configuration
             </span>
           </div>
-          <DialogTitle className="text-3xl font-serif text-slate-900 tracking-tight leading-none mb-2">
+          <DialogTitle className="text-3xl font-sans text-foreground tracking-tight leading-none mb-2">
             Formulate Identity.
           </DialogTitle>
-          <DialogDescription className="text-slate-500 font-light text-sm">
+          <DialogDescription className="text-muted-foreground font-light text-sm">
             Define a new clearance level to map to system actors.
           </DialogDescription>
         </DialogHeader>
@@ -480,41 +480,41 @@ function AddRoleModal({ onSuccess }: { onSuccess: () => void }) {
         <form onSubmit={handleSubmit} className="flex flex-col">
           <div className="p-8 space-y-6">
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Clearance Key (Snake_Case)
               </Label>
               <Input
                 name="name"
                 placeholder="e.g. regional_auditor"
                 required
-                className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm text-slate-900 focus-visible:ring-0 focus-visible:border-slate-900 transition-colors"
+                className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm text-foreground focus-visible:ring-0 focus-visible:border-slate-900 transition-colors"
               />
             </div>
             <div className="space-y-3">
-              <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Purpose / Scope
               </Label>
               <Textarea
                 name="description"
                 placeholder="Responsibilities and limits of this clearance level..."
                 required
-                className="rounded-none border-2 border-slate-200 bg-slate-50 px-4 py-4 font-mono text-sm text-slate-900 focus-visible:ring-0 focus-visible:border-slate-900 transition-colors resize-none h-24"
+                className="rounded-none border-2 border-border bg-muted px-4 py-4 font-mono text-sm text-foreground focus-visible:ring-0 focus-visible:border-slate-900 transition-colors resize-none h-24"
               />
             </div>
           </div>
-          <div className="p-6 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
+          <div className="p-6 bg-muted border-t border-border flex justify-between items-center">
             <Button
               variant="ghost"
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900"
+              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
             >
               Abort
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="rounded-none bg-secondary hover:bg-emerald-900 text-white px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               {loading ? "Formulating..." : "Initialize Role"}
             </Button>

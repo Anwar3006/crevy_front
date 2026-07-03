@@ -75,7 +75,7 @@ function CheckoutContent() {
 
   if (!projectId)
     return (
-      <div className="p-20 text-center uppercase font-black tracking-widest text-slate-400">
+      <div className="p-20 text-center uppercase font-black tracking-widest text-muted-foreground">
         Invalid Project Context
       </div>
     );
@@ -91,7 +91,7 @@ function CheckoutContent() {
       <button
         type="button"
         onClick={() => router.back()}
-        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-10 hover:text-slate-900 transition-colors"
+        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-10 hover:text-foreground transition-colors"
       >
         <ArrowLeft size={14} /> Back to Project
       </button>
@@ -107,12 +107,12 @@ function CheckoutContent() {
                 exit={{ opacity: 0, x: 20 }}
                 className="space-y-8"
               >
-                <h1 className="text-4xl font-black text-slate-900 uppercase italic tracking-tighter">
+                <h1 className="text-4xl font-black text-foreground uppercase italic tracking-tighter">
                   Credit Volume
                 </h1>
-                <div className="bg-white border border-slate-200 rounded-[2rem] p-10 shadow-sm space-y-6">
+                <div className="bg-white border border-border rounded-[2rem] p-10 shadow-sm space-y-6">
                   <div className="space-y-4">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                       tCO2e Quantity
                     </Label>
                     <div className="flex items-center gap-4">
@@ -124,16 +124,16 @@ function CheckoutContent() {
                             Math.max(1, parseInt(e.target.value, 10) || 0),
                           )
                         }
-                        className="h-16 text-3xl font-black rounded-2xl border-2 border-slate-100 focus:border-emerald-500 transition-all"
+                        className="h-16 text-3xl font-black rounded-2xl border-2 border-border focus:border-emerald-500 transition-all"
                       />
-                      <span className="text-sm font-black text-slate-400 uppercase tracking-widest">
+                      <span className="text-sm font-black text-muted-foreground uppercase tracking-widest">
                         Units
                       </span>
                     </div>
                   </div>
                   <Button
                     onClick={() => setStep(2)}
-                    className="w-full h-16 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs"
+                    className="w-full h-16 bg-secondary hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs"
                   >
                     Continue to Payment{" "}
                     <ChevronRight size={16} className="ml-2" />
@@ -150,7 +150,7 @@ function CheckoutContent() {
                 exit={{ opacity: 0, x: 20 }}
                 className="space-y-8"
               >
-                <h1 className="text-4xl font-black text-slate-900 uppercase italic tracking-tighter">
+                <h1 className="text-4xl font-black text-foreground uppercase italic tracking-tighter">
                   Payment
                 </h1>
                 <div className="space-y-4">
@@ -165,13 +165,13 @@ function CheckoutContent() {
                     <button
                       type="button"
                       key={method.id}
-                      className="w-full bg-white border border-slate-200 p-6 rounded-2xl flex items-center justify-between group hover:border-emerald-50 transition-all"
+                      className="w-full bg-white border border-border p-6 rounded-2xl flex items-center justify-between group hover:border-emerald-50 transition-all"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-600">
+                        <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-muted-foreground group-hover:bg-emerald-50 group-hover:text-emerald-600">
                           <method.icon size={24} />
                         </div>
-                        <span className="font-black text-slate-900 uppercase text-[11px] tracking-widest">
+                        <span className="font-black text-foreground uppercase text-[11px] tracking-widest">
                           {method.name}
                         </span>
                       </div>
@@ -193,7 +193,7 @@ function CheckoutContent() {
         </div>
 
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-secondary rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10">
               <ShieldCheck size={80} className="text-emerald-400" />
             </div>

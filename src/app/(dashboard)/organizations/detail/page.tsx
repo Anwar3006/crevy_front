@@ -47,30 +47,30 @@ function OrganizationDetailContent() {
   }, []);
 
   return (
-    <div className="animate-in fade-in duration-700 pb-24 font-sans bg-slate-50 min-h-screen">
+    <div className="animate-in fade-in duration-700 pb-24 font-sans bg-muted min-h-screen">
       {/* ── Editorial Header ── */}
-      <div className="border-b border-slate-200 bg-white pt-12 pb-12">
+      <div className="border-b border-border bg-white pt-12 pb-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="text-left">
               <button
                 type="button"
                 onClick={() => router.push("/organizations")}
-                className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 mb-8 hover:text-slate-900 transition-colors"
+                className="text-muted-foreground font-bold text-[10px] uppercase tracking-[0.3em] flex items-center gap-2 mb-8 hover:text-foreground transition-colors"
               >
                 <ArrowLeft size={14} /> Back to Registry
               </button>
               <div className="inline-flex items-center gap-3 mb-4">
-                <div className="w-8 h-[1px] bg-slate-900"></div>
-                <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                <div className="w-8 h-[1px] bg-secondary"></div>
+                <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
                   <Building2 size={14} className="text-emerald-700" />{" "}
                   Institutional Profile
                 </span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-serif text-slate-900 tracking-tight leading-none mb-4">
-                EcoLogic <span className="italic text-slate-500">Systems.</span>
+              <h1 className="text-4xl md:text-6xl font-sans text-foreground tracking-tight leading-none mb-4">
+                EcoLogic <span className="italic text-muted-foreground">Systems.</span>
               </h1>
-              <p className="text-slate-500 text-sm max-w-xl leading-relaxed font-light">
+              <p className="text-muted-foreground text-sm max-w-xl leading-relaxed font-light">
                 Strategic sustainability partner based in Accra, Ghana. Focused
                 on Nature-Based Solutions and Regenerative Agriculture offsets.
               </p>
@@ -81,7 +81,7 @@ function OrganizationDetailContent() {
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12">
         {/* Placeholder for content... */}
-        <p className="text-slate-500">Displaying organization {id}</p>
+        <p className="text-muted-foreground">Displaying organization {id}</p>
       </div>
     </div>
   );
@@ -92,7 +92,7 @@ export default function OrganizationDetailPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-white">
-          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+          <Loader2 className="w-10 h-10 text-foreground animate-spin" />
         </div>
       }
     >

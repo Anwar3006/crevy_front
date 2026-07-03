@@ -37,10 +37,10 @@ export default function ForgotPasswordPage() {
           <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-600">
             <Mail size={40} />
           </div>
-          <h2 className="text-2xl font-black text-slate-900 mb-2">
+          <h2 className="text-2xl font-black text-foreground mb-2">
             Check your email
           </h2>
-          <p className="text-slate-500 mb-8 font-medium">
+          <p className="text-muted-foreground mb-8 font-medium">
             We have sent a password reset link to your email address.
           </p>
           <Link
@@ -60,14 +60,14 @@ export default function ForgotPasswordPage() {
         <CardHeader className="space-y-4">
           <Link
             href="/login"
-            className="text-slate-400 hover:text-emerald-600 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors"
+            className="text-muted-foreground hover:text-emerald-600 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-colors"
           >
             <ArrowLeft size={14} /> Back to Login
           </Link>
-          <CardTitle className="text-3xl font-black text-slate-900 uppercase italic tracking-tighter">
+          <CardTitle className="text-3xl font-black text-foreground uppercase italic tracking-tighter">
             Forgot Password?
           </CardTitle>
-          <CardDescription className="text-slate-500 font-medium">
+          <CardDescription className="text-muted-foreground font-medium">
             No worries, it happens. Enter your email and we&apos;ll send you a
             recovery link.
           </CardDescription>
@@ -77,16 +77,16 @@ export default function ForgotPasswordPage() {
             <div className="space-y-2">
               <label
                 htmlFor="email"
-                className="text-[10px] font-black uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
               >
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
                   type="email"
                   placeholder="name@company.com"
-                  className="pl-12 h-14 rounded-2xl border-slate-200"
+                  className="pl-12 h-14 rounded-2xl border-border"
                   required
                 />
               </div>

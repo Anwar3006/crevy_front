@@ -1,7 +1,7 @@
 export const USERTYPE_OPTIONS = [
   {
-    label: "ProjectOwner",
-    value: "ProjectOwner",
+    label: "ProjectDeveloper",
+    value: "ProjectDeveloper",
   },
   {
     label: "Company",

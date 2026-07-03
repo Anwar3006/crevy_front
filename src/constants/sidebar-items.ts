@@ -49,8 +49,8 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           icon: CheckListIcon,
         },
         {
-          title: "Project Owners",
-          url: "/project-owners",
+          title: "Project Developers",
+          url: "/project-developers",
           icon: UserGroupIcon,
         },
       ],
@@ -98,8 +98,8 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
           icon: CheckListIcon,
         },
         {
-          title: "Project Owners",
-          url: "/project-owners",
+          title: "Project Developers",
+          url: "/project-developers",
           icon: UserGroupIcon,
         },
         { title: "Organizations", url: "/organizations", icon: Building02Icon },
@@ -231,13 +231,13 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
         { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
         { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
         {
-          title: "My Project Owners",
-          url: "/project-owners",
+          title: "My Project Developers",
+          url: "/project-developers",
           icon: UserGroupIcon,
         },
         {
           title: "Onboard Owner",
-          url: "/project-owners/register",
+          url: "/project-developers/register",
           icon: PropertyAddIcon,
         },
         { title: "Projects", url: "/projects", icon: ViewIcon },
@@ -261,7 +261,7 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
       ],
       sections: [],
     },
-    project_owner: {
+    project_developer: {
       topItems: [
         { title: "Dashboard", url: "/dashboard", icon: DashboardSquareAddIcon },
         { title: "Marketplace", url: "/marketplace", icon: DiscoverCircleIcon },
@@ -288,5 +288,5 @@ export const getSidebarConfig = (role: TRole): SidebarConfig => {
     },
   };
 
-  return configs[role] || configs.project_owner;
+  return configs[role] || configs.project_developer;
 };

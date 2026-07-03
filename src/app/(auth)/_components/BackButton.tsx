@@ -25,7 +25,7 @@ export default function BackButton({
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors",
+        "inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors",
         className,
       )}
     >

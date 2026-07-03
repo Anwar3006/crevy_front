@@ -22,14 +22,14 @@ export function SectionLabel({
       transition={{ delay, duration: 0.4 }}
       className="flex justify-between items-end border-b-2 border-slate-900 pb-3 mb-8"
     >
-      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 flex items-center gap-2">
+      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground flex items-center gap-2">
         <span className="w-2 h-2 bg-emerald-600 rounded-none shrink-0" />
         {label}
       </h2>
       {action && (
         <Link
           href={action.href}
-          className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-slate-900 transition-colors flex items-center gap-1"
+          className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-foreground transition-colors flex items-center gap-1"
         >
           {action.label} <ArrowRight size={12} />
         </Link>
@@ -110,23 +110,23 @@ export function StatCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
-      className="bg-white p-8 flex flex-col justify-between group hover:bg-slate-50 transition-colors border border-slate-200"
+      className="bg-white p-8 flex flex-col justify-between group hover:bg-muted transition-colors border border-border"
     >
       <div className="flex justify-between items-start mb-6">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           {label}
         </p>
-        {Icon && <Icon size={16} className="text-slate-900" />}
+        {Icon && <Icon size={16} className="text-foreground" />}
       </div>
       <div>
-        <h4 className="text-3xl md:text-4xl font-mono font-bold text-slate-900 tracking-tight mb-1">
+        <h4 className="text-3xl md:text-4xl font-mono font-bold text-foreground tracking-tight mb-1">
           {value}
-          <span className="text-base text-slate-400 ml-1 font-sans font-normal">
+          <span className="text-base text-muted-foreground ml-1 font-sans font-normal">
             {unit}
           </span>
         </h4>
         {trend && (
-          <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
             {trend}
           </p>
         )}
@@ -149,13 +149,13 @@ export function MrvPipelineStepper({
             href={stage.href}
             className="flex flex-col items-center group min-w-[72px]"
           >
-            <div className="w-12 h-12 border border-slate-900 flex items-center justify-center font-mono font-bold text-slate-900 bg-slate-50 group-hover:bg-slate-900 group-hover:text-white transition-colors mb-4 relative">
+            <div className="w-12 h-12 border border-slate-900 flex items-center justify-center font-mono font-bold text-foreground bg-muted group-hover:bg-secondary group-hover:text-white transition-colors mb-4 relative">
               {stage.count}
               {stage.count > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-emerald-500 rounded-none border border-white" />
               )}
             </div>
-            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-900 text-center">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground text-center">
               {stage.label}
             </span>
           </Link>

@@ -41,7 +41,7 @@ export default function MarketplaceProjectDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="w-10 h-10 text-brand animate-spin" />
       </div>
     );
@@ -49,16 +49,16 @@ export default function MarketplaceProjectDetailPage() {
 
   if (!project) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 p-6 text-center text-white">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center text-white">
         <h1 className="text-4xl font-extrabold text-white mb-4 uppercase tracking-tight">
           Project Not Located
         </h1>
-        <p className="text-slate-400 mb-8 max-w-md font-light">
+        <p className="text-muted-foreground mb-8 max-w-md font-light">
           The requested asset registry record could not be found.
         </p>
         <Button
           onClick={() => router.push("/marketplace")}
-          className="bg-brand text-slate-900 hover:bg-white rounded-none uppercase font-bold tracking-[0.2em] text-xs px-10 h-14"
+          className="bg-brand text-foreground hover:bg-white rounded-none uppercase font-bold tracking-[0.2em] text-xs px-10 h-14"
         >
           Return to Marketplace
         </Button>
@@ -67,9 +67,9 @@ export default function MarketplaceProjectDetailPage() {
   }
 
   return (
-    <div className="bg-slate-950 font-sans text-white selection:bg-slate-900 selection:text-white pb-32">
+    <div className="bg-background font-sans text-white selection:bg-secondary selection:text-white pb-32">
       {/* ── 1. CINEMATIC HERO SECTION ───────────────────────────────────────── */}
-      <section className="relative h-[90vh] w-full overflow-hidden bg-slate-950 border-b border-slate-900">
+      <section className="relative h-[90vh] w-full overflow-hidden bg-background border-b border-slate-900">
         <div className="absolute inset-0 z-0">
           <Image
             src={
@@ -93,10 +93,10 @@ export default function MarketplaceProjectDetailPage() {
             className="max-w-5xl space-y-8"
           >
             <div className="flex flex-wrap items-center gap-4">
-              <span className="bg-slate-900/80 border border-slate-800 text-brand px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] rounded-none backdrop-blur-md">
+              <span className="bg-secondary/80 border border-slate-800 text-brand px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] rounded-none backdrop-blur-md">
                 {project.projectType?.replace(/_/g, " ")}
               </span>
-              <span className="bg-slate-950/80 border border-slate-800 text-slate-400 px-4 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] rounded-none backdrop-blur-md">
+              <span className="bg-background/80 border border-slate-800 text-muted-foreground px-4 py-1.5 text-[10px] font-mono font-bold uppercase tracking-[0.2em] rounded-none backdrop-blur-md">
                 Registry:{" "}
                 {project.registryStatus?.replace(/_/g, " ").toUpperCase()}
               </span>
@@ -113,7 +113,7 @@ export default function MarketplaceProjectDetailPage() {
 
             <div className="flex flex-wrap items-center gap-12 pt-8 border-l-2 border-brand pl-8">
               <div>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-1">
                   Regional Context
                 </p>
                 <p className="text-white font-bold uppercase tracking-wide flex items-center gap-2 text-sm">
@@ -122,7 +122,7 @@ export default function MarketplaceProjectDetailPage() {
                 </p>
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-1">
                   Institutional Status
                 </p>
                 <p className="text-brand font-mono font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-xs">
@@ -139,7 +139,7 @@ export default function MarketplaceProjectDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left: Scientific Proof & Narrative */}
           <div className="lg:col-span-8 space-y-12">
-            <div className="bg-slate-900 border border-slate-800 p-10 lg:p-16 shadow-2xl rounded-none">
+            <div className="bg-secondary border border-slate-800 p-10 lg:p-16 shadow-2xl rounded-none">
               <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand mb-8 border-b border-slate-800 pb-4">
                 Impact Narrative
               </h2>
@@ -166,12 +166,12 @@ export default function MarketplaceProjectDetailPage() {
                   { label: "SDG Tags", val: "13, 15", unit: "#" },
                 ].map((m, i) => (
                   <div key={i} className="space-y-1">
-                    <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">
+                    <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
                       {m.label}
                     </p>
                     <p className="text-2xl font-mono font-bold text-white tracking-tight tabular-nums">
                       {m.val}{" "}
-                      <span className="text-[10px] text-slate-500 font-normal">
+                      <span className="text-[10px] text-muted-foreground font-normal">
                         {m.unit}
                       </span>
                     </p>
@@ -182,22 +182,22 @@ export default function MarketplaceProjectDetailPage() {
 
             {/* Scientific Trust Module */}
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-slate-900 border border-slate-800 p-8 space-y-6 rounded-none">
+              <div className="bg-secondary border border-slate-800 p-8 space-y-6 rounded-none">
                 <div className="flex justify-between items-start">
                   <Cpu className="text-brand" size={28} strokeWidth={1.5} />
-                  <span className="px-3 py-1 bg-brand text-slate-900 text-[9px] font-bold uppercase tracking-[0.2em]">
+                  <span className="px-3 py-1 bg-brand text-foreground text-[9px] font-bold uppercase tracking-[0.2em]">
                     99.8% Conf.
                   </span>
                 </div>
                 <h3 className="text-lg font-extrabold uppercase tracking-tight text-white">
                   AI Verification Proof
                 </h3>
-                <p className="text-slate-400 text-sm leading-relaxed font-light">
+                <p className="text-muted-foreground text-sm leading-relaxed font-light">
                   Crevy Worker 2 has validated this batch against historical
                   baselines with extreme certainty.
                 </p>
               </div>
-              <div className="bg-slate-900 border border-slate-800 p-8 space-y-6 text-white rounded-none">
+              <div className="bg-secondary border border-slate-800 p-8 space-y-6 text-white rounded-none">
                 <div className="flex justify-between items-start">
                   <Lock className="text-brand" size={28} strokeWidth={1.5} />
                   <span className="px-3 py-1 border border-slate-700 text-brand text-[9px] font-mono font-bold uppercase tracking-[0.2em]">
@@ -207,7 +207,7 @@ export default function MarketplaceProjectDetailPage() {
                 <h3 className="text-lg font-extrabold uppercase tracking-tight text-white">
                   Hardware Integrity
                 </h3>
-                <p className="text-slate-400 text-sm leading-relaxed font-light">
+                <p className="text-muted-foreground text-sm leading-relaxed font-light">
                   Cryptographic hardware signatures confirm raw telemetry
                   originated from verified on-site NDIR sensors.
                 </p>
@@ -217,7 +217,7 @@ export default function MarketplaceProjectDetailPage() {
 
           {/* Right: Pricing & Acquisition */}
           <div className="lg:col-span-4 lg:sticky lg:top-28">
-            <div className="bg-slate-950 border border-slate-800 p-10 text-white shadow-2xl space-y-10 relative overflow-hidden rounded-none">
+            <div className="bg-background border border-slate-800 p-10 text-white shadow-2xl space-y-10 relative overflow-hidden rounded-none">
               <div className="absolute top-0 right-0 p-10 opacity-5 rotate-12">
                 <Globe2 size={180} />
               </div>
@@ -230,22 +230,22 @@ export default function MarketplaceProjectDetailPage() {
                   <span className="text-5xl font-mono font-bold tracking-tight text-white tabular-nums">
                     $52.00
                   </span>
-                  <span className="text-slate-500 font-mono font-bold uppercase tracking-widest text-xs">
+                  <span className="text-muted-foreground font-mono font-bold uppercase tracking-widest text-xs">
                     USD
                   </span>
                 </div>
-                <p className="text-slate-400 text-[10px] font-mono uppercase tracking-widest">
+                <p className="text-muted-foreground text-[10px] font-mono uppercase tracking-widest">
                   Per verified carbon unit (tCO2e)
                 </p>
               </div>
 
               <div className="relative z-10 pt-8 border-t border-slate-800 space-y-6">
                 <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest">
-                  <span className="text-slate-400">Inventory Status</span>
+                  <span className="text-muted-foreground">Inventory Status</span>
                   <span className="text-brand font-bold">● Liquid</span>
                 </div>
                 <div className="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest">
-                  <span className="text-slate-400">Available units</span>
+                  <span className="text-muted-foreground">Available units</span>
                   <span className="font-bold text-white tabular-nums">
                     28,420 t
                   </span>
@@ -255,7 +255,7 @@ export default function MarketplaceProjectDetailPage() {
               <div className="relative z-10 space-y-4">
                 <Button
                   asChild
-                  className="w-full h-16 bg-brand hover:bg-white text-slate-900 rounded-none font-bold uppercase tracking-[0.2em] text-xs transition-colors group/btn"
+                  className="w-full h-16 bg-brand hover:bg-white text-foreground rounded-none font-bold uppercase tracking-[0.2em] text-xs transition-colors group/btn"
                 >
                   <Link href={`/marketplace/checkout?projectId=${project.id}`}>
                     Initiate Acquisition
@@ -265,7 +265,7 @@ export default function MarketplaceProjectDetailPage() {
                     />
                   </Link>
                 </Button>
-                <p className="text-[9px] text-slate-500 text-center font-mono uppercase tracking-widest leading-relaxed">
+                <p className="text-[9px] text-muted-foreground text-center font-mono uppercase tracking-widest leading-relaxed">
                   Transactions executed via smart-contracts and anchored on
                   Polygon PoS.
                 </p>
@@ -273,9 +273,9 @@ export default function MarketplaceProjectDetailPage() {
             </div>
 
             {/* Anonymized Originator */}
-            <div className="mt-6 p-6 border border-slate-800 bg-slate-900 flex items-center justify-between rounded-none">
+            <div className="mt-6 p-6 border border-slate-800 bg-secondary flex items-center justify-between rounded-none">
               <div>
-                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-1">
+                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-1">
                   Asset Originator
                 </p>
                 <p className="text-xs font-mono font-bold text-white uppercase tracking-wider">
@@ -283,7 +283,7 @@ export default function MarketplaceProjectDetailPage() {
                   {project.id.slice(0, 4).toUpperCase()}
                 </p>
               </div>
-              <div className="w-10 h-10 bg-slate-950 rounded-none flex items-center justify-center text-slate-500 border border-slate-800 font-mono text-sm">
+              <div className="w-10 h-10 bg-background rounded-none flex items-center justify-center text-muted-foreground border border-slate-800 font-mono text-sm">
                 ?
               </div>
             </div>

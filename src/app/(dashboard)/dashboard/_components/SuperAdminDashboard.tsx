@@ -28,38 +28,38 @@ export default function SuperAdminDashboard({
   const totalPending = pendingProjectsCount + pendingUsersCount;
 
   return (
-    <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10 font-sans selection:bg-slate-900 selection:text-white bg-slate-50 min-h-screen">
-      {/* ── 1. Hero Dossier ── */}
+    <div className="max-w-[1400px] mx-auto py-12 px-6 lg:px-10 font-sans selection:bg-secondary selection:text-white bg-muted min-h-screen">
+      {/* ── 1. Hero Details ── */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="grid md:grid-cols-12 gap-px bg-slate-200 border border-slate-200 mb-8"
+        className="grid md:grid-cols-12 gap-px bg-slate-200 border border-border mb-8"
       >
         <div className="md:col-span-8 bg-white p-10 md:p-14">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700 mb-4">
             Super Admin · Platform Registry
           </p>
-          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-6">
+          <h1 className="text-4xl md:text-5xl font-sans text-foreground tracking-tight leading-none mb-6">
             Carbon Registry{" "}
-            <span className="italic text-slate-500">Command Centre.</span>
+            <span className="italic text-muted-foreground">Command Centre.</span>
           </h1>
-          <p className="text-slate-500 font-light leading-relaxed max-w-xl mb-10">
+          <p className="text-muted-foreground font-light leading-relaxed max-w-xl mb-10">
             Monitor credit issuance, approve registrations, and ensure the
             cryptographic integrity of the global offset pipeline.
           </p>
           <Link
             href="/compliance"
-            className="inline-flex bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
+            className="inline-flex bg-secondary text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
           >
             Audit Ledger
           </Link>
         </div>
 
-        <div className="md:col-span-4 bg-slate-950 p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
+        <div className="md:col-span-4 bg-background p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
           <div className="relative z-10">
-            <p className="font-serif text-2xl mb-8">Operative: {userName}</p>
-            <ul className="space-y-4 font-mono text-xs text-slate-400">
+            <p className="font-sans text-2xl mb-8">Operative: {userName}</p>
+            <ul className="space-y-4 font-mono text-xs text-muted-foreground">
               <li className="flex items-center gap-3">
                 <span className="text-emerald-500">→</span>{" "}
                 {pendingProjectsCount} Project reviews pending
@@ -68,7 +68,7 @@ export default function SuperAdminDashboard({
                 <span className="text-emerald-500">→</span> {pendingUsersCount}{" "}
                 KYC audits pending
               </li>
-              <li className="flex items-center gap-3 mt-6 pt-6 border-t border-slate-800 text-slate-500">
+              <li className="flex items-center gap-3 mt-6 pt-6 border-t border-slate-800 text-muted-foreground">
                 <span className="w-2 h-2 bg-emerald-500 rounded-none shrink-0 animate-pulse" />{" "}
                 All services operational
               </li>
@@ -87,7 +87,7 @@ export default function SuperAdminDashboard({
       {/* ── 3. KPI Matrix ── */}
       <div className="mb-16">
         <SectionLabel label="Registry Liquidity Overview" delay={0.15} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-slate-200">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 border border-border">
           <StatCard
             label="Total Credits Issued"
             value="42,840"
@@ -136,12 +136,12 @@ export default function SuperAdminDashboard({
       >
         <SectionLabel label="Financial Settlement Vectors" />
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white border border-slate-200 p-8 flex flex-col justify-between">
+          <div className="bg-white border border-border p-8 flex flex-col justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
                 Platform Revenue (MTD)
               </p>
-              <h4 className="text-4xl font-mono font-bold text-slate-900 mb-2">
+              <h4 className="text-4xl font-mono font-bold text-foreground mb-2">
                 $24,600
               </h4>
               <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-600 flex items-center gap-1">
@@ -149,40 +149,40 @@ export default function SuperAdminDashboard({
               </p>
             </div>
           </div>
-          <div className="bg-white border border-slate-200 p-8 flex flex-col justify-between">
+          <div className="bg-white border border-border p-8 flex flex-col justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
                 Payout Queue
               </p>
-              <h4 className="text-4xl font-mono font-bold text-slate-900 mb-2">
+              <h4 className="text-4xl font-mono font-bold text-foreground mb-2">
                 12{" "}
-                <span className="text-base text-slate-400 font-sans">
+                <span className="text-base text-muted-foreground font-sans">
                   Pending
                 </span>
               </h4>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                 $38,240 outstanding
               </p>
             </div>
             <Link
               href="/financials/payouts"
-              className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-900 self-start mt-6 hover:text-emerald-700 hover:border-emerald-700 transition-colors"
+              className="text-[10px] font-bold uppercase tracking-widest text-foreground border-b border-slate-900 self-start mt-6 hover:text-emerald-700 hover:border-emerald-700 transition-colors"
             >
               Manage Payouts
             </Link>
           </div>
-          <div className="bg-white border border-slate-200 p-8 flex flex-col justify-between">
+          <div className="bg-white border border-border p-8 flex flex-col justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
                 Credits Acquired (MTD)
               </p>
-              <h4 className="text-4xl font-mono font-bold text-slate-900 mb-2">
+              <h4 className="text-4xl font-mono font-bold text-foreground mb-2">
                 2,840{" "}
-                <span className="text-base text-slate-400 font-sans">
+                <span className="text-base text-muted-foreground font-sans">
                   tCO₂e
                 </span>
               </h4>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-slate-500">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                 Value: $56,800
               </p>
             </div>
@@ -195,26 +195,26 @@ export default function SuperAdminDashboard({
         <SectionLabel label="Market Telemetry" delay={0.45} />
         <div className="grid lg:grid-cols-5 gap-8">
           <div className="lg:col-span-3 space-y-8">
-            <div className="bg-white border border-slate-200 p-8 h-[350px]">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 border-b border-slate-100 pb-2">
+            <div className="bg-white border border-border p-8 h-[350px]">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-6 border-b border-border pb-2">
                 User Acquisition Trajectory
               </h3>
-              <div className="w-full h-[250px] flex items-center justify-center bg-slate-50 text-slate-400 font-mono text-xs border border-dashed border-slate-200">
+              <div className="w-full h-[250px] flex items-center justify-center bg-muted text-muted-foreground font-mono text-xs border border-dashed border-border">
                 [MultiLineChart Component Renders Here]
               </div>
             </div>
-            <div className="bg-white border border-slate-200 p-8 h-[350px]">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 border-b border-slate-100 pb-2">
+            <div className="bg-white border border-border p-8 h-[350px]">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-6 border-b border-border pb-2">
                 Credit Market Liquidity
               </h3>
-              <div className="w-full h-[250px] flex items-center justify-center bg-slate-50 text-slate-400 font-mono text-xs border border-dashed border-slate-200">
+              <div className="w-full h-[250px] flex items-center justify-center bg-muted text-muted-foreground font-mono text-xs border border-dashed border-border">
                 [GroupedBarChart Component Renders Here]
               </div>
             </div>
           </div>
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white border border-slate-200 p-8 h-[350px] overflow-x-hidden">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 border-b border-slate-100 pb-2">
+            <div className="bg-white border border-border p-8 h-[350px] overflow-x-hidden">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-6 border-b border-border pb-2">
                 MRV Pipeline Flow
               </h3>
               <MrvPipelineStepper
@@ -226,8 +226,8 @@ export default function SuperAdminDashboard({
                 ]}
               />
             </div>
-            <div className="bg-slate-900 border border-slate-900 p-8 h-[350px] text-white">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-6 border-b border-slate-800 pb-2">
+            <div className="bg-secondary border border-slate-900 p-8 h-[350px] text-white">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-6 border-b border-slate-800 pb-2">
                 System Diagnostics
               </h3>
               <ul className="space-y-5 font-mono text-xs">
@@ -268,34 +268,34 @@ export default function SuperAdminDashboard({
             label="Project Vetting Ledger"
             action={{ label: "View All Projects", href: "/projects" }}
           />
-          <div className="bg-white border border-slate-200 overflow-x-auto">
+          <div className="bg-white border border-border overflow-x-auto">
             <table className="w-full text-left min-w-[800px]">
-              <thead className="bg-slate-50 border-b-2 border-slate-900">
+              <thead className="bg-muted border-b-2 border-slate-900">
                 <tr>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Project Reference
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Originator
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Methodology
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Priority
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground text-right">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <tr className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4 font-mono font-bold text-sm text-slate-900">
+                <tr className="hover:bg-muted transition-colors">
+                  <td className="px-6 py-4 font-mono font-bold text-sm text-foreground">
                     PRJ-GH-2026-081
                   </td>
-                  <td className="px-6 py-4 font-serif text-sm">Kwame Ofori</td>
-                  <td className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-slate-500">
+                  <td className="px-6 py-4 font-sans text-sm">Kwame Ofori</td>
+                  <td className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
                     Agroforestry
                   </td>
                   <td className="px-6 py-4">
@@ -306,7 +306,7 @@ export default function SuperAdminDashboard({
                   <td className="px-6 py-4 text-right space-x-2">
                     <button
                       type="button"
-                      className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-900 hover:text-white transition-colors"
+                      className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 border border-border text-slate-600 hover:bg-secondary hover:text-white transition-colors"
                     >
                       Review
                     </button>
@@ -329,37 +329,37 @@ export default function SuperAdminDashboard({
             label="Identity Verification Ledger"
             action={{ label: "Manage Directory", href: "/user-management" }}
           />
-          <div className="bg-white border border-slate-200 overflow-x-auto">
+          <div className="bg-white border border-border overflow-x-auto">
             <table className="w-full text-left min-w-[800px]">
-              <thead className="bg-slate-50 border-b-2 border-slate-900">
+              <thead className="bg-muted border-b-2 border-slate-900">
                 <tr>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Identity Reference
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Entity Name
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Role Request
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     KYC Status
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground text-right">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                <tr className="hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-4 font-mono font-bold text-sm text-slate-900">
+                <tr className="hover:bg-muted transition-colors">
+                  <td className="px-6 py-4 font-mono font-bold text-sm text-foreground">
                     USR-GH-9921
                   </td>
-                  <td className="px-6 py-4 font-serif text-sm">
+                  <td className="px-6 py-4 font-sans text-sm">
                     EcoFarm Consortium
                   </td>
-                  <td className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-slate-500">
-                    Project Owner
+                  <td className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                    Project Developer
                   </td>
                   <td className="px-6 py-4">
                     <span className="px-2 py-1 text-[9px] font-bold uppercase tracking-widest border border-amber-200 bg-amber-50 text-amber-700">
@@ -369,7 +369,7 @@ export default function SuperAdminDashboard({
                   <td className="px-6 py-4 text-right space-x-2">
                     <button
                       type="button"
-                      className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-900 hover:text-white transition-colors"
+                      className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 border border-border text-slate-600 hover:bg-secondary hover:text-white transition-colors"
                     >
                       Audit
                     </button>
@@ -389,30 +389,30 @@ export default function SuperAdminDashboard({
         {/* Activity Feed */}
         <div>
           <SectionLabel label="System Ledger Feed" />
-          <div className="bg-white border border-slate-200 p-6">
+          <div className="bg-white border border-border p-6">
             <ul className="space-y-4">
-              <li className="flex items-start gap-4 pb-4 border-b border-slate-100">
+              <li className="flex items-start gap-4 pb-4 border-b border-border">
                 <div className="p-2 bg-emerald-50 text-emerald-700 shrink-0">
                   <Leaf size={16} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-foreground">
                     1,200 tCO₂e Issued to PRJ-GH-2026-001
                   </p>
-                  <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1">
+                  <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-1">
                     Today, 14:32 UTC
                   </p>
                 </div>
               </li>
-              <li className="flex items-start gap-4 pb-4 border-b border-slate-100">
+              <li className="flex items-start gap-4 pb-4 border-b border-border">
                 <div className="p-2 bg-blue-50 text-blue-700 shrink-0">
                   <DollarSign size={16} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-foreground">
                     Payout $14,200 executed for EcoLogic Systems
                   </p>
-                  <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1">
+                  <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-1">
                     Today, 11:15 UTC
                   </p>
                 </div>
@@ -422,10 +422,10 @@ export default function SuperAdminDashboard({
                   <Activity size={16} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-foreground">
                     System maintenance completed successfully
                   </p>
-                  <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1">
+                  <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-1">
                     Yesterday, 02:00 UTC
                   </p>
                 </div>

@@ -11,7 +11,7 @@ export function ThePitchSection({
   shouldReduceMotion?: boolean;
 }) {
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-24 bg-muted">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 space-y-24">
         {/* ── 1. PROJECT OWNERS (Supply) ── */}
         <PitchBlock
@@ -108,10 +108,10 @@ function PitchBlock({ tag, headline, painPoint, bullets, cta, align }: any) {
       )}
     >
       <div className="flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
           {tag}
         </p>
-        <h2 className="text-4xl md:text-5xl text-slate-900 leading-tight tracking-tight mb-6">
+        <h2 className="text-4xl md:text-5xl text-foreground leading-tight tracking-tight mb-6">
           {headline}
         </h2>
         <div className="bg-brand/20 border-2 border-brand p-4 mb-8">
@@ -122,13 +122,13 @@ function PitchBlock({ tag, headline, painPoint, bullets, cta, align }: any) {
         </div>
         <Link
           href={cta.href}
-          className="inline-flex items-center gap-3 bg-brand text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-900 transition-colors"
+          className="inline-flex items-center gap-3 bg-brand text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-secondary transition-colors"
         >
           {cta.label} <ArrowUpRight size={14} />
         </Link>
       </div>
 
-      <div className="flex-1 bg-white border border-slate-200 p-8 md:p-10">
+      <div className="flex-1 bg-white border border-border p-8 md:p-10">
         <div className="space-y-8">
           {bullets.map((b: any, i: number) => (
             <div key={i} className="flex items-start gap-4">
@@ -136,7 +136,7 @@ function PitchBlock({ tag, headline, painPoint, bullets, cta, align }: any) {
                 <Check size={14} strokeWidth={3} />
               </div>
               <div>
-                <h4 className="font-bold text-slate-900 mb-1">{b.title}</h4>
+                <h4 className="font-bold text-foreground mb-1">{b.title}</h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   {b.desc}
                 </p>

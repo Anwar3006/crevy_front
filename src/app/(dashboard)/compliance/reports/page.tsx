@@ -34,15 +34,15 @@ export default function ComplianceReportsPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 space-y-12 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-200 pb-12">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-border pb-12">
         <div className="max-w-2xl">
           <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
             <FileText size={14} /> Institutional Compliance Artifacts
           </p>
-          <h1 className="text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter uppercase italic">
+          <h1 className="text-5xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
             Compliance <br /> Reports
           </h1>
-          <p className="text-slate-500 font-medium text-lg mt-6 leading-relaxed">
+          <p className="text-muted-foreground font-medium text-lg mt-6 leading-relaxed">
             Access and manage all generated ESG disclosure reports and impact
             assessments.
           </p>
@@ -52,36 +52,36 @@ export default function ComplianceReportsPage() {
       <div className="space-y-6">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[300px]">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search by reference or reporting window..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 h-12 rounded-2xl border-slate-200 focus:ring-emerald-500/20"
+              className="pl-12 h-12 rounded-2xl border-border focus:ring-emerald-500/20"
             />
           </div>
           <Button
             variant="outline"
-            className="h-12 px-6 rounded-2xl border-slate-200 font-bold text-xs gap-2"
+            className="h-12 px-6 rounded-2xl border-border font-bold text-xs gap-2"
           >
             <Filter size={16} /> Filter Results
           </Button>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-[3rem] overflow-hidden shadow-sm">
+        <div className="bg-white border border-border rounded-[3rem] overflow-hidden shadow-sm">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+              <tr className="bg-muted border-b border-border">
+                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                   Registry Reference
                 </th>
-                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                   Reporting Window
                 </th>
-                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
                   Institutional Impact
                 </th>
-                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right">
+                <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground text-right">
                   Action
                 </th>
               </tr>
@@ -90,7 +90,7 @@ export default function ComplianceReportsPage() {
               {reports.map((row, i) => (
                 <tr
                   key={i}
-                  className="hover:bg-slate-50/50 transition-all group"
+                  className="hover:bg-muted/50 transition-all group"
                 >
                   <td className="px-10 py-8">
                     <div className="flex items-center gap-4">
@@ -98,25 +98,25 @@ export default function ComplianceReportsPage() {
                         <FileText size={18} />
                       </div>
                       <div>
-                        <p className="font-black text-slate-900 tracking-tighter uppercase italic">
+                        <p className="font-black text-foreground tracking-tighter uppercase italic">
                           {row.ref}
                         </p>
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1 italic">
+                        <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-1 italic">
                           Published: {row.date}
                         </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-10 py-8 uppercase tracking-[0.15em] font-bold text-slate-500 text-[10px]">
+                  <td className="px-10 py-8 uppercase tracking-[0.15em] font-bold text-muted-foreground text-[10px]">
                     {row.period}
                   </td>
-                  <td className="px-10 py-8 text-slate-900 font-black tracking-tight">
+                  <td className="px-10 py-8 text-foreground font-black tracking-tight">
                     {row.amount}
                   </td>
                   <td className="px-10 py-8 text-right">
                     <Button
                       variant="outline"
-                      className="border-slate-200 text-slate-600 hover:bg-emerald-600 hover:text-white px-6 py-2.5 h-auto rounded-xl transition-all font-black uppercase text-[10px] tracking-widest shadow-lg active:scale-95"
+                      className="border-border text-slate-600 hover:bg-emerald-600 hover:text-white px-6 py-2.5 h-auto rounded-xl transition-all font-black uppercase text-[10px] tracking-widest shadow-lg active:scale-95"
                     >
                       Download Artifact <Download size={14} className="ml-2" />
                     </Button>
@@ -125,8 +125,8 @@ export default function ComplianceReportsPage() {
               ))}
             </tbody>
           </table>
-          <div className="p-10 bg-slate-50 flex justify-center border-t border-slate-100">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-3">
+          <div className="p-10 bg-muted flex justify-center border-t border-border">
+            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-3">
               <ShieldCheck size={16} className="text-emerald-500" /> All
               artifacts are cryptographically hashed and anchored to Polygon
               Mainnet.

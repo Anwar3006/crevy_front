@@ -26,7 +26,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
   const isSuperAdmin = user.role === "super_admin";
 
   return (
-    <div className="bg-slate-900 border border-slate-900 text-white relative overflow-hidden group">
+    <div className="bg-secondary border border-slate-900 text-white relative overflow-hidden group">
       {/* Abstract Institutional Watermark */}
       <div className="absolute -right-20 -bottom-20 text-slate-800 pointer-events-none opacity-50 group-hover:scale-105 transition-transform duration-1000">
         {user.role === "financial_admin" ? (
@@ -37,7 +37,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
       </div>
 
       <div className="p-8 md:p-12 relative z-10 flex flex-col md:flex-row items-start md:items-center gap-8">
-        <div className="h-24 w-24 md:h-32 md:w-32 bg-white text-slate-900 flex items-center justify-center font-serif text-4xl md:text-5xl shrink-0">
+        <div className="h-24 w-24 md:h-32 md:w-32 bg-white text-foreground flex items-center justify-center font-sans text-4xl md:text-5xl shrink-0">
           {initials}
         </div>
 
@@ -51,13 +51,13 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
               )}
               {user.role?.replace(/_/g, " ") || "Unassigned Entity"}
             </div>
-            <h1 className="text-4xl md:text-5xl font-serif tracking-tight leading-none mb-2">
+            <h1 className="text-4xl md:text-5xl font-sans tracking-tight leading-none mb-2">
               {user.firstName}{" "}
-              <span className="italic text-slate-400">{user.lastName}.</span>
+              <span className="italic text-muted-foreground">{user.lastName}.</span>
             </h1>
           </div>
 
-          <div className="flex flex-wrap gap-6 text-[11px] font-mono uppercase tracking-widest text-slate-400">
+          <div className="flex flex-wrap gap-6 text-[11px] font-mono uppercase tracking-widest text-muted-foreground">
             <span className="flex items-center gap-2">
               <Mail className="w-3.5 h-3.5 text-emerald-500" /> {user.email}
             </span>
@@ -76,11 +76,11 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
           </div>
 
           {(user.company?.legalBusinessName ||
-            user.projectOwner?.projectCategory) && (
+            user.projectDeveloper?.projectCategory) && (
             <div className="pt-4 mt-4 border-t border-slate-800 grid grid-cols-2 gap-4 max-w-lg">
               {user.company?.legalBusinessName && (
                 <div>
-                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+                  <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
                     Registered Entity
                   </p>
                   <p className="font-mono text-sm text-white">
@@ -88,13 +88,13 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
                   </p>
                 </div>
               )}
-              {user.projectOwner?.projectCategory && (
+              {user.projectDeveloper?.projectCategory && (
                 <div>
-                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+                  <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
                     Asset Category
                   </p>
                   <p className="font-mono text-sm text-white">
-                    {user.projectOwner.projectCategory}
+                    {user.projectDeveloper.projectCategory}
                   </p>
                 </div>
               )}

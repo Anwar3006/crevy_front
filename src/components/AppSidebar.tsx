@@ -34,11 +34,11 @@ export function AppSidebar({
   const pathname = usePathname();
   const { setOpenMobile, isMobile, state, toggleSidebar } = useSidebar();
 
-  const role = user.role || "project_owner";
+  const role = user.role || "project_developer";
   const sidebarConfig = getSidebarConfig(role);
 
   const getSidebarTheme = (r: string) => {
-    if (r === "super_admin" || r === "admin") return "bg-slate-950";
+    if (r === "super_admin" || r === "admin") return "bg-background";
     if (
       r.startsWith("org_") ||
       r === "sustainability_manager" ||
@@ -63,7 +63,7 @@ export function AppSidebar({
           <div className="flex items-center gap-3 overflow-hidden">
             <Link
               href="/"
-              className="text-2xl font-serif text-white tracking-tight group-data-[collapsible=icon]:hidden"
+              className="text-2xl font-sans text-white tracking-tight group-data-[collapsible=icon]:hidden"
             >
               Crevy.
             </Link>

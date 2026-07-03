@@ -25,21 +25,21 @@ function SuccessContent() {
       </div>
 
       <div className="space-y-4">
-        <h1 className="text-5xl font-black text-slate-900 uppercase italic tracking-tighter">
+        <h1 className="text-5xl font-black text-foreground uppercase italic tracking-tighter">
           Acquisition <br /> Confirmed
         </h1>
-        <p className="text-slate-500 font-medium text-lg max-w-sm mx-auto leading-relaxed">
+        <p className="text-muted-foreground font-medium text-lg max-w-sm mx-auto leading-relaxed">
           Your payment of{" "}
-          <span className="text-slate-900 font-black">
+          <span className="text-foreground font-black">
             ${parseFloat(amount || "0").toLocaleString()}
           </span>{" "}
-          for <span className="text-slate-900 font-black">{qty} tCO2e</span> has
+          for <span className="text-foreground font-black">{qty} tCO2e</span> has
           been successfully processed.
         </p>
       </div>
 
-      <div className="bg-slate-50 rounded-[2.5rem] p-10 border border-slate-100 space-y-4">
-        <p className="text-xs font-black uppercase tracking-widest text-slate-400">
+      <div className="bg-muted rounded-[2.5rem] p-10 border border-border space-y-4">
+        <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
           Institutional Next Steps
         </p>
         <p className="text-sm text-slate-600 font-medium">
@@ -52,7 +52,7 @@ function SuccessContent() {
       <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center">
         <Button
           onClick={() => router.push("/portfolio")}
-          className="h-14 px-10 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl"
+          className="h-14 px-10 bg-secondary hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl"
         >
           <LayoutDashboard className="w-4 h-4 mr-2" />
           View Portfolio
@@ -60,7 +60,7 @@ function SuccessContent() {
         <Button
           variant="outline"
           onClick={() => router.push("/marketplace")}
-          className="h-14 px-10 border-slate-200 text-slate-600 rounded-2xl font-black uppercase tracking-widest text-xs"
+          className="h-14 px-10 border-border text-slate-600 rounded-2xl font-black uppercase tracking-widest text-xs"
         >
           <Search className="w-4 h-4 mr-2" />
           Browse More

@@ -33,7 +33,7 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase())}
         </p>
-        <p className="text-slate-400 text-xs mb-4">
+        <p className="text-muted-foreground text-xs mb-4">
           (This section is optional but useful for carbon methodology)
         </p>
 
@@ -43,16 +43,16 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
             className="h-2 bg-slate-100"
             indicatorClassName="bg-emerald-500"
           />
-          <span className="text-sm font-medium text-slate-400 whitespace-nowrap">
+          <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
             80%
           </span>
         </div>
-        <p className="text-slate-400 text-sm">5 of 6 complete</p>
+        <p className="text-muted-foreground text-sm">5 of 6 complete</p>
       </div>
 
       <div className="space-y-6">
         <div className="space-y-3">
-          <Label className="text-slate-500 text-sm">
+          <Label className="text-muted-foreground text-sm">
             Are there social or economic benefits from the project?
           </Label>
           <CustomInput
@@ -65,7 +65,7 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
         </div>
 
         {/* <div className="space-y-3">
-          <Label className="text-slate-500 text-sm">
+          <Label className="text-muted-foreground text-sm">
             Does the project support biodiversity conservation or water
             management?
           </Label>
@@ -109,7 +109,7 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
         </div> */}
 
         {/* <div className="space-y-3">
-          <Label className="text-slate-500 text-sm">
+          <Label className="text-muted-foreground text-sm">
             Do you plan to expand the regenerative practices to other areas in
             the future?
           </Label>
@@ -171,7 +171,7 @@ const CommunityStep = ({ onNext, onPrev }: CommunityStepProps) => {
           label="Project Description"
           placeholder="Provide a detailed description of your project, implementation plan, and expected outcomes..."
         />
-        <p className="text-right text-xs text-slate-400 -mt-4">
+        <p className="text-right text-xs text-muted-foreground -mt-4">
           0/500 characters
         </p>
       </div>

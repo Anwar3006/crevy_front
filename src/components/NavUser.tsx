@@ -84,7 +84,7 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
                     <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-400/80">
                       {user?.role?.replace("_", " ")}
                     </span>
-                    <span className="truncate font-serif text-white text-base">
+                    <span className="truncate font-sans text-white text-base">
                       {user?.name || "User"}
                     </span>
                   </div>
@@ -95,28 +95,28 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-none border border-slate-200 shadow-2xl font-mono uppercase tracking-widest text-[10px]"
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-none border border-border shadow-2xl font-mono uppercase tracking-widest text-[10px]"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={16}
           >
-            <DropdownMenuLabel className="p-0 font-normal border-b border-slate-100 mb-1">
+            <DropdownMenuLabel className="p-0 font-normal border-b border-border mb-1">
               <div className="flex items-center gap-3 px-4 py-3 text-left">
-                <Avatar className="h-10 w-10 rounded-none border border-slate-200">
+                <Avatar className="h-10 w-10 rounded-none border border-border">
                   <AvatarImage
                     src={avatarUrl}
                     alt={user?.name}
                     className="object-cover"
                   />
-                  <AvatarFallback className="rounded-none bg-slate-900 text-white font-mono text-[10px]">
+                  <AvatarFallback className="rounded-none bg-secondary text-white font-mono text-[10px]">
                     {getInitials(user?.name)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left leading-tight">
-                  <span className="truncate font-bold text-slate-900 font-sans text-sm">
+                  <span className="truncate font-bold text-foreground font-sans text-sm">
                     {user?.name || "User"}
                   </span>
-                  <span className="truncate text-[9px] text-slate-400 lowercase tracking-normal font-sans">
+                  <span className="truncate text-[9px] text-muted-foreground lowercase tracking-normal font-sans">
                     {user?.email || ""}
                   </span>
                 </div>
@@ -126,16 +126,16 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
             <DropdownMenuGroup className="p-1">
               <DropdownMenuItem
                 onClick={() => router.push("/profile")}
-                className="cursor-pointer focus:bg-slate-50 focus:text-slate-900 py-2.5"
+                className="cursor-pointer focus:bg-muted focus:text-foreground py-2.5"
               >
-                <UserCircle className="h-4 w-4 mr-3 text-slate-400" />
+                <UserCircle className="h-4 w-4 mr-3 text-muted-foreground" />
                 My Profile
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => router.push("/settings")}
-                className="cursor-pointer focus:bg-slate-50 focus:text-slate-900 py-2.5"
+                className="cursor-pointer focus:bg-muted focus:text-foreground py-2.5"
               >
-                <BadgeCheck className="h-4 w-4 mr-3 text-slate-400" />
+                <BadgeCheck className="h-4 w-4 mr-3 text-muted-foreground" />
                 System Settings
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -146,7 +146,7 @@ export const NavUser = ({ user }: { user: TBetterAuthUser | null }) => {
               <DropdownMenuItem
                 onClick={handleLogOut}
                 disabled={loading}
-                className="cursor-pointer focus:bg-red-50 focus:text-red-600 text-slate-500 py-2.5"
+                className="cursor-pointer focus:bg-red-50 focus:text-red-600 text-muted-foreground py-2.5"
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-3" />

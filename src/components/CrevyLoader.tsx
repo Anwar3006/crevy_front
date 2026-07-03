@@ -35,7 +35,7 @@ export function CrevyLoader({ onComplete }: { onComplete?: () => void }) {
     <AnimatePresence onExitComplete={handleAnimationComplete}>
       {!isExiting && (
         <motion.div
-          className="fixed inset-0 z- bg-slate-900 flex flex-col items-center justify-center overflow-hidden"
+          className="fixed inset-0 z- bg-secondary flex flex-col items-center justify-center overflow-hidden"
           exit={{ y: "-100%" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
@@ -69,7 +69,7 @@ export function CrevyLoader({ onComplete }: { onComplete?: () => void }) {
             className="absolute bottom-12 flex flex-col items-center gap-2"
           >
             <div className="w-1.5 h-1.5 bg-white" />
-            <span className="font-mono text-[10px] text-slate-400 tracking-[0.3em] uppercase">
+            <span className="font-mono text-[10px] text-muted-foreground tracking-[0.3em] uppercase">
               {progress}%
             </span>
           </motion.div>

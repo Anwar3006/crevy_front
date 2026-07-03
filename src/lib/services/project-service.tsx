@@ -24,7 +24,7 @@ export const ProjectService = {
       projectTags: data.projectTags,
       description: data.description,
       sdgs: data.sdgs,
-      projectOwnerId: data.projectOwnerId || undefined,
+      projectDeveloperId: data.projectDeveloperId || undefined,
       assignedAdminId: data.assignedAdminId || undefined,
     };
     const response = await axiosClient.post("/projects", payload);

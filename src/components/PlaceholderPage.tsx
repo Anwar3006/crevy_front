@@ -16,7 +16,7 @@ const PlaceholderPage = ({
       >
         {title}
       </h1>
-      <p className="max-w-md text-slate-500 leading-relaxed">{description}</p>
+      <p className="max-w-md text-muted-foreground leading-relaxed">{description}</p>
       <div className="mt-8 flex gap-3">
         <div className="h-2 w-2 rounded-full bg-[#2cc295] animate-bounce" />
         <div className="h-2 w-2 rounded-full bg-[#2cc295] animate-bounce [animation-delay:0.2s]" />

@@ -81,7 +81,7 @@ function MarketplaceProjectDetailContent() {
   if (isError || !project) return <ProjectNotFoundState />;
 
   return (
-    <div className="bg-white min-h-screen selection:bg-slate-900 selection:text-white">
+    <div className="bg-white min-h-screen selection:bg-secondary selection:text-white">
       {/* ── SEO & Meta ── */}
       <MarketplaceSEO
         title={project.name}
@@ -94,7 +94,7 @@ function MarketplaceProjectDetailContent() {
       {/* ── Institutional Hero ── */}
       <ProjectHero project={project} visual={visual} />
 
-      <main className="relative z-20 bg-white border-t border-slate-200">
+      <main className="relative z-20 bg-white border-t border-border">
         {/* ── Price Insight Section ── */}
         <div className="max-w-7xl mx-auto px-6 lg:px-20 pt-16">
           <ProjectPriceChart data={priceData} />
@@ -107,7 +107,7 @@ function MarketplaceProjectDetailContent() {
           <Button
             onClick={() => router.push("/marketplace")}
             variant="ghost"
-            className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] hover:text-slate-900 rounded-none"
+            className="text-muted-foreground font-bold uppercase tracking-[0.2em] text-[10px] hover:text-foreground rounded-none"
           >
             <ArrowLeft className="mr-2 w-4 h-4" /> Back to Marketplace Discovery
           </Button>
@@ -121,7 +121,7 @@ export default function ProjectMarketplacePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="min-h-screen flex items-center justify-center bg-background">
           <Loader2 className="w-10 h-10 text-brand animate-spin" />
         </div>
       }
@@ -133,13 +133,13 @@ export default function ProjectMarketplacePage() {
 
 function ProjectLoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="h-[90vh] bg-slate-900 animate-pulse" />
+    <div className="min-h-screen bg-background">
+      <div className="h-[90vh] bg-secondary animate-pulse" />
       <div className="max-w-7xl mx-auto px-20 py-20 space-y-12">
-        <Skeleton className="h-[400px] rounded-none bg-slate-900" />
+        <Skeleton className="h-[400px] rounded-none bg-secondary" />
         <div className="grid grid-cols-3 gap-10">
-          <Skeleton className="h-64 col-span-2 rounded-none bg-slate-900" />
-          <Skeleton className="h-64 rounded-none bg-slate-900" />
+          <Skeleton className="h-64 col-span-2 rounded-none bg-secondary" />
+          <Skeleton className="h-64 rounded-none bg-secondary" />
         </div>
       </div>
     </div>
@@ -149,17 +149,17 @@ function ProjectLoadingSkeleton() {
 function ProjectNotFoundState() {
   const router = useRouter();
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-slate-950 text-white">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-background text-white">
       <h1 className="text-4xl font-extrabold text-white mb-4 uppercase tracking-tight">
         Project Not Found
       </h1>
-      <p className="text-slate-400 mb-8 max-w-md font-light">
+      <p className="text-muted-foreground mb-8 max-w-md font-light">
         The asset registry record could not be located. It may have been
         archived or is restricted.
       </p>
       <Button
         onClick={() => router.back()}
-        className="rounded-none h-14 px-10 bg-brand text-slate-900 hover:bg-white font-bold uppercase tracking-[0.2em] text-xs"
+        className="rounded-none h-14 px-10 bg-brand text-foreground hover:bg-white font-bold uppercase tracking-[0.2em] text-xs"
       >
         Return to Ledger
       </Button>

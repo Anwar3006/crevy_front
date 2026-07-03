@@ -70,19 +70,19 @@ export default function ContractsPage() {
   return (
     <div className="animate-in fade-in duration-700 pb-24">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 pt-12 pb-12">
+      <div className="bg-white border-b border-border pt-12 pb-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div className="max-w-2xl">
-              <p className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <p className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                 <ShieldCheck size={14} className="text-emerald-700" /> Legal
                 Artifact Registry
               </p>
-              <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-4">
+              <h1 className="text-4xl md:text-5xl font-sans text-foreground tracking-tight leading-none mb-4">
                 Contract{" "}
-                <span className="italic text-slate-500">Management.</span>
+                <span className="italic text-muted-foreground">Management.</span>
               </h1>
-              <p className="text-slate-500 text-sm font-light leading-relaxed">
+              <p className="text-muted-foreground text-sm font-light leading-relaxed">
                 Centralized governance of all institutional agreements,
                 emissions rights, and credit deeds mapped to verified dMRV
                 methodologies.
@@ -90,7 +90,7 @@ export default function ContractsPage() {
             </div>
             <button
               type="button"
-              className="shrink-0 bg-slate-900 hover:bg-emerald-900 text-white px-6 py-3 font-bold uppercase tracking-widest text-[10px] transition-colors flex items-center gap-2"
+              className="shrink-0 bg-secondary hover:bg-emerald-900 text-white px-6 py-3 font-bold uppercase tracking-widest text-[10px] transition-colors flex items-center gap-2"
             >
               <Plus size={14} /> Initialize Agreement
             </button>
@@ -101,24 +101,24 @@ export default function ContractsPage() {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12">
         {/* ── Visual Insights ── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          <div className="lg:col-span-1 bg-slate-900 text-white p-8 border border-slate-800 flex flex-col justify-center">
+          <div className="lg:col-span-1 bg-secondary text-white p-8 border border-slate-800 flex flex-col justify-center">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400 mb-2">
               Committed Inventory
             </p>
             <h2 className="text-5xl font-mono font-bold tracking-tight mb-2">
               72,900
-              <span className="text-lg text-slate-400 ml-2 font-sans font-normal">
+              <span className="text-lg text-muted-foreground ml-2 font-sans font-normal">
                 tCO₂e
               </span>
             </h2>
-            <p className="text-xs font-mono text-slate-400 border-t border-slate-800 pt-4 mt-4">
+            <p className="text-xs font-mono text-muted-foreground border-t border-slate-800 pt-4 mt-4">
               Across 4 active agreements
             </p>
           </div>
 
-          <div className="lg:col-span-2 bg-white border border-slate-200 p-8">
+          <div className="lg:col-span-2 bg-white border border-border p-8">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-900">
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-foreground">
                 Volume by Contract Type
               </h3>
             </div>
@@ -164,14 +164,14 @@ export default function ContractsPage() {
         </div>
 
         {/* ── Contract Ledger ── */}
-        <div className="bg-white border border-slate-200 overflow-hidden">
-          <div className="p-6 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+        <div className="bg-white border border-border overflow-hidden">
+          <div className="p-6 border-b border-border bg-muted flex justify-between items-center">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Active Artifacts
             </h3>
             <button
               type="button"
-              className="text-slate-400 hover:text-slate-900 transition-colors"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Filter size={16} />
             </button>
@@ -180,25 +180,25 @@ export default function ContractsPage() {
             <table className="w-full text-left min-w-[900px]">
               <thead>
                 <tr className="border-b-2 border-slate-900">
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Reference ID
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Agreement Type
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Counterparty
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Methodology
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground text-right">
                     Committed Vol.
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground text-right">
                     Actions
                   </th>
                 </tr>
@@ -207,18 +207,18 @@ export default function ContractsPage() {
                 {contracts.map((con, i) => (
                   <tr
                     key={i}
-                    className="hover:bg-slate-50 transition-colors group"
+                    className="hover:bg-muted transition-colors group"
                   >
-                    <td className="px-6 py-4 font-mono text-sm font-bold text-slate-900">
+                    <td className="px-6 py-4 font-mono text-sm font-bold text-foreground">
                       {con.id}
                     </td>
-                    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                       {con.type.replace("_", " ")}
                     </td>
-                    <td className="px-6 py-4 font-serif text-sm text-slate-900">
+                    <td className="px-6 py-4 font-sans text-sm text-foreground">
                       {con.party}
                     </td>
-                    <td className="px-6 py-4 text-[11px] font-mono text-slate-500 uppercase tracking-widest">
+                    <td className="px-6 py-4 text-[11px] font-mono text-muted-foreground uppercase tracking-widest">
                       {con.meth}
                     </td>
                     <td className="px-6 py-4">
@@ -235,20 +235,20 @@ export default function ContractsPage() {
                         {con.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-sm font-bold text-slate-900">
+                    <td className="px-6 py-4 text-right font-mono text-sm font-bold text-foreground">
                       {con.volume}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           type="button"
-                          className="p-2 text-slate-400 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-900 transition-colors"
+                          className="p-2 text-muted-foreground hover:text-foreground bg-white border border-border hover:border-slate-900 transition-colors"
                         >
                           <ExternalLink size={14} />
                         </button>
                         <button
                           type="button"
-                          className="p-2 text-slate-400 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-900 transition-colors"
+                          className="p-2 text-muted-foreground hover:text-foreground bg-white border border-border hover:border-slate-900 transition-colors"
                         >
                           <Download size={14} />
                         </button>

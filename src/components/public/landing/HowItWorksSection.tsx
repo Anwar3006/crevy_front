@@ -99,7 +99,7 @@ export function HowItWorksSection({
                   : "text-gray-500 hover:text-myBlue cursor-pointer",
               )}
             >
-              I'm a Project Owner
+              I'm a Project Developer
             </button>
             <button
               type="button"

@@ -40,7 +40,7 @@ function FieldLabel({
   required?: boolean;
 }) {
   return (
-    <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+    <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
       {children}
       {required && <span className="text-emerald-600 ml-1">*</span>}
     </div>
@@ -81,7 +81,7 @@ function TextField({
           <input
             type={type}
             placeholder={placeholder}
-            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors outline-none"
+            className="w-full bg-muted border-0 border-b-2 border-border p-4 font-sans text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors outline-none"
             {...field}
             value={field.value as string}
           />
@@ -115,7 +115,7 @@ function TextareaField({
           <textarea
             placeholder={placeholder}
             rows={4}
-            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors outline-none resize-none"
+            className="w-full bg-muted border-0 border-b-2 border-border p-4 font-sans text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors outline-none resize-none"
             {...field}
             value={field.value as string}
           />
@@ -149,7 +149,7 @@ function SingleSelectField({
         <div className="space-y-3">
           <FieldLabel required={required}>{label}</FieldLabel>
           <Select value={field.value as string} onValueChange={field.onChange}>
-            <SelectTrigger className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 rounded-none p-4 h-auto font-serif text-sm text-slate-900 focus:ring-0 data-[state=open]:border-slate-900">
+            <SelectTrigger className="w-full bg-muted border-0 border-b-2 border-border rounded-none p-4 h-auto font-sans text-sm text-foreground focus:ring-0 data-[state=open]:border-slate-900">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
@@ -212,8 +212,8 @@ function MultiSelectChips({
                     className={cn(
                       "px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest border transition-colors",
                       isActive
-                        ? "bg-slate-900 border-slate-900 text-white"
-                        : "bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-900",
+                        ? "bg-secondary border-slate-900 text-white"
+                        : "bg-muted border-border text-muted-foreground hover:border-slate-400 hover:text-foreground",
                     )}
                   >
                     {option}
@@ -258,11 +258,11 @@ function SelectableCardGroup({
                   className={cn(
                     "text-left p-6 border transition-colors",
                     isActive
-                      ? "bg-slate-900 border-slate-900 text-white"
-                      : "bg-slate-50 border-slate-200 text-slate-900 hover:border-slate-400",
+                      ? "bg-secondary border-slate-900 text-white"
+                      : "bg-muted border-border text-foreground hover:border-slate-400",
                   )}
                 >
-                  <p className="font-serif text-base leading-snug">{option}</p>
+                  <p className="font-sans text-base leading-snug">{option}</p>
                 </button>
               );
             })}
@@ -327,10 +327,10 @@ export default function RegisterInterestForm({
             Crevy Early Access
           </span>
         </div>
-        <h1 className="font-serif text-4xl md:text-5xl text-slate-900 tracking-tight leading-none mb-4">
-          Register Your <span className="italic text-slate-500">Interest.</span>
+        <h1 className="font-sans text-4xl md:text-5xl text-foreground tracking-tight leading-none mb-4">
+          Register Your <span className="italic text-muted-foreground">Interest.</span>
         </h1>
-        <p className="text-slate-500 text-sm leading-relaxed max-w-lg">
+        <p className="text-muted-foreground text-sm leading-relaxed max-w-lg">
           Tell us about yourself and how you'd like to engage with the carbon
           markets. A member of our team will personally follow up to discuss
           next steps.
@@ -345,7 +345,7 @@ export default function RegisterInterestForm({
         >
           {/* ── Identity ── */}
           <section className="space-y-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 pb-3 border-b border-slate-200">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground pb-3 border-b border-border">
               01 — Identity
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -386,7 +386,7 @@ export default function RegisterInterestForm({
 
           {/* ── Organization ── */}
           <section className="space-y-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 pb-3 border-b border-slate-200">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground pb-3 border-b border-border">
               02 — Organization
             </p>
             <TextField
@@ -415,7 +415,7 @@ export default function RegisterInterestForm({
 
           {/* ── Profile ── */}
           <section className="space-y-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 pb-3 border-b border-slate-200">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground pb-3 border-b border-border">
               03 — Profile
             </p>
             <SingleSelectField
@@ -443,7 +443,7 @@ export default function RegisterInterestForm({
 
           {/* ── Engagement (conditional) ── */}
           <section className="space-y-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 pb-3 border-b border-slate-200">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground pb-3 border-b border-border">
               04 — Engagement
             </p>
             <div className="space-y-3">
@@ -496,7 +496,7 @@ export default function RegisterInterestForm({
 
           {/* ── Feedback ── */}
           <section className="space-y-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 pb-3 border-b border-slate-200">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground pb-3 border-b border-border">
               05 — Feedback
             </p>
             <TextareaField

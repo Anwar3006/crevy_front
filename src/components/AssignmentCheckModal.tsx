@@ -37,7 +37,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ProjectOwnerService } from "@/lib/services/project-owner-service";
+import { ProjectDeveloperService } from "@/lib/services/project-developer-service";
 import { UserService } from "@/lib/services/user-service";
 import { cn } from "@/lib/utils";
 import type { TRole } from "@/types/user.types";
@@ -45,7 +45,7 @@ import type { TRole } from "@/types/user.types";
 interface AssignmentCheckModalProps {
   isOpen: boolean;
   role?: TRole;
-  onProceed: (projectOwnerId: string, assignedAdminId?: string) => void;
+  onProceed: (projectDeveloperId: string, assignedAdminId?: string) => void;
   onClose?: () => void; // Optional: If not provided, closing aborts to dashboard
 }
 
@@ -64,7 +64,7 @@ export function AssignmentCheckModal({
   const [isOwnerPopoverOpen, setIsOwnerPopoverOpen] = React.useState(false);
   const [isAdminPopoverOpen, setIsAdminPopoverOpen] = React.useState(false);
 
-  // 1. Fetch Project Owners (Paginated + Searchable)
+  // 1. Fetch Project Developers (Paginated + Searchable)
   const {
     data: ownerData,
     fetchNextPage: fetchNextOwners,
@@ -72,9 +72,9 @@ export function AssignmentCheckModal({
     isFetchingNextPage: isFetchingMoreOwners,
     isLoading: isLoadingOwners,
   } = useInfiniteQuery({
-    queryKey: ["project-owners-dropdown", search, selectedAdminId],
+    queryKey: ["project-developers-dropdown", search, selectedAdminId],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) =>
-      ProjectOwnerService.listProjectOwners({
+      ProjectDeveloperService.listProjectDevelopers({
         search,
         agentId: role === "super_admin" ? undefined : selectedAdminId,
         cursor: pageParam,
@@ -99,16 +99,16 @@ export function AssignmentCheckModal({
   console.log("Selected AdminId: ", selectedAdminId);
 
   React.useEffect(() => {
-    // Project Owners bypass this gate completely.
-    if (role === "project_owner" && isOpen) {
+    // Project Developers bypass this gate completely.
+    if (role === "project_developer" && isOpen) {
       onProceed("");
     }
   }, [role, isOpen, onProceed]);
 
-  if (!role || role === "project_owner") return null;
+  if (!role || role === "project_developer") return null;
 
   const handleOnboardRedirect = () => {
-    router.push("/project-owners/register");
+    router.push("/project-developers/register");
   };
 
   const handleFinalProceed = () => {
@@ -144,17 +144,17 @@ export function AssignmentCheckModal({
               transition={{ duration: 0.2 }}
             >
               <DialogHeader className="space-y-4 mb-6">
-                <div className="w-12 h-12 border border-slate-900 bg-slate-50 flex items-center justify-center text-slate-900">
+                <div className="w-12 h-12 border border-slate-900 bg-muted flex items-center justify-center text-foreground">
                   <Users className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-2 text-left">
-                  <DialogTitle className="text-3xl font-serif font-bold text-slate-900 tracking-tight">
+                  <DialogTitle className="text-3xl font-sans font-bold text-foreground tracking-tight">
                     Originator Verification
                   </DialogTitle>
                   <DialogDescription className="text-slate-600 text-sm font-light leading-relaxed">
                     Prior to initializing a new asset ledger, ensure the
-                    associated Originator (Project Owner) profile has been fully
+                    associated Originator (Project Developer) profile has been fully
                     authenticated on the registry.
                   </DialogDescription>
                 </div>
@@ -178,14 +178,14 @@ export function AssignmentCheckModal({
                   type="button"
                   variant="outline"
                   onClick={() => setStep(2)}
-                  className="w-full py-6 rounded-none border-slate-300 hover:border-slate-900 hover:bg-slate-50 text-slate-900 font-bold text-[10px] uppercase tracking-widest order-last sm:order-first transition-all"
+                  className="w-full py-6 rounded-none border-slate-300 hover:border-slate-900 hover:bg-muted text-foreground font-bold text-[10px] uppercase tracking-widest order-last sm:order-first transition-all"
                 >
                   Originator is Registered
                 </Button>
                 <Button
                   type="button"
                   onClick={handleOnboardRedirect}
-                  className="w-full py-6 rounded-none bg-slate-900 hover:bg-emerald-700 text-white font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors"
+                  className="w-full py-6 rounded-none bg-secondary hover:bg-emerald-700 text-white font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors"
                 >
                   Onboard Originator <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -200,12 +200,12 @@ export function AssignmentCheckModal({
               transition={{ duration: 0.2 }}
             >
               <DialogHeader className="space-y-4 mb-6">
-                <div className="w-12 h-12 border border-slate-900 bg-slate-900 flex items-center justify-center text-white">
+                <div className="w-12 h-12 border border-slate-900 bg-secondary flex items-center justify-center text-white">
                   <UserSquare className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-2 text-left">
-                  <DialogTitle className="text-3xl font-serif font-bold text-slate-900 tracking-tight">
+                  <DialogTitle className="text-3xl font-sans font-bold text-foreground tracking-tight">
                     Link Originator Profile
                   </DialogTitle>
                   <DialogDescription className="text-slate-600 text-sm font-light leading-relaxed">
@@ -221,7 +221,7 @@ export function AssignmentCheckModal({
                   <div className="space-y-2">
                     <label
                       htmlFor="admin"
-                      className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900"
+                      className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground"
                     >
                       Assigned Operative (Manager)
                     </label>
@@ -234,7 +234,7 @@ export function AssignmentCheckModal({
                         <Button
                           variant="outline"
                           role="combobox"
-                          className="w-full justify-between h-14 rounded-none border-slate-300 px-4 font-mono text-sm text-slate-700 hover:bg-slate-50 hover:border-slate-900 transition-colors"
+                          className="w-full justify-between h-14 rounded-none border-slate-300 px-4 font-mono text-sm text-slate-700 hover:bg-muted hover:border-slate-900 transition-colors"
                         >
                           {selectedAdmin
                             ? `${selectedAdmin.firstName} ${selectedAdmin.lastName}`
@@ -251,10 +251,10 @@ export function AssignmentCheckModal({
                           <CommandList>
                             {isLoadingAdmins ? (
                               <div className="p-6 text-center">
-                                <Loader2 className="h-5 w-5 animate-spin mx-auto text-slate-900" />
+                                <Loader2 className="h-5 w-5 animate-spin mx-auto text-foreground" />
                               </div>
                             ) : admins.length === 0 ? (
-                              <CommandEmpty className="py-6 text-center text-xs font-mono text-slate-500">
+                              <CommandEmpty className="py-6 text-center text-xs font-mono text-muted-foreground">
                                 No operatives found.
                               </CommandEmpty>
                             ) : (
@@ -268,21 +268,21 @@ export function AssignmentCheckModal({
                                       setSelectedOwnerId("");
                                       setIsAdminPopoverOpen(false);
                                     }}
-                                    className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-none hover:bg-slate-50 data-[selected=true]:bg-slate-100"
+                                    className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-none hover:bg-muted data-[selected=true]:bg-slate-100"
                                   >
                                     <Check
                                       className={cn(
-                                        "h-4 w-4 text-slate-900",
+                                        "h-4 w-4 text-foreground",
                                         selectedAdminId === admin.id
                                           ? "opacity-100"
                                           : "opacity-0",
                                       )}
                                     />
                                     <div className="flex flex-col">
-                                      <span className="font-serif font-bold text-slate-900">
+                                      <span className="font-sans font-bold text-foreground">
                                         {admin.firstName} {admin.lastName}
                                       </span>
-                                      <span className="text-[10px] text-slate-500 font-mono">
+                                      <span className="text-[10px] text-muted-foreground font-mono">
                                         {admin.email}
                                       </span>
                                     </div>
@@ -300,9 +300,9 @@ export function AssignmentCheckModal({
                 <div className="space-y-2">
                   <label
                     htmlFor="owner"
-                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900"
+                    className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground"
                   >
-                    Originator Entity (Project Owner)
+                    Originator Entity (Project Developer)
                   </label>
                   <Popover
                     open={isOwnerPopoverOpen}
@@ -313,8 +313,8 @@ export function AssignmentCheckModal({
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-full justify-between h-14 rounded-none border-slate-300 px-4 font-mono text-sm text-slate-700 hover:bg-slate-50 hover:border-slate-900 transition-colors",
-                          !selectedOwnerId && "text-slate-400",
+                          "w-full justify-between h-14 rounded-none border-slate-300 px-4 font-mono text-sm text-slate-700 hover:bg-muted hover:border-slate-900 transition-colors",
+                          !selectedOwnerId && "text-muted-foreground",
                         )}
                       >
                         {selectedOwner
@@ -328,10 +328,10 @@ export function AssignmentCheckModal({
                         shouldFilter={false}
                         className="border-none rounded-none"
                       >
-                        <div className="flex items-center border-b border-slate-200 px-3">
-                          <Search className="mr-2 h-4 w-4 shrink-0 opacity-50 text-slate-900" />
+                        <div className="flex items-center border-b border-border px-3">
+                          <Search className="mr-2 h-4 w-4 shrink-0 opacity-50 text-foreground" />
                           <input
-                            className="flex h-11 w-full rounded-none bg-transparent py-3 text-xs font-mono outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex h-11 w-full rounded-none bg-transparent py-3 text-xs font-mono outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                             placeholder="Search by exact name or ID..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
@@ -340,14 +340,14 @@ export function AssignmentCheckModal({
                         <CommandList className="max-h-[300px]">
                           {isLoadingOwners ? (
                             <div className="p-6 text-center">
-                              <Loader2 className="h-5 w-5 animate-spin mx-auto text-slate-900" />
+                              <Loader2 className="h-5 w-5 animate-spin mx-auto text-foreground" />
                             </div>
                           ) : owners.length === 0 ? (
                             <CommandEmpty className="p-8 text-center">
-                              <p className="text-sm font-serif font-bold text-slate-900 mb-1">
+                              <p className="text-sm font-sans font-bold text-foreground mb-1">
                                 No entities found.
                               </p>
-                              <p className="text-xs text-slate-500 font-light mb-6">
+                              <p className="text-xs text-muted-foreground font-light mb-6">
                                 {role === "super_admin" && !selectedAdminId
                                   ? "Acknowledge an operative first."
                                   : "The originator must be onboarded to the registry first."}
@@ -356,7 +356,7 @@ export function AssignmentCheckModal({
                                 size="sm"
                                 variant="outline"
                                 onClick={handleOnboardRedirect}
-                                className="rounded-none border-slate-900 text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:bg-slate-900 hover:text-white transition-colors"
+                                className="rounded-none border-slate-900 text-[10px] font-bold uppercase tracking-widest text-foreground hover:bg-secondary hover:text-white transition-colors"
                               >
                                 Onboard Now
                               </Button>
@@ -371,7 +371,7 @@ export function AssignmentCheckModal({
                                     setSelectedOwnerId(owner.id);
                                     setIsOwnerPopoverOpen(false);
                                   }}
-                                  className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-none hover:bg-slate-50 data-[selected=true]:bg-slate-100"
+                                  className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-none hover:bg-muted data-[selected=true]:bg-slate-100"
                                 >
                                   <Check
                                     className={cn(
@@ -382,21 +382,21 @@ export function AssignmentCheckModal({
                                     )}
                                   />
                                   <div className="flex flex-col">
-                                    <span className="font-serif font-bold text-slate-900">
+                                    <span className="font-sans font-bold text-foreground">
                                       {owner.firstName} {owner.lastName}
                                     </span>
-                                    <span className="text-[10px] text-slate-500 font-mono tracking-wider">
+                                    <span className="text-[10px] text-muted-foreground font-mono tracking-wider">
                                       {owner.code}
                                     </span>
                                   </div>
                                 </CommandItem>
                               ))}
                               {hasMoreOwners && (
-                                <div className="p-2 border-t border-slate-200">
+                                <div className="p-2 border-t border-border">
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="w-full text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-none"
+                                    className="w-full text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-slate-100 rounded-none"
                                     onClick={() => fetchNextOwners()}
                                     disabled={isFetchingMoreOwners}
                                   >
@@ -422,7 +422,7 @@ export function AssignmentCheckModal({
                   type="button"
                   variant="outline"
                   onClick={() => setStep(1)}
-                  className="w-full py-6 rounded-none border-slate-300 hover:border-slate-900 hover:bg-slate-50 text-slate-900 font-bold text-[10px] uppercase tracking-widest order-last sm:order-first transition-all"
+                  className="w-full py-6 rounded-none border-slate-300 hover:border-slate-900 hover:bg-muted text-foreground font-bold text-[10px] uppercase tracking-widest order-last sm:order-first transition-all"
                 >
                   <ChevronLeft className="w-4 h-4 mr-2" />
                   Retreat
@@ -431,7 +431,7 @@ export function AssignmentCheckModal({
                   type="button"
                   disabled={!selectedOwnerId}
                   onClick={handleFinalProceed}
-                  className="w-full py-6 rounded-none bg-slate-900 hover:bg-emerald-700 text-white font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-6 rounded-none bg-secondary hover:bg-emerald-700 text-white font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Verify & Proceed
                   <ArrowRight className="w-4 h-4" />

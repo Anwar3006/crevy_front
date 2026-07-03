@@ -9,14 +9,14 @@ export default function DataProcessingAgreementPage() {
       <DPAHero />
       <section className="py-24 container mx-auto px-6 max-w-4xl">
         <div className="prose prose-slate max-w-none space-y-12">
-          <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100 italic text-slate-500 text-sm">
+          <div className="p-8 bg-muted rounded-3xl border border-border italic text-muted-foreground text-sm">
             Note: This Data Processing Agreement (DPA) is designed to meet the
             requirements of the Ghana Data Protection Act (Act 843) and the EU
             General Data Protection Regulation (GDPR).
           </div>
 
           <section>
-            <h2 className="text-2xl font-black uppercase text-slate-900 mb-4">
+            <h2 className="text-2xl font-black uppercase text-foreground mb-4">
               1. Scope and Applicability
             </h2>
             <p className="text-slate-600 leading-relaxed">
@@ -27,7 +27,7 @@ export default function DataProcessingAgreementPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-black uppercase text-slate-900 mb-4">
+            <h2 className="text-2xl font-black uppercase text-foreground mb-4">
               2. Roles and Responsibilities
             </h2>
             <p className="text-slate-600 leading-relaxed">
@@ -38,7 +38,7 @@ export default function DataProcessingAgreementPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-black uppercase text-slate-900 mb-4">
+            <h2 className="text-2xl font-black uppercase text-foreground mb-4">
               3. Security Measures
             </h2>
             <p className="text-slate-600 leading-relaxed">
@@ -49,22 +49,22 @@ export default function DataProcessingAgreementPage() {
           </section>
 
           <div className="grid md:grid-cols-2 gap-8 mt-12">
-            <div className="p-8 border border-slate-200 rounded-3xl">
+            <div className="p-8 border border-border rounded-3xl">
               <FileLock className="text-emerald-600 mb-4" />
               <h4 className="font-black text-slate-800 uppercase mb-2 text-sm">
                 Encryption
               </h4>
-              <p className="text-slate-500 text-xs leading-relaxed">
+              <p className="text-muted-foreground text-xs leading-relaxed">
                 All institutional data is encrypted at rest using AES-256 and in
                 transit via TLS 1.3.
               </p>
             </div>
-            <div className="p-8 border border-slate-200 rounded-3xl">
+            <div className="p-8 border border-border rounded-3xl">
               <UserCheck className="text-emerald-600 mb-4" />
               <h4 className="font-black text-slate-800 uppercase mb-2 text-sm">
                 Access Control
               </h4>
-              <p className="text-slate-500 text-xs leading-relaxed">
+              <p className="text-muted-foreground text-xs leading-relaxed">
                 Strict role-based access controls (RBAC) ensure only authorised
                 personnel handle sensitive data.
               </p>
@@ -98,7 +98,7 @@ function DPAHero() {
             Data Processing <br />
             <span className="text-emerald-400">Agreement</span>
           </h1>
-          <p className="text-slate-400 text-lg font-medium leading-relaxed">
+          <p className="text-muted-foreground text-lg font-medium leading-relaxed">
             Standard contractual clauses for enterprise ESG clients and
             institutional partners. Ensuring highest standards of data
             governance.

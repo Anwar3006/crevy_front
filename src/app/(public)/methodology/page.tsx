@@ -22,7 +22,7 @@ import "katex/dist/katex.min.css";
 
 export default function MethodologyPage() {
   return (
-    <div className="bg-white min-h-screen font-sans selection:bg-slate-900 selection:text-white">
+    <div className="bg-white min-h-screen font-sans selection:bg-secondary selection:text-white">
       <NotebookHero />
       <TelemetrySpecs />
       <MathematicalSpecifications />
@@ -33,7 +33,7 @@ export default function MethodologyPage() {
 
 function NotebookHero() {
   return (
-    <section className="bg-white pt-32 pb-24 border-b border-slate-200">
+    <section className="bg-white pt-32 pb-24 border-b border-border">
       <div className="container mx-auto px-6 max-w-[1400px]">
         <div className="max-w-4xl">
           <motion.div
@@ -41,17 +41,17 @@ function NotebookHero() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center justify-center gap-3 mb-8"
           >
-            <div className="w-8 h-[1px] bg-slate-900"></div>
-            <span className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+            <div className="w-8 h-[1px] bg-secondary"></div>
+            <span className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">
               <GitCommit size={14} className="animate-pulse text-emerald-600" />
               PROTOCOL_V_2.4.1
             </span>
-            <div className="w-8 h-[1px] bg-slate-900"></div>
+            <div className="w-8 h-[1px] bg-secondary"></div>
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-slate-900 tracking-tight leading- mb-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-sans text-foreground tracking-tight leading- mb-8">
             The Scientific{" "}
-            <span className="italic text-slate-500">Notebook.</span>
+            <span className="italic text-muted-foreground">Notebook.</span>
           </h1>
 
           <p className="text-slate-600 text-lg md:text-xl font-light leading-relaxed max-w-2xl mb-12">
@@ -61,12 +61,12 @@ function NotebookHero() {
             Crevy credit.
           </p>
 
-          <div className="flex gap-4 border-t border-slate-200 pt-8">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-900">
+          <div className="flex gap-4 border-t border-border pt-8">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground">
               <ShieldCheck size={16} className="text-emerald-700" />
               ISO 14064 Compliant
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-900 ml-6">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-foreground ml-6">
               <Eye size={16} className="text-emerald-700" />
               Peer Reviewed
             </div>
@@ -106,20 +106,20 @@ function TelemetrySpecs() {
   ];
 
   return (
-    <section className="bg-slate-50 border-b border-slate-200">
+    <section className="bg-muted border-b border-border">
       <div className="container mx-auto max-w-[1400px]">
         <div className="grid grid-cols-1 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
           {/* Header Column */}
           <div className="p-8 lg:p-12 lg:col-span-1 flex flex-col justify-center bg-slate-100/50">
             <Globe2
-              className="text-slate-900 mb-6"
+              className="text-foreground mb-6"
               size={32}
               strokeWidth={1.5}
             />
-            <h2 className="text-2xl font-serif text-slate-900 mb-4 leading-tight">
+            <h2 className="text-2xl font-sans text-foreground mb-4 leading-tight">
               Data Ingestion Pipeline
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               Continuous, multi-modal planetary observation mapping the physical
               world to the digital ledger.
             </p>
@@ -136,32 +136,32 @@ function TelemetrySpecs() {
                 className="text-emerald-700 mb-6"
                 strokeWidth={1.5}
               />
-              <h3 className="text-lg font-bold text-slate-900 mb-6 font-sans">
+              <h3 className="text-lg font-bold text-foreground mb-6 font-sans">
                 {spec.title}
               </h3>
 
               <div className="space-y-4 mb-8 font-mono text-xs">
-                <div className="flex justify-between border-b border-slate-200 pb-2">
-                  <span className="text-slate-400">RESOLUTION</span>
-                  <span className="text-slate-900 font-semibold">
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">RESOLUTION</span>
+                  <span className="text-foreground font-semibold">
                     {spec.resolution}
                   </span>
                 </div>
-                <div className="flex justify-between border-b border-slate-200 pb-2">
-                  <span className="text-slate-400">FREQUENCY</span>
-                  <span className="text-slate-900 font-semibold">
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">FREQUENCY</span>
+                  <span className="text-foreground font-semibold">
                     {spec.frequency}
                   </span>
                 </div>
-                <div className="flex justify-between border-b border-slate-200 pb-2">
-                  <span className="text-slate-400">ERROR MARGIN</span>
-                  <span className="text-slate-900 font-semibold">
+                <div className="flex justify-between border-b border-border pb-2">
+                  <span className="text-muted-foreground">ERROR MARGIN</span>
+                  <span className="text-foreground font-semibold">
                     {spec.error}
                   </span>
                 </div>
               </div>
 
-              <p className="text-slate-500 text-sm leading-relaxed font-sans mt-auto">
+              <p className="text-muted-foreground text-sm leading-relaxed font-sans mt-auto">
                 {spec.desc}
               </p>
             </div>
@@ -178,44 +178,44 @@ function MathematicalSpecifications() {
       <div className="container mx-auto px-6 max-w-[1400px]">
         <div className="mb-16 border-b border-slate-900 pb-6 flex items-end justify-between">
           <div>
-            <h2 className="text-3xl font-serif text-slate-900 flex items-center gap-3">
-              <Code2 className="text-slate-400" size={28} strokeWidth={1.5} />
+            <h2 className="text-3xl font-sans text-foreground flex items-center gap-3">
+              <Code2 className="text-muted-foreground" size={28} strokeWidth={1.5} />
               Rigorous Mathematical Proofs
             </h2>
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hidden md:block">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hidden md:block">
             Open-source accounting validation
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 font-mono">
           {/* Formula 1 */}
-          <div className="border border-slate-200 p-8 md:p-10 flex flex-col justify-between bg-white shadow-sm hover:border-slate-900 transition-colors">
+          <div className="border border-border p-8 md:p-10 flex flex-col justify-between bg-white shadow-sm hover:border-slate-900 transition-colors">
             <div>
-              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] block mb-4 border-b border-slate-100 pb-4">
+              <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-[0.2em] block mb-4 border-b border-border pb-4">
                 01. BIOMASS SEQUESTRATION (AGB)
               </span>
-              <h3 className="text-slate-900 text-xl font-bold font-sans mb-4">
+              <h3 className="text-foreground text-xl font-bold font-sans mb-4">
                 Above-Ground Biomass Quantification
               </h3>
-              <p className="text-slate-500 text-sm font-sans leading-relaxed mb-8">
+              <p className="text-muted-foreground text-sm font-sans leading-relaxed mb-8">
                 Utilized to translate raw physical observations (whether via
                 LiDAR canopy dimensions or environmental indices) into total
                 vegetative mass.
               </p>
             </div>
 
-            <div className="bg-slate-50 p-6 border border-slate-200 my-4 overflow-x-auto w-full min-w-0 select-none flex justify-center">
+            <div className="bg-muted p-6 border border-border my-4 overflow-x-auto w-full min-w-0 select-none flex justify-center">
               <MathRenderer
                 formula="AGB = 0.0673 \times (\rho D^2 H)^{0.976}"
                 displayMode={true}
-                className="text-slate-900 text-base md:text-lg font-sans"
+                className="text-foreground text-base md:text-lg font-sans"
               />
             </div>
 
             <div className="text-xs text-slate-600 space-y-3 font-sans mt-6">
               <p className="flex items-start gap-3">
-                <strong className="text-slate-900 font-mono w-12 shrink-0 pt-0.5">
+                <strong className="text-foreground font-mono w-12 shrink-0 pt-0.5">
                   AGB:
                 </strong>
                 <span>
@@ -224,7 +224,7 @@ function MathematicalSpecifications() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <strong className="text-slate-900 font-mono w-12 shrink-0 pt-0.5">
+                <strong className="text-foreground font-mono w-12 shrink-0 pt-0.5">
                   <MathRenderer formula="\rho" className="text-[13px]" />:
                 </strong>
                 <span>
@@ -232,7 +232,7 @@ function MathematicalSpecifications() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <strong className="text-slate-900 font-mono w-12 shrink-0 pt-0.5">
+                <strong className="text-foreground font-mono w-12 shrink-0 pt-0.5">
                   D / H:
                 </strong>
                 <span>
@@ -245,32 +245,32 @@ function MathematicalSpecifications() {
           </div>
 
           {/* Formula 2 */}
-          <div className="border border-slate-200 p-8 md:p-10 flex flex-col justify-between bg-white shadow-sm hover:border-slate-900 transition-colors">
+          <div className="border border-border p-8 md:p-10 flex flex-col justify-between bg-white shadow-sm hover:border-slate-900 transition-colors">
             <div>
-              <span className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] block mb-4 border-b border-slate-100 pb-4">
+              <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-[0.2em] block mb-4 border-b border-border pb-4">
                 02. CONSERVATISM PRINCIPLE
               </span>
-              <h3 className="text-slate-900 text-xl font-bold font-sans mb-4">
+              <h3 className="text-foreground text-xl font-bold font-sans mb-4">
                 Net Asset Allocation Accounting
               </h3>
-              <p className="text-slate-500 text-sm font-sans leading-relaxed mb-8">
+              <p className="text-muted-foreground text-sm font-sans leading-relaxed mb-8">
                 Aligns directly with global standards (Verra VM0042 / Gold
                 Standard). We explicitly subtract all risk factors before
                 minting credits.
               </p>
             </div>
 
-            <div className="bg-slate-50 p-6 border border-slate-200 my-4 overflow-x-auto w-full min-w-0 select-none flex justify-center">
+            <div className="bg-muted p-6 border border-border my-4 overflow-x-auto w-full min-w-0 select-none flex justify-center">
               <MathRenderer
                 formula="N_{\text{credits}} = G_{\text{removals}} - L_{\text{deduction}} - B_{\text{contribution}}"
                 displayMode={true}
-                className="text-slate-900 text-base md:text-lg font-sans"
+                className="text-foreground text-base md:text-lg font-sans"
               />
             </div>
 
             <div className="text-xs text-slate-600 space-y-3 font-sans mt-6">
               <p className="flex items-start gap-3">
-                <strong className="text-slate-900 font-mono w-24 shrink-0 pt-0.5">
+                <strong className="text-foreground font-mono w-24 shrink-0 pt-0.5">
                   N_credits:
                 </strong>
                 <span>
@@ -278,7 +278,7 @@ function MathematicalSpecifications() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <strong className="text-slate-900 font-mono w-24 shrink-0 pt-0.5">
+                <strong className="text-foreground font-mono w-24 shrink-0 pt-0.5">
                   G_removals:
                 </strong>
                 <span>
@@ -291,7 +291,7 @@ function MathematicalSpecifications() {
                 </span>
               </p>
               <p className="flex items-start gap-3">
-                <strong className="text-slate-900 font-mono w-24 shrink-0 pt-0.5">
+                <strong className="text-foreground font-mono w-24 shrink-0 pt-0.5">
                   L / B:
                 </strong>
                 <span>
@@ -323,14 +323,14 @@ function TreeToTokenPipeline() {
   >("idle");
 
   return (
-    <section className="py-24 bg-slate-50 border-t border-slate-200">
+    <section className="py-24 bg-muted border-t border-border">
       <div className="container mx-auto px-6 max-w-[1400px]">
         <div className="mb-16">
-          <h2 className="text-4xl font-serif text-slate-900 mb-4 leading-tight">
+          <h2 className="text-4xl font-sans text-foreground mb-4 leading-tight">
             Tree to Token: <br />
-            <span className="italic text-slate-500">Chain of Custody.</span>
+            <span className="italic text-muted-foreground">Chain of Custody.</span>
           </h2>
-          <p className="text-slate-500 text-base max-w-xl font-sans">
+          <p className="text-muted-foreground text-base max-w-xl font-sans">
             Explore the exact path data takes from a remote forest to an
             immutable public registry. No manual spreadsheets. No human
             tampering.
@@ -341,14 +341,14 @@ function TreeToTokenPipeline() {
           {/* Pipeline Visual (Left Col) */}
           <div className="lg:col-span-5 space-y-6 relative before:absolute before:inset-0 before:ml-[31px] before:-translate-x-px before:h-full before:w-[2px] before:bg-slate-200">
             <div className="relative flex items-start gap-6 group">
-              <div className="flex items-center justify-center w-16 h-16 bg-white border border-slate-200 text-slate-900 shrink-0 relative z-10 group-hover:border-slate-900 transition-colors">
+              <div className="flex items-center justify-center w-16 h-16 bg-white border border-border text-foreground shrink-0 relative z-10 group-hover:border-slate-900 transition-colors">
                 <HardDrive size={24} strokeWidth={1.5} />
               </div>
               <div className="pt-2 font-sans">
-                <h4 className="font-bold text-slate-900 text-lg mb-1">
+                <h4 className="font-bold text-foreground text-lg mb-1">
                   1. Edge Capture
                 </h4>
-                <p className="text-sm text-slate-500 leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Hardware physically signs raw telemetry with a private key.
                   Prevents data spoofing at the source.
                 </p>
@@ -356,14 +356,14 @@ function TreeToTokenPipeline() {
             </div>
 
             <div className="relative flex items-start gap-6 group">
-              <div className="flex items-center justify-center w-16 h-16 bg-white border border-slate-200 text-slate-900 shrink-0 relative z-10 group-hover:border-slate-900 transition-colors">
+              <div className="flex items-center justify-center w-16 h-16 bg-white border border-border text-foreground shrink-0 relative z-10 group-hover:border-slate-900 transition-colors">
                 <Database size={24} strokeWidth={1.5} />
               </div>
               <div className="pt-2 font-sans">
-                <h4 className="font-bold text-slate-900 text-lg mb-1">
+                <h4 className="font-bold text-foreground text-lg mb-1">
                   2. dMRV Ingestion & AI
                 </h4>
-                <p className="text-sm text-slate-500 leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Satellite rasters and edge data are processed. Biomass and
                   carbon equivalence are calculated automatically.
                 </p>
@@ -371,11 +371,11 @@ function TreeToTokenPipeline() {
             </div>
 
             <div className="relative flex items-start gap-6 group">
-              <div className="flex items-center justify-center w-16 h-16 bg-slate-900 border border-slate-900 text-white shrink-0 relative z-10">
+              <div className="flex items-center justify-center w-16 h-16 bg-secondary border border-slate-900 text-white shrink-0 relative z-10">
                 <LinkIcon size={24} strokeWidth={1.5} />
               </div>
               <div className="pt-2 font-sans">
-                <h4 className="font-bold text-slate-900 text-lg mb-1">
+                <h4 className="font-bold text-foreground text-lg mb-1">
                   3. On-Chain Minting
                 </h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -397,7 +397,7 @@ function TreeToTokenPipeline() {
                   <div className="w-3 h-3 rounded-full bg-slate-700"></div>
                   <div className="w-3 h-3 rounded-full bg-slate-700"></div>
                 </div>
-                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 ml-4">
+                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground ml-4">
                   dMRV_trust_console.sh
                 </span>
               </div>
@@ -413,7 +413,7 @@ function TreeToTokenPipeline() {
                   className={`px-4 py-1 border transition-all cursor-pointer text-[10px] uppercase tracking-widest font-bold ${
                     activeTab === "json"
                       ? "border-emerald-500 text-emerald-400 bg-emerald-500/10"
-                      : "border-transparent text-slate-500 hover:text-slate-300"
+                      : "border-transparent text-muted-foreground hover:text-slate-300"
                   }`}
                 >
                   ledger_payload.json
@@ -427,7 +427,7 @@ function TreeToTokenPipeline() {
                   className={`px-4 py-1 border transition-all cursor-pointer text-[10px] uppercase tracking-widest font-bold ${
                     activeTab === "gis"
                       ? "border-emerald-500 text-emerald-400 bg-emerald-500/10"
-                      : "border-transparent text-slate-500 hover:text-slate-300"
+                      : "border-transparent text-muted-foreground hover:text-slate-300"
                   }`}
                 >
                   gis_satellite.proof
@@ -456,7 +456,7 @@ function TreeToTokenPipeline() {
                 <div className="p-6 h-full flex flex-col justify-between overflow-y-auto">
                   <div className="relative overflow-x-auto w-full min-w-0">
                     <pre className="text-slate-300 leading-[1.8] text-xs select-text">
-                      <span className="text-slate-500">{`{`}</span>
+                      <span className="text-muted-foreground">{`{`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -470,9 +470,9 @@ function TreeToTokenPipeline() {
                         }
                         className="text-emerald-400 cursor-help hover:bg-slate-800 transition-colors outline-none"
                       >{`  "asset_id"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-sky-300">{`"crv_0x8f2a...9b1c"`}</span>
-                      <span className="text-slate-500">{`,`}</span>
+                      <span className="text-muted-foreground">{`,`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -486,9 +486,9 @@ function TreeToTokenPipeline() {
                         }
                         className="text-emerald-400 cursor-help hover:bg-slate-800 transition-colors outline-none"
                       >{`  "project_did"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-sky-300">{`"did:crevy:gh:brong-ahafo:82"`}</span>
-                      <span className="text-slate-500">{`,`}</span>
+                      <span className="text-muted-foreground">{`,`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -502,9 +502,9 @@ function TreeToTokenPipeline() {
                         }
                         className="text-emerald-400 cursor-help hover:bg-slate-800 transition-colors outline-none"
                       >{`  "vintage"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-orange-300">{`2026`}</span>
-                      <span className="text-slate-500">{`,`}</span>
+                      <span className="text-muted-foreground">{`,`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -518,7 +518,7 @@ function TreeToTokenPipeline() {
                         }
                         className="text-emerald-400 cursor-help hover:bg-slate-800 transition-colors outline-none"
                       >{`  "quantification"`}</span>
-                      <span className="text-slate-500">{`: {`}</span>
+                      <span className="text-muted-foreground">{`: {`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -532,9 +532,9 @@ function TreeToTokenPipeline() {
                         }
                         className="text-blue-400 cursor-help hover:bg-slate-800 transition-colors pl-4 outline-none"
                       >{`    "mass_tco2e"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-orange-300">{`1.000`}</span>
-                      <span className="text-slate-500">{`,`}</span>
+                      <span className="text-muted-foreground">{`,`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -549,9 +549,9 @@ function TreeToTokenPipeline() {
                         }
                         className="text-blue-400 cursor-help hover:bg-slate-800 transition-colors pl-4 outline-none"
                       >{`    "confidence_score"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-orange-300">{`0.962`}</span>
-                      <span className="text-slate-500">{`,`}</span>
+                      <span className="text-muted-foreground">{`,`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -565,10 +565,10 @@ function TreeToTokenPipeline() {
                         }
                         className="text-blue-400 cursor-help hover:bg-slate-800 transition-colors pl-4 outline-none"
                       >{`    "satellite_cid"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-sky-300">{`"ipfs://QmX..."`}</span>
                       {"\n"}
-                      <span className="text-slate-500">{`  },`}</span>
+                      <span className="text-muted-foreground">{`  },`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -585,7 +585,7 @@ function TreeToTokenPipeline() {
                         }
                         className="text-emerald-400 cursor-help hover:bg-slate-800 transition-colors outline-none"
                       >{`  "hardware_attestation"`}</span>
-                      <span className="text-slate-500">{`: {`}</span>
+                      <span className="text-muted-foreground">{`: {`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -599,9 +599,9 @@ function TreeToTokenPipeline() {
                         }
                         className="text-blue-400 cursor-help hover:bg-slate-800 transition-colors pl-4 outline-none"
                       >{`    "device_mac"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-sky-300">{`"00:1B:44:11:3A:B7"`}</span>
-                      <span className="text-slate-500">{`,`}</span>
+                      <span className="text-muted-foreground">{`,`}</span>
                       {"\n"}
                       <span
                         role="button"
@@ -615,17 +615,17 @@ function TreeToTokenPipeline() {
                         }
                         className="text-blue-400 cursor-help hover:bg-slate-800 transition-colors pl-4 outline-none"
                       >{`    "signature"`}</span>
-                      <span className="text-slate-500">{`: `}</span>
+                      <span className="text-muted-foreground">{`: `}</span>
                       <span className="text-sky-300">{`"0x3e8...f1a"`}</span>
                       {"\n"}
-                      <span className="text-slate-500">{`  }`}</span>
+                      <span className="text-muted-foreground">{`  }`}</span>
                       {"\n"}
-                      <span className="text-slate-500">{`}`}</span>
+                      <span className="text-muted-foreground">{`}`}</span>
                     </pre>
                   </div>
 
                   {/* Hover Tooltip display area */}
-                  <div className="h-20 border-t border-slate-800 pt-4 text-xs flex items-start text-slate-400 shrink-0 select-none font-sans mt-4">
+                  <div className="h-20 border-t border-slate-800 pt-4 text-xs flex items-start text-muted-foreground shrink-0 select-none font-sans mt-4">
                     <AnimatePresence mode="wait">
                       {hoveredField ? (
                         <motion.div
@@ -782,7 +782,7 @@ function TreeToTokenPipeline() {
                           <button
                             type="button"
                             onClick={() => setSelectedIotNode(null)}
-                            className="text-slate-500 hover:text-white cursor-pointer font-bold"
+                            className="text-muted-foreground hover:text-white cursor-pointer font-bold"
                           >
                             ✕
                           </button>
@@ -790,7 +790,7 @@ function TreeToTokenPipeline() {
                         <p className="text-slate-300 font-sans font-medium mb-1">
                           {selectedIotNode.name}
                         </p>
-                        <p className="text-slate-400 font-mono text-[10px]">
+                        <p className="text-muted-foreground font-mono text-[10px]">
                           {selectedIotNode.val}
                         </p>
                         <p className="text-[10px] text-emerald-700 font-mono mt-2 pt-2 border-t border-slate-800">
@@ -806,26 +806,26 @@ function TreeToTokenPipeline() {
                       <button
                         type="button"
                         onClick={() => setActiveLayer("optical")}
-                        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeLayer === "optical" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}
+                        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeLayer === "optical" ? "bg-slate-800 text-white" : "text-muted-foreground hover:text-slate-300"}`}
                       >
                         Optical
                       </button>
                       <button
                         type="button"
                         onClick={() => setActiveLayer("sar")}
-                        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeLayer === "sar" ? "bg-slate-800 text-sky-400" : "text-slate-500 hover:text-slate-300"}`}
+                        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeLayer === "sar" ? "bg-slate-800 text-sky-400" : "text-muted-foreground hover:text-slate-300"}`}
                       >
                         Radar (SAR)
                       </button>
                       <button
                         type="button"
                         onClick={() => setActiveLayer("ndvi")}
-                        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeLayer === "ndvi" ? "bg-slate-800 text-emerald-400" : "text-slate-500 hover:text-slate-300"}`}
+                        className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${activeLayer === "ndvi" ? "bg-slate-800 text-emerald-400" : "text-muted-foreground hover:text-slate-300"}`}
                       >
                         NDVI
                       </button>
                     </div>
-                    <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 cursor-pointer select-none">
+                    <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={showIotNodes}
@@ -843,8 +843,8 @@ function TreeToTokenPipeline() {
             <div className="bg-[#0a0a0a] px-6 py-4 border-t border-slate-800 shrink-0 flex items-center justify-between select-none">
               {verificationState === "idle" && (
                 <>
-                  <span className="text-slate-500 text-[10px] font-mono uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse"></span>
+                  <span className="text-muted-foreground text-[10px] font-mono uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted0 animate-pulse"></span>
                     Ready for pipeline evaluation
                   </span>
                   <button
@@ -853,7 +853,7 @@ function TreeToTokenPipeline() {
                       setVerificationState("verifying");
                       setTimeout(() => setVerificationState("success"), 2500);
                     }}
-                    className="bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-[10px] uppercase tracking-[0.2em] px-4 py-2 font-bold transition-colors cursor-pointer"
+                    className="bg-emerald-500 hover:bg-emerald-400 text-foreground text-[10px] uppercase tracking-[0.2em] px-4 py-2 font-bold transition-colors cursor-pointer"
                   >
                     Execute Proof
                   </button>
@@ -902,7 +902,7 @@ function TreeToTokenPipeline() {
                       setVerificationState("idle");
                       setSelectedIotNode(null);
                     }}
-                    className="text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-widest cursor-pointer"
+                    className="text-muted-foreground hover:text-white text-[10px] font-bold uppercase tracking-widest cursor-pointer"
                   >
                     Reset
                   </button>

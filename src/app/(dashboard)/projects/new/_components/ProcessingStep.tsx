@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const ProcessingStep = () => {
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-slate-950 text-white overflow-hidden">
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background text-white overflow-hidden">
       <div className="absolute inset-0 flex justify-center pointer-events-none opacity-20">
         <div className="w-px h-full bg-emerald-500/50" />
         <div className="w-px h-full bg-emerald-500/50 mx-[25vw]" />
@@ -15,8 +15,8 @@ const ProcessingStep = () => {
         <div className="w-12 h-12 border border-slate-700 border-t-emerald-500 rounded-none animate-spin" />
 
         <div className="space-y-4">
-          <h2 className="font-serif text-3xl md:text-4xl tracking-tight text-white">
-            Encrypting <span className="italic text-slate-400">Payload.</span>
+          <h2 className="font-sans text-3xl md:text-4xl tracking-tight text-white">
+            Encrypting <span className="italic text-muted-foreground">Payload.</span>
           </h2>
           <motion.div
             initial={{ opacity: 0 }}

@@ -36,7 +36,7 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
           <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand mb-6 flex items-center gap-3">
             <Globe size={14} /> Global Impact Narrative
           </h3>
-          <p className="text-2xl font-extrabold text-slate-900 leading-relaxed italic border-l-4 border-brand pl-8">
+          <p className="text-2xl font-extrabold text-foreground leading-relaxed italic border-l-4 border-brand pl-8">
             "
             {project.description ||
               "Transforming degraded landscapes into high-integrity carbon sinks through community-led reforestation and AI-driven telemetry."}
@@ -66,12 +66,12 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
             {practices.map((practice, i) => (
               <div
                 key={i}
-                className="bg-slate-50 border border-slate-200 p-6 rounded-none flex items-center gap-4 group hover:border-slate-900 transition-colors"
+                className="bg-muted border border-border p-6 rounded-none flex items-center gap-4 group hover:border-slate-900 transition-colors"
               >
-                <div className="w-10 h-10 bg-slate-950 rounded-none flex items-center justify-center text-brand shrink-0">
+                <div className="w-10 h-10 bg-background rounded-none flex items-center justify-center text-brand shrink-0">
                   <Sprout size={18} />
                 </div>
-                <span className="font-bold text-slate-900 uppercase text-xs tracking-wider">
+                <span className="font-bold text-foreground uppercase text-xs tracking-wider">
                   {practice}
                 </span>
               </div>
@@ -82,11 +82,11 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
 
       {/* ── Right: Compliance & Proof Cards ── */}
       <div className="space-y-12">
-        <section className="bg-white border border-slate-200 rounded-none p-8 shadow-sm relative overflow-hidden group">
+        <section className="bg-white border border-border rounded-none p-8 shadow-sm relative overflow-hidden group">
           <div className="absolute top-0 right-0 -mt-2 -mr-2 opacity-5 group-hover:scale-105 transition-transform duration-700">
             <Target size={120} />
           </div>
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-6">
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-6">
             SDG Contribution
           </h3>
           <div className="flex flex-wrap gap-4">
@@ -105,7 +105,7 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
           </div>
         </section>
 
-        <section className="bg-slate-950 rounded-none p-8 text-white shadow-xl relative overflow-hidden group border border-slate-800">
+        <section className="bg-background rounded-none p-8 text-white shadow-xl relative overflow-hidden group border border-slate-800">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform duration-700">
             <Shield size={60} className="text-brand" />
           </div>
@@ -114,7 +114,7 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
           </h3>
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                 dMRV Status
               </span>
               <span className="text-[10px] font-mono font-bold uppercase text-brand flex items-center gap-2">
@@ -122,7 +122,7 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
               </span>
             </div>
             <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                 Inference Confidence
               </span>
               <span className="text-[10px] font-mono font-bold uppercase text-white tabular-nums">
@@ -130,7 +130,7 @@ export default function ProjectStory({ project }: ProjectStoryProps) {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                 Audit Ledger
               </span>
               <button

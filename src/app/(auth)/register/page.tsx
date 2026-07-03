@@ -19,9 +19,9 @@ const VALUE_PROPS = [
 
 const RegisterPage = () => {
   return (
-    <div className="w-full flex bg-white font-sans selection:bg-slate-900 selection:text-white lg:h-screen lg:overflow-hidden">
+    <div className="w-full flex bg-white font-sans selection:bg-secondary selection:text-white lg:h-screen lg:overflow-hidden">
       {/* ── Left: Editorial Media Panel ───────────────────────── */}
-      <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] relative overflow-hidden bg-slate-950">
+      <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] relative overflow-hidden bg-background">
         <Image
           src="https://images.pexels.com/photos/418831/pexels-photo-418831.jpeg"
           alt="Aerial view of lush green forest"
@@ -43,13 +43,13 @@ const RegisterPage = () => {
           </div>
 
           <div className="space-y-8 max-w-2xl mt-auto mb-16">
-            <h2 className="text-5xl xl:text-7xl font-serif text-white leading-[1.05] tracking-tight">
+            <h2 className="text-5xl xl:text-7xl font-sans text-white leading-[1.05] tracking-tight">
               Turn net-zero obligations into{" "}
               <span className="text-emerald-500 italic">
                 mathematical proof.
               </span>
             </h2>
-            <p className="text-slate-400 font-light text-lg xl:text-xl leading-relaxed max-w-xl">
+            <p className="text-muted-foreground font-light text-lg xl:text-xl leading-relaxed max-w-xl">
               Access the only carbon liquidity pool that fuses digital
               Measurement, Reporting, and Verification (dMRV) with permanent
               cryptographic anchoring.
@@ -63,7 +63,7 @@ const RegisterPage = () => {
               return (
                 <div
                   key={idx}
-                  className="bg-slate-950 p-6 flex flex-col justify-between h-32 group"
+                  className="bg-background p-6 flex flex-col justify-between h-32 group"
                 >
                   <div className="flex justify-between items-start">
                     <p className="text-white font-mono font-bold text-2xl leading-none">
@@ -71,7 +71,7 @@ const RegisterPage = () => {
                     </p>
                     <Icon className="w-4 h-4 text-slate-600 group-hover:text-emerald-500 transition-colors" />
                   </div>
-                  <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                  <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest">
                     {stat.label}
                   </p>
                 </div>
@@ -83,16 +83,16 @@ const RegisterPage = () => {
 
       {/* ── Right: Form Panel ──────────────────────────────────────────────── */}
       <div className="relative flex flex-col w-full lg:w-[46%] xl:w-[42%] bg-white px-8 md:px-16 py-12 h-full overflow-y-auto">
-        <div className="flex items-center justify-between mb-16 shrink-0 border-b border-slate-200 pb-6">
+        <div className="flex items-center justify-between mb-16 shrink-0 border-b border-border pb-6">
           <Link
             href="/"
-            className="font-serif font-bold text-3xl text-slate-900 tracking-tight"
+            className="font-sans font-bold text-3xl text-foreground tracking-tight"
           >
             Crevy.
           </Link>
           <Link
             href="/login"
-            className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-2"
+            className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
           >
             Authenticate Existing <ArrowRightIcon className="w-3 h-3" />
           </Link>
@@ -102,10 +102,10 @@ const RegisterPage = () => {
 
         <div className="flex flex-1 flex-col max-w-md w-full">
           <div className="mb-10">
-            <h1 className="text-4xl font-serif text-slate-900 tracking-tight leading-none mb-3">
+            <h1 className="text-4xl font-sans text-foreground tracking-tight leading-none mb-3">
               Register Entity.
             </h1>
-            <p className="text-sm text-slate-500 font-light leading-relaxed">
+            <p className="text-sm text-muted-foreground font-light leading-relaxed">
               Register your organization to access the verified carbon registry
               and act on it&apos;s behalf.
             </p>
@@ -113,19 +113,19 @@ const RegisterPage = () => {
 
           <RegisterForm />
 
-          <div className="mt-12 pt-8 border-t border-slate-200 text-center">
-            <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest leading-relaxed">
+          <div className="mt-12 pt-8 border-t border-border text-center">
+            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest leading-relaxed">
               By initializing, you accept the{" "}
               <Link
                 href="/terms"
-                className="text-slate-900 hover:text-emerald-700 underline underline-offset-4"
+                className="text-foreground hover:text-emerald-700 underline underline-offset-4"
               >
                 Terms of Service
               </Link>{" "}
               and{" "}
               <Link
                 href="/privacy"
-                className="text-slate-900 hover:text-emerald-700 underline underline-offset-4"
+                className="text-foreground hover:text-emerald-700 underline underline-offset-4"
               >
                 Privacy Policy
               </Link>

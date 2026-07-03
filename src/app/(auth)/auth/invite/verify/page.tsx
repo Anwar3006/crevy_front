@@ -19,10 +19,10 @@ function InviteVerifyContent() {
   }, [token, router]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-muted">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
-        <p className="text-sm font-black uppercase tracking-widest text-slate-400">
+        <p className="text-sm font-black uppercase tracking-widest text-muted-foreground">
           Verifying Invitation...
         </p>
       </div>
@@ -34,7 +34,7 @@ export default function InviteVerifyPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-muted">
           <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
         </div>
       }

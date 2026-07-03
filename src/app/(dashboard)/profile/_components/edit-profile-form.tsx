@@ -53,8 +53,8 @@ export function EditProfileForm({
       countryOfOperation: user.countryOfOperation || "",
       legalBusinessName: user.company?.legalBusinessName || "",
       businessAddress: user.company?.businessAddress || "",
-      projectCategory: user.projectOwner?.projectCategory || "",
-      projectStartDate: user.projectOwner?.projectStartDate || "",
+      projectCategory: user.projectDeveloper?.projectCategory || "",
+      projectStartDate: user.projectDeveloper?.projectStartDate || "",
     },
   });
 
@@ -76,8 +76,8 @@ export function EditProfileForm({
           legalBusinessName: values.legalBusinessName,
           businessAddress: values.businessAddress,
         };
-      else if (user.role === "project_owner")
-        updateData.projectOwner = {
+      else if (user.role === "project_developer")
+        updateData.projectDeveloper = {
           projectCategory: values.projectCategory,
           projectStartDate: values.projectStartDate,
         };
@@ -93,14 +93,14 @@ export function EditProfileForm({
   };
 
   return (
-    <div className="border border-slate-200 bg-white">
-      <div className="p-6 md:p-8 border-b border-slate-200 bg-slate-50 flex items-center gap-4">
-        <UserIcon className="w-5 h-5 text-slate-400" />
+    <div className="border border-border bg-white">
+      <div className="p-6 md:p-8 border-b border-border bg-muted flex items-center gap-4">
+        <UserIcon className="w-5 h-5 text-muted-foreground" />
         <div>
-          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
             Identity Ledger
           </h2>
-          <p className="text-xs text-slate-500 font-mono mt-1">
+          <p className="text-xs text-muted-foreground font-mono mt-1">
             {readOnly ? "Read-Only Access" : "Update Operational Parameters"}
           </p>
         </div>
@@ -112,40 +112,40 @@ export function EditProfileForm({
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Legal First Name
             </Label>
             <Input
               {...form.register("firstName")}
               disabled={readOnly}
-              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+              className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
             />
           </div>
           <div className="space-y-3">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Legal Last Name
             </Label>
             <Input
               {...form.register("lastName")}
               disabled={readOnly}
-              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+              className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Primary Contact (Tel)
             </Label>
             <Input
               {...form.register("phoneNumber")}
               disabled={readOnly}
-              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+              className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
             />
           </div>
           <div className="space-y-3">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Biological Sex
             </Label>
             <Select
@@ -153,10 +153,10 @@ export function EditProfileForm({
               onValueChange={(val) => form.setValue("sex", val)}
               disabled={readOnly}
             >
-              <SelectTrigger className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900">
+              <SelectTrigger className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900">
                 <SelectValue placeholder="Select indicator" />
               </SelectTrigger>
-              <SelectContent className="rounded-none border border-slate-200 shadow-xl font-mono text-xs uppercase tracking-widest">
+              <SelectContent className="rounded-none border border-border shadow-xl font-mono text-xs uppercase tracking-widest">
                 <SelectItem value="Male">Male</SelectItem>
                 <SelectItem value="Female">Female</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
@@ -167,81 +167,81 @@ export function EditProfileForm({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Secondary Contact
             </Label>
             <Input
               {...form.register("contactNumber")}
               disabled={readOnly}
-              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+              className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
             />
           </div>
           <div className="space-y-3">
-            <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Jurisdiction (Country)
             </Label>
             <Input
               {...form.register("countryOfOperation")}
               disabled={readOnly}
-              className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+              className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
             />
           </div>
         </div>
 
         {user.role === "financial_admin" && (
-          <div className="pt-8 border-t border-slate-200 space-y-6">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+          <div className="pt-8 border-t border-border space-y-6">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Institutional Data
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                   Registered Corporate Name
                 </Label>
                 <Input
                   {...form.register("legalBusinessName")}
                   disabled={readOnly}
-                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                  className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
                 />
               </div>
               <div className="space-y-3">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                   HQ Address
                 </Label>
                 <Input
                   {...form.register("businessAddress")}
                   disabled={readOnly}
-                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                  className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
                 />
               </div>
             </div>
           </div>
         )}
 
-        {user.role === "project_owner" && (
-          <div className="pt-8 border-t border-slate-200 space-y-6">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+        {user.role === "project_developer" && (
+          <div className="pt-8 border-t border-border space-y-6">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Originator Operations
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                   Asset Methodology Focus
                 </Label>
                 <Input
                   {...form.register("projectCategory")}
                   disabled={readOnly}
-                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                  className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
                 />
               </div>
               <div className="space-y-3">
-                <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                   Genesis Date
                 </Label>
                 <Input
                   {...form.register("projectStartDate")}
                   disabled={readOnly}
-                  className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+                  className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ export function EditProfileForm({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-none bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-12 px-8 transition-colors w-full md:w-auto"
+              className="rounded-none bg-secondary hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] h-12 px-8 transition-colors w-full md:w-auto"
             >
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />

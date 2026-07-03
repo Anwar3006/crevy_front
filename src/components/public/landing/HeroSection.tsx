@@ -93,10 +93,10 @@ export function HeroSection({
   }, [shouldReduceMotion, activeContent.src]);
 
   return (
-    <section className="relative min-h-[95vh] w-full flex flex-col justify-center overflow-hidden bg-slate-950 pt-24 pb-16 border-b border-slate-900">
+    <section className="relative min-h-[95vh] w-full flex flex-col justify-center overflow-hidden bg-background pt-24 pb-16 border-b border-slate-900">
       {/* ── 1. Stabilized Cinematic Background ── */}
       {/* The container below forces a stable aspect ratio and blocks layout shifts */}
-      <div className="absolute inset-0 z-0 bg-slate-950">
+      <div className="absolute inset-0 z-0 bg-background">
         <video
           ref={videoRef}
           className="w-full h-full object-cover mix-blend-luminosity opacity-40"
@@ -121,7 +121,7 @@ export function HeroSection({
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-slate-900/50 backdrop-blur-md mb-8">
+              <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-secondary/50 backdrop-blur-md mb-8">
                 <span className="w-2 h-2 bg-brand rounded-none animate-pulse" />
                 <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase">
                   Live Asset Class: {activeContent.tag}
@@ -149,7 +149,7 @@ export function HeroSection({
           >
             <Link
               href="/register"
-              className="w-full sm:w-auto bg-brand text-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-white transition-colors text-center"
+              className="w-full sm:w-auto bg-brand text-foreground px-8 py-5 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-white transition-colors text-center"
             >
               Enter the Marketplace
             </Link>
@@ -164,9 +164,9 @@ export function HeroSection({
       </div>
 
       {/* ── 3. Carousel Progress Indicators ── */}
-      <div className="relative z-20 w-full border-t border-slate-800 bg-slate-950/80 backdrop-blur-sm py-4">
+      <div className="relative z-20 w-full border-t border-slate-800 bg-background/80 backdrop-blur-sm py-4">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center gap-4">
-          <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 hidden md:block w-32 shrink-0">
+          <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground hidden md:block w-32 shrink-0">
             System Telemetry
           </p>
           <div className="flex-1 flex gap-2">
@@ -189,7 +189,7 @@ export function HeroSection({
               </button>
             ))}
           </div>
-          <p className="text-[10px] font-mono text-slate-500 shrink-0 w-12 text-right">
+          <p className="text-[10px] font-mono text-muted-foreground shrink-0 w-12 text-right">
             0{activeIndex + 1} / 0{CAROUSEL_DATA.length}
           </p>
         </div>
@@ -212,13 +212,13 @@ export function TrustLayerSection({
         <div className="grid lg:grid-cols-12 gap-px border-brand border -mt-12 relative z-30 p-3 shadow-2xl shadow-slate-950/50">
           {/* Live Data Block */}
           <div className="lg:col-span-4 bg-brand p-8 md:p-10 flex flex-col justify-center">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-4">
               Live Ledger Telemetry
             </p>
             <div className="font-mono text-4xl md:text-6xl text-white font-bold tracking-tight mb-2">
               <Counter value={1204500} />
             </div>
-            <p className="text-slate-900 text-xs font-mono uppercase tracking-widest">
+            <p className="text-foreground text-xs font-mono uppercase tracking-widest">
               Tonnes of CO₂e Projected to be Retired by 2030
             </p>
           </div>
@@ -251,10 +251,10 @@ export function TrustLayerSection({
                   <div className="border border-brand/20 p-6 flex flex-col items-center text-center group hover:border-slate-900 transition-colors">
                     <step.icon
                       size={24}
-                      className="text-brand mb-4 group-hover:text-slate-900 transition-colors"
+                      className="text-brand mb-4 group-hover:text-foreground transition-colors"
                     />
                     <h4 className="font-bold text-sm mb-1">{step.label}</h4>
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-slate-500">
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">
                       {step.desc}
                     </span>
                   </div>
@@ -266,10 +266,10 @@ export function TrustLayerSection({
 
         {/* ── Auditor Logos ── */}
         <div className="pt-4 mt-6 border-t border-slate-900 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 shrink-0">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground shrink-0">
             Frameworks & Compliance:
           </p>
-          <div className="flex flex-wrap gap-6 md:gap-12 text-xs md:text-xl font-bold text-slate-400">
+          <div className="flex flex-wrap gap-6 md:gap-12 text-xs md:text-xl font-bold text-muted-foreground">
             <span className="hover:text-white transition-colors cursor-default">
               [ ICVCM Aligned ]
             </span>

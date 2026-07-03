@@ -21,7 +21,7 @@ export const SDGSelection = () => {
     <div className="space-y-4">
       <Label className="text-slate-700 font-bold">
         Sustainable Development Goals (SDGs)
-        <span className="block text-slate-400 text-xs font-normal mt-1">
+        <span className="block text-muted-foreground text-xs font-normal mt-1">
           Select the goals your project aligns with:
         </span>
       </Label>
@@ -33,14 +33,14 @@ export const SDGSelection = () => {
             <label
               key={sdg.id}
               className={`flex items-start text-left space-x-3 p-3 border rounded-xl transition-all cursor-pointer hover:shadow-sm w-full
-        ${isSelected ? "border-emerald-500 bg-emerald-50/30" : "border-slate-100 bg-white"}`}
+        ${isSelected ? "border-emerald-500 bg-emerald-50/30" : "border-border bg-white"}`}
               htmlFor={`sdg-${sdg.id}`}
             >
               <Checkbox
                 id={`sdg-${sdg.id}`}
                 checked={isSelected}
                 onCheckedChange={() => toggleSdg(sdg.id)}
-                className="mt-1 w-5 h-5 border-slate-200 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                className="mt-1 w-5 h-5 border-border data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
               />
               <div className="flex-1 min-w-0">
                 <span className="text-xs font-bold text-slate-700 block leading-tight">

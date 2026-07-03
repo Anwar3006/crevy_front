@@ -49,13 +49,13 @@ export function AccountSecurity({ user }: { user: any }) {
       </div>
 
       <div className="p-6 space-y-6">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 p-6 border border-slate-200 bg-slate-50">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 p-6 border border-border bg-muted">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 flex items-center gap-2 mb-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground flex items-center gap-2 mb-1">
               <ShieldCheck className="w-4 h-4 text-emerald-600" /> Multi-Factor
               Auth (MFA)
             </p>
-            <p className="text-xs font-mono text-slate-500">
+            <p className="text-xs font-mono text-muted-foreground">
               Require cryptographic secondary verification for access.
             </p>
           </div>

@@ -73,7 +73,7 @@ function ProfileDetailContent() {
           variant="ghost"
           size="sm"
           onClick={() => router.back()}
-          className="text-slate-400 hover:text-slate-600"
+          className="text-muted-foreground hover:text-slate-600"
         >
           <ChevronLeft className="w-4 h-4 mr-1" /> Back
         </Button>
@@ -95,7 +95,7 @@ export default function UserProfileDetailPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-white">
-          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+          <Loader2 className="w-10 h-10 text-foreground animate-spin" />
         </div>
       }
     >

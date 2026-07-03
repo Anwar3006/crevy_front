@@ -81,14 +81,14 @@ export const DonutChart = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+      className="rounded-3xl border border-border bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
     >
       <div className="mb-6">
         <h4 className="text-sm font-black text-brand-primary uppercase tracking-wider">
           {title}
         </h4>
         {subtitle && (
-          <p className="mt-1 text-xs text-slate-400 font-medium">{subtitle}</p>
+          <p className="mt-1 text-xs text-muted-foreground font-medium">{subtitle}</p>
         )}
       </div>
 
@@ -157,7 +157,7 @@ export const DonutChart = ({
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-xl transition-colors w-fit lg:w-full border border-transparent",
                 hovered === s.i
-                  ? "bg-slate-50 border-slate-100"
+                  ? "bg-muted border-border"
                   : "bg-transparent",
               )}
               onMouseEnter={() => setHovered(s.i)}

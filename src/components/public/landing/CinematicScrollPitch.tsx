@@ -92,7 +92,7 @@ export function CinematicScrollPitch({
   return (
     <section
       ref={containerRef}
-      className="relative h-[350vh] bg-slate-950 border-t border-slate-900"
+      className="relative h-[350vh] bg-background border-t border-slate-900"
     >
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {/* ═══════════════════════════════════════════
@@ -147,7 +147,7 @@ export function CinematicScrollPitch({
             borderRadius: videoRadius,
             boxShadow,
           }}
-          className="relative z-10 bg-slate-950 flex items-center justify-center overflow-hidden border border-slate-800 will-change-transform"
+          className="relative z-10 bg-background flex items-center justify-center overflow-hidden border border-slate-800 will-change-transform"
         >
           <video
             key={getOptimizedVideoUrl("vid1.1_vn20nv.mp4")}
@@ -162,7 +162,7 @@ export function CinematicScrollPitch({
           {/* Darkening overlay */}
           <motion.div
             style={{ opacity: overlayOpacity }}
-            className="absolute inset-0 bg-slate-950 will-change-opacity"
+            className="absolute inset-0 bg-background will-change-opacity"
           />
 
           {/* ═══════════════════════════════════════════
@@ -176,7 +176,7 @@ export function CinematicScrollPitch({
               {/* Line 1 — Badge */}
               <motion.div
                 style={{ opacity: line1.opacity, y: line1.y }}
-                className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-slate-900/50 backdrop-blur-md mb-8 pointer-events-auto opacity-0 will-change-transform"
+                className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-secondary/50 backdrop-blur-md mb-8 pointer-events-auto opacity-0 will-change-transform"
               >
                 <Lock size={12} className="text-emerald-500" />
                 <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase">
@@ -225,7 +225,7 @@ export function CinematicScrollPitch({
               >
                 <Link
                   href="/marketplace"
-                  className="bg-white text-slate-900 hover:bg-brand hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
+                  className="bg-white text-foreground hover:bg-brand hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
                 >
                   Access the Marketplace <ArrowRight size={14} />
                 </Link>
@@ -249,7 +249,7 @@ export function CinematicScrollPitch({
    ═════════════════════════════════════════════════════════════════ */
 function StaticPitchFallback() {
   return (
-    <section className="relative min-h-screen bg-slate-950 flex flex-col justify-center items-center py-24 overflow-hidden border-t border-slate-900">
+    <section className="relative min-h-screen bg-background flex flex-col justify-center items-center py-24 overflow-hidden border-t border-slate-900">
       <video
         className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-40"
         src={getOptimizedVideoUrl("vid1.1_vn20nv.mp4")}
@@ -258,10 +258,10 @@ function StaticPitchFallback() {
         loop
         playsInline
       />
-      <div className="absolute inset-0 bg-slate-950/70" />
+      <div className="absolute inset-0 bg-background/70" />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center px-6">
-        <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-slate-900/50 backdrop-blur-md mb-8">
+        <div className="inline-flex items-center gap-3 px-4 py-2 border border-slate-700 bg-secondary/50 backdrop-blur-md mb-8">
           <Lock size={12} className="text-emerald-500" />
           <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase">
             Institutional Infrastructure
@@ -270,7 +270,7 @@ function StaticPitchFallback() {
 
         <h2 className="font-extrabold text-4xl md:text-6xl text-white leading-tight mb-6">
           From Verification to{" "}
-          <span className="italic text-slate-400">Retirement.</span>
+          <span className="italic text-muted-foreground">Retirement.</span>
         </h2>
 
         <h3 className="font-mono text-emerald-400 text-sm md:text-base uppercase tracking-widest mb-8">
@@ -286,13 +286,13 @@ function StaticPitchFallback() {
         <div className="flex flex-col sm:flex-row gap-px bg-slate-700 border border-slate-700 p-px w-fit mx-auto">
           <Link
             href="/marketplace"
-            className="bg-white text-slate-900 hover:bg-emerald-500 hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
+            className="bg-white text-foreground hover:bg-emerald-500 hover:text-white px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center gap-3"
           >
             Access the Registry <ArrowRight size={14} />
           </Link>
           <Link
             href="/methodology"
-            className="bg-slate-900 text-white hover:bg-slate-800 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center"
+            className="bg-secondary text-white hover:bg-slate-800 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors duration-300 flex items-center justify-center"
           >
             Review Methodology
           </Link>

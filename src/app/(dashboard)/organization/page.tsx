@@ -26,15 +26,15 @@ export default function OrganizationPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-6 space-y-12 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-200 pb-12">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-border pb-12">
         <div className="max-w-2xl">
           <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
             <Building2 size={14} /> Corporate Identity & Compliance
           </p>
-          <h1 className="text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter uppercase italic">
+          <h1 className="text-5xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
             Organization <br /> Registry
           </h1>
-          <p className="text-slate-500 font-medium text-lg mt-6 leading-relaxed">
+          <p className="text-muted-foreground font-medium text-lg mt-6 leading-relaxed">
             Manage institutional details, tax residency, and cross-border
             billing parameters.
           </p>
@@ -43,33 +43,33 @@ export default function OrganizationPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <Card className="rounded-[2.5rem] border-slate-200 shadow-sm overflow-hidden">
-            <CardHeader className="bg-slate-50/50 border-b border-slate-100 p-10">
-              <CardTitle className="text-sm font-black uppercase tracking-widest text-slate-400">
+          <Card className="rounded-[2.5rem] border-border shadow-sm overflow-hidden">
+            <CardHeader className="bg-muted/50 border-b border-border p-10">
+              <CardTitle className="text-sm font-black uppercase tracking-widest text-muted-foreground">
                 Institutional Details
               </CardTitle>
             </CardHeader>
             <CardContent className="p-10 space-y-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-1">
-                  <p className="text-[9px] font-black text-slate-400 uppercase">
+                  <p className="text-[9px] font-black text-muted-foreground uppercase">
                     Legal Entity Name
                   </p>
-                  <p className="text-lg font-black text-slate-900">
+                  <p className="text-lg font-black text-foreground">
                     {orgData.name}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[9px] font-black text-slate-400 uppercase">
+                  <p className="text-[9px] font-black text-muted-foreground uppercase">
                     Registry Residency
                   </p>
-                  <p className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <p className="text-lg font-black text-foreground flex items-center gap-2">
                     <Globe size={16} className="text-emerald-500" />{" "}
                     {orgData.residency}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[9px] font-black text-slate-400 uppercase">
+                  <p className="text-[9px] font-black text-muted-foreground uppercase">
                     Registration ID
                   </p>
                   <p className="text-sm font-bold text-slate-600 font-mono">
@@ -77,7 +77,7 @@ export default function OrganizationPage() {
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[9px] font-black text-slate-400 uppercase">
+                  <p className="text-[9px] font-black text-muted-foreground uppercase">
                     Tax Identification (TIN)
                   </p>
                   <p className="text-sm font-bold text-slate-600 font-mono">
@@ -86,14 +86,14 @@ export default function OrganizationPage() {
                 </div>
               </div>
 
-              <div className="pt-10 border-t border-slate-100 space-y-6">
+              <div className="pt-10 border-t border-border space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
                       <Mail size={20} />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase">
+                      <p className="text-[9px] font-black text-muted-foreground uppercase">
                         Billing Contact
                       </p>
                       <p className="text-sm font-bold text-slate-800">
@@ -103,7 +103,7 @@ export default function OrganizationPage() {
                   </div>
                   <Button
                     variant="outline"
-                    className="rounded-xl border-slate-200 text-[10px] font-black uppercase tracking-widest"
+                    className="rounded-xl border-border text-[10px] font-black uppercase tracking-widest"
                   >
                     Modify
                   </Button>
@@ -112,7 +112,7 @@ export default function OrganizationPage() {
             </CardContent>
           </Card>
 
-          <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-secondary rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12">
               <ShieldCheck size={160} className="text-emerald-400" />
             </div>
@@ -131,7 +131,7 @@ export default function OrganizationPage() {
                 </Badge>
               </div>
               <div className="flex gap-4">
-                <Button className="bg-white text-slate-900 hover:bg-slate-100 rounded-xl font-black uppercase text-[10px] px-8 tracking-widest">
+                <Button className="bg-white text-foreground hover:bg-slate-100 rounded-xl font-black uppercase text-[10px] px-8 tracking-widest">
                   Manage Plan
                 </Button>
                 <Button
@@ -146,8 +146,8 @@ export default function OrganizationPage() {
         </div>
 
         <div className="space-y-8">
-          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <div className="bg-white border border-border rounded-[2.5rem] p-10 shadow-sm space-y-8">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
               Institutional Governance
             </h3>
             <div className="space-y-6">
@@ -169,14 +169,14 @@ export default function OrganizationPage() {
                 },
               ].map((item, i) => (
                 <div key={i} className="flex gap-4 items-start group">
-                  <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
+                  <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center shrink-0 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
                     <item.icon size={18} />
                   </div>
                   <div>
                     <p className="text-xs font-black text-slate-800 uppercase tracking-tight">
                       {item.label}
                     </p>
-                    <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
+                    <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
                       {item.desc}
                     </p>
                   </div>

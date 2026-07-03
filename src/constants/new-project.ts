@@ -211,7 +211,7 @@ export const createProjectInputSchema = z
       name: z.string().min(1, "Select a currency"),
     }),
 
-    projectOwnerId: z
+    projectDeveloperId: z
       .string()
       .uuid("Please select a valid project owner")
       .optional()
@@ -253,7 +253,7 @@ export const createProjectDefaultValues: TCreateProject = {
   endDate: undefined,
   totalAreaHectares: 0,
   currency: { code: "", name: "" },
-  projectOwnerId: "",
+  projectDeveloperId: "",
   assignedAdminId: "",
   projectTags: [],
   description: "",

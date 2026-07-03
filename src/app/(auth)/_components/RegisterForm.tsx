@@ -9,7 +9,7 @@ import { authClient } from "@/lib/auth";
 import { axiosClient } from "@/lib/axiosClient";
 import { cn } from "@/lib/utils";
 
-type EntityType = "organization" | "project_owner";
+type EntityType = "organization" | "project_developer";
 
 export default function RegisterForm({
   className,
@@ -56,7 +56,7 @@ export default function RegisterForm({
       if (error) throw error;
 
       // 2. Hydrate Organization Database Tables.
-      // NOTE: project_owner no longer self-registers here — they're routed
+      // NOTE: project_developer no longer self-registers here — they're routed
       // to /register-interest instead. See the early return below.
       await axiosClient.post("/auth/register/organization", {
         userId: data.user.id,
@@ -76,48 +76,48 @@ export default function RegisterForm({
   return (
     <div className={cn("w-full max-w-md mx-auto", className)} {...props}>
       {/* ── Entity Selection Tabs ── */}
-      <div className="flex border-b border-slate-200 mb-8">
+      <div className="flex border-b border-border mb-8">
         <button
           type="button"
           onClick={() => setEntityType("organization")}
           className={cn(
             "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
             entityType === "organization"
-              ? "border-b-2 border-slate-900 text-slate-900"
-              : "text-slate-400 hover:text-slate-600",
+              ? "border-b-2 border-slate-900 text-foreground"
+              : "text-muted-foreground hover:text-slate-600",
           )}
         >
           Institutional Buyer
         </button>
 
-        {/* Project Owner self-registration is routed through the waitlist —
+        {/* Project Developer self-registration is routed through the waitlist —
             see /register-interest. We don't let project owners create an
             account directly here; a rep reaches out after reviewing their
             waitlist submission. */}
         <button
           type="button"
-          onClick={() => setEntityType("project_owner")}
+          onClick={() => setEntityType("project_developer")}
           className={cn(
             "flex-1 pb-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-all",
-            entityType === "project_owner"
-              ? "border-b-2 border-slate-900 text-slate-900"
-              : "text-slate-400 hover:text-slate-600",
+            entityType === "project_developer"
+              ? "border-b-2 border-slate-900 text-foreground"
+              : "text-muted-foreground hover:text-slate-600",
           )}
         >
-          Project Owner
+          Project Developer
         </button>
       </div>
 
-      {entityType === "project_owner" ? (
+      {entityType === "project_developer" ? (
         <div className="space-y-8 py-4">
           <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-50 border border-emerald-200">
             <Sprout className="w-5 h-5 text-emerald-700" strokeWidth={1.5} />
           </div>
           <div className="space-y-3">
-            <p className="font-serif text-2xl text-slate-900 leading-snug">
+            <p className="font-sans text-2xl text-foreground leading-snug">
               Project owner accounts aren't self-service.
             </p>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Onboarding a project involves a short conversation with our team
               to align on methodology, verification requirements, and registry
               setup. Register your interest below and a representative will
@@ -139,13 +139,13 @@ export default function RegisterForm({
             <div className="space-y-3">
               <label
                 htmlFor="firstName"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
                 First Name
               </label>
               <input
                 type="text"
-                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                className="w-full bg-muted border-0 border-b-2 border-border p-4 font-sans text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors"
                 value={formData.firstName}
                 onChange={(e) =>
                   setFormData({ ...formData, firstName: e.target.value })
@@ -157,13 +157,13 @@ export default function RegisterForm({
             <div className="space-y-3">
               <label
                 htmlFor="lastName"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Last Name
               </label>
               <input
                 type="text"
-                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                className="w-full bg-muted border-0 border-b-2 border-border p-4 font-sans text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors"
                 value={formData.lastName}
                 onChange={(e) =>
                   setFormData({ ...formData, lastName: e.target.value })
@@ -177,13 +177,13 @@ export default function RegisterForm({
           <div className="space-y-3">
             <label
               htmlFor="email"
-              className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+              className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
             >
               Work Email
             </label>
             <input
               type="email"
-              className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+              className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -198,13 +198,13 @@ export default function RegisterForm({
             <div className="space-y-3">
               <label
                 htmlFor="password"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Password
               </label>
               <input
                 type="password"
-                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors"
                 value={formData.password}
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
@@ -216,13 +216,13 @@ export default function RegisterForm({
             <div className="space-y-3">
               <label
                 htmlFor="confirmPassword"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Verify Password
               </label>
               <input
                 type="password"
-                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -232,21 +232,21 @@ export default function RegisterForm({
           </div>
 
           {/* Organization Fields */}
-          <div className="pt-6 border-t border-slate-200 space-y-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+          <div className="pt-6 border-t border-border space-y-6">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Corporate Identity
             </p>
 
             <div className="space-y-3">
               <label
                 htmlFor="orgName"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Registered Organization Name
               </label>
               <input
                 type="text"
-                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-serif text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors"
+                className="w-full bg-muted border-0 border-b-2 border-border p-4 font-sans text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors"
                 value={formData.orgName}
                 onChange={(e) =>
                   setFormData({ ...formData, orgName: e.target.value })
@@ -258,14 +258,14 @@ export default function RegisterForm({
             <div className="space-y-3">
               <label
                 htmlFor="taxResidence"
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Primary Tax Jurisdiction(Country of Operation)
               </label>
               <input
                 type="text"
                 placeholder="e.g. US, UK, GH"
-                className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-sm text-slate-900 uppercase focus:ring-0 focus:border-slate-900 transition-colors"
+                className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-sm text-foreground uppercase focus:ring-0 focus:border-slate-900 transition-colors"
                 value={formData.taxResidence}
                 onChange={(e) =>
                   setFormData({ ...formData, taxResidence: e.target.value })

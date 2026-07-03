@@ -18,7 +18,7 @@ export default function LandingPage() {
   const shouldReduceMotion = useReducedMotion() as boolean;
 
   return (
-    <div className="animate-in fade-in duration-700 bg-slate-50 selection:bg-slate-900 selection:text-white">
+    <div className="animate-in fade-in duration-700 bg-muted selection:bg-secondary selection:text-white">
       <HeroSection shouldReduceMotion={shouldReduceMotion} />
       <TrustLayerSection shouldReduceMotion={shouldReduceMotion} />
       <ThePitchSection shouldReduceMotion={shouldReduceMotion} />

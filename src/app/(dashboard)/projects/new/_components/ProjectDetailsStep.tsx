@@ -27,7 +27,7 @@ const ProjectDetailsStep = ({ onNext, onPrev }: ProjectDetailsStepProps) => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl md:text-3xl font-bold mb-2">Project Details</h2>
-        <p className="text-slate-400 text-sm md:text-base">
+        <p className="text-muted-foreground text-sm md:text-base">
           Provide detailed information about your project implementation and
           goals.
         </p>
@@ -64,7 +64,7 @@ const ProjectDetailsStep = ({ onNext, onPrev }: ProjectDetailsStepProps) => {
         />
 
         {/* Optional Fields */}
-        <div className="pt-4 border-t border-slate-200">
+        <div className="pt-4 border-t border-border">
           <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-700">
             Additional Information (Optional)
           </h3>
@@ -133,7 +133,7 @@ const ProjectDetailsStep = ({ onNext, onPrev }: ProjectDetailsStepProps) => {
         </div>
 
         {/* Checkboxes */}
-        <div className="pt-4 border-t border-slate-200">
+        <div className="pt-4 border-t border-border">
           <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-700">
             Project Characteristics
           </h3>
@@ -219,7 +219,7 @@ const ProjectDetailsStep = ({ onNext, onPrev }: ProjectDetailsStepProps) => {
           type="button"
           variant="ghost"
           onClick={onPrev}
-          className="px-6 md:px-8 py-3 md:py-4 text-slate-400 font-bold text-sm md:text-base order-2 sm:order-1"
+          className="px-6 md:px-8 py-3 md:py-4 text-muted-foreground font-bold text-sm md:text-base order-2 sm:order-1"
         >
           Previous
         </Button>

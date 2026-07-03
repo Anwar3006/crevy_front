@@ -100,7 +100,7 @@ export function ProjectTypesSection({
   );
 
   return (
-    <section ref={targetRef} className="relative h-[600vh] bg-slate-950">
+    <section ref={targetRef} className="relative h-[600vh] bg-background">
       <motion.div
         style={shouldReduceMotion ? undefined : { backgroundColor }}
         className="sticky top-0 h-[100dvh] w-full overflow-hidden flex flex-col"
@@ -167,7 +167,7 @@ export function ProjectTypesSection({
 
                   <Link
                     href="/register"
-                    className="inline-flex items-center justify-center text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-white border border-white/30 px-6 py-4 hover:bg-white hover:text-slate-900 transition-all duration-300 w-full sm:w-fit backdrop-blur-sm group"
+                    className="inline-flex items-center justify-center text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-white border border-white/30 px-6 py-4 hover:bg-white hover:text-foreground transition-all duration-300 w-full sm:w-fit backdrop-blur-sm group"
                   >
                     Sign Up{" "}
                     <ArrowRight

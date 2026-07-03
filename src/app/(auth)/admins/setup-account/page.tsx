@@ -107,8 +107,8 @@ function AdminSetupTerminal() {
   if (verifying) {
     return (
       <div className="flex flex-col items-center justify-center space-y-4">
-        <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin" />
-        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+        <div className="w-8 h-8 border-2 border-border border-t-slate-900 rounded-none animate-spin" />
+        <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground">
           Verifying Identity Token...
         </p>
       </div>
@@ -119,16 +119,16 @@ function AdminSetupTerminal() {
     return (
       <div className="max-w-md w-full border border-rose-200 bg-white p-8 text-center">
         <ShieldCheck className="w-12 h-12 text-rose-600 mx-auto mb-4" />
-        <h2 className="text-2xl font-serif text-slate-900 mb-2">
+        <h2 className="text-2xl font-sans text-foreground mb-2">
           Access Denied.
         </h2>
-        <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-8">
+        <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-8">
           Token invalid or expired.
         </p>
         <button
           type="button"
           onClick={() => router.push("/login")}
-          className="bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors w-full"
+          className="bg-secondary text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors w-full"
         >
           Return to Authenticator
         </button>
@@ -139,26 +139,26 @@ function AdminSetupTerminal() {
   return (
     <div className="max-w-lg w-full border border-slate-900 bg-white shadow-2xl rounded-none overflow-hidden my-12">
       {/* Terminal Header */}
-      <div className="bg-slate-900 p-8 text-white">
+      <div className="bg-secondary p-8 text-white">
         <div className="flex items-center gap-3 mb-4">
           <ShieldCheck size={20} className="text-emerald-500" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
             Governance Provisioning
           </span>
         </div>
-        <h2 className="text-3xl font-serif tracking-tight leading-none mb-2">
+        <h2 className="text-3xl font-sans tracking-tight leading-none mb-2">
           Anchor Credential.
         </h2>
-        <p className="text-slate-400 font-light text-sm">
+        <p className="text-muted-foreground font-light text-sm">
           Initialize your administrative access key and identity.
         </p>
       </div>
 
-      <div className="p-8 bg-slate-50 border-b border-slate-200">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+      <div className="p-8 bg-muted border-b border-border">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
           Assigned Identity
         </p>
-        <p className="font-mono text-sm font-bold text-slate-900 tracking-widest">
+        <p className="font-mono text-sm font-bold text-foreground tracking-widest">
           {assignedEmail}
         </p>
       </div>
@@ -169,15 +169,15 @@ function AdminSetupTerminal() {
           <div className="space-y-3">
             <label
               htmlFor="firstName"
-              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+              className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest"
             >
               First Name
             </label>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                className="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 border-b-2 border-slate-200 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
+                className="w-full pl-12 pr-4 py-4 bg-muted border-0 border-b-2 border-border font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
                 placeholder="John"
                 value={formData.firstName}
                 onChange={(e) =>
@@ -190,15 +190,15 @@ function AdminSetupTerminal() {
           <div className="space-y-3">
             <label
               htmlFor="lastName"
-              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+              className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest"
             >
               Last Name
             </label>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                className="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 border-b-2 border-slate-200 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
+                className="w-full pl-12 pr-4 py-4 bg-muted border-0 border-b-2 border-border font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
                 placeholder="Doe"
                 value={formData.lastName}
                 onChange={(e) =>
@@ -214,15 +214,15 @@ function AdminSetupTerminal() {
           <div className="space-y-3">
             <label
               htmlFor="contactNumber"
-              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+              className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest"
             >
               Contact Number
             </label>
             <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="tel"
-                className="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 border-b-2 border-slate-200 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
+                className="w-full pl-12 pr-4 py-4 bg-muted border-0 border-b-2 border-border font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
                 placeholder="+1..."
                 value={formData.contactNumber}
                 onChange={(e) =>
@@ -234,15 +234,15 @@ function AdminSetupTerminal() {
           <div className="space-y-3">
             <label
               htmlFor="countryOfOperation"
-              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+              className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest"
             >
               Country
             </label>
             <div className="relative">
-              <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                className="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 border-b-2 border-slate-200 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
+                className="w-full pl-12 pr-4 py-4 bg-muted border-0 border-b-2 border-border font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
                 placeholder="United Kingdom"
                 value={formData.countryOfOperation}
                 onChange={(e) =>
@@ -259,15 +259,15 @@ function AdminSetupTerminal() {
         <div className="space-y-3">
           <label
             htmlFor="password"
-            className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+            className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest"
           >
             Cryptographic Key (Password)
           </label>
           <div className="relative">
-            <Key className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Key className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="password"
-              className="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 border-b-2 border-slate-200 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
+              className="w-full pl-12 pr-4 py-4 bg-muted border-0 border-b-2 border-border font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) =>
@@ -281,15 +281,15 @@ function AdminSetupTerminal() {
         <div className="space-y-3">
           <label
             htmlFor="confirmPassword"
-            className="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+            className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest"
           >
             Verify Key
           </label>
           <div className="relative">
-            <Key className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Key className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="password"
-              className="w-full pl-12 pr-4 py-4 bg-slate-50 border-0 border-b-2 border-slate-200 font-mono text-sm text-slate-900 focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
+              className="w-full pl-12 pr-4 py-4 bg-muted border-0 border-b-2 border-border font-mono text-sm text-foreground focus:ring-0 focus:border-slate-900 transition-colors rounded-none placeholder:text-slate-300"
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={(e) =>
@@ -302,7 +302,7 @@ function AdminSetupTerminal() {
 
         <button
           type="submit"
-          className="w-full bg-slate-900 hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] py-6 transition-colors flex items-center justify-center gap-2 mt-4"
+          className="w-full bg-secondary hover:bg-emerald-900 text-white font-bold uppercase tracking-widest text-[10px] py-6 transition-colors flex items-center justify-center gap-2 mt-4"
           disabled={loading}
         >
           {loading ? (
@@ -320,11 +320,11 @@ function AdminSetupTerminal() {
 
 export default function AdminSetupPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-6 selection:bg-slate-900 selection:text-white">
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 p-6 selection:bg-secondary selection:text-white">
       <Suspense
         fallback={
           <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin" />
+            <div className="w-8 h-8 border-2 border-border border-t-slate-900 rounded-none animate-spin" />
           </div>
         }
       >

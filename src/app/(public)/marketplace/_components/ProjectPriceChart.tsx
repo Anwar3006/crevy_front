@@ -17,18 +17,18 @@ interface PricePoint {
 
 export default function ProjectPriceChart({ data }: { data: PricePoint[] }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-none p-8 shadow-sm group">
+    <div className="bg-white border border-border rounded-none p-8 shadow-sm group">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
             Market Value Index
           </h3>
-          <p className="text-[9px] font-mono text-slate-500 uppercase mt-1">
+          <p className="text-[9px] font-mono text-muted-foreground uppercase mt-1">
             Average trade price per tCO2e (12M)
           </p>
         </div>
         <div className="text-right">
-          <p className="text-3xl font-mono font-bold text-slate-900 leading-none tabular-nums">
+          <p className="text-3xl font-mono font-bold text-foreground leading-none tabular-nums">
             $52.00
           </p>
           <p className="text-[9px] font-mono font-bold text-brand uppercase mt-1">

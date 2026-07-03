@@ -50,9 +50,9 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
     if (value === undefined || value === "" || value === null) return null;
 
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 py-3 border-b border-slate-100">
-        <dt className="text-sm font-medium text-slate-500">{label}</dt>
-        <dd className="text-sm text-slate-900 sm:col-span-2">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 py-3 border-b border-border">
+        <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
+        <dd className="text-sm text-foreground sm:col-span-2">
           {typeof value === "boolean" ? (value ? "Yes" : "No") : value}
         </dd>
       </div>
@@ -63,7 +63,7 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl md:text-3xl font-bold mb-2">Review & Submit</h2>
-        <p className="text-slate-400 text-sm md:text-base">
+        <p className="text-muted-foreground text-sm md:text-base">
           Please review your project details before submitting.
         </p>
       </div>
@@ -84,8 +84,8 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
       </div>
 
       {/* Project Type Section */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6">
-        <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-900">
+      <div className="bg-white rounded-xl border border-border p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-foreground">
           Project Type
         </h3>
         <dl className="divide-y divide-slate-100">
@@ -97,8 +97,8 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
       </div>
 
       {/* Project Overview Section */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6">
-        <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-900">
+      <div className="bg-white rounded-xl border border-border p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-foreground">
           Project Overview
         </h3>
         <dl className="divide-y divide-slate-100">
@@ -126,8 +126,8 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
       </div>
 
       {/* Supporting Documents Section */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6">
-        <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-900">
+      <div className="bg-white rounded-xl border border-border p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-foreground">
           Supporting Documents ({formData.documents?.length || 0})
         </h3>
         {formData.documents && formData.documents.length > 0 ? (
@@ -135,57 +135,57 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
             {formData.documents.map((file) => (
               <div
                 key={file.name}
-                className="flex items-center gap-3 p-3 border border-slate-100 rounded-lg bg-slate-50/50"
+                className="flex items-center gap-3 p-3 border border-border rounded-lg bg-muted/50"
               >
                 <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                 <span className="text-xs font-medium text-slate-700 truncate">
                   {file.name}
                 </span>
-                <span className="text-[10px] text-slate-400 ml-auto whitespace-nowrap">
+                <span className="text-[10px] text-muted-foreground ml-auto whitespace-nowrap">
                   {file.size}
                 </span>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-400 italic">
+          <p className="text-xs text-muted-foreground italic">
             No documents uploaded.
           </p>
         )}
       </div>
 
       {/* Project Details Section */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6">
-        <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-900">
+      <div className="bg-white rounded-xl border border-border p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-foreground">
           Project Details
         </h3>
         <dl className="divide-y divide-slate-100">
-          <div className="py-3 border-b border-slate-100">
-            <dt className="text-sm font-medium text-slate-500 mb-2">
+          <div className="py-3 border-b border-border">
+            <dt className="text-sm font-medium text-muted-foreground mb-2">
               Description
             </dt>
-            <dd className="text-sm text-slate-900 whitespace-pre-wrap">
+            <dd className="text-sm text-foreground whitespace-pre-wrap">
               {formData.description}
             </dd>
           </div>
 
           {formData.implementationPlan && (
-            <div className="py-3 border-b border-slate-100">
-              <dt className="text-sm font-medium text-slate-500 mb-2">
+            <div className="py-3 border-b border-border">
+              <dt className="text-sm font-medium text-muted-foreground mb-2">
                 Implementation Plan
               </dt>
-              <dd className="text-sm text-slate-900 whitespace-pre-wrap">
+              <dd className="text-sm text-foreground whitespace-pre-wrap">
                 {formData.implementationPlan}
               </dd>
             </div>
           )}
 
           {formData.expectedOutcomes && (
-            <div className="py-3 border-b border-slate-100">
-              <dt className="text-sm font-medium text-slate-500 mb-2">
+            <div className="py-3 border-b border-border">
+              <dt className="text-sm font-medium text-muted-foreground mb-2">
                 Expected Outcomes
               </dt>
-              <dd className="text-sm text-slate-900 whitespace-pre-wrap">
+              <dd className="text-sm text-foreground whitespace-pre-wrap">
                 {formData.expectedOutcomes}
               </dd>
             </div>
@@ -214,8 +214,8 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
       </div>
 
       {/* Project Characteristics */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 md:p-6">
-        <h3 className="text-base md:text-lg font-semibold mb-4 text-slate-900">
+      <div className="bg-white rounded-xl border border-border p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-foreground">
           Project Characteristics
         </h3>
         <dl className="divide-y divide-slate-100">
@@ -244,7 +244,7 @@ const ReviewStep = ({ onPrev, onSubmit, isSubmitting }: ReviewStepProps) => {
           type="button"
           variant="ghost"
           onClick={onPrev}
-          className="px-6 md:px-8 py-3 md:py-4 text-slate-400 font-bold text-sm md:text-base order-2 sm:order-1"
+          className="px-6 md:px-8 py-3 md:py-4 text-muted-foreground font-bold text-sm md:text-base order-2 sm:order-1"
         >
           Previous
         </Button>
