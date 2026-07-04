@@ -7,9 +7,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 import {
-  type ProjectOwnerRecord,
-  ProjectOwnerService,
-} from "@/lib/services/project-owner-service";
+  type ProjectDeveloperRecord,
+  ProjectDeveloperService,
+} from "@/lib/services/project-developer-service";
 import { cn } from "@/lib/utils";
 
 // ─── Editorial Configs ────────────────────────────────────────────────────────
@@ -53,13 +53,13 @@ function InfoRow({
 }) {
   if (!value) return null;
   return (
-    <div className="grid grid-cols-12 gap-4 py-4 border-b border-slate-200 last:border-0">
-      <div className="col-span-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center">
+    <div className="grid grid-cols-12 gap-4 py-4 border-b border-border last:border-0">
+      <div className="col-span-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center">
         {label}
       </div>
       <div
         className={cn(
-          "col-span-8 text-sm font-semibold text-slate-900",
+          "col-span-8 text-sm font-semibold text-foreground",
           mono && "font-mono",
         )}
       >
@@ -71,25 +71,25 @@ function InfoRow({
 
 // ─── Main Content Component ──────────────────────────────────────────────────
 
-function ProjectOwnerDetailContent() {
+function ProjectDeveloperDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["project-owner", userId],
-    queryFn: () => ProjectOwnerService.getProjectOwner(userId!),
+    queryKey: ["project-developer", userId],
+    queryFn: () => ProjectDeveloperService.getProjectDeveloper(userId!),
     enabled: !!userId,
   });
 
-  const owner: ProjectOwnerRecord | undefined = data?.data;
+  const owner: ProjectDeveloperRecord | undefined = data?.data;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-40 flex flex-col items-center text-slate-400">
+      <div className="min-h-screen pt-40 flex flex-col items-center text-muted-foreground">
         <Loader2 className="w-10 h-10 animate-spin mb-4" />
         <span className="text-[10px] font-mono uppercase tracking-[0.2em]">
-          Extracting KYC Dossier...
+          Extracting KYC Details...
         </span>
       </div>
     );
@@ -99,12 +99,12 @@ function ProjectOwnerDetailContent() {
     return (
       <div className="min-h-screen pt-40 flex flex-col items-center text-center">
         <XCircle className="h-10 w-10 text-red-500 mb-4" />
-        <p className="font-serif text-xl text-slate-900 mb-2">
-          Dossier Retrieval Failed
+        <p className="font-sans text-xl text-foreground mb-2">
+          Details Retrieval Failed
         </p>
         <Link
-          href="/project-owners"
-          className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border-b border-slate-900 pb-0.5"
+          href="/project-developers"
+          className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground border-b border-slate-900 pb-0.5"
         >
           Return to Directory
         </Link>
@@ -118,27 +118,27 @@ function ProjectOwnerDetailContent() {
   return (
     <div className="animate-in fade-in duration-700 pb-24">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 pt-12 pb-12">
+      <div className="bg-white border-b border-border pt-12 pb-12">
         <div className="max-w-250 mx-auto px-6 lg:px-10">
           <button
             type="button"
-            onClick={() => router.push("/project-owners")}
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors mb-8"
+            onClick={() => router.push("/project-developers")}
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="w-3 h-3" /> Personnel Roster
           </button>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="flex items-center gap-6">
-              <div className="w-20 h-20 bg-slate-900 text-white flex items-center justify-center text-2xl font-serif">
+              <div className="w-20 h-20 bg-secondary text-white flex items-center justify-center text-2xl font-sans">
                 {getInitials(owner.firstName, owner.lastName)}
               </div>
               <div>
-                <h1 className="text-4xl font-serif text-slate-900 tracking-tight leading-none mb-3">
+                <h1 className="text-4xl font-sans text-foreground tracking-tight leading-none mb-3">
                   {owner.firstName} {owner.lastName}
                 </h1>
                 <div className="flex items-center gap-4">
-                  <span className="text-[11px] font-mono text-slate-500 uppercase tracking-[0.2em]">
+                  <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-[0.2em]">
                     ID: {owner.code}
                   </span>
                   <span
@@ -164,16 +164,16 @@ function ProjectOwnerDetailContent() {
   );
 }
 
-export default function ProjectOwnerDetailPage() {
+export default function ProjectDeveloperDetailPage() {
   return (
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-white">
-          <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+          <Loader2 className="w-10 h-10 text-foreground animate-spin" />
         </div>
       }
     >
-      <ProjectOwnerDetailContent />
+      <ProjectDeveloperDetailContent />
     </Suspense>
   );
 }

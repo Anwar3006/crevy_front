@@ -30,7 +30,7 @@ const SECTIONS = [
   { id: "platform-use", label: "4. Infrastructure Use", icon: Globe },
   { id: "prohibited", label: "5. Prohibited Vectors", icon: ShieldAlert },
   { id: "carbon-credits", label: "6. Asset Immutability", icon: Leaf },
-  { id: "project-owners", label: "7. Originator Obligations", icon: Briefcase },
+  { id: "project-developers", label: "7. Originator Obligations", icon: Briefcase },
   { id: "corporate-buyers", label: "8. Institutional Buyers", icon: Building2 },
   { id: "payments", label: "9. Settlement & Fees", icon: Wallet },
   { id: "ip", label: "10. Intellectual Property", icon: FileText },
@@ -64,7 +64,7 @@ export default function TermsOfServicePage() {
   }, []);
 
   return (
-    <div className="animate-in fade-in duration-700 bg-slate-50 min-h-screen pb-24 selection:bg-slate-900 selection:text-white">
+    <div className="animate-in fade-in duration-700 bg-muted min-h-screen pb-24 selection:bg-secondary selection:text-white">
       <TermsHero />
       <TermsContent
         activeSection={activeSection}
@@ -78,7 +78,7 @@ export default function TermsOfServicePage() {
 
 function TermsHero() {
   return (
-    <section className="bg-white border-b border-slate-200 pt-32 pb-16">
+    <section className="bg-white border-b border-border pt-32 pb-16">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -87,15 +87,15 @@ function TermsHero() {
           className="max-w-4xl"
         >
           <div className="flex items-center gap-4 mb-12">
-            <span className="w-2 h-2 bg-slate-900 rounded-none shrink-0" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
+            <span className="w-2 h-2 bg-secondary rounded-none shrink-0" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Governance Protocol
             </span>
           </div>
 
-          <h1 className="font-serif text-5xl md:text-7xl text-slate-900 tracking-tight leading-[1.05] mb-8">
+          <h1 className="font-sans text-5xl md:text-7xl text-foreground tracking-tight leading-[1.05] mb-8">
             Terms of <br />
-            <span className="italic text-slate-500">Service Protocol.</span>
+            <span className="italic text-muted-foreground">Service Protocol.</span>
           </h1>
 
           <p className="text-slate-600 text-lg leading-relaxed mb-12 max-w-2xl font-light">
@@ -104,28 +104,28 @@ function TermsHero() {
             environmental asset registry operated by Foovante Global Ltd.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-px bg-slate-200 border border-slate-200 w-fit">
+          <div className="flex flex-col sm:flex-row gap-px bg-slate-200 border border-border w-fit">
             <div className="bg-white px-6 py-4 flex flex-col gap-1">
-              <span className="font-bold text-[9px] uppercase tracking-widest text-slate-400">
+              <span className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground">
                 Last Revised
               </span>
-              <span className="font-mono text-sm font-bold text-slate-900">
+              <span className="font-mono text-sm font-bold text-foreground">
                 03 APR 2026
               </span>
             </div>
             <div className="bg-white px-6 py-4 flex flex-col gap-1">
-              <span className="font-bold text-[9px] uppercase tracking-widest text-slate-400">
+              <span className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground">
                 Enforcement Date
               </span>
-              <span className="font-mono text-sm font-bold text-slate-900">
+              <span className="font-mono text-sm font-bold text-foreground">
                 03 APR 2026
               </span>
             </div>
             <div className="bg-white px-6 py-4 flex flex-col gap-1">
-              <span className="font-bold text-[9px] uppercase tracking-widest text-slate-400">
+              <span className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground">
                 Jurisdiction
               </span>
-              <span className="font-mono text-sm font-bold text-slate-900">
+              <span className="font-mono text-sm font-bold text-foreground">
                 REPUBLIC OF GHANA
               </span>
             </div>
@@ -152,7 +152,7 @@ function TermsContent({
           {/* ── Index / Table of Contents ── */}
           <aside className="lg:w-64 shrink-0 hidden md:block">
             <div className="sticky top-32">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6 border-b border-slate-200 pb-4">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-6 border-b border-border pb-4">
                 Protocol Index
               </p>
               <nav className="space-y-0" aria-label="Terms of service sections">
@@ -164,8 +164,8 @@ function TermsContent({
                     className={cn(
                       "flex items-center gap-3 py-3 text-[10px] font-bold uppercase tracking-widest transition-all border-l-2",
                       activeSection === section.id
-                        ? "border-slate-900 text-slate-900 bg-white"
-                        : "border-transparent text-slate-400 hover:text-slate-900 hover:bg-white/50 pl-2",
+                        ? "border-slate-900 text-foreground bg-white"
+                        : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/50 pl-2",
                       "pl-4",
                     )}
                   >
@@ -177,7 +177,7 @@ function TermsContent({
           </aside>
 
           {/* ── Legal Text ── */}
-          <div className="flex-1 bg-white border border-slate-200 p-8 md:p-16">
+          <div className="flex-1 bg-white border border-border p-8 md:p-16">
             <div className="space-y-24">
               <TermsSection id="acceptance" title="1. Acceptance of Terms">
                 <p>
@@ -284,7 +284,7 @@ function TermsContent({
               </TermsSection>
 
               <TermsSection
-                id="project-owners"
+                id="project-developers"
                 title="7. Originator Obligations"
               >
                 <p>
@@ -387,7 +387,7 @@ function TermsSection({
       transition={{ duration: 0.5 }}
       className="scroll-mt-32"
     >
-      <h2 className="font-serif text-3xl md:text-4xl text-slate-900 mb-6 border-b-2 border-slate-900 pb-4 tracking-tight">
+      <h2 className="font-sans text-3xl md:text-4xl text-foreground mb-6 border-b-2 border-slate-900 pb-4 tracking-tight">
         {title}
       </h2>
       <div className="space-y-4 text-slate-600 leading-relaxed font-light text-base md:text-lg">

@@ -22,11 +22,11 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { authClient } from "@/lib/auth";
 import { axiosClient } from "@/lib/axiosClient";
-import { ProjectOwnerService } from "@/lib/services/project-owner-service";
+import { ProjectDeveloperService } from "@/lib/services/project-developer-service";
 import { cn } from "@/lib/utils";
 import {
-  projectOwnerOnboardingSchema,
-  type TProjectOwnerOnboardingInput,
+  projectDeveloperOnboardingSchema,
+  type TProjectDeveloperOnboardingInput,
 } from "@/types/onboarding.types";
 
 const STEPS = [
@@ -36,7 +36,7 @@ const STEPS = [
   { id: 4, title: "System Finalization" },
 ];
 
-export default function ProjectOwnerOnboardingForm() {
+export default function ProjectDeveloperOnboardingForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [admins, setAdmins] = useState<any[]>([]);
@@ -57,8 +57,8 @@ export default function ProjectOwnerOnboardingForm() {
     }
   }, [isAdmin]);
 
-  const form = useForm<TProjectOwnerOnboardingInput>({
-    resolver: zodResolver(projectOwnerOnboardingSchema) as any,
+  const form = useForm<TProjectDeveloperOnboardingInput>({
+    resolver: zodResolver(projectDeveloperOnboardingSchema) as any,
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -129,7 +129,7 @@ export default function ProjectOwnerOnboardingForm() {
 
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
-  const onSubmit = async (data: TProjectOwnerOnboardingInput) => {
+  const onSubmit = async (data: TProjectDeveloperOnboardingInput) => {
     setLoading(true);
     try {
       const payload = {
@@ -172,8 +172,8 @@ export default function ProjectOwnerOnboardingForm() {
           : null,
       };
 
-      await ProjectOwnerService.onboardProjectOwner(payload);
-      toast.success("Project Owner registered successfully!");
+      await ProjectDeveloperService.onboardProjectDeveloper(payload);
+      toast.success("Project Developer registered successfully!");
       router.push("/projects/new");
     } catch (error: any) {
       toast.error(
@@ -192,16 +192,16 @@ export default function ProjectOwnerOnboardingForm() {
       {/* ── Editorial Stepper ── */}
       <div className="mb-12">
         <div className="flex items-center justify-between mb-4">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
             [ STEP 0{currentStep} / 0{STEPS.length} ]
           </span>
-          <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">
+          <span className="font-bold text-[10px] uppercase tracking-widest text-muted-foreground">
             {STEPS[currentStep - 1].title}
           </span>
         </div>
         <div className="relative h-[2px] w-full bg-slate-200 overflow-hidden">
           <motion.div
-            className="absolute top-0 left-0 h-full bg-slate-900"
+            className="absolute top-0 left-0 h-full bg-secondary"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.6, ease: "circOut" }}
@@ -213,7 +213,7 @@ export default function ProjectOwnerOnboardingForm() {
               key={step.id}
               className={cn(
                 "text-[9px] font-bold uppercase tracking-widest transition-colors",
-                currentStep >= step.id ? "text-slate-900" : "text-slate-400",
+                currentStep >= step.id ? "text-foreground" : "text-muted-foreground",
               )}
             >
               {step.title}
@@ -234,16 +234,16 @@ export default function ProjectOwnerOnboardingForm() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="bg-white border border-slate-200 p-8 md:p-12 shadow-sm"
+              className="bg-white border border-border p-8 md:p-12 shadow-sm"
             >
               {/* ── Step 1: Account Info ── */}
               {currentStep === 1 && (
                 <div className="space-y-8">
-                  <div className="border-b border-slate-200 pb-6 mb-8">
-                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                  <div className="border-b border-border pb-6 mb-8">
+                    <h2 className="text-3xl font-sans text-foreground tracking-tight mb-2">
                       Identity Profile
                     </h2>
-                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                    <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">
                       Register primary credentials and jurisdictional data.
                     </p>
                   </div>
@@ -310,17 +310,17 @@ export default function ProjectOwnerOnboardingForm() {
               {/* ── Step 2: Payment Details ── */}
               {currentStep === 2 && (
                 <div className="space-y-8">
-                  <div className="border-b border-slate-200 pb-6 mb-8">
-                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                  <div className="border-b border-border pb-6 mb-8">
+                    <h2 className="text-3xl font-sans text-foreground tracking-tight mb-2">
                       Payout Vectors
                     </h2>
-                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                    <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">
                       Configure climate revenue disbursement channels.
                     </p>
                   </div>
 
                   <div className="space-y-4">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                       Select Routing Network
                     </Label>
                     <RadioGroup
@@ -338,13 +338,13 @@ export default function ProjectOwnerOnboardingForm() {
                         />
                         <Label
                           htmlFor="momo"
-                          className="flex flex-col items-start p-6 border border-slate-200 bg-slate-50 hover:bg-slate-100 peer-data-[state=checked]:border-slate-900 peer-data-[state=checked]:bg-white cursor-pointer transition-all"
+                          className="flex flex-col items-start p-6 border border-border bg-muted hover:bg-slate-100 peer-data-[state=checked]:border-slate-900 peer-data-[state=checked]:bg-white cursor-pointer transition-all"
                         >
                           <Smartphone
-                            className="h-6 w-6 text-slate-900 mb-4"
+                            className="h-6 w-6 text-foreground mb-4"
                             strokeWidth={1.5}
                           />
-                          <span className="font-bold text-sm tracking-widest uppercase text-slate-900">
+                          <span className="font-bold text-sm tracking-widest uppercase text-foreground">
                             Mobile Money
                           </span>
                         </Label>
@@ -357,13 +357,13 @@ export default function ProjectOwnerOnboardingForm() {
                         />
                         <Label
                           htmlFor="bank"
-                          className="flex flex-col items-start p-6 border border-slate-200 bg-slate-50 hover:bg-slate-100 peer-data-[state=checked]:border-slate-900 peer-data-[state=checked]:bg-white cursor-pointer transition-all"
+                          className="flex flex-col items-start p-6 border border-border bg-muted hover:bg-slate-100 peer-data-[state=checked]:border-slate-900 peer-data-[state=checked]:bg-white cursor-pointer transition-all"
                         >
                           <Building2
-                            className="h-6 w-6 text-slate-900 mb-4"
+                            className="h-6 w-6 text-foreground mb-4"
                             strokeWidth={1.5}
                           />
-                          <span className="font-bold text-sm tracking-widest uppercase text-slate-900">
+                          <span className="font-bold text-sm tracking-widest uppercase text-foreground">
                             Institutional Transfer
                           </span>
                         </Label>
@@ -372,7 +372,7 @@ export default function ProjectOwnerOnboardingForm() {
                   </div>
 
                   {/* Account Name Inheritance */}
-                  <div className="p-5 bg-slate-50 border border-slate-200 space-y-3">
+                  <div className="p-5 bg-muted border border-border space-y-3">
                     <div className="flex items-start gap-3">
                       <Checkbox
                         id="sameAsUser"
@@ -381,7 +381,7 @@ export default function ProjectOwnerOnboardingForm() {
                           setIsAccountNameSameAsUser(!!checked);
                           if (!checked) form.setValue("accountName", "");
                         }}
-                        className="mt-1 rounded-none border-slate-300 data-[state=checked]:bg-slate-900 data-[state=checked]:border-slate-900"
+                        className="mt-1 rounded-none border-slate-300 data-[state=checked]:bg-secondary data-[state=checked]:border-slate-900"
                       />
                       <div>
                         <label
@@ -390,9 +390,9 @@ export default function ProjectOwnerOnboardingForm() {
                         >
                           Inherit Entity Name
                         </label>
-                        <p className="text-[10px] font-mono text-slate-400 mt-1">
+                        <p className="text-[10px] font-mono text-muted-foreground mt-1">
                           Use Identity Profile Name for routing:{" "}
-                          <span className="text-slate-900 font-bold">
+                          <span className="text-foreground font-bold">
                             {isAccountNameSameAsUser
                               ? `${watchedFirstName} ${watchedLastName}`.trim()
                               : "UNSET"}
@@ -414,7 +414,7 @@ export default function ProjectOwnerOnboardingForm() {
                   )}
 
                   {watchedPaymentMethod === "bank" && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border">
                       <CustomInput
                         name="bankName"
                         label="Bank Name"
@@ -435,7 +435,7 @@ export default function ProjectOwnerOnboardingForm() {
                   )}
 
                   {watchedPaymentMethod === "momo" && (
-                    <div className="space-y-6 pt-4 border-t border-slate-200">
+                    <div className="space-y-6 pt-4 border-t border-border">
                       <CustomInput
                         name="momoNetwork"
                         label="Network Operator"
@@ -445,7 +445,7 @@ export default function ProjectOwnerOnboardingForm() {
                         disabled={loading}
                       />
 
-                      <div className="p-5 bg-slate-50 border border-slate-200 space-y-3">
+                      <div className="p-5 bg-muted border border-border space-y-3">
                         <div className="flex items-start gap-3">
                           <Checkbox
                             id="sameAsContact"
@@ -454,7 +454,7 @@ export default function ProjectOwnerOnboardingForm() {
                               setIsMomoSameAsContact(!!checked);
                               if (!checked) form.setValue("momoNumber", "");
                             }}
-                            className="mt-1 rounded-none border-slate-300 data-[state=checked]:bg-slate-900 data-[state=checked]:border-slate-900"
+                            className="mt-1 rounded-none border-slate-300 data-[state=checked]:bg-secondary data-[state=checked]:border-slate-900"
                           />
                           <div>
                             <label
@@ -463,9 +463,9 @@ export default function ProjectOwnerOnboardingForm() {
                             >
                               Inherit Contact Number
                             </label>
-                            <p className="text-[10px] font-mono text-slate-400 mt-1">
+                            <p className="text-[10px] font-mono text-muted-foreground mt-1">
                               Use Primary Phone for MoMo:{" "}
-                              <span className="text-slate-900 font-bold">
+                              <span className="text-foreground font-bold">
                                 {isMomoSameAsContact
                                   ? watchedContactNumber
                                   : "UNSET"}
@@ -493,11 +493,11 @@ export default function ProjectOwnerOnboardingForm() {
               {/* ── Step 3: Land Plot ── */}
               {currentStep === 3 && (
                 <div className="space-y-8">
-                  <div className="border-b border-slate-200 pb-6 mb-8">
-                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                  <div className="border-b border-border pb-6 mb-8">
+                    <h2 className="text-3xl font-sans text-foreground tracking-tight mb-2">
                       Spatial Assets
                     </h2>
-                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                    <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">
                       Register primary geo-coordinates for verification.
                     </p>
                   </div>
@@ -521,13 +521,13 @@ export default function ProjectOwnerOnboardingForm() {
                     />
                   </div>
 
-                  <div className="p-6 bg-slate-50 border border-slate-200 flex items-start gap-4">
-                    <MapPin className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
+                  <div className="p-6 bg-muted border border-border flex items-start gap-4">
+                    <MapPin className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-1">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-1">
                         Coordinate Mapping
                       </p>
-                      <p className="text-xs text-slate-500 font-mono leading-relaxed">
+                      <p className="text-xs text-muted-foreground font-mono leading-relaxed">
                         Raw coordinates required for initial dMRV satellite
                         targeting and baseline biomass calculations.
                       </p>
@@ -567,21 +567,21 @@ export default function ProjectOwnerOnboardingForm() {
               {/* ── Step 4: Assignment ── */}
               {currentStep === 4 && (
                 <div className="space-y-8">
-                  <div className="border-b border-slate-200 pb-6 mb-8">
-                    <h2 className="text-3xl font-serif text-slate-900 tracking-tight mb-2">
+                  <div className="border-b border-border pb-6 mb-8">
+                    <h2 className="text-3xl font-sans text-foreground tracking-tight mb-2">
                       Finalization Protocol
                     </h2>
-                    <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
+                    <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">
                       Establish chain-of-custody assignments.
                     </p>
                   </div>
 
-                  <div className="p-8 bg-slate-50 border border-slate-200 space-y-6">
+                  <div className="p-8 bg-muted border border-border space-y-6">
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-1">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-1">
                         Account Custody
                       </p>
-                      <p className="text-xs text-slate-500 font-mono">
+                      <p className="text-xs text-muted-foreground font-mono">
                         Current operative will be assigned as primary oversight
                         agent.
                       </p>
@@ -596,19 +596,19 @@ export default function ProjectOwnerOnboardingForm() {
                       disabled={loading}
                     />
 
-                    <div className="flex items-center justify-between py-4 border-t border-slate-200 mt-4">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                    <div className="flex items-center justify-between py-4 border-t border-border mt-4">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                         Assignment Classification
                       </span>
-                      <span className="text-[10px] font-mono font-bold text-slate-900 bg-white border border-slate-200 px-3 py-1">
+                      <span className="text-[10px] font-mono font-bold text-foreground bg-white border border-border px-3 py-1">
                         PRIMARY_AGENT
                       </span>
                     </div>
                   </div>
 
                   {isAdmin && (
-                    <div className="space-y-4 pt-4 border-t border-slate-200">
-                      <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <div className="space-y-4 pt-4 border-t border-border">
+                      <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                         Assign to Administrator
                       </Label>
                       <select
@@ -651,7 +651,7 @@ export default function ProjectOwnerOnboardingForm() {
               variant="ghost"
               onClick={prevStep}
               disabled={currentStep === 1 || loading}
-              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
+              className="rounded-none text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
             >
               <ChevronLeft className="w-4 h-4 mr-2" /> Back
             </Button>
@@ -660,7 +660,7 @@ export default function ProjectOwnerOnboardingForm() {
               <Button
                 type="button"
                 onClick={nextStep}
-                className="rounded-none bg-slate-900 text-white hover:bg-emerald-900 px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
+                className="rounded-none bg-secondary text-white hover:bg-emerald-900 px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
                 Next Section <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
@@ -668,7 +668,7 @@ export default function ProjectOwnerOnboardingForm() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="rounded-none bg-slate-900 text-white hover:bg-emerald-900 px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
+                className="rounded-none bg-secondary text-white hover:bg-emerald-900 px-8 py-6 text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
                 {loading ? "Executing Protocol..." : "Finalize Registration"}
                 {!loading && <CheckCircle2 className="w-4 h-4 ml-2" />}

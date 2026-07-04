@@ -79,9 +79,9 @@ function ProjectDetailContent() {
 
   if (loadingProject || !isMounted) {
     return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center bg-slate-50">
-        <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin mb-4" />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
+      <div className="min-h-[80vh] flex flex-col items-center justify-center bg-muted">
+        <div className="w-8 h-8 border-2 border-border border-t-slate-900 rounded-none animate-spin mb-4" />
+        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
           Decrypting Ledger...
         </span>
       </div>
@@ -90,17 +90,17 @@ function ProjectDetailContent() {
 
   if (!project) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-center px-6">
-        <ShieldAlert size={32} className="text-slate-900 mb-4" />
-        <h1 className="font-serif text-3xl text-slate-900 mb-2">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-muted text-center px-6">
+        <ShieldAlert size={32} className="text-foreground mb-4" />
+        <h1 className="font-sans text-3xl text-foreground mb-2">
           Asset Not Found
         </h1>
-        <p className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-6">
+        <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-6">
           Error: Null Pointer in Ledger
         </p>
         <Link
           href="/dashboard"
-          className="px-6 py-3 border border-slate-900 text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:bg-slate-900 hover:text-white transition-colors"
+          className="px-6 py-3 border border-slate-900 text-[10px] font-bold uppercase tracking-widest text-foreground hover:bg-secondary hover:text-white transition-colors"
         >
           Return to Console
         </Link>
@@ -119,12 +119,12 @@ function ProjectDetailContent() {
   }));
 
   return (
-    <div className="bg-slate-50 min-h-screen font-sans selection:bg-slate-950 selection:text-white pb-32">
+    <div className="bg-muted min-h-screen font-sans selection:bg-background selection:text-white pb-32">
       {/* ── Top Navigation Bar ── */}
-      <div className="bg-white border-b border-slate-200 px-6 lg:px-10 py-4 flex items-center justify-between sticky top-0 z-50">
+      <div className="bg-white border-b border-border px-6 lg:px-10 py-4 flex items-center justify-between sticky top-0 z-50">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
+          className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft size={14} /> Back to Directory
         </Link>
@@ -139,7 +139,7 @@ function ProjectDetailContent() {
       {/* ── 1. MEDIA & GIS CONTROL CENTER (Split Screen) ────────────────────── */}
       <section className="min-h-[60vh] w-full grid grid-cols-1 lg:grid-cols-2 border-b-2 border-slate-900 bg-white">
         {/* Left: Spatial Overview / Image */}
-        <div className="relative border-r border-slate-200 bg-slate-950 flex items-center justify-center overflow-hidden min-h-[40vh]">
+        <div className="relative border-r border-border bg-background flex items-center justify-center overflow-hidden min-h-[40vh]">
           {project.coverImageUrl ? (
             <img
               src={project.coverImageUrl}
@@ -155,7 +155,7 @@ function ProjectDetailContent() {
             </div>
           )}
           <div className="absolute bottom-6 left-6 flex gap-2">
-            <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700 px-3 py-1.5 text-white font-mono text-[10px] uppercase tracking-widest flex items-center gap-2">
+            <div className="bg-secondary/80 backdrop-blur-md border border-slate-700 px-3 py-1.5 text-white font-mono text-[10px] uppercase tracking-widest flex items-center gap-2">
               <MapPin size={12} className="text-emerald-500" />{" "}
               {project.gpsCoordinates || "N/A"}
             </div>
@@ -165,50 +165,50 @@ function ProjectDetailContent() {
         {/* Right: Core Asset Telemetry */}
         <div className="p-8 md:p-14 lg:p-20 flex flex-col justify-center">
           <div className="mb-12">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Asset Ref:{" "}
-              <span className="text-slate-900 font-mono">
+              <span className="text-foreground font-mono">
                 {project.code || id}
               </span>
             </p>
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-none mb-6">
+            <h1 className="font-sans text-4xl md:text-5xl lg:text-6xl text-foreground tracking-tight leading-none mb-6">
               {project.name}
             </h1>
-            <p className="text-slate-500 font-light leading-relaxed max-w-lg">
+            <p className="text-muted-foreground font-light leading-relaxed max-w-lg">
               {project.description ||
                 "No thesis description provided by the originator."}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-px bg-slate-200 border border-slate-200">
+          <div className="grid grid-cols-2 gap-px bg-slate-200 border border-border">
             <div className="bg-white p-6 flex flex-col">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 Methodology
               </span>
-              <span className="font-mono text-sm text-slate-900">
+              <span className="font-mono text-sm text-foreground">
                 {project.projectType?.replace(/_/g, " ") || "UNKNOWN"}
               </span>
             </div>
             <div className="bg-white p-6 flex flex-col">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 Jurisdiction
               </span>
-              <span className="font-mono text-sm text-slate-900">
+              <span className="font-mono text-sm text-foreground">
                 {project.country || "N/A"} - {project.region}
               </span>
             </div>
             <div className="bg-white p-6 flex flex-col">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 Spatial Scale
               </span>
-              <span className="font-mono text-sm text-slate-900">
+              <span className="font-mono text-sm text-foreground">
                 {project.totalAreaHectares
                   ? `${project.totalAreaHectares} ha`
                   : "N/A"}
               </span>
             </div>
             <div className="bg-white p-6 flex flex-col">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 Status Protocol
               </span>
               <span
@@ -227,25 +227,25 @@ function ProjectDetailContent() {
       </section>
 
       {/* ── 2. IDENTITY & KYC DOSSIER ────────────────────────────────────────── */}
-      <section className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 border-b border-slate-200">
-        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 border-b-2 border-slate-900 pb-3 mb-8">
+      <section className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 border-b border-border">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground border-b-2 border-slate-900 pb-3 mb-8">
           Originator Identity Profile
         </h2>
 
         {owner ? (
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white border border-slate-200 p-8 flex flex-col">
-              <UserCheck size={24} className="text-slate-400 mb-4" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+            <div className="bg-white border border-border p-8 flex flex-col">
+              <UserCheck size={24} className="text-muted-foreground mb-4" />
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 Entity Name
               </span>
-              <span className="font-serif text-2xl text-slate-900">
+              <span className="font-sans text-2xl text-foreground">
                 {owner.name || "UNREGISTERED"}
               </span>
             </div>
-            <div className="bg-white border border-slate-200 p-8 flex flex-col">
-              <Lock size={24} className="text-slate-400 mb-4" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+            <div className="bg-white border border-border p-8 flex flex-col">
+              <Lock size={24} className="text-muted-foreground mb-4" />
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 KYC / AML Status
               </span>
               <span
@@ -259,12 +259,12 @@ function ProjectDetailContent() {
                 {owner.verificationStatus?.toUpperCase() || "PENDING"}
               </span>
             </div>
-            <div className="bg-white border border-slate-200 p-8 flex flex-col">
-              <Activity size={24} className="text-slate-400 mb-4" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+            <div className="bg-white border border-border p-8 flex flex-col">
+              <Activity size={24} className="text-muted-foreground mb-4" />
+              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
                 System Identifier
               </span>
-              <span className="font-mono text-sm text-slate-900 break-all">
+              <span className="font-mono text-sm text-foreground break-all">
                 {owner.id}
               </span>
             </div>
@@ -280,13 +280,13 @@ function ProjectDetailContent() {
       </section>
 
       {/* ── 3. MRV TELEMETRY & YIELD ─────────────────────────────────────────── */}
-      <section className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 border-b border-slate-200">
-        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 border-b-2 border-slate-900 pb-3 mb-8">
+      <section className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 border-b border-border">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground border-b-2 border-slate-900 pb-3 mb-8">
           dMRV Yield Telemetry
         </h2>
 
         {chartData.length > 0 ? (
-          <div className="bg-white border border-slate-200 p-8 h-[450px]">
+          <div className="bg-white border border-border p-8 h-[450px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={chartData}
@@ -349,7 +349,7 @@ function ProjectDetailContent() {
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="bg-slate-100 border border-slate-200 h-[300px] flex flex-col items-center justify-center text-slate-400">
+          <div className="bg-slate-100 border border-border h-[300px] flex flex-col items-center justify-center text-muted-foreground">
             <Radio size={32} className="mb-4 opacity-50" />
             <p className="font-mono text-xs uppercase tracking-widest">
               No sensor telemetry anchored yet.
@@ -360,37 +360,37 @@ function ProjectDetailContent() {
 
       {/* ── 4. CRYPTOGRAPHIC AUDIT LEDGER ─────────────────────────────────────── */}
       <section className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16">
-        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 border-b-2 border-slate-900 pb-3 mb-8">
+        <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground border-b-2 border-slate-900 pb-3 mb-8">
           System Audit Ledger
         </h2>
 
         {auditLogs.length > 0 ? (
-          <div className="bg-white border border-slate-200">
+          <div className="bg-white border border-border">
             {auditLogs.map((log: any, idx: number) => (
               <div
                 key={log.id || idx}
-                className="flex flex-col md:flex-row md:items-center justify-between p-6 border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors"
+                className="flex flex-col md:flex-row md:items-center justify-between p-6 border-b border-border last:border-0 hover:bg-muted transition-colors"
               >
                 <div className="flex items-start gap-4">
-                  <History size={16} className="text-slate-400 mt-1" />
+                  <History size={16} className="text-muted-foreground mt-1" />
                   <div>
-                    <p className="text-sm font-bold text-slate-900">
+                    <p className="text-sm font-bold text-foreground">
                       {log.action}
                     </p>
-                    <p className="text-xs text-slate-500 font-light mt-1 max-w-xl">
+                    <p className="text-xs text-muted-foreground font-light mt-1 max-w-xl">
                       {log.details}
                     </p>
                   </div>
                 </div>
-                <div className="mt-4 md:mt-0 font-mono text-[10px] text-slate-400 uppercase tracking-widest text-right shrink-0">
+                <div className="mt-4 md:mt-0 font-mono text-[10px] text-muted-foreground uppercase tracking-widest text-right shrink-0">
                   {new Date(log.createdAt).toLocaleString()}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="bg-white border border-slate-200 p-8 text-center">
-            <p className="font-mono text-xs text-slate-400 uppercase tracking-widest">
+          <div className="bg-white border border-border p-8 text-center">
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
               No audit events recorded.
             </p>
           </div>
@@ -405,9 +405,9 @@ export default function ProjectDetailPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-          <div className="w-8 h-8 border-2 border-slate-200 border-t-slate-900 rounded-none animate-spin mb-4" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-slate-500">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-muted">
+          <div className="w-8 h-8 border-2 border-border border-t-slate-900 rounded-none animate-spin mb-4" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             Initializing Secure Environment...
           </span>
         </div>

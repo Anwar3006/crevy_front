@@ -44,7 +44,7 @@ const ProjectTypeStep = ({
       <h2 className="text-2xl md:text-3xl font-bold mb-2">
         Select Your Project Type
       </h2>
-      <p className="text-slate-400 mb-6 md:mb-8 text-sm md:text-base">
+      <p className="text-muted-foreground mb-6 md:mb-8 text-sm md:text-base">
         Choose the category that best describes your green project.
       </p>
 
@@ -55,7 +55,7 @@ const ProjectTypeStep = ({
             key={type.id}
             onClick={() => handleTypeSelect(type.id)}
             className={`cursor-pointer p-4 md:p-6 rounded-2xl border-2 transition-all text-center flex flex-col items-center justify-center min-h-[180px] md:min-h-[200px]
-              ${selected === type.id ? "border-emerald-500 bg-emerald-50/50" : "border-slate-100 hover:border-emerald-200"}`}
+              ${selected === type.id ? "border-emerald-500 bg-emerald-50/50" : "border-border hover:border-emerald-200"}`}
           >
             <Image
               src={type.icon}
@@ -70,7 +70,7 @@ const ProjectTypeStep = ({
             <p className="text-emerald-500 text-xs font-semibold mt-1">
               Starting Up
             </p>
-            <p className="text-slate-500 text-xs leading-relaxed max-w-[200px] mt-1">
+            <p className="text-muted-foreground text-xs leading-relaxed max-w-[200px] mt-1">
               {type.description}
             </p>
           </button>
@@ -78,7 +78,7 @@ const ProjectTypeStep = ({
       </div>
 
       {/* Custom project option */}
-      <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t border-slate-100">
+      <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t border-border">
         <div className="flex items-center gap-2 text-[#2ebc8d] font-semibold mb-4">
           <span className="text-base md:text-lg">⚙️</span>
           <span className="text-sm md:text-base">
@@ -89,7 +89,7 @@ const ProjectTypeStep = ({
           type="text"
           placeholder="Enter a descriptive name for your project"
           onChange={handleCustomNameChange}
-          className="w-full p-3 md:p-4 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm md:text-base"
+          className="w-full p-3 md:p-4 rounded-xl border border-border bg-muted focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-sm md:text-base"
         />
       </div>
 
@@ -108,7 +108,7 @@ const ProjectTypeStep = ({
           variant="ghost"
           onClick={onPrev}
           type="button"
-          className="px-6 md:px-8 py-3 md:py-4 text-slate-400 font-bold text-sm md:text-base order-2 sm:order-1"
+          className="px-6 md:px-8 py-3 md:py-4 text-muted-foreground font-bold text-sm md:text-base order-2 sm:order-1"
         >
           Previous
         </Button>

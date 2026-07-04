@@ -5,8 +5,8 @@ import { z } from "zod";
  * v2 registration schema — flat, no userType discriminated union.
  *
  * What was removed:
- *   - userType (Company / ProjectOwner / Admin)
- *   - Conditional company / projectOwner / admin sub-objects
+ *   - userType (Company / ProjectDeveloper / Admin)
+ *   - Conditional company / projectDeveloper / admin sub-objects
  *   - userName (not required at registration)
  *
  * The backend assigns super_admin role automatically for the pilot.
@@ -84,7 +84,7 @@ export type TRole =
   | "financial_admin"
   | "mrv_admin"
   | "project_manager"
-  | "project_owner"
+  | "project_developer"
   | "org_admin"
   | "sustainability_manager"
   | "org_auditor";
@@ -110,3 +110,4 @@ export type TBetterAuthUser = {
   roleId?: number | null;
   profileCompleted?: boolean | null;
 };
+// test change

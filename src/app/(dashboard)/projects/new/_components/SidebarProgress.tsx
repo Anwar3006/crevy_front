@@ -9,7 +9,7 @@ interface SidebarProgressProps {
 
 const SidebarProgress = ({ currentStep, steps }: SidebarProgressProps) => {
   return (
-    <div className="flex flex-col gap-0 border-l-2 border-slate-100">
+    <div className="flex flex-col gap-0 border-l-2 border-border">
       {steps.map((step, index) => {
         const isCompleted = index < currentStep;
         const isActive = index === currentStep;
@@ -27,10 +27,10 @@ const SidebarProgress = ({ currentStep, steps }: SidebarProgressProps) => {
                 className={cn(
                   "font-mono text-[10px] uppercase tracking-widest",
                   isActive
-                    ? "text-slate-900 font-bold"
+                    ? "text-foreground font-bold"
                     : isCompleted
                       ? "text-emerald-600"
-                      : "text-slate-400",
+                      : "text-muted-foreground",
                 )}
               >
                 Phase 0{index + 1} {isCompleted && "✓"}
@@ -39,10 +39,10 @@ const SidebarProgress = ({ currentStep, steps }: SidebarProgressProps) => {
                 className={cn(
                   "text-sm tracking-wide",
                   isActive
-                    ? "text-slate-900 font-bold font-serif"
+                    ? "text-foreground font-bold font-sans"
                     : isCompleted
                       ? "text-slate-700"
-                      : "text-slate-400",
+                      : "text-muted-foreground",
                 )}
               >
                 {step}

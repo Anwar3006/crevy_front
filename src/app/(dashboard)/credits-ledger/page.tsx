@@ -24,21 +24,21 @@ export default function PlatformCreditsLedgerPage() {
   const credits = data?.data || [];
 
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-slate-900 selection:text-white">
+    <div className="min-h-screen bg-white font-sans selection:bg-secondary selection:text-white">
       {/* Editorial Header */}
-      <div className="bg-white pt-20 pb-12 border-b border-slate-200">
+      <div className="bg-white pt-20 pb-12 border-b border-border">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="inline-flex items-center gap-3 mb-6">
-            <div className="w-8 h-[1px] bg-slate-900"></div>
+            <div className="w-8 h-[1px] bg-secondary"></div>
             <span className="text-emerald-600 text-[10px] font-bold uppercase tracking-[0.3em]">
               Global Supply Oversight
             </span>
-            <div className="w-8 h-[1px] bg-slate-900"></div>
+            <div className="w-8 h-[1px] bg-secondary"></div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-serif text-slate-900 tracking-tight mb-4 leading-none">
-            Platform <span className="italic text-slate-500">Ledger.</span>
+          <h1 className="text-4xl md:text-6xl font-sans text-foreground tracking-tight mb-4 leading-none">
+            Platform <span className="italic text-muted-foreground">Ledger.</span>
           </h1>
-          <p className="text-slate-500 text-base max-w-2xl leading-relaxed mt-6 italic">
+          <p className="text-muted-foreground text-base max-w-2xl leading-relaxed mt-6 italic">
             The master administrative record of all carbon credits generated
             across the Crevy ecosystem. This ledger provides a comprehensive
             audit trail of every cryptographic serial number, ensuring
@@ -53,12 +53,12 @@ export default function PlatformCreditsLedgerPage() {
           <div className="w-full md:w-1/2">
             <label
               htmlFor="global-registry-search"
-              className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block"
+              className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2 block"
             >
               Search Global Registry
             </label>
-            <div className="relative border-b-2 border-slate-200 hover:border-slate-900 transition-colors">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-900 w-5 h-5" />
+            <div className="relative border-b-2 border-border hover:border-slate-900 transition-colors">
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-foreground w-5 h-5" />
               <input
                 id="global-registry-search"
                 placeholder="Query serial numbers, batches, or project codes..."
@@ -71,7 +71,7 @@ export default function PlatformCreditsLedgerPage() {
 
           <div className="flex gap-4 w-full md:w-auto">
             <div className="relative group w-full md:w-48">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10" />
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -90,19 +90,19 @@ export default function PlatformCreditsLedgerPage() {
           <table className="w-full text-left border-collapse min-w-[900px]">
             <thead>
               <tr className="border-b-2 border-slate-900">
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground">
                   Cryptographic Serial
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground">
                   Project Context
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground">
                   Vintage
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900 text-right">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground text-right">
                   Volume (tCO₂e)
                 </th>
-                <th className="py-4 pl-6 text-[11px] font-bold uppercase tracking-widest text-slate-900 text-right">
+                <th className="py-4 pl-6 text-[11px] font-bold uppercase tracking-widest text-foreground text-right">
                   System Status
                 </th>
               </tr>
@@ -112,7 +112,7 @@ export default function PlatformCreditsLedgerPage() {
                 <tr>
                   <td
                     colSpan={5}
-                    className="py-20 text-center text-slate-400 font-mono text-sm uppercase tracking-widest"
+                    className="py-20 text-center text-muted-foreground font-mono text-sm uppercase tracking-widest"
                   >
                     Synchronizing Registry Data...
                   </td>
@@ -121,7 +121,7 @@ export default function PlatformCreditsLedgerPage() {
                 <tr>
                   <td
                     colSpan={5}
-                    className="py-20 text-center text-slate-400 font-serif text-lg"
+                    className="py-20 text-center text-muted-foreground font-sans text-lg"
                   >
                     No registry records matched your query.
                   </td>
@@ -130,11 +130,11 @@ export default function PlatformCreditsLedgerPage() {
                 credits.map((c: any) => (
                   <tr
                     key={c.id}
-                    className="group hover:bg-slate-50 transition-colors"
+                    className="group hover:bg-muted transition-colors"
                   >
                     {/* Serial Number */}
                     <td className="py-6 pr-6 align-top">
-                      <div className="font-mono text-sm font-semibold text-slate-900">
+                      <div className="font-mono text-sm font-semibold text-foreground">
                         {c.serialNumber || `SN-${c.id.slice(0, 12)}`}
                       </div>
                     </td>
@@ -144,14 +144,14 @@ export default function PlatformCreditsLedgerPage() {
                       <div className="font-bold text-slate-800 text-sm">
                         {c.project?.name || "Global Program"}
                       </div>
-                      <div className="font-mono text-[10px] text-slate-400 uppercase mt-1">
+                      <div className="font-mono text-[10px] text-muted-foreground uppercase mt-1">
                         {c.project?.code || c.mrv_batch_id?.slice(0, 8)}
                       </div>
                     </td>
 
                     {/* Vintage */}
                     <td className="py-6 pr-6 align-top">
-                      <div className="font-mono text-sm text-slate-900">
+                      <div className="font-mono text-sm text-foreground">
                         {c.creditVintage}
                       </div>
                     </td>
@@ -174,7 +174,7 @@ export default function PlatformCreditsLedgerPage() {
                             "inline-flex items-center gap-1.5 border px-2 py-1 text-[10px] font-bold uppercase tracking-widest",
                             c.creditStatus === "available"
                               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                              : "border-slate-200 bg-white text-slate-500",
+                              : "border-border bg-white text-muted-foreground",
                           )}
                         >
                           {c.creditStatus === "available" ? (

@@ -2,30 +2,34 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowRight,
   ChevronDown,
-  Globe2,
   RotateCcw,
   Search,
-  ShieldCheck,
   SlidersHorizontal,
-  TrendingUp,
   X,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  Suspense,
   useCallback,
-  useDeferredValue,
+  useEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
 } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PROJECT_TYPES, SDGS } from "@/constants/new-project";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { useMarketplace } from "@/hooks/use-marketplace";
 import { cn } from "@/lib/utils";
 import PrimaryMarketplaceHero from "./_components/PrimaryMarketplaceHero";
@@ -44,6 +48,7 @@ interface FilterState {
 type FilterAction =
   | { type: "SET"; key: keyof FilterState; value: string | string[] }
   | { type: "TOGGLE_SDG"; id: string }
+  | { type: "SET_ALL"; payload: FilterState }
   | { type: "RESET" };
 
 const INITIAL_FILTERS: FilterState = {
@@ -65,6 +70,8 @@ function filterReducer(state: FilterState, action: FilterAction): FilterState {
           ? state.sdgs.filter((s) => s !== action.id)
           : [...state.sdgs, action.id],
       };
+    case "SET_ALL":
+      return action.payload;
     case "RESET":
       return INITIAL_FILTERS;
     default:
@@ -81,29 +88,111 @@ const STATUSES = [
   { value: "active", label: "Pre-Verified" },
 ];
 
-// ─── Page Component ───────────────────────────────────────────────────────────
+// ─── Page Export ──────────────────────────────────────────────────────────────
+// Next.js 15+ requires useSearchParams() to be inside a Suspense boundary.
+// This outer component is prerendered; the inner component is client-only.
 
 export default function MarketplacePage() {
+  return (
+    <Suspense fallback={<SkeletonGrid />}>
+      <MarketplacePageInner />
+    </Suspense>
+  );
+}
+
+// ─── Page Component ───────────────────────────────────────────────────────────
+
+function MarketplacePageInner() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [filters, dispatch] = useReducer(filterReducer, INITIAL_FILTERS);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState<"newest" | "impact" | "price">("newest");
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const deferredSearch = useDeferredValue(filters.search);
+  // Debounce the free-text search so it doesn't trigger a fetch (or a URL
+  // update) on every keystroke.
+  const debouncedSearch = useDebouncedValue(filters.search, 400);
+
+  // Prevents the "state -> URL" effect from firing as a reaction to the
+  // "URL -> state" effect below, which otherwise causes the two effects to
+  // ping-pong off each other (each triggering re-renders / refetches).
+  const isSyncingFromUrl = useRef(false);
+
+  // Sync state from URL query parameters on mount / external navigation
+  useEffect(() => {
+    const urlFilters = {
+      region: searchParams.get("region") || "",
+      projectType: searchParams.get("projectType") || "",
+      status: searchParams.get("status") || "",
+      search: searchParams.get("search") || "",
+      sdgs: searchParams.get("sdgs")
+        ? searchParams.get("sdgs")!.split(",")
+        : [],
+    };
+    const urlSortBy = searchParams.get("sortBy") as any;
+
+    isSyncingFromUrl.current = true;
+
+    if (
+      urlSortBy === "newest" ||
+      urlSortBy === "impact" ||
+      urlSortBy === "price"
+    ) {
+      setSortBy(urlSortBy);
+    }
+    dispatch({ type: "SET_ALL", payload: urlFilters });
+  }, [searchParams]);
+
+  // Sync state transformations to the URL parameter index for direct sharing.
+  // Skips the write when it was the URL that produced this state change, and
+  // skips it again when the resulting query string wouldn't actually change,
+  // to avoid an infinite replace <-> parse loop.
+  useEffect(() => {
+    if (isSyncingFromUrl.current) {
+      isSyncingFromUrl.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams();
+    if (filters.region) params.set("region", filters.region);
+    if (filters.projectType) params.set("projectType", filters.projectType);
+    if (filters.status) params.set("status", filters.status);
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    if (filters.sdgs.length > 0) params.set("sdgs", filters.sdgs.join(","));
+    if (sortBy !== "newest") params.set("sortBy", sortBy);
+
+    const nextQuery = params.toString();
+    if (nextQuery === searchParams.toString()) return;
+
+    router.replace(`${pathname}?${nextQuery}`, { scroll: false });
+  }, [
+    filters.region,
+    filters.projectType,
+    filters.status,
+    filters.sdgs,
+    debouncedSearch,
+    sortBy,
+    pathname,
+    router,
+    searchParams,
+  ]);
 
   const queryFilters = useMemo(
     () => ({
       region: filters.region || undefined,
       projectType: filters.projectType || undefined,
       status: filters.status || undefined,
-      search: deferredSearch.trim() || undefined,
+      search: debouncedSearch.trim() || undefined,
       sdgs: filters.sdgs.length > 0 ? filters.sdgs.join(",") : undefined,
     }),
     [
       filters.region,
       filters.projectType,
       filters.status,
-      deferredSearch,
+      debouncedSearch,
       filters.sdgs,
     ],
   );
@@ -161,9 +250,8 @@ export default function MarketplacePage() {
   );
   const resetFilters = useCallback(() => dispatch({ type: "RESET" }), []);
 
-  // bg-[#FDFDFD]
   return (
-    <div className="min-h-screen bg-background  font-sans text-white selection:bg-slate-900 selection:text-white">
+    <div className="min-h-screen bg-background font-sans text-white selection:bg-secondary selection:text-white">
       {/* ── Institutional Hero ───────────────────────────────────────────── */}
       <PrimaryMarketplaceHero />
 
@@ -180,11 +268,11 @@ export default function MarketplacePage() {
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className="relative flex items-center gap-2 px-5 py-3 bg-brand text-slate-900 font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-white transition-colors shrink-0 rounded-none"
+            className="relative flex items-center gap-2 px-5 py-3 bg-brand text-foreground font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-white transition-colors shrink-0 rounded-none"
           >
             <SlidersHorizontal className="w-4 h-4" /> Filters
             {activeFilterCount > 0 && (
-              <span className="absolute -top-2 -right-2 w-5 h-5 bg-slate-900 text-brand text-[10px] font-black flex items-center justify-center rounded-none border border-brand">
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-secondary text-brand text-[10px] font-black flex items-center justify-center rounded-none border border-brand">
                 {activeFilterCount}
               </span>
             )}
@@ -193,7 +281,7 @@ export default function MarketplacePage() {
 
         <div className="flex gap-12 items-start">
           {/* ── Institutional Sidebar ───────────────────────────────────── */}
-          <aside className="hidden xl:block w-[290px] shrink-0 sticky top-8 bg-slate-900 border border-slate-800 p-6">
+          <aside className="hidden xl:block w-[290px] shrink-0 sticky top-8 h-fit bg-foreground border border-slate-800 p-6">
             <FilterPanel
               filters={filters}
               activeFilterCount={activeFilterCount}
@@ -221,7 +309,7 @@ export default function MarketplacePage() {
 
             {/* Result count */}
             {!isLoading && (
-              <p className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-6">
+              <p className="text-[10px] font-mono text-foreground uppercase tracking-[0.2em] mb-6">
                 Query Returned:{" "}
                 <span className="text-brand font-bold">
                   {sortedProjects.length}
@@ -267,7 +355,7 @@ export default function MarketplacePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-slate-950/80 z-40 backdrop-blur-sm"
+              className="fixed inset-0 bg-background/80 z-40 backdrop-blur-sm"
               onClick={() => setMobileFiltersOpen(false)}
             />
             <motion.div
@@ -275,16 +363,16 @@ export default function MarketplacePage() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed inset-y-0 left-0 w-[85vw] max-w-[340px] bg-slate-900 z-50 shadow-2xl overflow-y-auto border-r border-slate-800 text-white"
+              className="fixed inset-y-0 left-0 w-[85vw] max-w-[340px] bg-secondary z-50 shadow-2xl overflow-y-auto border-r border-slate-800 text-white"
             >
-              <div className="flex items-center justify-between p-6 border-b border-slate-800 bg-slate-950">
+              <div className="flex items-center justify-between p-6 border-b border-slate-800 bg-background">
                 <h2 className="font-extrabold text-lg text-white uppercase tracking-wider">
                   Screener Filters
                 </h2>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="p-2 text-slate-400 hover:text-white transition-colors"
+                  className="p-2 text-muted-foreground hover:text-white transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -339,7 +427,7 @@ function FilterPanel({
           <button
             type="button"
             onClick={onReset}
-            className="text-[10px] text-slate-400 hover:text-white uppercase tracking-[0.2em] font-bold flex items-center gap-1 transition-colors"
+            className="text-[10px] text-foreground hover:text-white uppercase tracking-[0.2em] font-bold flex items-center gap-1 transition-colors"
           >
             <RotateCcw className="w-3 h-3" /> Reset
           </button>
@@ -354,8 +442,8 @@ function FilterPanel({
             className={cn(
               "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
               !filters.region
-                ? "bg-brand text-slate-900 font-bold"
-                : "text-slate-400 hover:bg-slate-800 hover:text-white",
+                ? "bg-brand text-foreground font-bold"
+                : "text-white hover:bg-slate-800 hover:text-white",
             )}
           >
             Global Index
@@ -368,8 +456,8 @@ function FilterPanel({
               className={cn(
                 "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
                 filters.region === r
-                  ? "bg-brand text-slate-900 font-bold"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white",
+                  ? "bg-brand text-foreground font-bold"
+                  : "text-white hover:bg-slate-800 hover:text-white",
               )}
             >
               {r}
@@ -386,8 +474,8 @@ function FilterPanel({
             className={cn(
               "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
               !filters.projectType
-                ? "bg-brand text-slate-900 font-bold"
-                : "text-slate-400 hover:bg-slate-800 hover:text-white",
+                ? "bg-brand text-foreground font-bold"
+                : "text-white hover:bg-slate-800 hover:text-white",
             )}
           >
             All Methodologies
@@ -400,8 +488,8 @@ function FilterPanel({
               className={cn(
                 "w-full text-left px-3 py-2 text-[11px] font-mono uppercase tracking-[0.2em] transition-colors rounded-none",
                 filters.projectType === t.id
-                  ? "bg-brand text-slate-900 font-bold"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white",
+                  ? "bg-brand text-foreground font-bold"
+                  : "text-white hover:bg-slate-800 hover:text-white",
               )}
             >
               {t.title}
@@ -438,7 +526,7 @@ function FilterPanel({
               />
               <Label
                 htmlFor={`status-${s.value}`}
-                className="text-xs font-bold uppercase tracking-[0.2em] text-slate-300 cursor-pointer"
+                className="text-xs uppercase tracking-[0.2em] text-slate-300 cursor-pointer"
               >
                 {s.label}
               </Label>
@@ -455,7 +543,7 @@ function FilterPanel({
                 id={`sdg-${sdg.id}`}
                 checked={filters.sdgs.includes(sdg.id)}
                 onCheckedChange={() => onToggleSdg(sdg.id)}
-                className="mt-0.5 rounded-none border-slate-700 data-[state=checked]:bg-brand data-[state=checked]:text-slate-900 data-[state=checked]:border-brand"
+                className="mt-0.5 rounded-none border-slate-700 data-[state=checked]:bg-brand data-[state=checked]:text-foreground data-[state=checked]:border-brand"
               />
               <Label
                 htmlFor={`sdg-${sdg.id}`}
@@ -492,7 +580,7 @@ function FilterSection({
         {title}
         <ChevronDown
           className={cn(
-            "w-4 h-4 transition-transform text-slate-400",
+            "w-4 h-4 transition-transform text-muted-foreground",
             open ? "rotate-180" : "",
           )}
         />
@@ -527,20 +615,20 @@ const SearchBar = ({
   ref?: React.Ref<HTMLInputElement>;
 }) => (
   <div className={cn("relative group", className)}>
-    <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-brand transition-colors pointer-events-none" />
+    <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-brand transition-colors pointer-events-none" />
     <input
       ref={ref}
       type="search"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Query by asset, region, or serial..."
-      className="w-full bg-transparent border-none border-b-2 border-slate-800 pl-8 pr-8 py-2 text-base md:text-lg font-sans text-white placeholder:text-slate-500 placeholder:font-sans placeholder:text-base focus:outline-none focus:border-brand transition-colors rounded-none"
+      className="w-full bg-transparent border-none border-b-2 border-slate-800 pl-8 pr-8 py-2 text-base md:text-lg font-sans text-foreground placeholder:text-muted-foreground placeholder:font-sans placeholder:text-base focus:outline-none focus:border-brand transition-colors rounded-none"
     />
     {value && (
       <button
         type="button"
         onClick={() => onChange("")}
-        className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+        className="absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white transition-colors"
       >
         <X className="w-4 h-4" />
       </button>
@@ -554,22 +642,52 @@ function SortSelector({
   value,
   onChange,
 }: {
-  value: string;
+  value: "newest" | "impact" | "price";
   onChange: (v: "newest" | "impact" | "price") => void;
 }) {
+  const labelMap = {
+    newest: "Sort: Newly Listed",
+    impact: "Sort: Max Impact",
+    price: "Sort: Lowest Price",
+  };
+
   return (
-    <div className="relative shrink-0">
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value as any)}
-        className="appearance-none bg-slate-900 border border-slate-800 rounded-none pl-4 pr-10 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white focus:outline-none focus:border-brand cursor-pointer hover:border-slate-700 transition-colors"
-      >
-        <option value="newest">Sort: Newly Listed</option>
-        <option value="impact">Sort: Max Impact</option>
-        <option value="price">Sort: Lowest Price</option>
-      </select>
-      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="flex items-center justify-between gap-4 bg-foreground border border-slate-800 rounded-none pl-4 pr-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white focus:outline-none focus:border-brand hover:border-slate-700 transition-colors cursor-pointer min-w-[210px]"
+        >
+          <span>{labelMap[value]}</span>
+          <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-foreground border border-slate-800 rounded-none p-1 text-white min-w-[210px] z-50">
+        <DropdownMenuRadioGroup
+          value={value}
+          onValueChange={(v) => onChange(v as any)}
+        >
+          <DropdownMenuRadioItem
+            value="newest"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] rounded-none focus:bg-brand focus:text-foreground cursor-pointer py-2 px-3"
+          >
+            Sort: Newly Listed
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="impact"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] rounded-none focus:bg-brand focus:text-foreground cursor-pointer py-2 px-3"
+          >
+            Sort: Max Impact
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            value="price"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] rounded-none focus:bg-brand focus:text-foreground cursor-pointer py-2 px-3"
+          >
+            Sort: Lowest Price
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -581,17 +699,17 @@ function SkeletonGrid() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="h-[500px] border border-slate-900 bg-slate-900/50 animate-pulse flex flex-col rounded-none"
+          className="h-[500px] border border-slate-900 bg-secondary/50 animate-pulse flex flex-col rounded-none"
         >
-          <div className="h-56 bg-slate-900" />
+          <div className="h-56 bg-secondary" />
           <div className="p-6 flex-1 flex flex-col space-y-4">
-            <div className="h-6 bg-slate-900 w-3/4" />
-            <div className="h-4 bg-slate-900 w-1/2" />
+            <div className="h-6 bg-secondary w-3/4" />
+            <div className="h-4 bg-secondary w-1/2" />
             <div className="mt-auto grid grid-cols-2 gap-4">
-              <div className="h-12 bg-slate-950" />
-              <div className="h-12 bg-slate-950" />
+              <div className="h-12 bg-background" />
+              <div className="h-12 bg-background" />
             </div>
-            <div className="h-12 bg-slate-900 w-full mt-4" />
+            <div className="h-12 bg-secondary w-full mt-4" />
           </div>
         </div>
       ))}
@@ -609,14 +727,14 @@ function EmptyState({
   hasFilters: boolean;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center py-32 text-center border border-slate-900 bg-slate-900/40 rounded-none">
-      <div className="w-16 h-16 border border-slate-800 flex items-center justify-center mb-6 bg-slate-950">
-        <Search className="w-6 h-6 text-slate-500" />
+    <div className="flex flex-col items-center justify-center py-32 text-center border border-slate-900 bg-secondary/40 rounded-none">
+      <div className="w-16 h-16 border border-slate-800 flex items-center justify-center mb-6 bg-background">
+        <Search className="w-6 h-6 text-muted-foreground" />
       </div>
       <h3 className="text-2xl font-extrabold text-white mb-2 uppercase tracking-tight">
         No Assets Match Criteria
       </h3>
-      <p className="text-slate-400 text-sm mb-8 max-w-sm font-light">
+      <p className="text-muted-foreground text-sm mb-8 max-w-sm font-light">
         {hasFilters
           ? "Adjust your screener parameters to view available inventory."
           : "The marketplace currently has no liquid inventory matching this query."}
@@ -625,7 +743,7 @@ function EmptyState({
         <button
           type="button"
           onClick={onReset}
-          className="px-8 py-4 bg-brand text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors rounded-none"
+          className="px-8 py-4 bg-brand text-foreground text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white transition-colors rounded-none"
         >
           Clear Screener Filters
         </button>

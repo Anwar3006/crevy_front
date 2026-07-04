@@ -61,7 +61,7 @@ export default function PrivacyPolicyPage() {
   }, []);
 
   return (
-    <div className="animate-in fade-in duration-700 bg-slate-50 min-h-screen pb-24 selection:bg-slate-900 selection:text-white">
+    <div className="animate-in fade-in duration-700 bg-muted min-h-screen pb-24 selection:bg-secondary selection:text-white">
       <PrivacyHero />
       <PrivacyContent
         activeSection={activeSection}
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
 
 function PrivacyHero() {
   return (
-    <section className="bg-white border-b border-slate-200 pt-32 pb-16">
+    <section className="bg-white border-b border-border pt-32 pb-16">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -84,15 +84,15 @@ function PrivacyHero() {
           className="max-w-4xl"
         >
           <div className="flex items-center gap-4 mb-12">
-            <span className="w-2 h-2 bg-slate-900 rounded-none shrink-0" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
+            <span className="w-2 h-2 bg-secondary rounded-none shrink-0" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Governance Protocol
             </span>
           </div>
 
-          <h1 className="font-serif text-5xl md:text-7xl text-slate-900 tracking-tight leading-[1.05] mb-8">
+          <h1 className="font-sans text-5xl md:text-7xl text-foreground tracking-tight leading-[1.05] mb-8">
             Data Privacy & <br />
-            <span className="italic text-slate-500">Protection Policy.</span>
+            <span className="italic text-muted-foreground">Protection Policy.</span>
           </h1>
 
           <p className="text-slate-600 text-lg leading-relaxed mb-12 max-w-2xl font-light">
@@ -102,28 +102,28 @@ function PrivacyHero() {
             entity data within the Crevy registry ecosystem.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-px bg-slate-200 border border-slate-200 w-fit">
+          <div className="flex flex-col sm:flex-row gap-px bg-slate-200 border border-border w-fit">
             <div className="bg-white px-6 py-4 flex flex-col gap-1">
-              <span className="font-bold text-[9px] uppercase tracking-widest text-slate-400">
+              <span className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground">
                 Last Revised
               </span>
-              <span className="font-mono text-sm font-bold text-slate-900">
+              <span className="font-mono text-sm font-bold text-foreground">
                 03 APR 2026
               </span>
             </div>
             <div className="bg-white px-6 py-4 flex flex-col gap-1">
-              <span className="font-bold text-[9px] uppercase tracking-widest text-slate-400">
+              <span className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground">
                 Enforcement Date
               </span>
-              <span className="font-mono text-sm font-bold text-slate-900">
+              <span className="font-mono text-sm font-bold text-foreground">
                 03 APR 2026
               </span>
             </div>
             <div className="bg-white px-6 py-4 flex flex-col gap-1">
-              <span className="font-bold text-[9px] uppercase tracking-widest text-slate-400">
+              <span className="font-bold text-[9px] uppercase tracking-widest text-muted-foreground">
                 Compliance
               </span>
-              <span className="font-mono text-sm font-bold text-slate-900">
+              <span className="font-mono text-sm font-bold text-foreground">
                 GDPR & GH-DPA
               </span>
             </div>
@@ -150,7 +150,7 @@ function PrivacyContent({
           {/* ── Index / Table of Contents ── */}
           <aside className="lg:w-64 shrink-0 hidden md:block">
             <div className="sticky top-32">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-6 border-b border-slate-200 pb-4">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-6 border-b border-border pb-4">
                 Protocol Index
               </p>
               <nav className="space-y-0" aria-label="Privacy policy sections">
@@ -162,8 +162,8 @@ function PrivacyContent({
                     className={cn(
                       "flex items-center gap-3 py-3 text-[10px] font-bold uppercase tracking-widest transition-all border-l-2",
                       activeSection === section.id
-                        ? "border-slate-900 text-slate-900 bg-white"
-                        : "border-transparent text-slate-400 hover:text-slate-900 hover:bg-white/50 pl-2",
+                        ? "border-slate-900 text-foreground bg-white"
+                        : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/50 pl-2",
                       "pl-4",
                     )}
                   >
@@ -175,7 +175,7 @@ function PrivacyContent({
           </aside>
 
           {/* ── Legal Text ── */}
-          <div className="flex-1 bg-white border border-slate-200 p-8 md:p-16">
+          <div className="flex-1 bg-white border border-border p-8 md:p-16">
             <div className="space-y-24">
               <PolicySection
                 id="overview"
@@ -298,35 +298,35 @@ function PrivacyContent({
                 </p>
                 <InfoBox>
                   <ul className="space-y-3 font-mono text-xs">
-                    <li className="flex justify-between border-b border-slate-200 pb-2">
-                      <span className="font-bold text-slate-900">
+                    <li className="flex justify-between border-b border-border pb-2">
+                      <span className="font-bold text-foreground">
                         Identity Verification:
                       </span>
-                      <span className="text-slate-500 text-right">
+                      <span className="text-muted-foreground text-right">
                         SmileID / Onfido
                       </span>
                     </li>
-                    <li className="flex justify-between border-b border-slate-200 pb-2">
-                      <span className="font-bold text-slate-900">
+                    <li className="flex justify-between border-b border-border pb-2">
+                      <span className="font-bold text-foreground">
                         Validation Bodies (VVB):
                       </span>
-                      <span className="text-slate-500 text-right">
+                      <span className="text-muted-foreground text-right">
                         Verra, Gold Standard (Anonymized)
                       </span>
                     </li>
-                    <li className="flex justify-between border-b border-slate-200 pb-2">
-                      <span className="font-bold text-slate-900">
+                    <li className="flex justify-between border-b border-border pb-2">
+                      <span className="font-bold text-foreground">
                         Financial Settlement:
                       </span>
-                      <span className="text-slate-500 text-right">
+                      <span className="text-muted-foreground text-right">
                         Paystack / Circle (USDC)
                       </span>
                     </li>
                     <li className="flex justify-between">
-                      <span className="font-bold text-slate-900">
+                      <span className="font-bold text-foreground">
                         Cloud Infrastructure:
                       </span>
-                      <span className="text-slate-500 text-right">
+                      <span className="text-muted-foreground text-right">
                         Oracle Cloud (OCI) / AWS
                       </span>
                     </li>
@@ -431,7 +431,7 @@ function PrivacyContent({
                 <div className="mt-6">
                   <a
                     href="mailto:privacy@foovante-global.com"
-                    className="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
+                    className="inline-flex items-center gap-3 bg-secondary text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-900 transition-colors"
                   >
                     <Mail size={14} /> Contact Privacy Team
                   </a>
@@ -465,7 +465,7 @@ function PolicySection({
       transition={{ duration: 0.5 }}
       className="scroll-mt-32"
     >
-      <h2 className="font-serif text-3xl md:text-4xl text-slate-900 mb-6 border-b-2 border-slate-900 pb-4 tracking-tight">
+      <h2 className="font-sans text-3xl md:text-4xl text-foreground mb-6 border-b-2 border-slate-900 pb-4 tracking-tight">
         {title}
       </h2>
       <div className="space-y-4 text-slate-600 leading-relaxed font-light text-base md:text-lg">
@@ -477,7 +477,7 @@ function PolicySection({
 
 function InfoBox({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-slate-50 border border-slate-200 p-8 font-mono text-sm text-slate-700 leading-relaxed mt-6">
+    <div className="bg-muted border border-border p-8 font-mono text-sm text-slate-700 leading-relaxed mt-6">
       {children}
     </div>
   );

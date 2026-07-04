@@ -10,8 +10,19 @@ export function ScrollingMarquee() {
   return (
     <div className="bg-slate-200 py-3 overflow-hidden relative border-b border-slate-300">
       <style jsx>{`
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .marquee-container { display: flex; white-space: nowrap; animation: marquee 40s linear infinite; }
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .marquee-container {
+          display: flex;
+          white-space: nowrap;
+          animation: marquee 40s linear infinite;
+        }
       `}</style>
       <div className="marquee-container">
         {[...Array(4)].map((_, i) => (
@@ -34,7 +45,7 @@ export function FinalCTASection({
   shouldReduceMotion?: boolean;
 }) {
   return (
-    <section className="bg-slate-900 py-32 border-t border-slate-800">
+    <section className="bg-foreground py-32 border-t border-slate-800">
       <div className="max-w-[1000px] mx-auto px-6 text-center">
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -56,13 +67,13 @@ export function FinalCTASection({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-px bg-slate-700 border border-slate-700 p-px mx-auto w-fit">
             <Link
               href="/register"
-              className="w-full sm:w-auto bg-brand text-white hover:bg-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-brand text-white hover:bg-foreground px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
-              Become a Project Owner
+              Become a Project Developer
             </Link>
             <Link
               href="/marketplace"
-              className="w-full sm:w-auto bg-brand text-white hover:bg-slate-900 px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
+              className="w-full sm:w-auto bg-foreground text-white hover:bg-white hover:text-brand px-8 py-5 text-[10px] font-bold uppercase tracking-widest transition-colors"
             >
               Start Buying Credits
             </Link>

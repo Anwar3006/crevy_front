@@ -38,7 +38,7 @@ export function PublicFooter() {
   const handleRegisterProjectClick = (e: React.MouseEvent) => {
     if (!session) return;
 
-    const allowedRoles = ["project_owner", "super_admin", "admin"];
+    const allowedRoles = ["project_developer", "super_admin", "admin"];
     const userRole = user?.role || "";
 
     if (!allowedRoles.includes(userRole)) {
@@ -73,7 +73,7 @@ export function PublicFooter() {
           </div>
           <Link
             href="/support"
-            className="group flex items-center gap-4 bg-[#F38221] hover:bg-[#FF751F] text-[#F8F8F9] px-8 py-4 font-semibold text-[11px] uppercase tracking-[0.25em] transition-all shrink-0 rounded-sm shadow-lg shadow-[#F38221]/20"
+            className="group flex items-center gap-4 bg-[#F38221] hover:bg-[#FF751F] text-[#F8F8F9] px-8 py-4 font-semibold text-[11px] uppercase tracking-[0.25em] transition-all shrink-0 rounded-none shadow-lg shadow-[#F38221]/20"
           >
             Initiate Contact{" "}
             <ArrowRight
@@ -105,7 +105,7 @@ export function PublicFooter() {
                 <MapPin size={14} className="text-[#F38221]" /> Accra, Greater
                 Accra, GH
               </div>
-              {/* <div className="flex items-center gap-3 text-slate-400 font-mono text-[10px] uppercase tracking-widest">
+              {/* <div className="flex items-center gap-3 text-muted-foreground font-mono text-[10px] uppercase tracking-widest">
                 <span className="w-3.5 h-3.5 border border-emerald-600 rounded-none flex items-center justify-center text-[8px] text-emerald-600">
                   @
                 </span>

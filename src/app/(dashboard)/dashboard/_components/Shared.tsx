@@ -5,6 +5,86 @@ import { AlertCircle, ArrowRight, CheckCircle2, Info } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+// ─── FORMAT HELPERS ───
+export function formatNumber(value: number | string | null | undefined) {
+  const n = Number(value ?? 0);
+  if (Number.isNaN(n)) return "0";
+  return new Intl.NumberFormat("en-US").format(n);
+}
+
+export function formatCurrency(value: number | string | null | undefined) {
+  const n = Number(value ?? 0);
+  if (Number.isNaN(n)) return "$0";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(n);
+}
+
+export function timeAgo(date: string | Date | null | undefined) {
+  if (!date) return "—";
+  const d = new Date(date);
+  const diffMs = Date.now() - d.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+// ─── DASHBOARD STATE (loading / error) ───
+export function DashboardState({
+  isLoading,
+  isError,
+  error,
+  onRetry,
+}: {
+  isLoading: boolean;
+  isError: boolean;
+  error?: unknown;
+  onRetry?: () => void;
+}) {
+  if (isLoading) {
+    return (
+      <div className="max-w-[1400px] mx-auto py-24 px-6 flex flex-col items-center justify-center text-center">
+        <div className="w-8 h-8 border-2 border-slate-300 border-t-slate-900 rounded-full animate-spin mb-6" />
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+          Loading dashboard data…
+        </p>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="max-w-[1400px] mx-auto py-24 px-6 flex flex-col items-center justify-center text-center">
+        <AlertCircle className="w-8 h-8 text-rose-600 mb-6" />
+        <p className="text-sm font-bold text-foreground mb-2">
+          Couldn't load dashboard data
+        </p>
+        <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-6 max-w-md">
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."}
+        </p>
+        {onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="text-[10px] font-bold uppercase tracking-widest px-6 py-3 bg-foreground text-white hover:bg-brand transition-colors"
+          >
+            Retry
+          </button>
+        )}
+      </div>
+    );
+  }
+  return null;
+}
+
 // ─── SECTION LABEL ───
 export function SectionLabel({
   label,
@@ -22,14 +102,14 @@ export function SectionLabel({
       transition={{ delay, duration: 0.4 }}
       className="flex justify-between items-end border-b-2 border-slate-900 pb-3 mb-8"
     >
-      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 flex items-center gap-2">
+      <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground flex items-center gap-2">
         <span className="w-2 h-2 bg-emerald-600 rounded-none shrink-0" />
         {label}
       </h2>
       {action && (
         <Link
           href={action.href}
-          className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-slate-900 transition-colors flex items-center gap-1"
+          className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 hover:text-foreground transition-colors flex items-center gap-1"
         >
           {action.label} <ArrowRight size={12} />
         </Link>
@@ -110,23 +190,23 @@ export function StatCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
-      className="bg-white p-8 flex flex-col justify-between group hover:bg-slate-50 transition-colors border border-slate-200"
+      className="bg-white p-8 flex flex-col justify-between group hover:bg-muted transition-colors border border-border"
     >
       <div className="flex justify-between items-start mb-6">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           {label}
         </p>
-        {Icon && <Icon size={16} className="text-slate-900" />}
+        {Icon && <Icon size={16} className="text-foreground" />}
       </div>
       <div>
-        <h4 className="text-3xl md:text-4xl font-mono font-bold text-slate-900 tracking-tight mb-1">
+        <h4 className="text-3xl md:text-4xl font-mono font-bold text-foreground tracking-tight mb-1">
           {value}
-          <span className="text-base text-slate-400 ml-1 font-sans font-normal">
+          <span className="text-base text-muted-foreground ml-1 font-sans font-normal">
             {unit}
           </span>
         </h4>
         {trend && (
-          <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
             {trend}
           </p>
         )}
@@ -149,13 +229,13 @@ export function MrvPipelineStepper({
             href={stage.href}
             className="flex flex-col items-center group min-w-[72px]"
           >
-            <div className="w-12 h-12 border border-slate-900 flex items-center justify-center font-mono font-bold text-slate-900 bg-slate-50 group-hover:bg-slate-900 group-hover:text-white transition-colors mb-4 relative">
+            <div className="w-12 h-12 border border-slate-900 flex items-center justify-center font-mono font-bold text-foreground bg-muted group-hover:bg-secondary group-hover:text-white transition-colors mb-4 relative">
               {stage.count}
               {stage.count > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-emerald-500 rounded-none border border-white" />
               )}
             </div>
-            <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-900 text-center">
+            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground text-center">
               {stage.label}
             </span>
           </Link>

@@ -45,10 +45,10 @@ const Step2_PracticesContext = ({
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="border-b-2 border-slate-900 pb-4">
-        <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] mb-2">
+        <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-2">
           Phase 02 / 03
         </p>
-        <h2 className="text-2xl font-serif text-slate-900 tracking-tight">
+        <h2 className="text-2xl font-sans text-foreground tracking-tight">
           Operational Context
         </h2>
         <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mt-2">
@@ -59,23 +59,23 @@ const Step2_PracticesContext = ({
       {practices.length > 0 && (
         <div className="space-y-4">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Applied Methodologies
             </p>
-            <p className="text-xs text-slate-500 font-light mt-1">
+            <p className="text-xs text-muted-foreground font-light mt-1">
               Select all active operational practices.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-slate-200 border border-border">
             {practices.map((practice) => (
               <div
                 key={practice}
-                className="flex items-start gap-3 p-4 bg-white hover:bg-slate-50 transition-colors cursor-pointer"
+                className="flex items-start gap-3 p-4 bg-white hover:bg-muted transition-colors cursor-pointer"
               >
                 <Checkbox
                   checked={selectedTags.includes(practice)}
                   onCheckedChange={(checked) => toggleTag(practice, !!checked)}
-                  className="mt-0.5 rounded-none border-slate-300 data-[state=checked]:bg-slate-900 data-[state=checked]:border-slate-900"
+                  className="mt-0.5 rounded-none border-slate-300 data-[state=checked]:bg-secondary data-[state=checked]:border-slate-900"
                 />
                 <span className="text-sm text-slate-700 font-medium">
                   {practice}
@@ -87,10 +87,10 @@ const Step2_PracticesContext = ({
       )}
 
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-1">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-1">
           Sustainable Development Goals (SDGs)
         </p>
-        <p className="text-xs text-slate-500 font-light mb-4">
+        <p className="text-xs text-muted-foreground font-light mb-4">
           Optional co-benefit tracking for institutional buyers.
         </p>
         <SDGSelection />
@@ -109,23 +109,23 @@ const Step2_PracticesContext = ({
             {errors.description.message}
           </p>
         )}
-        <p className="text-right text-[10px] font-mono text-slate-400 mt-2">
+        <p className="text-right text-[10px] font-mono text-muted-foreground mt-2">
           {watch("description")?.length ?? 0} / 1000 BYTES
         </p>
       </div>
 
-      <div className="flex gap-4 pt-8 border-t border-slate-100">
+      <div className="flex gap-4 pt-8 border-t border-border">
         <button
           type="button"
           onClick={onPrev}
-          className="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border border-slate-200 hover:border-slate-400 transition-all flex items-center justify-center gap-2"
+          className="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground border border-border hover:border-slate-400 transition-all flex items-center justify-center gap-2"
         >
           <ArrowLeft size={14} /> Retreat
         </button>
         <button
           type="button"
           onClick={handleNext}
-          className="flex-1 bg-slate-900 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-secondary hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
         >
           Commit & Proceed <ArrowRight size={14} />
         </button>

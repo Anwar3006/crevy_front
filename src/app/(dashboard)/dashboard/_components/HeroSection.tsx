@@ -32,7 +32,7 @@ const HeroSection = ({ role, userName }: HeroSectionProps) => {
   const { data: projectsRes } = useQuery({
     queryKey: ["hero-projects", userId],
     queryFn: () => ProjectService.getProjects({ createdBy: userId, limit: 50 }),
-    enabled: !!userId && role === "project_owner",
+    enabled: !!userId && role === "project_developer",
     staleTime: 60_000,
   });
 
@@ -46,7 +46,7 @@ const HeroSection = ({ role, userName }: HeroSectionProps) => {
 
   // ── Config per role ───────────────────────────────────────────────────────
   const configs: Record<TRole, any> = {
-    project_owner: {
+    project_developer: {
       title: "Build your carbon legacy",
       desc: "Register projects, track sequestration, and earn verified carbon credits with full transparency.",
       cta: { label: "Register New Project", url: "/new-project", icon: Rocket },
@@ -210,7 +210,7 @@ const HeroSection = ({ role, userName }: HeroSectionProps) => {
     },
   };
 
-  const c = configs[role] || configs.project_owner;
+  const c = configs[role] || configs.project_developer;
   const Cta = c.cta.icon;
 
   return (

@@ -47,53 +47,53 @@ export function ChangePasswordForm() {
   };
 
   return (
-    <div className="border border-slate-200 bg-white">
-      <div className="p-6 border-b border-slate-200 bg-slate-50 flex items-center gap-4">
-        <Lock className="w-5 h-5 text-slate-400" />
+    <div className="border border-border bg-white">
+      <div className="p-6 border-b border-border bg-muted flex items-center gap-4">
+        <Lock className="w-5 h-5 text-muted-foreground" />
         <div>
-          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
             Access Credentials
           </h2>
-          <p className="text-xs text-slate-500 font-mono mt-1">
+          <p className="text-xs text-muted-foreground font-mono mt-1">
             Manage cryptographic keys
           </p>
         </div>
       </div>
       <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
         <div className="space-y-3">
-          <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
             Active Cipher Key
           </Label>
           <Input
             type="password"
             {...form.register("currentPassword")}
-            className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
           />
         </div>
         <div className="space-y-3">
-          <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
             New Cipher Key
           </Label>
           <Input
             type="password"
             {...form.register("newPassword")}
-            className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
           />
         </div>
         <div className="space-y-3">
-          <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
             Verify New Cipher Key
           </Label>
           <Input
             type="password"
             {...form.register("confirmPassword")}
-            className="rounded-none border-0 border-b-2 border-slate-200 bg-slate-50 px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
+            className="rounded-none border-0 border-b-2 border-border bg-muted px-4 py-6 font-mono text-sm focus-visible:ring-0 focus-visible:border-slate-900"
           />
         </div>
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-none bg-slate-900 hover:bg-slate-800 text-white font-bold uppercase tracking-widest text-[10px] h-12 transition-colors"
+          className="w-full rounded-none bg-secondary hover:bg-slate-800 text-white font-bold uppercase tracking-widest text-[10px] h-12 transition-colors"
         >
           {isSubmitting ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />

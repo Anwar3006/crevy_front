@@ -30,7 +30,7 @@ export default function CarbonCalculator() {
   const [_activeTab, setActiveTab] = useState("home");
 
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900">
+    <div className="min-h-screen bg-white font-sans text-foreground">
       {/* Hero Section */}
       <section className="relative h-[70vh] min-h-[600px] overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
@@ -46,14 +46,14 @@ export default function CarbonCalculator() {
 
         <div className="container mx-auto px-6 relative z-20 max-w-7xl">
           <div className="max-w-2xl space-y-6">
-            <nav className="flex items-center gap-2 text-sm font-medium text-slate-500">
+            <nav className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <span className="hover:text-emerald-600 cursor-pointer">
                 Home
               </span>
               <span>/</span>
-              <span className="text-slate-900">Carbon Calculator</span>
+              <span className="text-foreground">Carbon Calculator</span>
             </nav>
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground leading-[1.1]">
               Know Your <br />
               <span className="text-emerald-500">Carbon Footprint</span>
             </h1>
@@ -75,7 +75,7 @@ export default function CarbonCalculator() {
                 onValueChange={setActiveTab}
                 className="w-full"
               >
-                <div className="border-b border-slate-100 px-6 pt-6">
+                <div className="border-b border-border px-6 pt-6">
                   <TabsList className="bg-slate-100/50 p-1.5 h-16 rounded-2xl w-full max-w-2xl mx-auto flex gap-2">
                     <TabsTrigger
                       value="home"
@@ -109,7 +109,7 @@ export default function CarbonCalculator() {
                       <div className="space-y-3">
                         <label
                           htmlFor="electricity-usage"
-                          className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
+                          className="text-sm font-bold text-muted-foreground uppercase tracking-wider cursor-pointer"
                         >
                           Electricity Usage
                         </label>
@@ -118,10 +118,10 @@ export default function CarbonCalculator() {
                             id="electricity-usage" // Matches htmlFor
                             type="number"
                             placeholder="36"
-                            className="h-14 rounded-xl border-slate-200 focus:ring-emerald-500/20"
+                            className="h-14 rounded-xl border-border focus:ring-emerald-500/20"
                           />
                           <Select defaultValue="monthly">
-                            <SelectTrigger className="w-[140px] h-14 rounded-xl border-slate-200">
+                            <SelectTrigger className="w-[140px] h-14 rounded-xl border-border">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -136,7 +136,7 @@ export default function CarbonCalculator() {
                       <div className="space-y-3">
                         <label
                           htmlFor="natural-gas"
-                          className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
+                          className="text-sm font-bold text-muted-foreground uppercase tracking-wider cursor-pointer"
                         >
                           Natural Gas
                         </label>
@@ -145,10 +145,10 @@ export default function CarbonCalculator() {
                             id="natural-gas" // Matches htmlFor
                             type="number"
                             placeholder="1.5"
-                            className="h-14 rounded-xl border-slate-200 focus:ring-emerald-500/20"
+                            className="h-14 rounded-xl border-border focus:ring-emerald-500/20"
                           />
                           <Select defaultValue="daily">
-                            <SelectTrigger className="w-[140px] h-14 rounded-xl border-slate-200">
+                            <SelectTrigger className="w-[140px] h-14 rounded-xl border-border">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -163,14 +163,14 @@ export default function CarbonCalculator() {
                       <div className="space-y-3">
                         <label
                           htmlFor="renewables-select"
-                          className="text-sm font-bold text-slate-500 uppercase tracking-wider cursor-pointer"
+                          className="text-sm font-bold text-muted-foreground uppercase tracking-wider cursor-pointer"
                         >
                           Use Renewables?
                         </label>
                         <Select defaultValue="yes">
                           <SelectTrigger
                             id="renewables-select" // Matches htmlFor
-                            className="h-14 rounded-xl border-slate-200"
+                            className="h-14 rounded-xl border-border"
                           >
                             <SelectValue />
                           </SelectTrigger>
@@ -184,7 +184,7 @@ export default function CarbonCalculator() {
                       </div>
                     </div>
                     <div className="flex justify-center pt-8">
-                      <Button className="h-16 px-12 rounded-2xl bg-slate-900 hover:bg-black text-white font-bold text-lg group transition-all">
+                      <Button className="h-16 px-12 rounded-2xl bg-secondary hover:bg-black text-white font-bold text-lg group transition-all">
                         Calculate & Add Footprint
                         <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
@@ -195,7 +195,7 @@ export default function CarbonCalculator() {
                     value="transport"
                     className="mt-0 animate-in fade-in slide-in-from-bottom-4 duration-500"
                   >
-                    <div className="text-center py-12 text-slate-400 font-medium">
+                    <div className="text-center py-12 text-muted-foreground font-medium">
                       Transportation metrics implementation coming soon...
                     </div>
                   </TabsContent>
@@ -204,7 +204,7 @@ export default function CarbonCalculator() {
                     value="lifestyle"
                     className="mt-0 animate-in fade-in slide-in-from-bottom-4 duration-500"
                   >
-                    <div className="text-center py-12 text-slate-400 font-medium">
+                    <div className="text-center py-12 text-muted-foreground font-medium">
                       Lifestyle metrics implementation coming soon...
                     </div>
                   </TabsContent>
@@ -216,24 +216,24 @@ export default function CarbonCalculator() {
       </section>
 
       {/* Services Section */}
-      <section className="py-24 bg-slate-50 px-6">
+      <section className="py-24 bg-muted px-6">
         <div className="container mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="space-y-4">
               <span className="text-emerald-600 font-bold uppercase tracking-[0.2em] text-sm flex items-center gap-2">
                 <Leaf className="w-4 h-4" /> Eco Solutions
               </span>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+              <h2 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
                 Our Services
               </h2>
-              <p className="text-slate-500 max-w-md text-lg">
+              <p className="text-muted-foreground max-w-md text-lg">
                 Power solutions designed for the planet — and for you. Expert
                 guidance at every step of your journey.
               </p>
             </div>
             <Button
               variant="outline"
-              className="h-14 px-8 rounded-xl border-slate-200 font-bold hover:bg-slate-100"
+              className="h-14 px-8 rounded-xl border-border font-bold hover:bg-slate-100"
             >
               View All Services
             </Button>
@@ -257,7 +257,7 @@ export default function CarbonCalculator() {
                     <Sun className="w-6 h-6 text-emerald-600" />
                   </div>
                   <h4 className="text-xl font-bold">Solar Solutions</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     Custom-designed solar arrays for residential and commercial
                     properties.
                   </p>
@@ -288,7 +288,7 @@ export default function CarbonCalculator() {
                     <Battery className="w-6 h-6 text-blue-600" />
                   </div>
                   <h4 className="text-xl font-bold">EV Charging</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     State-of-the-art charging infrastructure for your modern
                     electric fleet.
                   </p>
@@ -312,7 +312,7 @@ export default function CarbonCalculator() {
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-bold">Real-time Stats</h4>
-                    <p className="text-slate-500 text-xs">
+                    <p className="text-muted-foreground text-xs">
                       Monitor your consumption 24/7 with precision.
                     </p>
                   </div>
@@ -325,7 +325,7 @@ export default function CarbonCalculator() {
                   </div>
                   <div className="space-y-2">
                     <h4 className="font-bold">Technical Help</h4>
-                    <p className="text-slate-500 text-xs">
+                    <p className="text-muted-foreground text-xs">
                       Expert support for system maintenance.
                     </p>
                   </div>
@@ -334,14 +334,14 @@ export default function CarbonCalculator() {
             </div>
 
             {/* Dashboard Preview */}
-            <Card className="border-none shadow-xl rounded-3xl bg-slate-900 text-white overflow-hidden relative">
+            <Card className="border-none shadow-xl rounded-3xl bg-secondary text-white overflow-hidden relative">
               <div className="p-8 space-y-6 flex flex-col h-full justify-between">
                 <div className="space-y-2">
                   <BarChart3 className="w-10 h-10 text-emerald-400 mb-4" />
                   <h4 className="text-2xl font-bold">
                     Track Your Monthly Progress
                   </h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     Get detailed analytics and personalized insights to help you
                     reduce costs.
                   </p>

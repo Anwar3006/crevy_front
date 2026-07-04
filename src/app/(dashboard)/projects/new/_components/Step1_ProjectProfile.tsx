@@ -47,7 +47,7 @@ const Step1_ProjectProfile = ({
       "startDate",
       "totalAreaHectares",
       "currency",
-      "projectOwnerId",
+      "projectDeveloperId",
     ]);
     if (valid) onNext();
   };
@@ -55,19 +55,19 @@ const Step1_ProjectProfile = ({
   return (
     <div className="space-y-8 md:space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="hidden md:block border-b-2 border-slate-900 pb-4">
-        <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] mb-2">
+        <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-2">
           Phase 01 / 03
         </p>
-        <h2 className="text-2xl font-serif text-slate-900 tracking-tight">
+        <h2 className="text-2xl font-sans text-foreground tracking-tight">
           Asset Telemetry
         </h2>
       </div>
 
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 mb-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground mb-4">
           Methodology Class <span className="text-emerald-600">*</span>
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-200 border border-border">
           {PROJECT_TYPES.map((type) => {
             const isSelected = selectedType === type.id;
             const disabled = !type.pilotEnabled;
@@ -83,21 +83,21 @@ const Step1_ProjectProfile = ({
                 className={cn(
                   "relative p-5 md:p-6 text-left transition-all bg-white",
                   isSelected
-                    ? "ring-2 ring-inset ring-slate-900 bg-slate-50"
+                    ? "ring-2 ring-inset ring-slate-900 bg-muted"
                     : disabled
-                      ? "opacity-50 cursor-not-allowed bg-slate-50"
-                      : "hover:bg-slate-50",
+                      ? "opacity-50 cursor-not-allowed bg-muted"
+                      : "hover:bg-muted",
                 )}
               >
                 {disabled && (
-                  <span className="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-widest bg-slate-200 text-slate-500 px-2 py-1">
+                  <span className="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-widest bg-slate-200 text-muted-foreground px-2 py-1">
                     Pending
                   </span>
                 )}
-                <p className="font-serif font-bold text-slate-900 text-base md:text-lg mb-2">
+                <p className="font-sans font-bold text-foreground text-base md:text-lg mb-2">
                   {type.title}
                 </p>
-                <p className="text-slate-500 text-xs leading-relaxed font-light">
+                <p className="text-muted-foreground text-xs leading-relaxed font-light">
                   {type.description}
                 </p>
               </button>
@@ -146,10 +146,10 @@ const Step1_ProjectProfile = ({
           placeholder="lat, lng — e.g. 6.5244, -1.3792"
         />
 
-        <div className="bg-slate-50 border-l-2 border-slate-900 p-4 flex flex-col sm:flex-row gap-3">
-          <Info className="h-4 w-4 text-slate-900 shrink-0 sm:mt-0.5 hidden sm:block" />
+        <div className="bg-muted border-l-2 border-slate-900 p-4 flex flex-col sm:flex-row gap-3">
+          <Info className="h-4 w-4 text-foreground shrink-0 sm:mt-0.5 hidden sm:block" />
           <p className="text-[11px] md:text-xs text-slate-600 font-mono leading-relaxed">
-            <span className="font-bold uppercase text-slate-900">Note:</span>{" "}
+            <span className="font-bold uppercase text-foreground">Note:</span>{" "}
             Precise GPS coordinates enable dMRV sensor mapping. Extract lat/lng
             directly from GIS software or Google Maps.
           </p>
@@ -185,7 +185,7 @@ const Step1_ProjectProfile = ({
         <div className="space-y-2 relative" data-lenis-prevent="true">
           <label
             htmlFor="currency"
-            className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900"
+            className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground"
           >
             Settlement Currency *
           </label>
@@ -198,7 +198,7 @@ const Step1_ProjectProfile = ({
               })
             }
             placeholder="Select protocol currency"
-            className="w-full rounded-none border-slate-200"
+            className="w-full rounded-none border-border"
           />
           {errors.currency && (
             <p className="text-red-500 text-xs font-mono">
@@ -208,18 +208,18 @@ const Step1_ProjectProfile = ({
         </div>
       </div>
 
-      <div className="flex flex-col-reverse sm:flex-row gap-4 pt-8 border-t border-slate-100">
+      <div className="flex flex-col-reverse sm:flex-row gap-4 pt-8 border-t border-border">
         <button
           type="button"
           onClick={onPrev}
-          className="w-full sm:w-auto px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border border-slate-200 hover:border-slate-400 transition-all text-center"
+          className="w-full sm:w-auto px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground border border-border hover:border-slate-400 transition-all text-center"
         >
           Abort
         </button>
         <button
           type="button"
           onClick={handleNext}
-          className="w-full sm:flex-1 bg-slate-900 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
+          className="w-full sm:flex-1 bg-secondary hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
         >
           Commit & Proceed <ArrowRight size={14} />
         </button>

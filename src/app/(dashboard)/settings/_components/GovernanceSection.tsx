@@ -23,43 +23,43 @@ export function GovernanceSection({ isSuperAdmin }: { isSuperAdmin: boolean }) {
 
   return (
     <div className="animate-in fade-in duration-500 space-y-12">
-      <div className="border-b border-slate-200 pb-8">
-        <h2 className="text-3xl font-serif text-slate-900 mb-2">
+      <div className="border-b border-border pb-8">
+        <h2 className="text-3xl font-sans text-foreground mb-2">
           Registry Governance.
         </h2>
-        <p className="text-slate-500 text-xs font-mono uppercase tracking-widest">
+        <p className="text-muted-foreground text-xs font-mono uppercase tracking-widest">
           High-integrity thresholds for dMRV verification & project lifecycle.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Threshold Control */}
-        <div className="p-8 border border-slate-200 bg-white">
+        <div className="p-8 border border-border bg-white">
           <div className="flex items-center gap-3 mb-8">
-            <Settings size={16} className="text-slate-900" />
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+            <Settings size={16} className="text-foreground" />
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               dMRV Sensitivity
             </h3>
           </div>
 
-          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3 block">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3 block">
             AI Confidence Score Threshold (%)
           </div>
           <input
             type="number"
             defaultValue={85}
             disabled={!isSuperAdmin}
-            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-slate-900 font-bold mb-8 focus:ring-0 focus:border-slate-900 disabled:opacity-50"
+            className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-foreground font-bold mb-8 focus:ring-0 focus:border-slate-900 disabled:opacity-50"
           />
 
-          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3 block">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3 block">
             Maximum Buffer Deduction (%)
           </div>
           <input
             type="number"
             defaultValue={20}
             disabled={!isSuperAdmin}
-            className="w-full bg-slate-50 border-0 border-b-2 border-slate-200 p-4 font-mono text-slate-900 font-bold focus:ring-0 focus:border-slate-900 disabled:opacity-50"
+            className="w-full bg-muted border-0 border-b-2 border-border p-4 font-mono text-foreground font-bold focus:ring-0 focus:border-slate-900 disabled:opacity-50"
           />
         </div>
 
@@ -89,12 +89,12 @@ export function GovernanceSection({ isSuperAdmin }: { isSuperAdmin: boolean }) {
       </div>
 
       {isSuperAdmin && (
-        <div className="flex justify-end pt-8 border-t border-slate-200">
+        <div className="flex justify-end pt-8 border-t border-border">
           <button
             type="button"
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-emerald-900 transition-colors disabled:opacity-70"
+            className="bg-secondary text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 hover:bg-emerald-900 transition-colors disabled:opacity-70"
           >
             {isSaving ? "Anchoring Protocol..." : "Anchor Configuration"}
             {!isSaving && <Save size={14} />}

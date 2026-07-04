@@ -74,23 +74,23 @@ const Step3_Documents = ({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-2 mb-2">
-              <p className="font-serif font-bold text-slate-900">{doc.label}</p>
+              <p className="font-sans font-bold text-foreground">{doc.label}</p>
               {doc.required ? (
                 <span className="text-[9px] font-bold uppercase tracking-widest text-rose-600 bg-rose-50 px-2 py-0.5 border border-rose-100">
                   Required
                 </span>
               ) : (
-                <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 bg-slate-100 px-2 py-0.5 border border-slate-200">
+                <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground bg-slate-100 px-2 py-0.5 border border-border">
                   Optional
                 </span>
               )}
             </div>
-            <p className="text-[11px] md:text-xs text-slate-500 font-light max-w-md">
+            <p className="text-[11px] md:text-xs text-muted-foreground font-light max-w-md">
               {doc.description}
             </p>
           </div>
 
-          <div className="shrink-0 flex flex-col items-start lg:items-end gap-3 w-full lg:w-auto mt-2 lg:mt-0 border-t border-slate-100 lg:border-none pt-4 lg:pt-0">
+          <div className="shrink-0 flex flex-col items-start lg:items-end gap-3 w-full lg:w-auto mt-2 lg:mt-0 border-t border-border lg:border-none pt-4 lg:pt-0">
             <input
               type="file"
               ref={(el) => {
@@ -112,14 +112,14 @@ const Step3_Documents = ({
               <div className="flex items-center justify-between w-full lg:w-auto gap-3 bg-white border border-emerald-200 px-3 py-2">
                 <div className="flex items-center gap-2 overflow-hidden">
                   <Check size={14} className="text-emerald-500 shrink-0" />
-                  <span className="font-mono text-[10px] md:text-xs text-slate-900 max-w-[120px] md:max-w-[200px] truncate">
+                  <span className="font-mono text-[10px] md:text-xs text-foreground max-w-[120px] md:max-w-[200px] truncate">
                     {fileName}
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => removeFile(doc.id as DocumentTypeId)}
-                  className="text-slate-400 hover:text-rose-500 transition-colors shrink-0"
+                  className="text-muted-foreground hover:text-rose-500 transition-colors shrink-0"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -128,7 +128,7 @@ const Step3_Documents = ({
               <button
                 type="button"
                 onClick={() => fileRefs.current[doc.id]?.click()}
-                className="w-full lg:w-auto px-6 py-3 border border-slate-900 text-[10px] font-bold uppercase tracking-widest text-slate-900 hover:bg-slate-900 hover:text-white transition-colors flex items-center justify-center gap-2"
+                className="w-full lg:w-auto px-6 py-3 border border-slate-900 text-[10px] font-bold uppercase tracking-widest text-foreground hover:bg-secondary hover:text-white transition-colors flex items-center justify-center gap-2"
               >
                 <Upload size={12} /> Select File
               </button>
@@ -155,20 +155,20 @@ const Step3_Documents = ({
   return (
     <div className="space-y-8 md:space-y-12 animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="hidden md:block border-b-2 border-slate-900 pb-4">
-        <p className="text-[10px] font-mono text-slate-400 uppercase tracking-[0.2em] mb-2">
+        <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.2em] mb-2">
           Phase 03 / 03
         </p>
-        <h2 className="text-2xl font-serif text-slate-900 tracking-tight">
+        <h2 className="text-2xl font-sans text-foreground tracking-tight">
           Cryptographic Documentation
         </h2>
-        <p className="text-[10px] font-mono text-slate-500 mt-2">
+        <p className="text-[10px] font-mono text-muted-foreground mt-2">
           STATUS: {filledRequired.length} / {requiredSlots.length} REQUIRED
           UPLOADS COMPLETE
         </p>
       </div>
 
       <div className="space-y-4 md:space-y-6">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-2">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-foreground border-b border-border pb-2">
           Mandatory Artifacts
         </p>
         <div className="space-y-4">
@@ -177,7 +177,7 @@ const Step3_Documents = ({
       </div>
 
       <div className="space-y-4 md:space-y-6">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-2">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-foreground border-b border-border pb-2">
           Supplementary Artifacts
         </p>
         <div className="space-y-4">
@@ -193,12 +193,12 @@ const Step3_Documents = ({
         </div>
       )}
 
-      <div className="flex flex-col-reverse sm:flex-row gap-4 pt-8 border-t border-slate-100">
+      <div className="flex flex-col-reverse sm:flex-row gap-4 pt-8 border-t border-border">
         <button
           type="button"
           onClick={onPrev}
           disabled={isSubmitting}
-          className="w-full sm:w-auto px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 border border-slate-200 hover:border-slate-400 transition-all text-center"
+          className="w-full sm:w-auto px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground border border-border hover:border-slate-400 transition-all text-center"
         >
           Retreat
         </button>
@@ -206,7 +206,7 @@ const Step3_Documents = ({
           type="button"
           onClick={onSubmit}
           disabled={isSubmitting || !allRequiredFilled}
-          className="w-full sm:flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full sm:flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:bg-slate-200 disabled:text-muted-foreground disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>

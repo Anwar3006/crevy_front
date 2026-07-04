@@ -14,7 +14,7 @@ const onboardingSteps = [
   {
     id: 1,
     title: "KYC Verification",
-    desc: "Verify Project Owner identity and legal documentation.",
+    desc: "Verify Project Developer identity and legal documentation.",
     icon: UserCheck,
     status: "completed",
     date: "May 12, 2026",

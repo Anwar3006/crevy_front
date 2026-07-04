@@ -42,23 +42,23 @@ export default function AnalyticsDashboardPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 space-y-12 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-200 pb-12">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-border pb-12">
         <div className="max-w-2xl">
           <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
             <BarChart3 size={14} /> Yield Intelligence & Impact Analytics
           </p>
-          <h1 className="text-5xl font-black text-slate-900 leading-[1.1] tracking-tighter uppercase italic">
+          <h1 className="text-5xl font-black text-foreground leading-[1.1] tracking-tighter uppercase italic">
             Statistical <br /> Breakdown
           </h1>
         </div>
         <div className="flex gap-4">
           <Button
             variant="outline"
-            className="rounded-2xl border-slate-200 h-14 px-8 font-black uppercase tracking-widest text-[10px]"
+            className="rounded-2xl border-border h-14 px-8 font-black uppercase tracking-widest text-[10px]"
           >
             <Download size={16} className="mr-2" /> Export Dataset
           </Button>
-          <Button className="bg-slate-900 hover:bg-black text-white rounded-2xl h-14 px-8 font-black uppercase tracking-widest text-[10px] shadow-xl">
+          <Button className="bg-secondary hover:bg-black text-white rounded-2xl h-14 px-8 font-black uppercase tracking-widest text-[10px] shadow-xl">
             <Filter size={16} className="mr-2" /> Adjust Parameters
           </Button>
         </div>
@@ -66,12 +66,12 @@ export default function AnalyticsDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white border border-slate-200 rounded-[3rem] p-12 shadow-sm">
+          <div className="bg-white border border-border rounded-[3rem] p-12 shadow-sm">
             <div className="flex justify-between items-center mb-12">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground">
                 Yield Performance (tCO2e)
               </h3>
-              <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100 font-black text-[10px] text-slate-500 uppercase tracking-widest">
+              <div className="flex items-center gap-2 bg-muted px-4 py-2 rounded-xl border border-border font-black text-[10px] text-muted-foreground uppercase tracking-widest">
                 Net Growth: <span className="text-emerald-600">+24.2%</span>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function AnalyticsDashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-2xl">
+            <div className="bg-secondary rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-2xl">
               <Activity
                 size={100}
                 className="absolute top-0 right-0 p-8 opacity-10"
@@ -136,7 +136,7 @@ export default function AnalyticsDashboardPage() {
               <h4 className="text-4xl font-black italic uppercase tracking-tighter">
                 99.8%
               </h4>
-              <p className="text-slate-500 text-xs font-bold uppercase mt-6">
+              <p className="text-muted-foreground text-xs font-bold uppercase mt-6">
                 Sensor Uptime & Trust Score
               </p>
             </div>
@@ -159,8 +159,8 @@ export default function AnalyticsDashboardPage() {
         </div>
 
         <div className="space-y-8">
-          <div className="bg-white border border-slate-200 rounded-[3rem] p-12 shadow-sm h-full">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 mb-12 text-center">
+          <div className="bg-white border border-border rounded-[3rem] p-12 shadow-sm h-full">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-12 text-center">
               Portfolio Distribution
             </h3>
             <div className="h-[300px]">
@@ -190,18 +190,18 @@ export default function AnalyticsDashboardPage() {
               {distributionData.map((item, i) => (
                 <div
                   key={item.name}
-                  className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100 group"
+                  className="flex items-center justify-between p-3 rounded-2xl hover:bg-muted transition-all border border-transparent hover:border-border group"
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: COLORS[i % COLORS.length] }}
                     />
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                       {item.name}
                     </span>
                   </div>
-                  <span className="text-sm font-black text-slate-900 tracking-tighter italic">
+                  <span className="text-sm font-black text-foreground tracking-tighter italic">
                     {item.value}%
                   </span>
                 </div>

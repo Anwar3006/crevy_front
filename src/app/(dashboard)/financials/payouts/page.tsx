@@ -71,30 +71,30 @@ export default function PayoutsPage() {
   return (
     <div className="animate-in fade-in duration-700 pb-24">
       {/* ── Editorial Header ── */}
-      <div className="bg-white border-b border-slate-200 pt-12 pb-12">
+      <div className="bg-white border-b border-border pt-12 pb-12">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div className="max-w-2xl">
-              <p className="text-slate-900 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <p className="text-foreground text-[10px] font-bold uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                 <Landmark size={14} className="text-emerald-700" /> Disbursement
                 Ledger
               </p>
-              <h1 className="text-4xl md:text-5xl font-serif text-slate-900 tracking-tight leading-none mb-4">
-                Payout <span className="italic text-slate-500">History.</span>
+              <h1 className="text-4xl md:text-5xl font-sans text-foreground tracking-tight leading-none mb-4">
+                Payout <span className="italic text-muted-foreground">History.</span>
               </h1>
-              <p className="text-slate-500 text-sm font-light leading-relaxed">
+              <p className="text-muted-foreground text-sm font-light leading-relaxed">
                 Immutable tracking of all capital disbursements mapped to
                 verified credit sales. Oversee mobile money and bank transfers
                 to originators.
               </p>
             </div>
 
-            <div className="bg-slate-900 text-white p-6 border border-slate-800 min-w-[240px] shrink-0">
+            <div className="bg-secondary text-white p-6 border border-slate-800 min-w-[240px] shrink-0">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400 mb-2">
                 Total Disbursed (FY26)
               </p>
               <h2 className="text-4xl font-mono font-bold tracking-tight mb-1">
-                <span className="text-slate-500 font-sans mr-1">$</span>148,240
+                <span className="text-muted-foreground font-sans mr-1">$</span>148,240
               </h2>
             </div>
           </div>
@@ -103,16 +103,16 @@ export default function PayoutsPage() {
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-12">
         {/* ── Liquidity Chart ── */}
-        <div className="bg-white border border-slate-200 p-8 md:p-10 mb-12">
-          <div className="flex justify-between items-end mb-8 border-b border-slate-100 pb-4">
-            <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-900">
+        <div className="bg-white border border-border p-8 md:p-10 mb-12">
+          <div className="flex justify-between items-end mb-8 border-b border-border pb-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-foreground">
               Capital Outflow Trajectory
             </h3>
             <div className="flex gap-4 text-[10px] font-bold uppercase tracking-widest">
-              <span className="flex items-center gap-1.5 text-slate-900">
-                <div className="w-2 h-2 bg-slate-900"></div> Settled
+              <span className="flex items-center gap-1.5 text-foreground">
+                <div className="w-2 h-2 bg-secondary"></div> Settled
               </span>
-              <span className="flex items-center gap-1.5 text-slate-400">
+              <span className="flex items-center gap-1.5 text-muted-foreground">
                 <div className="w-2 h-2 bg-slate-300"></div> Pending
               </span>
             </div>
@@ -177,14 +177,14 @@ export default function PayoutsPage() {
         </div>
 
         {/* ── Transaction Table ── */}
-        <div className="bg-white border border-slate-200 overflow-hidden">
-          <div className="p-6 border-b border-slate-200 bg-slate-50 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+        <div className="bg-white border border-border overflow-hidden">
+          <div className="p-6 border-b border-border bg-muted flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
               Disbursement Registry
             </h3>
             <div className="flex gap-3">
-              <div className="flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 w-full md:w-64">
-                <Search size={14} className="text-slate-400" />
+              <div className="flex items-center gap-2 bg-white border border-border px-3 py-1.5 w-full md:w-64">
+                <Search size={14} className="text-muted-foreground" />
                 <input
                   placeholder="Search Reference ID"
                   className="bg-transparent border-none outline-none text-[10px] font-mono w-full"
@@ -192,7 +192,7 @@ export default function PayoutsPage() {
               </div>
               <button
                 type="button"
-                className="bg-white border border-slate-200 text-slate-900 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors flex items-center gap-2"
+                className="bg-white border border-border text-foreground px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors flex items-center gap-2"
               >
                 <Download size={14} /> Export
               </button>
@@ -203,41 +203,41 @@ export default function PayoutsPage() {
             <table className="w-full text-left min-w-[900px]">
               <thead>
                 <tr className="border-b-2 border-slate-900">
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Ref ID
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Beneficiary
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Vector
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
                     Timestamp
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 text-right">
+                  <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-foreground text-right">
                     Amount (USD)
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {payouts.map((pay, i) => (
-                  <tr key={i} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-sm font-bold text-slate-900">
+                  <tr key={i} className="hover:bg-muted transition-colors">
+                    <td className="px-6 py-4 font-mono text-sm font-bold text-foreground">
                       {pay.ref}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-serif text-sm text-slate-900">
+                      <div className="font-sans text-sm text-foreground">
                         {pay.entity}
                       </div>
-                      <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-1">
+                      <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mt-1">
                         {pay.project}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                    <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                       {pay.method.replace("_", " ")}
                     </td>
                     <td className="px-6 py-4">
@@ -254,10 +254,10 @@ export default function PayoutsPage() {
                         {pay.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 font-mono text-[11px] text-slate-500 uppercase tracking-widest">
+                    <td className="px-6 py-4 font-mono text-[11px] text-muted-foreground uppercase tracking-widest">
                       {pay.date}
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-sm font-bold text-slate-900">
+                    <td className="px-6 py-4 text-right font-mono text-sm font-bold text-foreground">
                       ${pay.amount}
                     </td>
                   </tr>

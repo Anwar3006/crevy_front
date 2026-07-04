@@ -1,7 +1,7 @@
-// src/lib/services/project-owner-service.tsx
+// src/lib/services/project-developer-service.tsx
 import { axiosClient } from "../axiosClient";
 
-export type ProjectOwnerFilters = {
+export type ProjectDeveloperFilters = {
   cursor?: string;
   limit?: number;
   verificationStatus?: "pending" | "verified" | "rejected";
@@ -11,7 +11,7 @@ export type ProjectOwnerFilters = {
   agentId?: string;
 };
 
-export type ProjectOwnerRecord = {
+export type ProjectDeveloperRecord = {
   id: string;
   userId: string;
   code: string;
@@ -34,14 +34,14 @@ export type ProjectOwnerRecord = {
   countryOfOperation: string | null;
 };
 
-export type ProjectOwnerListResponse = {
+export type ProjectDeveloperListResponse = {
   success: boolean;
-  data: ProjectOwnerRecord[];
+  data: ProjectDeveloperRecord[];
   nextCursor: string | null;
   total: number;
 };
 
-export type ProjectOwnerOnboardPayload = {
+export type ProjectDeveloperOnboardPayload = {
   firstName: string;
   lastName: string;
   email?: string | null;
@@ -70,7 +70,7 @@ export type ProjectOwnerOnboardPayload = {
   } | null;
 };
 
-export const ProjectOwnerService = {
+export const ProjectDeveloperService = {
   /**
    * List project owners.
    * The backend injects role-based filtering:
@@ -78,14 +78,14 @@ export const ProjectOwnerService = {
    *   - project_manager: sees only their assigned owners
    * The frontend passes filters but never controls the scope boundary.
    */
-  listProjectOwners: async (
-    filters: ProjectOwnerFilters = {},
-  ): Promise<ProjectOwnerListResponse> => {
+  listProjectDevelopers: async (
+    filters: ProjectDeveloperFilters = {},
+  ): Promise<ProjectDeveloperListResponse> => {
     // Strip undefined values so axios doesn't send empty params
     const params = Object.fromEntries(
       Object.entries(filters).filter(([, v]) => v !== undefined && v !== ""),
     );
-    const response = await axiosClient.get("/project-owners", { params });
+    const response = await axiosClient.get("/project-developers", { params });
     return response.data;
   },
 
@@ -94,17 +94,17 @@ export const ProjectOwnerService = {
    * The backend creates the Better Auth user, project owner profile,
    * farm plot, and assignment in a single atomic transaction.
    */
-  onboardProjectOwner: async (
-    payload: ProjectOwnerOnboardPayload,
+  onboardProjectDeveloper: async (
+    payload: ProjectDeveloperOnboardPayload,
   ): Promise<{ success: boolean; message: string; data: any }> => {
-    const response = await axiosClient.post("/project-owners/onboard", payload);
+    const response = await axiosClient.post("/project-developers/onboard", payload);
     return response.data;
   },
 
-  getProjectOwner: async (
+  getProjectDeveloper: async (
     userId: string,
-  ): Promise<{ success: boolean; data: ProjectOwnerRecord }> => {
-    const response = await axiosClient.get(`/project-owners/${userId}`);
+  ): Promise<{ success: boolean; data: ProjectDeveloperRecord }> => {
+    const response = await axiosClient.get(`/project-developers/${userId}`);
     return response.data;
   },
 };

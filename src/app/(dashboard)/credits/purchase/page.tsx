@@ -76,7 +76,7 @@ export default function PurchaseCreditsPage() {
 
   if (!projectId)
     return (
-      <div className="p-20 text-center uppercase font-black tracking-widest text-slate-400">
+      <div className="p-20 text-center uppercase font-black tracking-widest text-muted-foreground">
         Invalid Project Context
       </div>
     );
@@ -92,7 +92,7 @@ export default function PurchaseCreditsPage() {
       <button
         type="button"
         onClick={() => router.back()}
-        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-10 hover:text-slate-900 transition-colors"
+        className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-10 hover:text-foreground transition-colors"
       >
         <ArrowLeft size={14} /> Back to Marketplace
       </button>
@@ -110,18 +110,18 @@ export default function PurchaseCreditsPage() {
                 className="space-y-8"
               >
                 <div className="space-y-2">
-                  <h1 className="text-4xl font-black text-slate-900 uppercase italic">
+                  <h1 className="text-4xl font-black text-foreground uppercase italic">
                     Credit Volume
                   </h1>
-                  <p className="text-slate-500 font-medium">
+                  <p className="text-muted-foreground font-medium">
                     Define the amount of verified carbon reduction units to
                     acquire.
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-[2rem] p-10 shadow-sm space-y-6">
+                <div className="bg-white border border-border rounded-[2rem] p-10 shadow-sm space-y-6">
                   <div className="space-y-4">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                       tCO2e Quantity
                     </Label>
                     <div className="flex items-center gap-4">
@@ -133,13 +133,13 @@ export default function PurchaseCreditsPage() {
                             Math.max(1, parseInt(e.target.value, 10) || 0),
                           )
                         }
-                        className="h-16 text-3xl font-black rounded-2xl border-2 border-slate-100 focus:border-emerald-500 transition-all"
+                        className="h-16 text-3xl font-black rounded-2xl border-2 border-border focus:border-emerald-500 transition-all"
                       />
-                      <span className="text-sm font-black text-slate-400 uppercase tracking-widest">
+                      <span className="text-sm font-black text-muted-foreground uppercase tracking-widest">
                         Units
                       </span>
                     </div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase italic">
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase italic">
                       Available Supply:{" "}
                       {parseFloat(
                         project?.availableCredits || "0",
@@ -150,7 +150,7 @@ export default function PurchaseCreditsPage() {
 
                   <Button
                     onClick={() => setStep(2)}
-                    className="w-full h-16 bg-slate-900 hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs"
+                    className="w-full h-16 bg-secondary hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs"
                   >
                     Continue to Payment{" "}
                     <ChevronRight size={16} className="ml-2" />
@@ -168,10 +168,10 @@ export default function PurchaseCreditsPage() {
                 className="space-y-8"
               >
                 <div className="space-y-2">
-                  <h1 className="text-4xl font-black text-slate-900 uppercase italic">
+                  <h1 className="text-4xl font-black text-foreground uppercase italic">
                     Payment Method
                   </h1>
-                  <p className="text-slate-500 font-medium">
+                  <p className="text-muted-foreground font-medium">
                     Select your preferred institutional settlement method.
                   </p>
                 </div>
@@ -189,17 +189,17 @@ export default function PurchaseCreditsPage() {
                     <button
                       type="button"
                       key={method.id}
-                      className="w-full bg-white border border-slate-200 p-6 rounded-2xl flex items-center justify-between group hover:border-emerald-500 transition-all"
+                      className="w-full bg-white border border-border p-6 rounded-2xl flex items-center justify-between group hover:border-emerald-500 transition-all"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-600">
+                        <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-muted-foreground group-hover:bg-emerald-50 group-hover:text-emerald-600">
                           <method.icon size={24} />
                         </div>
-                        <span className="font-black text-slate-900 uppercase text-[11px] tracking-widest">
+                        <span className="font-black text-foreground uppercase text-[11px] tracking-widest">
                           {method.name}
                         </span>
                       </div>
-                      <div className="w-6 h-6 rounded-full border-2 border-slate-100 group-hover:border-emerald-500 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full border-2 border-border group-hover:border-emerald-500 flex items-center justify-center">
                         <div className="w-3 h-3 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </button>
@@ -223,15 +223,15 @@ export default function PurchaseCreditsPage() {
                 key="step3"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white border border-slate-200 rounded-[3rem] p-16 text-center space-y-8 shadow-2xl"
+                className="bg-white border border-border rounded-[3rem] p-16 text-center space-y-8 shadow-2xl"
               >
                 <div className="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-10">
                   <CheckCircle2 size={48} />
                 </div>
-                <h2 className="text-4xl font-black text-slate-900 uppercase italic">
+                <h2 className="text-4xl font-black text-foreground uppercase italic">
                   Acquisition Finalized
                 </h2>
-                <p className="text-slate-500 font-medium max-w-sm mx-auto">
+                <p className="text-muted-foreground font-medium max-w-sm mx-auto">
                   Your carbon credits have been successfully assigned to your
                   institutional portfolio and anchored on the blockchain.
                 </p>
@@ -239,14 +239,14 @@ export default function PurchaseCreditsPage() {
                 <div className="pt-8 flex flex-col gap-3">
                   <Button
                     onClick={() => router.push("/portfolio")}
-                    className="h-14 bg-slate-900 rounded-xl font-black uppercase tracking-widest text-[10px]"
+                    className="h-14 bg-secondary rounded-xl font-black uppercase tracking-widest text-[10px]"
                   >
                     View Registry Portfolio
                   </Button>
                   <Button
                     variant="ghost"
                     onClick={() => router.push("/marketplace")}
-                    className="text-slate-400 font-black uppercase tracking-widest text-[10px]"
+                    className="text-muted-foreground font-black uppercase tracking-widest text-[10px]"
                   >
                     Back to Discovery
                   </Button>
@@ -258,7 +258,7 @@ export default function PurchaseCreditsPage() {
 
         {/* ── Right: Summary Sidebar ── */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-secondary rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10">
               <ShieldCheck size={80} className="text-emerald-400" />
             </div>
@@ -268,7 +268,7 @@ export default function PurchaseCreditsPage() {
 
             <div className="space-y-6">
               <div className="space-y-1">
-                <p className="text-[9px] font-black text-slate-500 uppercase">
+                <p className="text-[9px] font-black text-muted-foreground uppercase">
                   Project
                 </p>
                 <p className="font-black text-white uppercase tracking-tight leading-tight">
@@ -277,13 +277,13 @@ export default function PurchaseCreditsPage() {
               </div>
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-1">
-                  <p className="text-[9px] font-black text-slate-500 uppercase">
+                  <p className="text-[9px] font-black text-muted-foreground uppercase">
                     Vintage
                   </p>
                   <p className="font-black text-white uppercase">2024</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[9px] font-black text-slate-500 uppercase">
+                  <p className="text-[9px] font-black text-muted-foreground uppercase">
                     Registry
                   </p>
                   <p className="font-black text-white uppercase">VERRA</p>
@@ -291,7 +291,7 @@ export default function PurchaseCreditsPage() {
               </div>
               <div className="pt-6 border-t border-white/10 space-y-4">
                 <div className="flex justify-between items-center text-[11px] font-black uppercase">
-                  <span className="text-slate-500">Unit Price</span>
+                  <span className="text-muted-foreground">Unit Price</span>
                   <span>$52.00</span>
                 </div>
                 <div className="flex justify-between items-center text-xl font-black uppercase italic tracking-tight">
@@ -302,7 +302,7 @@ export default function PurchaseCreditsPage() {
             </div>
 
             <div className="mt-12 bg-white/5 border border-white/10 rounded-2xl p-6">
-              <p className="text-[10px] font-bold text-slate-400 uppercase leading-relaxed flex items-start gap-3">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase leading-relaxed flex items-start gap-3">
                 <Info size={16} className="text-emerald-500 flex-shrink-0" />
                 Institutional acquisition includes permanent custody tracking
                 and automated ESG reporting data.

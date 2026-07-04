@@ -61,7 +61,7 @@ const SubmissionResult = ({ data }: SubmissionResultProps) => {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-slate-800">{title}</p>
-                  <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">
+                  <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
                     {desc}
                   </p>
                 </div>
@@ -71,7 +71,7 @@ const SubmissionResult = ({ data }: SubmissionResultProps) => {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
           {projectId && (
             <Button
               onClick={() => router.push(`/projects/${projectId}`)}
@@ -83,7 +83,7 @@ const SubmissionResult = ({ data }: SubmissionResultProps) => {
           <Button
             onClick={() => router.push("/track-verification")}
             variant="outline"
-            className="flex-1 h-12 rounded-xl font-bold border-2 border-slate-200 text-slate-600 hover:bg-slate-50"
+            className="flex-1 h-12 rounded-xl font-bold border-2 border-border text-slate-600 hover:bg-muted"
           >
             Track Verification
           </Button>

@@ -49,11 +49,11 @@ const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
             className="h-2 bg-slate-100"
             indicatorClassName="bg-emerald-500"
           />
-          <span className="text-sm font-medium text-slate-400 whitespace-nowrap">
+          <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
             20%
           </span>
         </div>
-        <p className="text-slate-400 text-sm">1 of 6 complete</p>
+        <p className="text-muted-foreground text-sm">1 of 6 complete</p>
       </div>
 
       <div className="space-y-6">
@@ -76,7 +76,7 @@ const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
         />
 
         <div className="space-y-4">
-          <Label className="text-slate-500 text-sm">
+          <Label className="text-muted-foreground text-sm">
             Current regenerative practices being applied
             <span className="block text-emerald-500 text-xs mt-1">
               (Select all that apply):
@@ -88,7 +88,7 @@ const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
               {[1, 2, 4].map((i) => (
                 <div
                   key={i}
-                  className="h-12 bg-slate-50 animate-pulse rounded-lg"
+                  className="h-12 bg-muted animate-pulse rounded-lg"
                 />
               ))}
             </div>
@@ -97,7 +97,7 @@ const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
               {practices?.map((option: any) => (
                 <div
                   key={option.id}
-                  className="flex items-center space-x-3 p-3 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors"
+                  className="flex items-center space-x-3 p-3 border border-border rounded-lg hover:bg-muted transition-colors"
                 >
                   <Checkbox
                     id={option.id}
@@ -105,7 +105,7 @@ const LandUseStep = ({ onNext, onPrev }: LandUseStepProps) => {
                     onCheckedChange={(checked) =>
                       togglePractice(option.id, !!checked)
                     }
-                    className="w-5 h-5 border-slate-200 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                    className="w-5 h-5 border-border data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
                   />
                   <Label
                     htmlFor={option.id}

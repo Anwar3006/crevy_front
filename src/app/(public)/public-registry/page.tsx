@@ -57,7 +57,7 @@ export default function PublicRegistryPage() {
   ];
 
   return (
-    <div className="bg-white min-h-screen font-sans selection:bg-slate-900 selection:text-white">
+    <div className="bg-white min-h-screen font-sans selection:bg-secondary selection:text-white">
       <RegistryHero />
       <LedgerMetrics />
 
@@ -67,16 +67,16 @@ export default function PublicRegistryPage() {
           <div className="w-full md:w-1/2">
             <label
               htmlFor="ledger-search"
-              className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block"
+              className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2 block"
             >
               Query the Ledger
             </label>
             <div className="relative">
-              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-900 w-5 h-5" />
+              <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-foreground w-5 h-5" />
               <input
                 id="ledger-search"
                 placeholder="Search beneficiaries, serial numbers, or project names..."
-                className="w-full pl-8 pr-4 py-2 border-none border-b-2 border-transparent hover:border-slate-200 focus:border-slate-900 outline-none font-medium text-lg lg:text-xl transition-all bg-transparent placeholder:text-slate-300 rounded-none"
+                className="w-full pl-8 pr-4 py-2 border-none border-b-2 border-transparent hover:border-border focus:border-slate-900 outline-none font-medium text-lg lg:text-xl transition-all bg-transparent placeholder:text-slate-300 rounded-none"
               />
             </div>
           </div>
@@ -101,47 +101,47 @@ export default function PublicRegistryPage() {
           <table className="w-full text-left border-collapse min-w-[900px]">
             <thead>
               <tr className="border-b-2 border-slate-900">
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900 whitespace-nowrap">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground whitespace-nowrap">
                   Retirement ID
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground">
                   Beneficiary
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground">
                   Origin Project
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground">
                   Vintage
                 </th>
-                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-slate-900 text-right">
+                <th className="py-4 pr-6 text-[11px] font-bold uppercase tracking-widest text-foreground text-right">
                   Volume
                 </th>
-                <th className="py-4 pl-6 text-[11px] font-bold uppercase tracking-widest text-slate-900 text-right">
+                <th className="py-4 pl-6 text-[11px] font-bold uppercase tracking-widest text-foreground text-right">
                   Immutability
                 </th>
               </tr>
             </thead>
 
             {/* Institutional Blank State */}
-            <tbody className="bg-slate-50/30">
+            <tbody className="bg-muted/30">
               <tr>
                 <td colSpan={6} className="py-32 px-6">
                   <div className="flex flex-col items-center justify-center text-center max-w-lg mx-auto">
-                    <div className="p-4 border border-slate-200 bg-white mb-6">
+                    <div className="p-4 border border-border bg-white mb-6">
                       <LockKeyhole
                         className="text-slate-300"
                         size={32}
                         strokeWidth={1}
                       />
                     </div>
-                    <h3 className="font-serif text-2xl text-slate-900 mb-4">
+                    <h3 className="font-sans text-2xl text-foreground mb-4">
                       Ledger Initialization Pending
                     </h3>
                     <div className="space-y-4">
                       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 bg-emerald-50 border border-emerald-100 inline-block px-3 py-1">
                         System Status: Awaiting Genesis Cohort
                       </p>
-                      <p className="text-sm font-mono text-slate-500 leading-relaxed">
+                      <p className="text-sm font-mono text-muted-foreground leading-relaxed">
                         Public retirement records, cryptographic hashes, and
                         beneficiary allocations will populate automatically upon
                         the verification and settlement of the Phase 01 pilot
@@ -156,38 +156,38 @@ export default function PublicRegistryPage() {
         </div>
 
         {/* Pagination / Footer */}
-        <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
-          <p className="text-xs text-slate-500 font-serif italic">
+        <div className="mt-8 pt-6 border-t border-border flex items-center justify-between">
+          <p className="text-xs text-muted-foreground font-sans italic">
             Displaying the 4 most recent immutable retirements.
           </p>
           <div className="flex gap-2 font-mono text-sm">
             <button
               type="button"
-              className="px-3 py-1 border border-slate-200 hover:border-slate-900 transition-colors text-slate-400 hover:text-slate-900"
+              className="px-3 py-1 border border-border hover:border-slate-900 transition-colors text-muted-foreground hover:text-foreground"
             >
               PREV
             </button>
             <button
               type="button"
-              className="px-3 py-1 bg-slate-900 text-white border border-slate-900"
+              className="px-3 py-1 bg-secondary text-white border border-slate-900"
             >
               1
             </button>
             <button
               type="button"
-              className="px-3 py-1 border border-slate-200 hover:border-slate-900 transition-colors text-slate-600"
+              className="px-3 py-1 border border-border hover:border-slate-900 transition-colors text-slate-600"
             >
               2
             </button>
             <button
               type="button"
-              className="px-3 py-1 border border-slate-200 hover:border-slate-900 transition-colors text-slate-600"
+              className="px-3 py-1 border border-border hover:border-slate-900 transition-colors text-slate-600"
             >
               3
             </button>
             <button
               type="button"
-              className="px-3 py-1 border border-slate-200 hover:border-slate-900 transition-colors text-slate-400 hover:text-slate-900"
+              className="px-3 py-1 border border-border hover:border-slate-900 transition-colors text-muted-foreground hover:text-foreground"
             >
               NEXT
             </button>
@@ -207,15 +207,15 @@ function RegistryHero() {
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center justify-center gap-3 mb-8"
         >
-          <div className="w-12 h-[1px] bg-slate-900"></div>
-          <span className="text-slate-900 text-xs font-bold uppercase tracking-[0.2em]">
+          <div className="w-12 h-[1px] bg-secondary"></div>
+          <span className="text-foreground text-xs font-bold uppercase tracking-[0.2em]">
             The Immutability Ledger
           </span>
-          <div className="w-12 h-[1px] bg-slate-900"></div>
+          <div className="w-12 h-[1px] bg-secondary"></div>
         </motion.div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-slate-900 tracking-tight leading-[1] mb-8">
-          Proof of <span className="italic text-slate-500">Impact.</span>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-sans text-foreground tracking-tight leading-[1] mb-8">
+          Proof of <span className="italic text-muted-foreground">Impact.</span>
         </h1>
 
         <p className="max-w-2xl mx-auto text-slate-600 text-lg md:text-xl font-light leading-relaxed">
@@ -231,43 +231,43 @@ function RegistryHero() {
 
 function LedgerMetrics() {
   return (
-    <div className="border-y border-slate-200 bg-slate-50">
+    <div className="border-y border-border bg-muted">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 text-center">
           <div className="py-8 px-4 flex flex-col items-center justify-center">
             <Award
-              className="text-slate-400 mb-3"
+              className="text-muted-foreground mb-3"
               size={24}
               strokeWidth={1.5}
             />
-            <p className="text-4xl font-serif text-slate-900 mb-1">
-              10,000<span className="text-2xl text-slate-400">+</span>
+            <p className="text-4xl font-sans text-foreground mb-1">
+              10,000<span className="text-2xl text-muted-foreground">+</span>
             </p>
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
               Projected Pilot Volume (tCO₂e)
             </p>
           </div>
           <div className="py-8 px-4 flex flex-col items-center justify-center">
             <Globe2
-              className="text-slate-400 mb-3"
+              className="text-muted-foreground mb-3"
               size={24}
               strokeWidth={1.5}
             />
-            <p className="text-4xl font-serif text-slate-900 mb-1">50</p>
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+            <p className="text-4xl font-sans text-foreground mb-1">50</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
               Genesis Cohort Capacity
             </p>
           </div>
           <div className="py-8 px-4 flex flex-col items-center justify-center">
             <Building2
-              className="text-slate-400 mb-3"
+              className="text-muted-foreground mb-3"
               size={24}
               strokeWidth={1.5}
             />
-            <p className="text-4xl font-serif text-slate-900 mb-1">
-              120<span className="text-2xl text-slate-400">+</span>
+            <p className="text-4xl font-sans text-foreground mb-1">
+              120<span className="text-2xl text-muted-foreground">+</span>
             </p>
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
               Waitlisted Counterparties
             </p>
           </div>
